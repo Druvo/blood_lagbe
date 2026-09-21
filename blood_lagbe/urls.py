@@ -16,10 +16,8 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from blogapp.views import postView
-
 
 
 urlpatterns = [
@@ -29,7 +27,6 @@ urlpatterns = [
     path('', include("pages.urls"), name='index'),
     path('accounts/', include("accounts.urls"), name='accounts'),
 
-    path('', include("pages.urls")),
     path('blog/', include("blogapp.urls")),
     path('post/<id>/', postView, name='post-view'),
 
