@@ -3,7 +3,7 @@ from accounts import views as account_views
 
 
 urlpatterns = [
-    path('signup', account_views.signup_view, name='signup'),
+    path('signup/', account_views.signup_view, name='signup'),
     path('login/', account_views.login_view, name='login'),
     path('logout/', account_views.logout_view, name='logout'),
     # path('password_change/', views.PasswordChangeView.as_view(), name='password_change'),
