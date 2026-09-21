@@ -134,6 +134,19 @@ STATICFILES_DIRS = [
 ]
 
 
+# Email
+# https://docs.djangoproject.com/en/3.2/topics/email/
+# Defaults to printing emails (e.g. password reset links) to the console
+# in dev. Set EMAIL_BACKEND to the SMTP backend and the EMAIL_HOST_* vars
+# in production.
+EMAIL_BACKEND = os.environ.get(
+    'EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend'
+)
+DEFAULT_FROM_EMAIL = os.environ.get(
+    'DEFAULT_FROM_EMAIL', 'noreply@bloodlagbe.com'
+)
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
