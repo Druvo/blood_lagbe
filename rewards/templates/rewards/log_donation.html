@@ -1,0 +1,86 @@
+{% extends 'base/base.html' %}
+{% load widget_tweaks %}
+
+{% block title %}My Donations{% endblock title %}
+
+{% block body %}
+<div class="middle-sidebar-bottom">
+  <div class="middle-wrap container mt-4 mb-4">
+
+    <div class="card w-100 border-0 shadow-xs p-4 mb-4">
+      <h2 class="fw-700 font-md mb-3">Log a Donation</h2>
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-success">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <div class="form-group mb-3">
+          {{ form.blood_group.errors }}
+          <label for="{{ form.blood_group.id_for_label }}">Blood Group</label>
+          {{ form.blood_group|add_class:"form-control" }}
+        </div>
+
+        <div class="form-group mb-3">
+          {{ form.donation_date.errors }}
+          <label for="{{ form.donation_date.id_for_label }}">Donation Date</label>
+          {{ form.donation_date|add_class:"form-control" }}
+        </div>
+
+        <div class="form-group mb-3">
+          {{ form.location.errors }}
+          <label for="{{ form.location.id_for_label }}">Location</label>
+          {{ form.location|add_class:"form-control" }}
+        </div>
+
+        <button class="btn btn-primary" type="submit">Submit for Verification</button>
+        <small class="d-block text-muted mt-2">
+          An admin verifies each donation before it counts toward your donor tier.
+        </small>
+      </form>
+    </div>
+
+    <div class="card w-100 border-0 shadow-xs p-4">
+      <h2 class="fw-700 font-md mb-3">My Donation History</h2>
+
+      {% if donations %}
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Blood Group</th>
+              <th>Location</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for donation in donations %}
+              <tr>
+                <td>{{ donation.donation_date }}</td>
+                <td>{{ donation.blood_group }}</td>
+                <td>{{ donation.location }}</td>
+                <td>
+                  {% if donation.status == 'approved' %}
+                    <span class="badge bg-success">Approved</span>
+                  {% elif donation.status == 'rejected' %}
+                    <span class="badge bg-danger">Rejected</span>
+                  {% else %}
+                    <span class="badge bg-warning text-dark">Pending</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="text-muted">You haven't logged any donations yet.</p>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+{% endblock body %}
