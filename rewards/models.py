@@ -149,3 +149,28 @@ def get_earned_streak_badges(streak):
     return list(
         Badge.objects.filter(badge_type=Badge.Type.STREAK, min_streak__lte=streak)
     )
+
+
+def get_donor_badge_snapshot(user):
+    """(tier_badge_id, {earned streak badge ids}) -- for diffing before/after
+    a donation gets approved, to detect newly-unlocked badges."""
+    tier_badge, _, _, _ = get_donor_badge_progress(user)
+    streak_badge_ids = frozenset(
+        b.id for b in get_earned_streak_badges(get_current_streak(user))
+    )
+    return (tier_badge.id if tier_badge else None), streak_badge_ids
+
+
+def get_newly_unlocked_badges(before_snapshot, user):
+    """Badges earned by `user` now that weren't in `before_snapshot`."""
+    before_tier_id, before_streak_ids = before_snapshot
+    after_tier, _, _, _ = get_donor_badge_progress(user)
+    after_streak_badges = get_earned_streak_badges(get_current_streak(user))
+
+    newly_unlocked = []
+    if after_tier and after_tier.id != before_tier_id:
+        newly_unlocked.append(after_tier)
+    newly_unlocked += [
+        b for b in after_streak_badges if b.id not in before_streak_ids
+    ]
+    return newly_unlocked

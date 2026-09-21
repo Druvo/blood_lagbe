@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ display_name }}'s Donor Badge | Blood Lagbe</title>
+  <link rel="stylesheet" href="{% static 'css/feather.css' %}" />
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .card {
+      width: 360px;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+      padding: 40px 30px;
+      text-align: center;
+    }
+    .card .icon {
+      font-size: 64px;
+    }
+    .card h1 {
+      font-size: 22px;
+      margin: 10px 0 2px;
+    }
+    .card .tier-name {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 6px 0 18px;
+    }
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 20px 0;
+    }
+    .stats div h2 {
+      margin: 0;
+      font-size: 24px;
+    }
+    .stats div span {
+      font-size: 11px;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .brand {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    {% if current_badge %}
+      <i class="feather-{{ current_badge.icon }} icon" style="color:{{ current_badge.color }};"></i>
+      <h1>{{ display_name }}</h1>
+      <div class="tier-name" style="color:{{ current_badge.color }};">{{ current_badge.name }}</div>
+    {% else %}
+      <i class="feather-heart icon" style="color:#ccc;"></i>
+      <h1>{{ display_name }}</h1>
+      <div class="tier-name" style="color:#aaa;">Aspiring Donor</div>
+    {% endif %}
+
+    <div class="stats">
+      <div>
+        <h2>{{ approved_count }}</h2>
+        <span>Donations</span>
+      </div>
+      <div>
+        <h2>{{ current_streak }}</h2>
+        <span>Streak</span>
+      </div>
+      <div>
+        <h2>{{ points }}</h2>
+        <span>Points</span>
+      </div>
+    </div>
+
+    <div class="brand">🩸 bloodlagbe.com</div>
+  </div>
+</body>
+</html>
