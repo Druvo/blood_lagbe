@@ -1,38 +1,40 @@
+{% extends 'base/base.html' %}
+{% load widget_tweaks %}
 
+{% block title %}Login{% endblock title %}
 
-{% block content %}
-  <div class="container">
-    <div class="block-end">
-        <div class="head-notice">
-            <div class="login_form">
-                <div class="form">
-                    <h2 class="form_tittle">LOGIN</h2>
-                    <form method="POST">
-                        {% csrf_token %}
+{% block body %}
+<div class="middle-sidebar-bottom">
+  <div class="middle-wrap container mt-4 mb-4" style="max-width: 480px;">
+    <div class="card w-100 border-0 shadow-xs p-4">
+      <h2 class="fw-700 font-md mb-3">Login</h2>
 
-                        <div class="form-row">
-                            <div class="col-sm-18 container">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-danger">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
 
-                                <div class="form-group">
-                                {{ login_form.phone.errors }}
-                                <label for="{{ login_form.phone.id_for_label }}">Phone Number*</label>
-                                {{ login_form.phone }}
-                                </div>
+      <form method="POST">
+        {% csrf_token %}
 
-                                <div class="form-group">
-                                    {{ login_form.password.errors }}
-                                    <label for="{{ login_form.password.id_for_label }}">Password*</label>
-                                    {{ login_form.password }}
-                                </div>
-                                <br>
-                                 <button class="btn btn-primary btn-block" type="submit">Login</button>
-                                 <a href="{% url 'password_reset' %}">Forgot your password?</a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+        <div class="form-group mb-3">
+          {{ login_form.phone.errors }}
+          <label for="{{ login_form.phone.id_for_label }}">Phone Number*</label>
+          {{ login_form.phone|add_class:"form-control" }}
         </div>
+
+        <div class="form-group mb-3">
+          {{ login_form.password.errors }}
+          <label for="{{ login_form.password.id_for_label }}">Password*</label>
+          {{ login_form.password|add_class:"form-control" }}
+        </div>
+
+        <button class="btn btn-primary btn-block" type="submit">Login</button>
+        <a href="{% url 'password_reset' %}" class="d-block mt-2">Forgot your password?</a>
+        <a href="{% url 'signup' %}" class="d-block mt-1">Don't have an account? Register</a>
+      </form>
     </div>
+  </div>
 </div>
-{% endblock %}
+{% endblock body %}
