@@ -44,6 +44,41 @@
       </div>
     </div>
 
+    <div class="card w-100 border-0 shadow-xs p-4 mb-4 text-center">
+      <h2 class="fw-700 font-md mb-3">Streak &amp; Points</h2>
+
+      <div class="row justify-content-center mb-3">
+        <div class="col-6">
+          <h3 class="fw-700 font-lg mb-0">{{ points }}</h3>
+          <div class="text-muted font-xsss">Points</div>
+        </div>
+        <div class="col-6">
+          <h3 class="fw-700 font-lg mb-0">{{ current_streak }}</h3>
+          <div class="text-muted font-xsss">Cycle Streak</div>
+        </div>
+      </div>
+
+      {% if current_streak == 0 %}
+        <small class="text-muted d-block mb-3">
+          Donate again within a 12-week cycle to start a streak.
+        </small>
+      {% else %}
+        <small class="text-muted d-block mb-3">
+          Keep donating every cycle (~12 weeks) to grow your streak.
+        </small>
+      {% endif %}
+
+      <div class="row justify-content-center">
+        {% for badge in streak_badges %}
+          <div class="col-4 text-center {% if badge not in earned_streak_badges %}opacity-50{% endif %}">
+            <i class="feather-{{ badge.icon }}" style="font-size:28px;color:{{ badge.color }};"></i>
+            <div class="font-xsss fw-600 mt-1">{{ badge.name }}</div>
+            <div class="font-xsssss text-muted">{{ badge.min_streak }}+ streak</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
     <div class="card w-100 border-0 shadow-xs p-4 mb-4">
       <h2 class="fw-700 font-md mb-3">Log a Donation</h2>
 

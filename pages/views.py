@@ -24,7 +24,9 @@ def index(request):
         .order_by('-approved_count')[:6]
     )
 
-    badges_desc = list(Badge.objects.order_by('-min_donations'))
+    badges_desc = list(
+        Badge.objects.filter(badge_type=Badge.Type.TIER).order_by('-min_donations')
+    )
 
     leaderboard = []
     for donor in donors:

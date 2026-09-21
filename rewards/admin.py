@@ -33,5 +33,5 @@ class DonationAdmin(admin.ModelAdmin):
 
 @admin.register(Badge)
 class BadgeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'min_donations', 'icon', 'color')
-    ordering = ('min_donations',)
+    list_display = ('name', 'badge_type', 'min_donations', 'min_streak', 'icon', 'color')
+    list_filter = ('badge_type',)

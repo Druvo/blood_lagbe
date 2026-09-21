@@ -1,8 +1,13 @@
+from datetime import timedelta
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+
+DONATION_CYCLE_DAYS = 84  # 12 weeks, the site's minimum donation gap
+STREAK_GRACE_DAYS = 14  # slack allowed before a streak is considered broken
 
 BLOOD_GROUP_CHOICES = [
     ('A+', 'A+'), ('A-', 'A-'),
@@ -53,7 +58,11 @@ class Donation(models.Model):
 
 
 class Badge(models.Model):
-    """A donor tier, unlocked once a donor has enough approved donations."""
+    """An achievement a donor unlocks: a donation-count tier, or a streak."""
+
+    class Type(models.TextChoices):
+        TIER = 'tier', _('Tier (by total donations)')
+        STREAK = 'streak', _('Streak (by consecutive donation cycles)')
 
     name = models.CharField(_('Name'), max_length=50)
     icon = models.CharField(
@@ -62,12 +71,20 @@ class Badge(models.Model):
     )
     color = models.CharField(_('Color'), max_length=20, default='#cd7f32')
     description = models.CharField(_('Description'), max_length=255, blank=True)
+    badge_type = models.CharField(
+        _('Type'), max_length=10, choices=Type.choices, default=Type.TIER,
+    )
     min_donations = models.PositiveIntegerField(
-        _('Minimum Approved Donations'), unique=True,
+        _('Minimum Approved Donations'), null=True, blank=True,
+        help_text=_('Required for tier badges.'),
+    )
+    min_streak = models.PositiveIntegerField(
+        _('Minimum Streak'), null=True, blank=True,
+        help_text=_('Required for streak badges.'),
     )
 
     class Meta:
-        ordering = ['min_donations']
+        ordering = ['badge_type', 'min_donations', 'min_streak']
 
     def __str__(self):
         return self.name
@@ -79,10 +96,36 @@ def approved_donation_count(user):
     ).count()
 
 
+def get_current_streak(user):
+    """Consecutive approved donations spaced no more than one donation
+    cycle (+ grace) apart, counting back from the most recent one. Zero
+    if the donor hasn't donated within a cycle+grace of today."""
+    dates = list(
+        Donation.objects.filter(donor=user, status=Donation.Status.APPROVED)
+        .order_by('donation_date').values_list('donation_date', flat=True)
+    )
+    if not dates:
+        return 0
+
+    threshold = timedelta(days=DONATION_CYCLE_DAYS + STREAK_GRACE_DAYS)
+    streak = 1
+    for prev_date, curr_date in zip(dates, dates[1:]):
+        streak = streak + 1 if (curr_date - prev_date) <= threshold else 1
+
+    if timezone.localdate() - dates[-1] > threshold:
+        return 0
+    return streak
+
+
+def get_donor_points(user):
+    return approved_donation_count(user) * 10 + get_current_streak(user) * 5
+
+
 def get_donor_badge_progress(user):
-    """Returns (current_badge, next_badge, approved_count, progress_percent)."""
+    """Returns (current_badge, next_badge, approved_count, progress_percent)
+    for tier badges only."""
     count = approved_donation_count(user)
-    badges = list(Badge.objects.all())
+    badges = list(Badge.objects.filter(badge_type=Badge.Type.TIER))
 
     current_badge = None
     next_badge = None
@@ -100,3 +143,9 @@ def get_donor_badge_progress(user):
         progress_percent = int((count - lower) / span * 100) if span else 100
 
     return current_badge, next_badge, count, progress_percent
+
+
+def get_earned_streak_badges(streak):
+    return list(
+        Badge.objects.filter(badge_type=Badge.Type.STREAK, min_streak__lte=streak)
+    )
