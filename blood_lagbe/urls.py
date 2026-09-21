@@ -16,12 +16,22 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.templatetags.static import static as static_url
 from django.urls import path, include
+from django.views.generic.base import RedirectView
 from blogapp.views import postView
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path(
+        'favicon.ico',
+        RedirectView.as_view(
+            url=static_url('images/logo/blood_lagbe_logo.png'),
+            permanent=True,
+        ),
+    ),
 
     # pages url ----
     path('', include("pages.urls"), name='index'),
