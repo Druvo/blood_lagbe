@@ -50,3 +50,53 @@ class Donation(models.Model):
 
     def __str__(self):
         return f'{self.donor} - {self.donation_date} ({self.status})'
+
+
+class Badge(models.Model):
+    """A donor tier, unlocked once a donor has enough approved donations."""
+
+    name = models.CharField(_('Name'), max_length=50)
+    icon = models.CharField(
+        _('Icon'), max_length=50, default='award',
+        help_text=_("Feather icon name, e.g. 'award' for feather-award."),
+    )
+    color = models.CharField(_('Color'), max_length=20, default='#cd7f32')
+    description = models.CharField(_('Description'), max_length=255, blank=True)
+    min_donations = models.PositiveIntegerField(
+        _('Minimum Approved Donations'), unique=True,
+    )
+
+    class Meta:
+        ordering = ['min_donations']
+
+    def __str__(self):
+        return self.name
+
+
+def approved_donation_count(user):
+    return Donation.objects.filter(
+        donor=user, status=Donation.Status.APPROVED,
+    ).count()
+
+
+def get_donor_badge_progress(user):
+    """Returns (current_badge, next_badge, approved_count, progress_percent)."""
+    count = approved_donation_count(user)
+    badges = list(Badge.objects.all())
+
+    current_badge = None
+    next_badge = None
+    for badge in badges:
+        if count >= badge.min_donations:
+            current_badge = badge
+        elif next_badge is None:
+            next_badge = badge
+
+    if next_badge is None:
+        progress_percent = 100
+    else:
+        lower = current_badge.min_donations if current_badge else 0
+        span = next_badge.min_donations - lower
+        progress_percent = int((count - lower) / span * 100) if span else 100
+
+    return current_badge, next_badge, count, progress_percent

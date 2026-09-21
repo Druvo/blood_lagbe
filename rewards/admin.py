@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.utils import timezone
 
-from rewards.models import Donation
+from rewards.models import Badge, Donation
 
 
 @admin.action(description='Approve selected donations')
@@ -29,3 +29,9 @@ class DonationAdmin(admin.ModelAdmin):
     list_filter = ('status', 'blood_group')
     search_fields = ('donor__phone', 'donor__email', 'location')
     actions = [approve_donations, reject_donations]
+
+
+@admin.register(Badge)
+class BadgeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'min_donations', 'icon', 'color')
+    ordering = ('min_donations',)

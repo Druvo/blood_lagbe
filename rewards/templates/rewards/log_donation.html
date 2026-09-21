@@ -7,6 +7,43 @@
 <div class="middle-sidebar-bottom">
   <div class="middle-wrap container mt-4 mb-4">
 
+    <div class="card w-100 border-0 shadow-xs p-4 mb-4 text-center">
+      {% if current_badge %}
+        <i class="feather-{{ current_badge.icon }}" style="font-size:48px;color:{{ current_badge.color }};"></i>
+        <h2 class="fw-700 font-md mt-2 mb-1" style="color:{{ current_badge.color }};">{{ current_badge.name }}</h2>
+        <p class="text-muted mb-2">{{ current_badge.description }}</p>
+      {% else %}
+        <i class="feather-heart" style="font-size:48px;color:#ccc;"></i>
+        <h2 class="fw-700 font-md mt-2 mb-1">No Tier Yet</h2>
+        <p class="text-muted mb-2">Log your first verified donation to earn Bronze Donor.</p>
+      {% endif %}
+
+      <p class="fw-600 mb-3">{{ approved_count }} verified donation{{ approved_count|pluralize }}</p>
+
+      {% if next_badge %}
+        <div class="progress mb-2" style="height:10px;">
+          <div class="progress-bar" role="progressbar"
+               style="width:{{ progress_percent }}%; background-color:{{ next_badge.color }};"
+               aria-valuenow="{{ progress_percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <small class="text-muted">
+          {{ remaining_to_next }} more donation{{ remaining_to_next|pluralize }} to reach {{ next_badge.name }}
+        </small>
+      {% else %}
+        <small class="text-muted">You've reached the highest donor tier. Thank you!</small>
+      {% endif %}
+
+      <div class="row justify-content-center mt-4">
+        {% for badge in all_badges %}
+          <div class="col-3 text-center {% if badge.min_donations > approved_count %}opacity-50{% endif %}">
+            <i class="feather-{{ badge.icon }}" style="font-size:28px;color:{{ badge.color }};"></i>
+            <div class="font-xsss fw-600 mt-1">{{ badge.name }}</div>
+            <div class="font-xsssss text-muted">{{ badge.min_donations }}+</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
     <div class="card w-100 border-0 shadow-xs p-4 mb-4">
       <h2 class="fw-700 font-md mb-3">Log a Donation</h2>
 
