@@ -2,8 +2,14 @@
 
     <!-- JavaScript files-->
     <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script>
+      // plugin.js bundles a vendor Owl Carousel init that was never
+      // shipped with the actual Owl Carousel library, throwing on
+      // every page load. Nothing on this site uses a carousel; stub
+      // it out rather than pulling in an unused ~30KB plugin.
+      if (window.jQuery && !jQuery.fn.owlCarousel) {
+        jQuery.fn.owlCarousel = function () { return this; };
+      }
+    </script>
     <script src="{% static 'vendor/popper.js/umd/popper.min.js' %}"> </script>
     <script src="{% static 'vendor/bootstrap/js/bootstrap.min.js' %}"></script>
-    <script src="{% static 'vendor/jquery.cookie/jquery.cookie.js' %}"> </script>
-    <script src="{% static 'vendor/@fancyapps/fancybox/jquery.fancybox.min.js' %}"></script>
-    <script src="{% static 'js/front.js' %}"></script>
