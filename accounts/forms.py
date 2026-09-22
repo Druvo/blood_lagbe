@@ -5,12 +5,9 @@ from django.contrib.auth.forms import UserCreationForm
 User = get_user_model()
 
 
-class LoginForm(forms.ModelForm):
+class LoginForm(forms.Form):
+    phone = forms.CharField(label='Phone Number')
     password = forms.CharField(label='Password', widget=forms.PasswordInput)
-
-    class Meta:
-        model = User
-        fields = ('phone', 'password')
 
     def clean(self):
         cleaned_data = super().clean()

@@ -26,3 +26,10 @@ h1, h2, h3, h4, h5, h6 {
 .table-responsive {
   overflow-x: auto !important;
 }
+
+/* Bootstrap 5 utility; this project runs Bootstrap 4, which never
+   defined it, so locked badges rendered fully opaque with no visual
+   difference from earned ones. */
+.opacity-50 {
+  opacity: 0.5;
+}
