@@ -16,11 +16,20 @@
 </p>
 
 <h4 align="center">
-	🚧  Blood Lagbe pip package 🚀 Under construction...  🚧 <br>
-  This is the Main Website of blood lagbe by Python Django
+  🩸 A fast, simple and safe platform connecting blood donors and recipients 🩸 <br>
+  Built with Python &amp; Django
 </h4>
 
 <img class="ml-3" src="preview.png" alt="blood_lagbe"> 
+
+## :sparkles: Features
+
+- Donor signup/login with phone-based authentication
+- Admin-verified donation logging, so donor stats are trustworthy, not self-reported
+- Donor rewards system: tiers (Bronze/Silver/Gold/Platinum), donation-cycle streaks,
+  points, and shareable badge cards
+- A real, data-driven donor leaderboard and blood-type compatibility guide
+- A blog for donation-related posts and announcements
 
 ## :checkered_flag: Starting
 
@@ -33,6 +42,9 @@ $ cd blood_lagbe
 
 # Install dependencies
 $ pip install -r requirements.txt
+
+# Apply database migrations
+$ python manage.py migrate
 
 # Run the project
 $ python manage.py runserver
