@@ -1,26 +1,19 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect
-from .forms import RegistrationForm, LoginForm
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import redirect, render
+
+from .forms import LoginForm, RegistrationForm
 
 
-# Create your views here.
 def login_view(request):
-    ("LOGIN")
-    ("Login")
-    ("Phone Number*")
-    ("Password*")
-
-    context = {}
-    user = request.user
-    if user.is_authenticated:
+    if request.user.is_authenticated:
         return redirect('/')
 
-    if request.POST:
+    if request.method == 'POST':
         form = LoginForm(request.POST)
         if form.is_valid():
-            phone = request.POST['phone']
-            password = request.POST['password']
+            phone = form.cleaned_data['phone']
+            password = form.cleaned_data['password']
             user = authenticate(phone=phone, password=password)
             if user:
                 login(request, user)
@@ -42,44 +35,25 @@ def logout_view(request):
 
 
 def signup_view(request):
+    if request.user.is_authenticated:
+        return redirect('/')
 
-    ("REGISTER")
-    ("Name*")
-    ("Phone*")
-    ("Email Address")
-    ("Address")
-    ("Register")
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
 
-    ("If you want to join as a seller, please select a Producer Organization.")
-    ("Enter the same password as before, for verification.")
-    ("Required. Add a valid phone number")
-    ("Your password can't be too similar to your other personal information.")
-    ("Your password must contain at least 8 characters.")
-    ("Your password can't be a commonly used password.")
-    ("Your password can't be entirely numeric.")
-
-    context = {}
-    if not request.user.is_authenticated:
-        if request.POST:
-            form = RegistrationForm(request.POST)
-
-            if form.is_valid():
-                name = form.cleaned_data.get('name')
-                phone = form.cleaned_data.get('phone')
-                email = form.cleaned_data.get('email')
-                raw_password = form.cleaned_data.get('password1')
-                form.save(commit=True)
-                account = authenticate(name=name, phone=phone, email=email, password=raw_password)
+        if form.is_valid():
+            phone = form.cleaned_data.get('phone')
+            raw_password = form.cleaned_data.get('password1')
+            form.save(commit=True)
+            account = authenticate(phone=phone, password=raw_password)
+            if account:
                 login(request, account)
-                return render(request, 'pages/home.html')
-            else:
-                context['registration_form'] = form
-        else:  # GET request
-            form = RegistrationForm()
-            context = {
-                "registration_form": form
-            }
-        return render(request, 'signup.html', context)
+                return redirect('/')
+            return redirect('login')
+
+        context = {'registration_form': form}
     else:
-        # return render(request, 'registration.html', context)
-        return render(request, 'pages/home.html')
+        form = RegistrationForm()
+        context = {"registration_form": form}
+
+    return render(request, 'signup.html', context)

@@ -1,7 +1,7 @@
 from django import forms
-from django.contrib.auth import get_user_model
+from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import authenticate
+
 User = get_user_model()
 
 
@@ -13,26 +13,21 @@ class LoginForm(forms.ModelForm):
         fields = ('phone', 'password')
 
     def clean(self):
-        if self.is_valid():
-            phone = self.cleaned_data['phone']
-            password = self.cleaned_data['password']
-            if not authenticate(phone=phone, password=password):
-                raise forms.ValidationError("Invalid login")
+        cleaned_data = super().clean()
+        phone = cleaned_data.get('phone')
+        password = cleaned_data.get('password')
+        if phone and password and not authenticate(phone=phone, password=password):
+            raise forms.ValidationError("Invalid login")
+        return cleaned_data
 
 
 class RegistrationForm(UserCreationForm):
     class Meta:
-        """Meta class"""
         model = User
         fields = ('first_name', 'last_name', 'email', 'phone')
 
-        def clean_phone(self, *args, **kwargs):
-            phone = self.cleaned_data.get('phone')
-            print("\n -------------" + phone[0:2])
-            if phone[:2] == '01':
-                if phone[:3] == '010' or phone[:3] == '011' or phone[:3] == '012':
-                    raise forms.ValidationError('Invalid Phone number')
-                else:
-                    return phone
-            else:
-                raise forms.ValidationError('Invalid Phone number')
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        if not phone or phone[:2] != '01' or phone[:3] in ('010', '011', '012'):
+            raise forms.ValidationError('Invalid Phone number')
+        return phone
