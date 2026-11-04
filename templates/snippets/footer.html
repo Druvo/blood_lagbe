@@ -24,6 +24,8 @@
             <h4 class="text-white">Useful Links</h4>
             <ul class="text-white">
               <li><i class="feather-chevron-right p-2 text-danger"></i> <a href="/" class="text-white">Home</a></li>
+              <li><i class="feather-chevron-right p-2 text-danger"></i> <a href="{% url 'request-list' %}" class="text-white">Urgent Requests</a></li>
+              <li><i class="feather-chevron-right p-2 text-danger"></i> <a href="{% url 'leaderboard' %}" class="text-white">Leaderboard</a></li>
               <li><i class="feather-chevron-right p-2 text-danger"></i> <a href="{% url 'blogapp:blog-view' %}" class="text-white">Blog</a></li>
               {% if user.is_authenticated %}
                 <li><i class="feather-chevron-right p-2 text-danger"></i> <a href="{% url 'log-donation' %}" class="text-white">My Donations</a></li>

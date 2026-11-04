@@ -6,6 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title>{% block title %}Home{% endblock title %} | Blood Lagbe</title>
+    {% block meta %}
+    {% static 'images/logo/blood_lagbe_logo-v2.png' as og_logo %}
+    <meta name="description" content="Blood Lagbe connects blood donors with people who urgently need blood.">
+    <meta property="og:site_name" content="Blood Lagbe">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Blood Lagbe - donate blood, save lives">
+    <meta property="og:description" content="Join the community of blood donors. Answer urgent requests, earn badges, and save lives.">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_logo }}">
+    <meta name="twitter:card" content="summary">
+    {% endblock meta %}
     <!-- Favicon icon -->
     <link
             rel="icon"

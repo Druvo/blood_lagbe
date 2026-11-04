@@ -1,0 +1,29 @@
+{% load static %}
+{# Needs: share_card (dict), share_url, share_text, share_filename #}
+<style>
+  .share-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .share-btn {
+    display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+    padding: 9px 16px; border-radius: 8px; border: 1px solid #e50202;
+    background: #fff; color: #e50202; font: 600 14px/1.2 "Montserrat", Arial, sans-serif;
+    text-decoration: none;
+  }
+  .share-btn:hover { background: #fff1f1; color: #e50202; text-decoration: none; }
+  .share-btn-primary { background: #e50202; color: #fff; }
+  .share-btn-primary:hover { background: #c00000; color: #fff; }
+</style>
+<div class="share-box" data-share-root data-share-data="share-data"
+     data-share-url="{{ share_url }}" data-share-text="{{ share_text }}"
+     data-share-filename="{{ share_filename }}">
+  {{ share_card|json_script:"share-data" }}
+  <div class="share-actions">
+    <button type="button" class="share-btn share-btn-primary" data-share-action="native"><i class="feather-share-2"></i> Share</button>
+    <button type="button" class="share-btn" data-share-action="download"><i class="feather-download"></i> Save image</button>
+    <a class="share-btn" target="_blank" rel="noopener noreferrer"
+       href="https://wa.me/?text={{ share_text|urlencode:'' }}%20{{ share_url|urlencode:'' }}">WhatsApp</a>
+    <a class="share-btn" target="_blank" rel="noopener noreferrer"
+       href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode:'' }}">Facebook</a>
+    <button type="button" class="share-btn" data-share-action="copy"><i class="feather-copy"></i> Copy link</button>
+  </div>
+</div>
+<script src="{% static 'js/share-card.js' %}"></script>

@@ -80,11 +80,12 @@
             >
               <div class="box">
                 <span>How often can I donate?</span>
-                <p>Every 12 weeks</p>
+                <p>Every {{ donation_interval_label }}*</p>
               </div>
             </div>
           </div>
         </div>
+        <p class="text-center text-muted small mt-3">* A general reminder, not medical advice. Eligibility is decided by the blood bank's screening.</p>
       </section>
       <!-- End Why Us Section -->
 
@@ -189,6 +190,8 @@
     </div>
   </div>
 
+  {% include 'pages/urgent_requests.html' %}
+
   {% include 'pages/top_donors.html' %}
 
   <div class="row justify-content-center mb-3">
@@ -205,7 +208,7 @@
             Ready to save a life?
           </h2>
           <p class="font-xsss ps-lg-5 pe-lg-5 lh-28 text-grey-200">
-            Every donation can save up to three lives. Register as a donor
+            One donation can be separated into components that help up to three patients. Register as a donor
             today and join the Blood Lagbe community.
           </p>
           <a

@@ -5,27 +5,41 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{{ display_name }}'s Donor Badge | Blood Lagbe</title>
+  {% static 'images/logo/blood_lagbe_logo-v2.png' as og_logo %}
+  <meta property="og:site_name" content="Blood Lagbe">
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="{{ display_name }} is a {% if current_badge %}{{ current_badge.name }}{% else %}blood donor{% endif %} on Blood Lagbe">
+  <meta property="og:description" content="{{ approved_count }} verified donation{{ approved_count|pluralize }}, an estimated {{ lives }} people helped at most. Join the community and donate blood.">
+  <meta property="og:url" content="{{ share_url }}">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_logo }}">
+  <meta name="twitter:card" content="summary">
   <link rel="stylesheet" href="{% static 'css/feather.css' %}" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       min-height: 100vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      gap: 24px;
+      padding: 24px 12px;
+      box-sizing: border-box;
+      background: linear-gradient(135deg, #e50202 0%, #6b0000 100%);
       font-family: 'Open Sans', 'Segoe UI', Arial, sans-serif;
     }
     .card {
-      width: 360px;
+      width: 100%;
+      max-width: 360px;
       background: #fff;
       border-radius: 20px;
       box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
       padding: 40px 30px;
       text-align: center;
+      box-sizing: border-box;
     }
     .card .icon {
       font-size: 64px;
@@ -38,12 +52,17 @@
     .card .tier-name {
       font-size: 15px;
       font-weight: 700;
-      margin: 6px 0 18px;
+      margin: 6px 0 6px;
+    }
+    .card .hero-name {
+      font-size: 13px;
+      font-weight: 600;
+      margin: 0 0 14px;
     }
     .stats {
       display: flex;
       justify-content: center;
-      gap: 30px;
+      gap: 22px;
       margin: 20px 0;
     }
     .stats div h2 {
@@ -51,7 +70,7 @@
       font-size: 24px;
     }
     .stats div span {
-      font-size: 11px;
+      font-size: 10px;
       color: #888;
       text-transform: uppercase;
       letter-spacing: 1px;
@@ -60,6 +79,22 @@
       margin-top: 20px;
       font-size: 12px;
       color: #aaa;
+    }
+    .share-panel {
+      width: 100%;
+      max-width: 360px;
+    }
+    .share-panel .share-btn {
+      background: rgba(255, 255, 255, 0.95);
+    }
+    .share-panel .share-btn-primary {
+      background: #fff;
+      color: #e50202;
+    }
+    .join {
+      color: #fff;
+      font-size: 14px;
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -74,11 +109,20 @@
       <h1>{{ display_name }}</h1>
       <div class="tier-name" style="color:#aaa;">Aspiring Donor</div>
     {% endif %}
+    {% if hero_badge %}
+      <div class="hero-name" style="color:{{ hero_badge.color }};">
+        <i class="feather-{{ hero_badge.icon }}"></i> {{ hero_badge.name }}
+      </div>
+    {% endif %}
 
     <div class="stats">
       <div>
         <h2>{{ approved_count }}</h2>
         <span>Donations</span>
+      </div>
+      <div>
+        <h2>{{ lives }}</h2>
+        <span>Est. people helped</span>
       </div>
       <div>
         <h2>{{ current_streak }}</h2>
@@ -92,5 +136,10 @@
 
     <div class="brand">🩸 bloodlagbe.com</div>
   </div>
+
+  <div class="share-panel">
+    {% include 'rewards/_share_buttons.html' %}
+  </div>
+  <a class="join" href="{% url 'signup' %}">Join Blood Lagbe and start saving lives</a>
 </body>
 </html>

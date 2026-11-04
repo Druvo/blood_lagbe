@@ -72,6 +72,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'rewards.context_processors.donation_interval',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -143,6 +144,12 @@ STATICFILES_DIRS = [
 EMAIL_BACKEND = os.environ.get(
     'EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend'
 )
+# Minimum gap between whole-blood donations, in days. Bangladeshi sources
+# differ (3 to 4 months for men, 4 to 6 for women), so the default is the
+# conservative 4 months for everyone. It is a reminder only, never medical
+# clearance: confirm the figure with the national blood transfusion service.
+DONATION_INTERVAL_DAYS = int(os.environ.get('DONATION_INTERVAL_DAYS', '120'))
+
 DEFAULT_FROM_EMAIL = os.environ.get(
     'DEFAULT_FROM_EMAIL', 'noreply@bloodlagbe.com'
 )

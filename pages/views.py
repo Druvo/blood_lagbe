@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Count, Q
 from django.shortcuts import render
 
-from rewards.models import Badge
+from rewards.models import Badge, BloodRequest, get_community_stats
 
 User = get_user_model()
 
@@ -45,4 +45,10 @@ def index(request):
             'latest_donation': latest_donation,
         })
 
-    return render(request, "pages/home.html", {'leaderboard': leaderboard})
+    return render(request, "pages/home.html", {
+        'leaderboard': leaderboard,
+        'community': get_community_stats(),
+        'urgent_requests': list(
+            BloodRequest.objects.still_needed().select_related('requester')[:3]
+        ),
+    })

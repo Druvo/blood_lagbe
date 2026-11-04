@@ -24,8 +24,10 @@
 
     <a href="/" class="p-2 text-center ms-3 menu-icon center-menu-icon"><i class="feather-home font-lg alert-light bg-greylight btn-round-lg theme-dark-bg text-danger"></i></a>
     <a href="{% url 'blogapp:blog-view' %}" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i class="feather-book-open font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"></i></a>
+    <a href="{% url 'request-list' %}" title="Urgent requests" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i class="feather-droplet font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"></i></a>
+    <a href="{% url 'leaderboard' %}" title="Leaderboard" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i class="feather-bar-chart-2 font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"></i></a>
     {% if user.is_authenticated %}
-      <a href="{% url 'log-donation' %}" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i class="feather-award font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"></i></a>
+      <a href="{% url 'log-donation' %}" title="My donations" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i class="feather-award font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"></i></a>
     {% endif %}
 
     {% if user.is_authenticated %}

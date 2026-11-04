@@ -1,0 +1,68 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Urgent Blood Requests{% endblock title %}
+
+{% block body %}
+<div class="middle-sidebar-bottom">
+  <div class="middle-wrap container mt-4 mb-4">
+
+    <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+      <h2 class="fw-700 font-md mb-2">Urgent Blood Requests</h2>
+      <a href="{% url 'request-create' %}" class="btn btn-danger mb-2">Post a request</a>
+    </div>
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    {% if eligibility %}
+      <div class="alert {% if eligibility.eligible %}alert-success{% else %}alert-warning{% endif %}">
+        {% if eligibility.eligible %}
+          You're ready to donate. Pick a request below and tap "I can help".
+        {% else %}
+          You can donate again on <strong>{{ eligibility.next_date|date:"M d, Y" }}</strong>
+          ({{ eligibility.days_left }} day{{ eligibility.days_left|pluralize }} left).
+          You can still share requests to help find a donor.
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="mb-3">
+      <a href="{% url 'request-list' %}" class="badge {% if not selected %}bg-danger text-white{% else %}bg-light text-dark{% endif %} p-2 me-1">All</a>
+      {% for group in blood_groups %}
+        <a href="?blood_group={{ group|urlencode:'' }}"
+           class="badge {% if selected == group %}bg-danger text-white{% else %}bg-light text-dark{% endif %} p-2 me-1">{{ group }}</a>
+      {% endfor %}
+    </div>
+
+    {% for req in blood_requests %}
+      <div class="card w-100 border-0 shadow-xs p-4 mb-3">
+        <div class="d-flex align-items-center">
+          <div class="me-4 text-center" style="min-width:72px;">
+            <i class="feather-droplet" style="font-size:44px;color:#e50202;"></i>
+            <div class="fw-700 font-md" style="color:#e50202;">{{ req.blood_group }}</div>
+          </div>
+          <div class="flex-grow-1">
+            <h4 class="fw-700 mb-1">{{ req.hospital }}</h4>
+            <div class="text-muted mb-1"><i class="feather-map-pin"></i> {{ req.district }}</div>
+            <div class="mb-2">
+              <strong>{{ req.units_remaining }}</strong> of {{ req.units_needed }}
+              bag{{ req.units_needed|pluralize }} still needed &middot;
+              needed by <strong>{{ req.needed_by|date:"M d" }}</strong>
+            </div>
+            {% if req.note %}<p class="text-muted mb-2">{{ req.note }}</p>{% endif %}
+            <a href="{% url 'request-detail' req.pk %}" class="btn btn-danger btn-sm">View &amp; respond</a>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="card w-100 border-0 shadow-xs p-4 text-center text-muted">
+        No open requests{% if selected %} for {{ selected }}{% endif %} right now. That's good news.
+      </div>
+    {% endfor %}
+
+  </div>
+</div>
+{% endblock body %}

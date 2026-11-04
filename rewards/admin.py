@@ -5,7 +5,9 @@ from django.utils import timezone
 
 from rewards.models import (
     Badge,
+    BloodRequest,
     Donation,
+    RequestResponse,
     get_donor_badge_snapshot,
     get_newly_unlocked_badges,
 )
@@ -68,7 +70,7 @@ def reject_donations(modeladmin, request, queryset):
 class DonationAdmin(admin.ModelAdmin):
     list_display = (
         'donor', 'blood_group', 'donation_date', 'location',
-        'status', 'verified_by',
+        'status', 'blood_request', 'verified_by',
     )
     list_filter = ('status', 'blood_group')
     search_fields = ('donor__phone', 'donor__email', 'location')
@@ -77,5 +79,35 @@ class DonationAdmin(admin.ModelAdmin):
 
 @admin.register(Badge)
 class BadgeAdmin(admin.ModelAdmin):
-    list_display = ('name', 'badge_type', 'min_donations', 'min_streak', 'icon', 'color')
+    list_display = (
+        'name', 'badge_type', 'min_donations', 'min_streak',
+        'min_request_donations', 'icon', 'color',
+    )
     list_filter = ('badge_type',)
+
+
+@admin.action(description='Close selected requests')
+def close_requests(modeladmin, request, queryset):
+    queryset.update(status=BloodRequest.Status.CLOSED)
+
+
+@admin.action(description='Re-open selected requests')
+def reopen_requests(modeladmin, request, queryset):
+    queryset.update(status=BloodRequest.Status.OPEN)
+
+
+@admin.register(BloodRequest)
+class BloodRequestAdmin(admin.ModelAdmin):
+    list_display = (
+        'blood_group', 'hospital', 'district', 'units_needed', 'needed_by',
+        'status', 'requester', 'created_at',
+    )
+    list_filter = ('status', 'blood_group', 'district')
+    search_fields = ('hospital', 'district', 'requester__phone', 'note')
+    actions = [close_requests, reopen_requests]
+
+
+@admin.register(RequestResponse)
+class RequestResponseAdmin(admin.ModelAdmin):
+    list_display = ('blood_request', 'donor', 'created_at')
+    search_fields = ('donor__phone', 'blood_request__hospital')

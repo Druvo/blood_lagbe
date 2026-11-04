@@ -40,6 +40,7 @@ urlpatterns = [
     path('blog/', include("blogapp.urls")),
     path('post/<id>/', postView, name='post-view'),
     path('donations/', include('rewards.urls')),
+    path('', include('rewards.public_urls')),
 
     # auth urls -----
     path('accounts/', include('django.contrib.auth.urls')),

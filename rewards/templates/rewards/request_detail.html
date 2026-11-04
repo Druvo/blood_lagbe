@@ -1,0 +1,129 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}{{ blood_request.blood_group }} needed at {{ blood_request.hospital }}{% endblock title %}
+
+{% block meta %}
+{% static 'images/logo/blood_lagbe_logo-v2.png' as og_logo %}
+<meta property="og:site_name" content="Blood Lagbe">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Urgent: {{ blood_request.blood_group }} blood needed at {{ blood_request.hospital }}">
+<meta property="og:description" content="{{ blood_request.units_remaining }} bag{{ blood_request.units_remaining|pluralize }} still needed in {{ blood_request.district }} by {{ blood_request.needed_by|date:'M d' }}. Can you help?">
+<meta property="og:url" content="{{ share_url }}">
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_logo }}">
+<meta name="twitter:card" content="summary">
+{% endblock meta %}
+
+{% block body %}
+<div class="middle-sidebar-bottom">
+  <div class="middle-wrap container mt-4 mb-4" style="max-width: 720px;">
+
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">{{ message }}</div>
+      {% endfor %}
+    {% endif %}
+
+    <div class="card w-100 border-0 shadow-xs p-4 mb-4">
+      <div class="d-flex align-items-center mb-3">
+        <div class="me-4 text-center" style="min-width:84px;">
+          <i class="feather-droplet" style="font-size:56px;color:#e50202;"></i>
+          <div class="fw-700 font-lg" style="color:#e50202;">{{ blood_request.blood_group }}</div>
+        </div>
+        <div>
+          <h2 class="fw-700 font-md mb-1">{{ blood_request.hospital }}</h2>
+          <div class="text-muted"><i class="feather-map-pin"></i> {{ blood_request.district }}</div>
+        </div>
+      </div>
+
+      <p class="mb-2">
+        <strong>{{ blood_request.units_remaining }}</strong> of {{ blood_request.units_needed }}
+        bag{{ blood_request.units_needed|pluralize }} still needed &middot;
+        needed by <strong>{{ blood_request.needed_by|date:"M d, Y" }}</strong>
+      </p>
+      <div class="progress mb-3" style="height:10px;">
+        <div class="progress-bar bg-danger" role="progressbar"
+             style="width:{% widthratio blood_request.units_received blood_request.units_needed 100 %}%;"></div>
+      </div>
+
+      {% if blood_request.note %}<p class="text-muted">{{ blood_request.note }}</p>{% endif %}
+
+      {% if blood_request.is_active %}
+        {% if user.is_authenticated %}
+          <p class="mb-3">
+            <i class="feather-phone"></i> Contact:
+            <a href="tel:{{ blood_request.contact_phone }}"><strong>{{ blood_request.contact_phone }}</strong></a>
+          </p>
+        {% endif %}
+      {% else %}
+        <div class="alert alert-secondary mb-3">
+          {% if blood_request.is_fulfilled %}
+            This request has been fulfilled. Thank you to every donor!
+          {% elif blood_request.is_expired %}
+            This request has expired.
+          {% else %}
+            This request is closed.
+          {% endif %}
+        </div>
+      {% endif %}
+
+      {% if blood_request.is_active and not is_owner %}
+        {% if not user.is_authenticated %}
+          <a href="{% url 'login' %}?next={{ request.path|urlencode }}" class="btn btn-danger">Log in to respond</a>
+          <a href="{% url 'signup' %}" class="btn btn-outline-danger ms-2">Register as a donor</a>
+        {% elif has_responded %}
+          <div class="alert alert-success mb-0">
+            You're on the list. The requester can see your name and phone.
+            After you donate, log it and pick this request to earn bonus points.
+          </div>
+        {% elif eligibility and not eligibility.eligible %}
+          <div class="alert alert-warning mb-0">
+            You can donate again on <strong>{{ eligibility.next_date|date:"M d, Y" }}</strong>.
+            Please share this request so someone else can help.
+          </div>
+        {% else %}
+          <form method="POST" action="{% url 'request-respond' blood_request.pk %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">I can help</button>
+            <small class="d-block text-muted mt-2">
+              Make sure your blood group is compatible and you're feeling well.
+              The requester will see your name and phone number.
+            </small>
+          </form>
+        {% endif %}
+      {% endif %}
+
+      {% if is_owner and blood_request.status == 'open' %}
+        <form method="POST" action="{% url 'request-close' blood_request.pk %}" class="mt-3">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-danger btn-sm">Close this request</button>
+        </form>
+      {% endif %}
+    </div>
+
+    {% if is_owner %}
+      <div class="card w-100 border-0 shadow-xs p-4 mb-4">
+        <h3 class="fw-700 font-sm mb-3">Donors who offered to help ({{ response_count }})</h3>
+        {% for r in responses %}
+          <div class="d-flex justify-content-between border-bottom py-2">
+            <span>{{ r.name }}</span>
+            <a href="tel:{{ r.phone }}">{{ r.phone }}</a>
+          </div>
+        {% empty %}
+          <p class="text-muted mb-0">Nobody yet. Share this request to reach more donors.</p>
+        {% endfor %}
+      </div>
+    {% elif response_count %}
+      <p class="text-center text-muted">{{ response_count }} donor{{ response_count|pluralize }} offered to help so far.</p>
+    {% endif %}
+
+    {% if blood_request.is_active %}
+      <div class="card w-100 border-0 shadow-xs p-4 text-center">
+        <h3 class="fw-700 font-sm mb-3">Know someone who can help? Share this request</h3>
+        {% include 'rewards/_share_buttons.html' %}
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock body %}

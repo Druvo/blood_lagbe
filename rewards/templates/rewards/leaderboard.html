@@ -1,0 +1,113 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Leaderboard{% endblock title %}
+
+{% block body %}
+<div class="middle-sidebar-bottom">
+  <div class="middle-wrap container mt-4 mb-4" style="max-width: 860px;">
+
+    <h2 class="fw-700 font-md mb-3 text-center">Donor Leaderboard</h2>
+
+    <div class="card w-100 border-0 shadow-xs p-4 mb-4">
+      <h3 class="fw-700 font-sm mb-3 text-center">{{ monthly.month_label }} awards</h3>
+
+      <div class="row text-center mb-3">
+        <div class="col-4">
+          <div class="fw-700 font-lg">{{ monthly.donations }}</div>
+          <div class="text-muted font-xsss">Donations this month</div>
+        </div>
+        <div class="col-4">
+          <div class="fw-700 font-lg">{{ monthly.lives }}</div>
+          <div class="text-muted font-xsss">Est. people helped</div>
+        </div>
+        <div class="col-4">
+          <div class="fw-700 font-lg">{{ monthly.new_donors }}</div>
+          <div class="text-muted font-xsss">New donors</div>
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        {% for award in monthly.awards %}
+          <div class="col-md-6 text-center mb-2">
+            <i class="feather-{{ award.icon }}" style="font-size:40px;color:{{ award.color }};"></i>
+            <div class="fw-700">{{ award.title }}</div>
+            <a href="{% url 'badge-card' award.user.id %}" class="fw-600">{{ award.name }}</a>
+            <div class="text-muted font-xsss">{{ award.detail }}</div>
+          </div>
+        {% empty %}
+          <p class="text-center text-muted mb-0">
+            No verified donations yet this month. Be the first on the board!
+          </p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="mb-3 text-center">
+      <a href="?period=all" class="btn btn-sm {% if period == 'all' %}btn-danger{% else %}btn-outline-danger{% endif %}">All time</a>
+      <a href="?period=month" class="btn btn-sm {% if period == 'month' %}btn-danger{% else %}btn-outline-danger{% endif %}">This month</a>
+    </div>
+
+    {% if user.is_authenticated %}
+      <div class="alert {% if my_entry %}alert-success{% else %}alert-secondary{% endif %} text-center">
+        {% if my_entry %}
+          You're ranked <strong>#{{ my_entry.rank }}</strong> with
+          <strong>{{ my_entry.points }}</strong> points.
+        {% else %}
+          You're not on the board yet. <a href="{% url 'log-donation' %}">Log a donation</a>
+          or <a href="{% url 'request-list' %}">answer an urgent request</a> to climb it.
+        {% endif %}
+      </div>
+    {% endif %}
+
+    <div class="card w-100 border-0 shadow-xs p-4">
+      <div class="table-responsive">
+        <table class="table align-middle mb-0">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Donor</th>
+              <th>Tier</th>
+              <th class="text-end">Donations</th>
+              <th class="text-end">Points</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for e in entries %}
+              <tr>
+                <td class="fw-700">
+                  {% if e.rank == 1 %}<i class="feather-award" style="color:#d4af37;font-size:22px;"></i>
+                  {% elif e.rank == 2 %}<i class="feather-award" style="color:#a8a8a8;font-size:22px;"></i>
+                  {% elif e.rank == 3 %}<i class="feather-award" style="color:#cd7f32;font-size:22px;"></i>
+                  {% else %}{{ e.rank }}{% endif %}
+                </td>
+                <td>
+                  <a href="{% url 'badge-card' e.user.id %}" class="fw-600">{{ e.name }}</a>
+                  {% if e.request_donations %}
+                    <span class="text-danger" title="Answered {{ e.request_donations }} urgent request{{ e.request_donations|pluralize }}"><i class="feather-heart"></i> {{ e.request_donations }}</span>
+                  {% endif %}
+                  <div class="text-muted font-xsss">est. up to {{ e.lives }} people helped</div>
+                </td>
+                <td>
+                  {% if e.badge %}
+                    <span style="color:{{ e.badge.color }};"><i class="feather-{{ e.badge.icon }}"></i> {{ e.badge.name }}</span>
+                  {% else %}-{% endif %}
+                </td>
+                <td class="text-end">{{ e.donations }}</td>
+                <td class="text-end fw-700">{{ e.points }}</td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="5" class="text-center text-muted py-4">Nobody on the board yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="text-muted font-xsss mt-3 mb-0">
+        Points: 10 per verified donation, +20 for each donation to an urgent
+        request{% if period == 'all' %}, +5 per streak cycle{% endif %}.
+        Only admin-verified donations count.
+      </p>
+    </div>
+
+  </div>
+</div>
+{% endblock body %}

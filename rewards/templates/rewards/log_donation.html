@@ -8,6 +8,32 @@
   <div class="middle-wrap container mt-4 mb-4">
 
     <div class="card w-100 border-0 shadow-xs p-4 mb-4 text-center">
+      {% if eligibility.eligible %}
+        <h2 class="fw-700 font-md mb-1" style="color:#1e9e5b;"><i class="feather-zap"></i> Ready to donate</h2>
+        <p class="text-muted mb-3">
+          {% if eligibility.last_date %}
+            You've passed the {{ donation_interval_label }} gap since {{ eligibility.last_date|date:"M d, Y" }}.
+          {% else %}
+            Log your first donation to start your journey.
+          {% endif %}
+        </p>
+        <div><a href="{% url 'request-list' %}" class="btn btn-danger btn-sm">See urgent requests</a></div>
+      {% else %}
+        <h2 class="fw-700 font-md mb-1"><i class="feather-clock"></i> Recharging</h2>
+        <div class="progress my-3" style="height:12px;">
+          <div class="progress-bar bg-danger" role="progressbar"
+               style="width:{{ eligibility.percent }}%;"
+               aria-valuenow="{{ eligibility.percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <p class="mb-0">
+          <strong>{{ eligibility.days_left }}</strong> day{{ eligibility.days_left|pluralize }} until you can
+          donate again on <strong>{{ eligibility.next_date|date:"M d, Y" }}</strong>.
+        </p>
+        <small class="text-muted">A reminder only, not medical clearance. Always follow the blood bank's screening.</small>
+      {% endif %}
+    </div>
+
+    <div class="card w-100 border-0 shadow-xs p-4 mb-4 text-center">
       {% if current_badge %}
         <i class="feather-{{ current_badge.icon }}" style="font-size:48px;color:{{ current_badge.color }};"></i>
         <h2 class="fw-700 font-md mt-2 mb-1" style="color:{{ current_badge.color }};">{{ current_badge.name }}</h2>
@@ -18,7 +44,8 @@
         <p class="text-muted mb-2">Log your first verified donation to earn Bronze Donor.</p>
       {% endif %}
 
-      <p class="fw-600 mb-3">{{ approved_count }} verified donation{{ approved_count|pluralize }}</p>
+      <p class="fw-600 mb-1">{{ approved_count }} verified donation{{ approved_count|pluralize }}</p>
+      <p class="mb-3" style="color:#e50202;"><i class="feather-heart"></i> est. up to <strong>{{ lives }}</strong> people helped</p>
 
       {% if next_badge %}
         <div class="progress mb-2" style="height:10px;">
@@ -67,11 +94,11 @@
 
       {% if current_streak == 0 %}
         <small class="text-muted d-block mb-3">
-          Donate again within a 12-week cycle to start a streak.
+          Donate again within a {{ donation_interval_label }} cycle to start a streak.
         </small>
       {% else %}
         <small class="text-muted d-block mb-3">
-          Keep donating every cycle (~12 weeks) to grow your streak.
+          Keep donating every cycle (~{{ donation_interval_label }}) to grow your streak.
         </small>
       {% endif %}
 
@@ -81,6 +108,24 @@
             <i class="feather-{{ badge.icon }}" style="font-size:28px;color:{{ badge.color }};"></i>
             <div class="font-xsss fw-600 mt-1">{{ badge.name }}</div>
             <div class="font-xsssss text-muted">{{ badge.min_streak }}+ streak</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="card w-100 border-0 shadow-xs p-4 mb-4 text-center">
+      <h2 class="fw-700 font-md mb-1">Hero Badges</h2>
+      <p class="text-muted font-xsss mb-3">
+        Earned by verified donations to urgent requests
+        ({{ request_donations }} so far).
+        <a href="{% url 'request-list' %}">Find a request</a>
+      </p>
+      <div class="row justify-content-center">
+        {% for badge in hero_badges %}
+          <div class="col-4 text-center {% if badge not in earned_hero_badges %}opacity-50{% endif %}">
+            <i class="feather-{{ badge.icon }}" style="font-size:28px;color:{{ badge.color }};"></i>
+            <div class="font-xsss fw-600 mt-1">{{ badge.name }}</div>
+            <div class="font-xsssss text-muted">{{ badge.min_request_donations }}+ request{{ badge.min_request_donations|pluralize }}</div>
           </div>
         {% endfor %}
       </div>
@@ -115,6 +160,14 @@
           <label for="{{ form.location.id_for_label }}">Location</label>
           {{ form.location|add_class:"form-control" }}
         </div>
+
+        {% if form.blood_request.field.queryset.exists %}
+          <div class="form-group mb-3">
+            {{ form.blood_request.errors }}
+            <label for="{{ form.blood_request.id_for_label }}">Donated for an urgent request? (+20 bonus points)</label>
+            {{ form.blood_request|add_class:"form-control" }}
+          </div>
+        {% endif %}
 
         <button class="btn btn-danger" type="submit">Submit for Verification</button>
         <small class="d-block text-muted mt-2">

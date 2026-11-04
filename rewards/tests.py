@@ -88,7 +88,7 @@ class StreakTests(TestCase):
         self.assertEqual(get_current_streak(self.user), 1)
 
     def test_single_stale_donation_streak_zero(self):
-        self._donate(150)  # older than 84 + 14 day threshold
+        self._donate(150)  # older than cycle + 14 day threshold
         self.assertEqual(get_current_streak(self.user), 0)
 
     def test_consecutive_donations_within_threshold(self):
@@ -146,10 +146,16 @@ class BadgeProgressTests(TestCase):
         self.assertEqual(current.name, 'Bronze Donor')
         self.assertEqual(next_badge.min_donations, 5)
 
-    def test_top_tier_has_no_next_badge_and_full_progress(self):
+    def test_platinum_at_25_with_legend_next(self):
         self._approve_n_donations(25)
         current, next_badge, count, progress = get_donor_badge_progress(self.user)
         self.assertEqual(current.name, 'Platinum Donor')
+        self.assertEqual(next_badge.name, 'Legend Donor')
+
+    def test_top_tier_has_no_next_badge_and_full_progress(self):
+        self._approve_n_donations(50)
+        current, next_badge, count, progress = get_donor_badge_progress(self.user)
+        self.assertEqual(current.name, 'Legend Donor')
         self.assertIsNone(next_badge)
         self.assertEqual(progress, 100)
 
