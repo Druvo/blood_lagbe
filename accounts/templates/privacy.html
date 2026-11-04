@@ -1,12 +1,13 @@
 {% extends 'base/base.html' %}
+{% load widget_tweaks %}
 
-{% block title %}Privacy{% endblock title %}
+{% block title %}Profile &amp; privacy{% endblock title %}
 
 {% block body %}
 <div class="middle-sidebar-bottom">
   <div class="middle-wrap container mt-4 mb-4" style="max-width: 560px;">
     <div class="card w-100 border-0 shadow-xs p-4">
-      <h2 class="fw-700 font-md mb-1">Privacy</h2>
+      <h2 class="fw-700 font-md mb-1">Profile &amp; privacy</h2>
       <p class="text-muted">
         Choose what other people can see. Your phone number is never shown
         on public pages, and your donations still count in site-wide totals.
@@ -20,6 +21,43 @@
         {% csrf_token %}
         {{ form.non_field_errors }}
 
+        <h5 class="fw-700 mt-2">Donor profile</h5>
+        <div class="row">
+          <div class="col-6 mb-3">
+            {{ form.blood_group.errors }}
+            <label for="{{ form.blood_group.id_for_label }}">Blood group</label>
+            {{ form.blood_group|add_class:"form-control" }}
+          </div>
+          <div class="col-6 mb-3">
+            {{ form.district.errors }}
+            <label for="{{ form.district.id_for_label }}">District</label>
+            {{ form.district|add_class:"form-control" }}
+          </div>
+        </div>
+
+        <div class="custom-control custom-checkbox mb-3">
+          {{ form.in_directory }}
+          <label class="ms-2" for="{{ form.in_directory.id_for_label }}">
+            <strong>List me in the donor directory</strong>
+            <span class="d-block text-muted font-xsss">
+              Opt-in. Members who are logged in can ask you for help. Your
+              phone number is shared only if you accept a request.
+            </span>
+          </label>
+        </div>
+
+        <div class="custom-control custom-checkbox mb-4">
+          {{ form.available_to_donate }}
+          <label class="ms-2" for="{{ form.available_to_donate.id_for_label }}">
+            <strong>I am available to donate right now</strong>
+            <span class="d-block text-muted font-xsss">
+              Switch off when you are away or unwell. You also show as unavailable
+              automatically during your recovery gap after a donation.
+            </span>
+          </label>
+        </div>
+
+        <h5 class="fw-700">Privacy</h5>
         <div class="custom-control custom-checkbox mb-3">
           {{ form.show_on_leaderboard }}
           <label class="ms-2" for="{{ form.show_on_leaderboard.id_for_label }}">

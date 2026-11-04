@@ -1,0 +1,59 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Contact Requests{% endblock title %}
+
+{% block body %}
+<div class="middle-sidebar-bottom">
+  <div class="middle-wrap container mt-4 mb-4" style="max-width: 760px;">
+    <h2 class="fw-700 font-md mb-3">Contact Requests</h2>
+
+    {% for message in messages %}
+      <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">{{ message }}</div>
+    {% endfor %}
+
+    <div class="card w-100 border-0 shadow-xs p-4 mb-4">
+      <h4 class="fw-700 mb-3">People asking for your help</h4>
+      {% for item in received %}
+        <div class="border-bottom pb-3 mb-3">
+          <div class="fw-700">{{ item.name }}</div>
+          {% if item.req.message %}<p class="mb-2">&ldquo;{{ item.req.message }}&rdquo;</p>{% endif %}
+          <div class="text-muted font-xsss mb-2">{{ item.req.created_at|date:"M d, Y" }}</div>
+          {% if item.req.status == 'pending' %}
+            <form method="post" action="{% url 'contact-respond' item.req.pk %}" class="d-inline">
+              {% csrf_token %}
+              <button name="answer" value="accept" class="btn btn-success btn-sm">Accept and share my number</button>
+              <button name="answer" value="decline" class="btn btn-outline-secondary btn-sm">Decline</button>
+            </form>
+          {% elif item.req.status == 'accepted' %}
+            <span class="badge bg-success text-white">Accepted</span>
+            <a href="tel:{{ item.phone }}" class="ms-2"><i class="feather-phone"></i> {{ item.phone }}</a>
+          {% else %}
+            <span class="badge bg-secondary text-white">Declined</span>
+          {% endif %}
+        </div>
+      {% empty %}
+        <p class="text-muted mb-0">Nobody has asked yet.</p>
+      {% endfor %}
+    </div>
+
+    <div class="card w-100 border-0 shadow-xs p-4">
+      <h4 class="fw-700 mb-3">Requests you sent</h4>
+      {% for item in sent %}
+        <div class="border-bottom pb-3 mb-3">
+          <div class="fw-700">{{ item.name }} <span class="text-danger">{{ item.group }}</span></div>
+          {% if item.req.status == 'accepted' %}
+            <span class="badge bg-success text-white">Accepted</span>
+            <a href="tel:{{ item.phone }}" class="ms-2"><i class="feather-phone"></i> {{ item.phone }}</a>
+          {% elif item.req.status == 'pending' %}
+            <span class="badge bg-warning text-dark">Waiting for an answer</span>
+          {% else %}
+            <span class="badge bg-secondary text-white">Declined</span>
+          {% endif %}
+        </div>
+      {% empty %}
+        <p class="text-muted mb-0">You haven't asked anyone yet. <a href="{% url 'donor-directory' %}">Find donors</a>.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock body %}

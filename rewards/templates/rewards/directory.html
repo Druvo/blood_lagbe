@@ -1,0 +1,123 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Find Donors{% endblock title %}
+
+{% block body %}
+<div class="middle-sidebar-bottom">
+  <div class="middle-wrap container mt-4 mb-4">
+
+    <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
+      <h2 class="fw-700 font-md mb-2">Find Donors</h2>
+      <a href="{% url 'contact-inbox' %}" class="btn btn-outline-danger mb-2">
+        <i class="feather-inbox"></i> My contact requests
+        {% if contact_pending_count %}<span class="badge bg-danger text-white">{{ contact_pending_count }}</span>{% endif %}
+      </a>
+    </div>
+
+    {% for message in messages %}
+      <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">{{ message }}</div>
+    {% endfor %}
+
+    {% if not in_directory %}
+      <div class="alert alert-secondary">
+        You're not listed. <a href="{% url 'privacy' %}">Join the directory</a>
+        so people in need can ask you for help.
+      </div>
+    {% endif %}
+
+    <form method="get" class="card w-100 border-0 shadow-xs p-3 mb-3">
+      <div class="row g-2 align-items-end">
+        <div class="col-6 col-md-3">
+          <label for="f-group" class="font-xsss">Blood group</label>
+          <select id="f-group" name="group" class="form-control">
+            <option value="">Any</option>
+            {% for code in blood_groups %}
+              <option value="{{ code }}" {% if code == group %}selected{% endif %}>{{ code }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-6 col-md-4">
+          <label for="f-district" class="font-xsss">District</label>
+          <select id="f-district" name="district" class="form-control">
+            <option value="">Anywhere</option>
+            {% for division, districts in district_choices %}
+              <optgroup label="{{ division }}">
+                {% for value, label in districts %}
+                  <option value="{{ value }}" {% if value == district %}selected{% endif %}>{{ label }}</option>
+                {% endfor %}
+              </optgroup>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-12 col-md-3 font-xsss">
+          <label class="d-block mb-1"><input type="checkbox" name="compatible" value="1" {% if compatible %}checked{% endif %}> Include compatible groups</label>
+          <label class="d-block mb-0"><input type="checkbox" name="available" value="1" {% if available_only %}checked{% endif %}> Available now only</label>
+        </div>
+        <div class="col-12 col-md-2">
+          <button class="btn btn-danger btn-block w-100" type="submit">Search</button>
+        </div>
+      </div>
+      {% if compatible %}
+        <small class="text-muted mt-2">Compatibility is a general guide. The hospital's own testing decides.</small>
+      {% endif %}
+    </form>
+
+    {% for d in donors %}
+      <div class="card w-100 border-0 shadow-xs p-3 mb-2">
+        <div class="d-flex flex-wrap align-items-center">
+          <div class="me-3 text-center" style="min-width:64px;">
+            <i class="feather-droplet" style="font-size:32px;color:#e50202;"></i>
+            <div class="fw-700" style="color:#e50202;">{{ d.group }}</div>
+          </div>
+          <div class="flex-grow-1">
+            <div class="fw-700">{{ d.name }}</div>
+            <div class="text-muted font-xsss">
+              <i class="feather-map-pin"></i> {{ d.district|default:"-" }}
+              &middot; {{ d.donations }} verified donation{{ d.donations|pluralize }}
+              {% if d.badge %}&middot; <span style="color:{{ d.badge.color }};">{{ d.badge.name }}</span>{% endif %}
+            </div>
+            <span class="badge {% if d.available %}bg-success{% else %}bg-secondary{% endif %} text-white font-xsssss mt-1">
+              {% if d.available %}Available{% else %}Not available now{% endif %}
+            </span>
+          </div>
+          <div class="text-end mt-2 ms-auto" style="min-width:150px;flex:1 1 150px;max-width:260px;">
+            {% if d.contact.status == 'accepted' %}
+              <a href="tel:{{ d.user.phone }}" class="btn btn-success btn-sm"><i class="feather-phone"></i> {{ d.user.phone }}</a>
+            {% elif d.contact.status == 'pending' %}
+              <span class="text-muted font-xsss">Request sent</span>
+            {% elif d.contact.status == 'declined' %}
+              <span class="text-muted font-xsss">Declined</span>
+            {% else %}
+              <form method="post" action="{% url 'contact-donor' d.user.pk %}">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                <input type="text" name="message" maxlength="200" class="form-control form-control-sm mb-1" placeholder="Short note (optional)">
+                <button class="btn btn-outline-danger btn-sm w-100" type="submit">Ask for help</button>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="card w-100 border-0 shadow-xs p-4 text-center text-muted">
+        No donors match yet. Try a nearby district or tick "Include compatible groups".
+        <div class="mt-2"><a href="{% url 'request-create' %}">Post an urgent request</a> to reach donors directly.</div>
+      </div>
+    {% endfor %}
+
+    {% if page.has_other_pages %}
+      <div class="text-center mt-3">
+        {% if page.has_previous %}<a class="btn btn-sm btn-outline-danger" href="?{{ query }}&amp;page={{ page.previous_page_number }}">Previous</a>{% endif %}
+        <span class="mx-2 text-muted">Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+        {% if page.has_next %}<a class="btn btn-sm btn-outline-danger" href="?{{ query }}&amp;page={{ page.next_page_number }}">Next</a>{% endif %}
+      </div>
+    {% endif %}
+
+    <p class="text-muted font-xsss text-center mt-4">
+      Donors share their number only if they accept. In an emergency, also
+      contact the hospital's blood bank. Everyone should follow the
+      screening of the blood bank before donating.
+    </p>
+  </div>
+</div>
+{% endblock body %}

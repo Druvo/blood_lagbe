@@ -8,9 +8,24 @@ User = get_user_model()
 
 
 class PrivacyForm(forms.ModelForm):
+    """Donor profile and what other people may see of it."""
+
     class Meta:
         model = Profile
-        fields = ['show_on_leaderboard', 'public_badge_card']
+        fields = [
+            'blood_group', 'district', 'in_directory', 'available_to_donate',
+            'show_on_leaderboard', 'public_badge_card',
+        ]
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get('in_directory'):
+            for name in ('blood_group', 'district'):
+                if not cleaned_data.get(name) and name not in self.errors:
+                    self.add_error(
+                        name, 'Needed so people can find you in the directory.',
+                    )
+        return cleaned_data
 
 
 class LoginForm(forms.Form):

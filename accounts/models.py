@@ -7,6 +7,9 @@ from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
 from django.core.validators import RegexValidator
+
+from rewards.blood import BLOOD_GROUP_CHOICES
+from rewards.geo import DISTRICT_CHOICES
 # Create your models here.
 
 
@@ -133,6 +136,21 @@ class Profile(models.Model):
         choices=[('M', 'Male'), ('F', 'Female')]
     )
 
+    blood_group = models.CharField(
+        _('Blood Group'), max_length=3, blank=True,
+        choices=BLOOD_GROUP_CHOICES,
+    )
+    district = models.CharField(
+        _('District'), max_length=100, blank=True, choices=DISTRICT_CHOICES,
+    )
+    in_directory = models.BooleanField(
+        _('List me in the donor directory'), default=False,
+        help_text=_('Opt-in. Logged-in members can then ask you for help. '
+                    'Your phone number is shared only if you accept.'),
+    )
+    available_to_donate = models.BooleanField(
+        _('I am available to donate right now'), default=True,
+    )
     show_on_leaderboard = models.BooleanField(
         _('Show me on the leaderboard and home page'), default=True,
     )

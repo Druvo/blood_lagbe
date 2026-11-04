@@ -1,6 +1,6 @@
 from django.urls import path
 
-from rewards import views
+from rewards import directory_views, views
 
 urlpatterns = [
     path('leaderboard/', views.leaderboard, name='leaderboard'),
@@ -14,5 +14,17 @@ urlpatterns = [
     path(
         'requests/<int:pk>/close/', views.request_close,
         name='request-close',
+    ),
+    path('donors/', directory_views.donor_directory, name='donor-directory'),
+    path(
+        'donors/inbox/', directory_views.contact_inbox, name='contact-inbox',
+    ),
+    path(
+        'donors/<int:user_id>/contact/', directory_views.contact_donor,
+        name='contact-donor',
+    ),
+    path(
+        'donors/contact/<int:pk>/respond/', directory_views.contact_respond,
+        name='contact-respond',
     ),
 ]

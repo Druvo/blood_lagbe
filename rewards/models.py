@@ -13,6 +13,7 @@ from django.db.models import Count, F, Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from rewards.blood import BLOOD_GROUP_CHOICES  # noqa: F401 (re-exported)
 from rewards.geo import DISTRICT_CHOICES
 
 DONATION_CYCLE_DAYS = settings.DONATION_INTERVAL_DAYS  # see settings.py
@@ -21,12 +22,8 @@ LIVES_PER_DONATION = 3  # upper-bound estimate of patients one donation can help
 REQUEST_BONUS_POINTS = 20  # extra points for a verified donation to a request
 MAX_OPEN_REQUESTS_PER_USER = 3  # spam guard on the public request board
 
-BLOOD_GROUP_CHOICES = [
-    ('A+', 'A+'), ('A-', 'A-'),
-    ('B+', 'B+'), ('B-', 'B-'),
-    ('AB+', 'AB+'), ('AB-', 'AB-'),
-    ('O+', 'O+'), ('O-', 'O-'),
-]
+MAX_PENDING_CONTACTS_PER_USER = 5  # outgoing contact requests awaiting an answer
+CONTACT_RETRY_DAYS = 30  # wait before asking a donor who declined again
 
 
 def validate_not_future(value):
@@ -246,6 +243,47 @@ class RequestResponse(models.Model):
 
     def __str__(self):
         return f'{self.donor} -> {self.blood_request}'
+
+
+class ContactRequest(models.Model):
+    """One person asking a directory donor for help. The donor's phone number
+    stays hidden until the donor accepts, so contact is always consented."""
+
+    class Status(models.TextChoices):
+        PENDING = 'pending', _('Pending')
+        ACCEPTED = 'accepted', _('Accepted')
+        DECLINED = 'declined', _('Declined')
+
+    sender = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        related_name='contact_requests_sent',
+    )
+    donor = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        related_name='contact_requests_received',
+    )
+    message = models.CharField(_('Message'), max_length=200, blank=True)
+    status = models.CharField(
+        max_length=10, choices=Status.choices, default=Status.PENDING,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    answered_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['sender', 'donor'],
+                condition=Q(status='pending'),
+                name='one_pending_contact_per_pair',
+            ),
+            models.CheckConstraint(
+                check=~Q(sender=F('donor')), name='no_contact_with_self',
+            ),
+        ]
+
+    def __str__(self):
+        return f'{self.sender} -> {self.donor} ({self.status})'
 
 
 class Badge(models.Model):

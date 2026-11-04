@@ -11,3 +11,14 @@ def donation_interval(request):
             else f'{days} days'
         ),
     }
+
+
+def contact_inbox(request):
+    user = getattr(request, 'user', None)
+    if user is None or not user.is_authenticated:
+        return {}
+    return {
+        'contact_pending_count': user.contact_requests_received.filter(
+            status='pending',
+        ).count(),
+    }
