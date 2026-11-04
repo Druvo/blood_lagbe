@@ -1,0 +1,116 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Squads{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/community.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container cm-page">
+  <header class="cm-head bb-row bb-row--between bb-row--top">
+    <div>
+      <span class="bb-eyebrow">Squads</span>
+      <h1 class="bb-h2 bb-mb-1">Donate better together</h1>
+      <p class="bb-lead">Teams of friends, offices, universities or villages. Every verified donation counts for the squad.</p>
+    </div>
+    <div class="cm-link-row">
+      <a href="{% url 'squads:leaderboard' %}" class="bb-btn bb-btn--soft bb-btn--sm"><i class="feather-award"></i> Squad ranking</a>
+      {% if at_limit %}
+        <span class="bb-btn bb-btn--primary bb-btn--sm is-disabled" aria-disabled="true"><i class="feather-plus"></i> Create a squad</span>
+      {% else %}
+        <a href="{% url 'squads:create' %}" class="bb-btn bb-btn--primary bb-btn--sm"><i class="feather-plus"></i> Create a squad</a>
+      {% endif %}
+    </div>
+  </header>
+
+  {% if at_limit %}
+    <div class="bb-alert bb-alert--info bb-mt-2">You are in {{ max_squads }} squads, the maximum. Leave one to join or start another.</div>
+  {% endif %}
+
+  <div class="bb-split bb-mt-3">
+    <div class="bb-stack">
+      <section aria-labelledby="mine-h">
+        <h2 class="bb-h3" id="mine-h">My squads</h2>
+        {% for s in mine %}
+          <a href="{% url 'squads:detail' s.pk %}" class="bb-card bb-card--lift cm-squad bb-mb-1" style="display:flex;color:inherit;">
+            <span class="cm-squad__icon" aria-hidden="true">{{ s.name|slice:":2"|upper }}</span>
+            <div class="bb-grow">
+              <div class="bb-strong cm-trunc">{{ s.name }}</div>
+              <div class="bb-small bb-muted">{{ s.member_count }} member{{ s.member_count|pluralize }}{% if s.district %} &middot; {{ s.district }}{% endif %}</div>
+            </div>
+            {% if s.owner_id == user.id %}<span class="bb-pill bb-pill--info">Owner</span>{% endif %}
+            <span class="bb-pill">{% if s.is_public %}Public{% else %}Private{% endif %}</span>
+          </a>
+        {% empty %}
+          <div class="bb-card bb-empty">
+            <i class="feather-users"></i>
+            <strong class="bb-strong">No squad yet</strong>
+            <p class="bb-small">Start one, or enter a join code a friend sent you.</p>
+            <a href="{% url 'squads:create' %}" class="bb-btn bb-btn--primary bb-btn--sm">Create a squad</a>
+          </div>
+        {% endfor %}
+      </section>
+
+      <section aria-labelledby="discover-h">
+        <div class="cm-bar bb-mb-1">
+          <h2 class="bb-h3 bb-mb-0" id="discover-h">Public squads</h2>
+          <form method="get" class="bb-form" id="sq-filter">
+            <label class="bb-sr" for="sq-district">District</label>
+            <select id="sq-district" name="district" aria-label="Filter by district">
+              <option value="">All districts</option>
+              {% for division, districts in district_choices %}
+                <optgroup label="{{ division }}">
+                  {% for value, label in districts %}
+                    <option value="{{ value }}" {% if value == district %}selected{% endif %}>{{ label }}</option>
+                  {% endfor %}
+                </optgroup>
+              {% endfor %}
+            </select>
+            <noscript><button type="submit" class="bb-btn bb-btn--sm">Apply</button></noscript>
+          </form>
+        </div>
+        {% for s in discover %}
+          <div class="bb-card cm-squad bb-mb-1">
+            <span class="cm-squad__icon" aria-hidden="true">{{ s.name|slice:":2"|upper }}</span>
+            <div class="bb-grow">
+              <a href="{% url 'squads:detail' s.pk %}" class="bb-strong cm-trunc" style="display:block;">{{ s.name }}</a>
+              <div class="bb-small bb-muted">{{ s.member_count }} member{{ s.member_count|pluralize }}{% if s.district %} &middot; {{ s.district }}{% endif %}</div>
+              {% if s.description %}<div class="bb-small cm-trunc">{{ s.description }}</div>{% endif %}
+            </div>
+            <form method="post" action="{% url 'squads:join-public' s.pk %}">
+              {% csrf_token %}
+              <button type="submit" class="bb-btn bb-btn--ghost bb-btn--sm" {% if at_limit %}disabled{% endif %}>Join</button>
+            </form>
+          </div>
+        {% empty %}
+          <div class="bb-card bb-empty">
+            <i class="feather-search"></i>
+            <strong class="bb-strong">{% if district %}No public squads in {{ district }} yet{% else %}No public squads to join yet{% endif %}</strong>
+            <p class="bb-small">Be the first: make a squad and tick "Show in the public squad list".</p>
+          </div>
+        {% endfor %}
+      </section>
+    </div>
+
+    <aside class="bb-card bb-mt-2" aria-labelledby="code-h">
+      <h2 class="bb-card__title" id="code-h"><i class="feather-lock"></i> Have a join code?</h2>
+      <form method="post" action="{% url 'squads:join' %}" class="bb-form">
+        {% csrf_token %}
+        <div class="bb-field">
+          <label class="bb-label" for="id_code">Join code</label>
+          <input type="text" name="code" id="id_code" maxlength="24" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="e.g. K7M2QX9P" required>
+        </div>
+        <button type="submit" class="bb-btn bb-btn--primary bb-btn--block" {% if at_limit %}disabled{% endif %}>Join squad</button>
+      </form>
+    </aside>
+  </div>
+</div>
+{% endblock body %}
+
+{% block extra_scripts %}
+<script>
+  (function () {
+    var s = document.getElementById('sq-district');
+    if (s) s.addEventListener('change', function () { document.getElementById('sq-filter').submit(); });
+  })();
+</script>
+{% endblock extra_scripts %}

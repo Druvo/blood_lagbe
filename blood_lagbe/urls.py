@@ -16,10 +16,13 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.sitemaps.views import sitemap
 from django.templatetags.static import static as static_url
 from django.urls import path, include
 from django.views.generic.base import RedirectView
+from accounts.views import welcome_view
 from blogapp.views import postView
+from pages import seo
 
 
 urlpatterns = [
@@ -28,19 +31,32 @@ urlpatterns = [
     path(
         'favicon.ico',
         RedirectView.as_view(
-            url=static_url('images/logo/blood_lagbe_logo.png'),
+            url=static_url('images/brand/bloodbond-mark.svg'),
             permanent=True,
         ),
     ),
 
+    # SEO / PWA / ops ----
+    path('robots.txt', seo.robots_txt, name='robots'),
+    path(
+        'sitemap.xml', sitemap, {'sitemaps': seo.SITEMAPS},
+        name='sitemap',
+    ),
+    path('manifest.webmanifest', seo.manifest, name='manifest'),
+    path('sw.js', seo.service_worker, name='service-worker'),
+
     # pages url ----
     path('', include("pages.urls"), name='index'),
     path('accounts/', include("accounts.urls"), name='accounts'),
+    path('welcome/', welcome_view, name='welcome'),
 
     path('blog/', include("blogapp.urls")),
     path('post/<id>/', postView, name='post-view'),
     path('donations/', include('rewards.urls')),
     path('', include('rewards.public_urls')),
+    path('squads/', include('squads.urls')),
+    path('impact/', include('insights.urls')),
+    path('stories/', include('stories.urls')),
 
     # auth urls -----
     path('accounts/', include('django.contrib.auth.urls')),
@@ -54,7 +70,11 @@ if settings.DEBUG:
     )
 
 
-# admin site title change
-admin.sites.AdminSite.site_header = "Blood Lagbe Administration"
-admin.sites.AdminSite.site_title = "Blood Lagbe Administration"
-admin.sites.AdminSite.index_title = "Blood Lagbe Admin Panel"
+# Error pages: Django's default handlers render templates/404.html, 403.html
+# and 500.html (the 500 one is standalone on purpose).
+
+
+# admin site title change: follows the configured site name
+admin.sites.AdminSite.site_header = f"{settings.SITE_NAME} Administration"
+admin.sites.AdminSite.site_title = f"{settings.SITE_NAME} Administration"
+admin.sites.AdminSite.index_title = f"{settings.SITE_NAME} Admin Panel"

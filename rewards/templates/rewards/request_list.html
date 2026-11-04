@@ -1,68 +1,138 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
-{% block title %}Urgent Blood Requests{% endblock title %}
+{% block title %}Urgent blood requests{% endblock title %}
+
+{% block meta %}
+<meta name="description" content="People near you who need blood right now. See who needs which group, where, and by when.">
+<meta property="og:site_name" content="{{ SITE_NAME }}">
+<meta property="og:title" content="Urgent blood requests | {{ SITE_NAME }}">
+<meta property="og:description" content="People near you who need blood right now. Can you help?">
+{% endblock meta %}
+
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/requests.css' %}">{% endblock extra_style %}
 
 {% block body %}
-<div class="middle-sidebar-bottom">
-  <div class="middle-wrap container mt-4 mb-4">
+<div class="bb-container bb-section--tight">
 
-    <div class="d-flex flex-wrap align-items-center justify-content-between mb-3">
-      <h2 class="fw-700 font-md mb-2">Urgent Blood Requests</h2>
-      <a href="{% url 'request-create' %}" class="btn btn-danger mb-2">Post a request</a>
+  <div class="bb-pagehead bb-row bb-row--between">
+    <div>
+      <span class="bb-eyebrow">Urgent</span>
+      <h1 class="bb-h2 bb-mb-0">Blood requests</h1>
     </div>
+    <div class="bb-row">
+      {% if user.is_authenticated %}
+        <a href="{% url 'request-mine' %}" class="bb-btn bb-btn--ghost">My requests</a>
+      {% endif %}
+      <a href="{% url 'request-create' %}" class="bb-btn bb-btn--primary"><i class="feather-plus"></i> Post a request</a>
+    </div>
+  </div>
 
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">{{ message }}</div>
-      {% endfor %}
-    {% endif %}
+  {% if eligibility and not eligibility.eligible %}
+    <div class="bb-alert bb-alert--warn bb-mt-2">
+      You can donate again on <strong>{{ eligibility.next_date|date:"M d, Y" }}</strong>
+      ({{ eligibility.days_left }} day{{ eligibility.days_left|pluralize }} left).
+      You can still share a request to help find a donor.
+    </div>
+  {% endif %}
 
-    {% if eligibility %}
-      <div class="alert {% if eligibility.eligible %}alert-success{% else %}alert-warning{% endif %}">
-        {% if eligibility.eligible %}
-          You're ready to donate. Pick a request below and tap "I can help".
-        {% else %}
-          You can donate again on <strong>{{ eligibility.next_date|date:"M d, Y" }}</strong>
-          ({{ eligibility.days_left }} day{{ eligibility.days_left|pluralize }} left).
-          You can still share requests to help find a donor.
-        {% endif %}
+  <form method="get" class="bb-card bb-card--flat bb-mt-2 rq-filters" aria-label="Filter requests">
+    <div class="rq-filters__row">
+      <span class="rq-filters__label" id="lbl-group">Group</span>
+      <div class="rq-groups" role="group" aria-labelledby="lbl-group">
+        <a href="{{ any_group_url }}" class="bb-chip{% if not selected %} bb-chip--active{% endif %}">All</a>
+        {% for g in blood_groups %}
+          <a href="{{ g.url }}" class="bb-chip{% if g.active %} bb-chip--active{% endif %}"{% if g.active %} aria-current="true"{% endif %}>{{ g.code }}</a>
+        {% endfor %}
       </div>
-    {% endif %}
-
-    <div class="mb-3">
-      <a href="{% url 'request-list' %}" class="badge {% if not selected %}bg-danger text-white{% else %}bg-light text-dark{% endif %} p-2 me-1">All</a>
-      {% for group in blood_groups %}
-        <a href="?blood_group={{ group|urlencode:'' }}"
-           class="badge {% if selected == group %}bg-danger text-white{% else %}bg-light text-dark{% endif %} p-2 me-1">{{ group }}</a>
-      {% endfor %}
     </div>
+    <div class="rq-filters__row">
+      <span class="rq-filters__label" id="lbl-when">Needed</span>
+      <div class="bb-chips" role="group" aria-labelledby="lbl-when">
+        {% for w in when_options %}
+          <a href="{{ w.url }}" class="bb-chip{% if w.active %} bb-chip--active{% endif %}">{{ w.label }}</a>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="rq-filters__row">
+      <label class="rq-filters__label" for="f-district">District</label>
+      <select id="f-district" name="district" data-autosubmit>
+        <option value="">All districts</option>
+        {% for division, districts in district_choices %}
+          <optgroup label="{{ division }}">
+            {% for value, label in districts %}
+              <option value="{{ value }}"{% if value == district %} selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </optgroup>
+        {% endfor %}
+      </select>
+      {% if selected %}<input type="hidden" name="blood_group" value="{{ selected }}">{% endif %}
+      {% if when %}<input type="hidden" name="when" value="{{ when }}">{% endif %}
+      <noscript><button class="bb-btn bb-btn--soft bb-btn--sm" type="submit">Apply</button></noscript>
+      {% if filtered %}<a href="{% url 'request-list' %}" class="bb-small">Clear filters</a>{% endif %}
+    </div>
+  </form>
 
+  <p class="bb-muted bb-small bb-mt-2 bb-mb-1" aria-live="polite">
+    {{ total }} request{{ total|pluralize }} still need{{ total|pluralize:"s," }} donors{% if selected %} for {{ selected }}{% endif %}{% if district %} in {{ district }}{% endif %}.
+  </p>
+
+  <div class="bb-stack">
     {% for req in blood_requests %}
-      <div class="card w-100 border-0 shadow-xs p-4 mb-3">
-        <div class="d-flex align-items-center">
-          <div class="me-4 text-center" style="min-width:72px;">
-            <i class="feather-droplet" style="font-size:44px;color:#e50202;"></i>
-            <div class="fw-700 font-md" style="color:#e50202;">{{ req.blood_group }}</div>
-          </div>
-          <div class="flex-grow-1">
-            <h4 class="fw-700 mb-1">{{ req.hospital }}</h4>
-            <div class="text-muted mb-1"><i class="feather-map-pin"></i> {{ req.district }}</div>
-            <div class="mb-2">
-              <strong>{{ req.units_remaining }}</strong> of {{ req.units_needed }}
-              bag{{ req.units_needed|pluralize }} still needed &middot;
-              needed by <strong>{{ req.needed_by|date:"M d" }}</strong>
-            </div>
-            {% if req.note %}<p class="text-muted mb-2">{{ req.note }}</p>{% endif %}
-            <a href="{% url 'request-detail' req.pk %}" class="btn btn-danger btn-sm">View &amp; respond</a>
+      {% with urg=req.urgency %}
+      <a href="{% url 'request-detail' req.pk %}" class="bb-card bb-card--lift rq-card{% if req.is_flagged %} rq-card--flag{% endif %}">
+        <span class="bb-bloodtag"><span>{{ req.blood_group }}</span></span>
+        <div>
+          <h2 class="rq-card__title">{{ req.hospital }}</h2>
+          <div class="rq-card__meta">
+            <span><i class="feather-map-pin"></i>{{ req.district }}</span>
+            {% if req.pledges %}<span><i class="feather-users"></i>{{ req.pledges }} offered</span>{% endif %}
           </div>
         </div>
-      </div>
+        <div class="rq-card__foot">
+          <span class="bb-pill{% if urg.1 %} bb-pill--{{ urg.1 }}{% endif %}"><i class="feather-clock"></i> {{ urg.0 }}</span>
+          {% if req.is_flagged %}<span class="bb-pill bb-pill--warn">Reported</span>{% endif %}
+          <div class="rq-card__progress">
+            <div class="rq-bags"><strong>{{ req.units_remaining }}</strong> of {{ req.units_needed }} bag{{ req.units_needed|pluralize }} still needed</div>
+            <div class="bb-progress" role="progressbar" aria-valuemin="0" aria-valuemax="{{ req.units_needed }}" aria-valuenow="{{ req.units_received }}" aria-label="Bags received"><span style="width:{% widthratio req.units_received req.units_needed 100 %}%"></span></div>
+          </div>
+        </div>
+      </a>
+      {% endwith %}
     {% empty %}
-      <div class="card w-100 border-0 shadow-xs p-4 text-center text-muted">
-        No open requests{% if selected %} for {{ selected }}{% endif %} right now. That's good news.
+      <div class="bb-card bb-empty">
+        <i class="feather-heart"></i>
+        {% if filtered %}
+          <p class="bb-strong bb-mb-1">No open requests match these filters.</p>
+          <p>Try another group or district.</p>
+          <a href="{% url 'request-list' %}" class="bb-btn bb-btn--ghost">Clear filters</a>
+        {% else %}
+          <p class="bb-strong bb-mb-1">No one is waiting for blood right now.</p>
+          <p>That is good news. If you or someone you know needs blood, post a request.</p>
+        {% endif %}
+        <p class="bb-mt-2"><a href="{% url 'request-create' %}" class="bb-btn bb-btn--primary">Post a request</a></p>
       </div>
     {% endfor %}
-
   </div>
+
+  {% if page.has_other_pages %}
+    <nav class="rq-pager bb-mt-3" aria-label="Pages">
+      {% if page.has_previous %}<a class="bb-btn bb-btn--ghost bb-btn--sm" href="?{% if page_query %}{{ page_query }}&amp;{% endif %}page={{ page.previous_page_number }}">Previous</a>{% endif %}
+      <span class="bb-muted bb-small">Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+      {% if page.has_next %}<a class="bb-btn bb-btn--ghost bb-btn--sm" href="?{% if page_query %}{{ page_query }}&amp;{% endif %}page={{ page.next_page_number }}">Next</a>{% endif %}
+    </nav>
+  {% endif %}
+
+  <p class="bb-muted bb-xs bb-center bb-mt-3">
+    In an emergency, call the hospital's blood bank first. Whether someone can donate is decided by the blood bank, not by this site.
+  </p>
 </div>
 {% endblock body %}
+
+{% block extra_scripts %}
+<script>
+  document.querySelectorAll('[data-autosubmit]').forEach(function (el) {
+    el.addEventListener('change', function () { el.form.submit(); });
+  });
+</script>
+{% endblock extra_scripts %}

@@ -1,51 +1,44 @@
 {% load static %}
-
-<a href="#topbar" id="to-top" class="btn btn-danger"><i class="feather-arrow-up p-2"></i></a>
-
-<div id="footer" class="shadow-xss w-100 d-block d-flex justify-contain-center align-items-center border-0 p-5 mb-0" style="background-image: url({% static 'images/logo/blood_lagbe-footer_logo.png' %})">
-  <!-- ======= Footer ======= -->
-  <footer class="container">
-    <div class="footer-top">
-      <div class="container">
-        <div class="row">
-
-          <div class="col-lg-6 col-md-6">
-            <div class="footer-info">
-              <h3><a href="/"><img class="ml-0" src="{% static 'images/logo/blood_lagbe_logo-v2.png' %}" alt="Blood Lagbe" style="width: 90px;"></a></h3>
-              <p>
-                A fast, simple and safe platform connecting blood donors and recipients.<br>
-                <strong>Phone:</strong> <a href="tel:+01988353282" class="text-white">+01988353282</a><br>
-                <strong>Email:</strong> <a href="mailto:zh@bloodlagbe.com" class="text-white">zh@bloodlagbe.com</a><br>
-              </p>
-            </div>
-          </div>
-
-          <div class="col-lg-6 col-md-6 footer-links">
-            <h4 class="text-white">Useful Links</h4>
-            <ul class="text-white">
-              <li><i class="feather-chevron-right p-2 text-danger"></i> <a href="/" class="text-white">Home</a></li>
-              <li><i class="feather-chevron-right p-2 text-danger"></i> <a href="{% url 'request-list' %}" class="text-white">Urgent Requests</a></li>
-              <li><i class="feather-chevron-right p-2 text-danger"></i> <a href="{% url 'leaderboard' %}" class="text-white">Leaderboard</a></li>
-              <li><i class="feather-chevron-right p-2 text-danger"></i> <a href="{% url 'blogapp:blog-view' %}" class="text-white">Blog</a></li>
-              {% if user.is_authenticated %}
-                <li><i class="feather-chevron-right p-2 text-danger"></i> <a href="{% url 'log-donation' %}" class="text-white">My Donations</a></li>
-              {% else %}
-                <li><i class="feather-chevron-right p-2 text-danger"></i> <a href="{% url 'signup' %}" class="text-white">Register as a Donor</a></li>
-              {% endif %}
-            </ul>
-          </div>
-        </div>
+<footer class="bb-footer">
+  <div class="bb-container">
+    <div class="bb-footer__grid">
+      <div>
+        <a href="{% url 'home' %}" class="bb-brand"><img src="{% static 'images/brand/bloodbond-mark.svg' %}" alt="" width="36" height="36"><span>{{ SITE_NAME }}</span></a>
+        <p class="bb-small" style="margin-top:12px;max-width:34ch;">{{ SITE_TAGLINE }} A community that connects blood donors with the people who need them, across Bangladesh.</p>
+        {% if SITE_CONTACT_EMAIL %}<p class="bb-small"><a href="mailto:{{ SITE_CONTACT_EMAIL }}">{{ SITE_CONTACT_EMAIL }}</a></p>{% endif %}
+      </div>
+      <div>
+        <h4>Give &amp; get blood</h4>
+        <ul>
+          <li><a href="{% url 'request-list' %}">Urgent requests</a></li>
+          <li><a href="{% url 'request-create' %}">Ask for blood</a></li>
+          <li><a href="{% url 'donor-directory' %}">Find donors</a></li>
+          <li><a href="{% url 'log-donation' %}">Log a donation</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Community</h4>
+        <ul>
+          <li><a href="{% url 'leaderboard' %}">Leaderboard</a></li>
+          <li><a href="{% url 'squads:list' %}">Squads</a></li>
+          <li><a href="{% url 'impact' %}">Impact</a></li>
+          <li><a href="{% url 'stories' %}">Stories</a></li>
+          <li><a href="{% url 'blogapp:blog-view' %}">Blog</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Learn</h4>
+        <ul>
+          <li><a href="{% url 'learn' %}">Can I donate?</a></li>
+          <li><a href="{% url 'faq' %}">FAQ</a></li>
+          <li><a href="{% url 'about' %}">About</a></li>
+          <li><a href="{% url 'privacy' %}">Privacy settings</a></li>
+        </ul>
       </div>
     </div>
-
-    <div class="container">
-      <div class="copyright text-center text-white">
-        &copy; Copyright <strong><span>Blood Lagbe</span></strong>. All Rights Reserved
-      </div>
-      <div class="credits text-center text-white">
-        Developed by Blood Lagbe
-      </div>
+    <div class="bb-footer__legal">
+      <p style="margin-bottom:6px;">{{ SITE_NAME }} is a community tool, not a medical service. Eligibility and safety are decided by the blood bank's screening. In an emergency, contact the hospital's blood bank directly.</p>
+      <p style="margin:0;">&copy; {% now "Y" %} {{ SITE_NAME }}. Made in Bangladesh.</p>
     </div>
-  </footer><!-- End Footer -->
-
-</div>
+  </div>
+</footer>

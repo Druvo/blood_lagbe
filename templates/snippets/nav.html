@@ -1,49 +1,41 @@
-{% load static %}
-<!-- ======= Top Bar ======= -->
-<section id="topbar" class="d-flex align-items-center text-white p-2">
-  <div class="container d-flex justify-content-center justify-content-md-between">
-    <div class="contact-info d-flex align-items-center">
-      <a href="tel:+01988353282" class="text-white"><i class="feather-phone text-danger p-2"></i>+01988353282</a>
-      <a href="mailto:zh@bloodlagbe.com" class="text-white"><i class="feather-mail text-danger p-2"></i>zh@bloodlagbe.com</a>
+{% load static %}{% with p=request.path %}
+<header class="bb-nav">
+  <div class="bb-container bb-nav__inner">
+    <a href="{% url 'home' %}" class="bb-brand" aria-label="{{ SITE_NAME }} home">
+      <img src="{% static 'images/brand/bloodbond-mark.svg' %}" alt="" width="36" height="36">
+      <span>{{ SITE_NAME }}</span>
+    </a>
+
+    <nav class="bb-nav__links" aria-label="Main">
+      <a href="{% url 'request-list' %}" class="{% if p|slice:':10' == '/requests/' %}is-active{% endif %}">Urgent requests</a>
+      <a href="{% url 'donor-directory' %}" class="{% if p|slice:':8' == '/donors/' %}is-active{% endif %}">Find donors</a>
+      <a href="{% url 'leaderboard' %}" class="{% if p|slice:':13' == '/leaderboard/' or p|slice:':8' == '/squads/' %}is-active{% endif %}">Leaderboard</a>
+      <a href="{% url 'impact' %}" class="{% if p|slice:':8' == '/impact/' %}is-active{% endif %}">Impact</a>
+      <a href="{% url 'stories' %}" class="{% if p|slice:':9' == '/stories/' %}is-active{% endif %}">Stories</a>
+      <a href="{% url 'learn' %}" class="{% if p|slice:':7' == '/learn/' or p|slice:':5' == '/faq/' or p|slice:':7' == '/about/' %}is-active{% endif %}">Learn</a>
+    </nav>
+
+    <div class="bb-nav__end">
+      <button type="button" class="bb-iconbtn" data-theme-toggle aria-label="Toggle dark mode"><i class="feather-moon"></i></button>
+      {% if user.is_authenticated %}
+        <a href="{% url 'contact-inbox' %}" class="bb-iconbtn" aria-label="Contact requests"><i class="feather-bell"></i>{% if contact_pending_count %}<span class="bb-dot">{{ contact_pending_count }}</span>{% endif %}</a>
+        <div class="bb-menu">
+          <button type="button" class="bb-iconbtn" data-menu-toggle aria-haspopup="true" aria-expanded="false" aria-label="Account menu"><i class="feather-user"></i></button>
+          <div class="bb-menu__panel" role="menu">
+            <div class="bb-menu__head">{{ user.first_name|default:"My account" }}</div>
+            <a href="{% url 'log-donation' %}" role="menuitem"><i class="feather-award"></i> My hub</a>
+            <a href="{% url 'squads:list' %}" role="menuitem"><i class="feather-users"></i> My squads</a>
+            <a href="{% url 'contact-inbox' %}" role="menuitem"><i class="feather-inbox"></i> Contact requests{% if contact_pending_count %} ({{ contact_pending_count }}){% endif %}</a>
+            <a href="{% url 'request-mine' %}" role="menuitem"><i class="feather-droplet"></i> My requests</a>
+            <a href="{% url 'privacy' %}" role="menuitem"><i class="feather-sliders"></i> Profile &amp; privacy</a>
+            <a href="{% url 'logout' %}" role="menuitem"><i class="feather-log-out"></i> Log out</a>
+          </div>
+        </div>
+      {% else %}
+        <a href="{% url 'login' %}" class="bb-btn bb-btn--ghost bb-btn--sm bb-hide-sm">Log in</a>
+        <a href="{% url 'signup' %}" class="bb-btn bb-btn--primary bb-btn--sm">Join free</a>
+      {% endif %}
     </div>
-    {% if user.is_authenticated %}
-      <div class="d-none d-md-block text-white">
-        Welcome, {{ user.first_name|default:user.phone }}
-      </div>
-    {% endif %}
   </div>
-</section>
-<!-- navigation top-->
-<div id="navbar" class="nav-header bg-white border-0">
-  <div class="container d-flex justify-content-center justify-content-md-between align-items-center">
-
-    <div class="nav-top">
-      <a href="/"><img class="ml-0" src="{% static 'images/logo/blood_lagbe_logo-v2.png' %}" alt="Blood Lagbe" style="width: 90px;"></a>
-      <button class="nav-menu me-0 ms-2"></button>
-    </div>
-
-    <a href="/" class="p-2 text-center ms-3 menu-icon center-menu-icon"><i class="feather-home font-lg alert-light bg-greylight btn-round-lg theme-dark-bg text-danger"></i></a>
-    <a href="{% url 'blogapp:blog-view' %}" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i class="feather-book-open font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"></i></a>
-    <a href="{% url 'request-list' %}" title="Urgent requests" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i class="feather-droplet font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"></i></a>
-    {% if user.is_authenticated %}<a href="{% url 'donor-directory' %}" title="Find donors" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i class="feather-users font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"></i></a>{% endif %}
-    <a href="{% url 'leaderboard' %}" title="Leaderboard" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i class="feather-bar-chart-2 font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"></i></a>
-    {% if user.is_authenticated %}
-      <a href="{% url 'log-donation' %}" title="My donations" class="p-2 text-center ms-0 menu-icon center-menu-icon"><i class="feather-award font-lg bg-greylight btn-round-lg theme-dark-bg text-grey-500"></i></a>
-    {% endif %}
-
-    {% if user.is_authenticated %}
-      <a href="#" class="p-2 text-center ms-auto menu-icon" id="dropdownMenu3" data-bs-toggle="dropdown" aria-expanded="false"><i class="feather-user font-xl text-current"></i></a>
-      <div class="dropdown-menu dropdown-menu-end p-4 rounded-3 border-0 shadow-lg" aria-labelledby="dropdownMenu3">
-        <h4 class="fw-700 font-xss mb-3">{{ user.first_name|default:user.phone }}</h4>
-        <a href="{% url 'log-donation' %}" class="d-block mb-2">My Donations</a>
-        <a href="{% url 'contact-inbox' %}" class="d-block mb-2">Contact requests{% if contact_pending_count %} ({{ contact_pending_count }}){% endif %}</a>
-        <a href="{% url 'privacy' %}" class="d-block mb-2">Profile &amp; privacy</a>
-        <a href="{% url 'logout' %}" class="d-block">Logout</a>
-      </div>
-    {% else %}
-      <a href="{% url 'login' %}" class="p-2 text-center ms-auto menu-icon"><i class="feather-log-in font-xl text-current"></i></a>
-      <a href="{% url 'signup' %}" class="p-2 text-center ms-2 menu-icon"><i class="feather-user-plus font-xl text-current"></i></a>
-    {% endif %}
-  </div>
-</div>
-<!-- navigation top -->
+</header>
+{% endwith %}

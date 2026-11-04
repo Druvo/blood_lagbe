@@ -9,7 +9,8 @@ from django.core.validators import (
     RegexValidator,
 )
 from django.db import models
-from django.db.models import Count, F, Q
+from django.db.models import Count, F, OuterRef, Q, Subquery
+from django.db.models.functions import Coalesce
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -21,6 +22,7 @@ STREAK_GRACE_DAYS = 14  # slack allowed before a streak is considered broken
 LIVES_PER_DONATION = 3  # upper-bound estimate of patients one donation can help
 REQUEST_BONUS_POINTS = 20  # extra points for a verified donation to a request
 MAX_OPEN_REQUESTS_PER_USER = 3  # spam guard on the public request board
+REPORT_FLAG_THRESHOLD = 3  # open reports that hide a request until staff clear it
 
 MAX_PENDING_CONTACTS_PER_USER = 5  # outgoing contact requests awaiting an answer
 CONTACT_RETRY_DAYS = 30  # wait before asking a donor who declined again
@@ -140,6 +142,42 @@ class BloodRequestQuerySet(models.QuerySet):
             .filter(received__lt=F('units_needed'))
         )
 
+    def with_report_count(self):
+        """Annotate `report_total`: reports staff have not cleared. A
+        subquery, so it cannot multiply the donation join in with_received."""
+        open_reports = (
+            RequestReport.objects.filter(
+                blood_request=OuterRef('pk'), cleared=False,
+            ).order_by().values('blood_request')
+            .annotate(total=Count('pk')).values('total')
+        )
+        return self.annotate(report_total=Coalesce(
+            Subquery(open_reports, output_field=models.IntegerField()), 0,
+        ))
+
+    def with_pledge_count(self):
+        """Annotate `pledges`: donors who said "I can help". A subquery for
+        the same reason as with_report_count."""
+        pledges = (
+            RequestResponse.objects.filter(blood_request=OuterRef('pk'))
+            .order_by().values('blood_request')
+            .annotate(total=Count('pk')).values('total')
+        )
+        return self.annotate(pledges=Coalesce(
+            Subquery(pledges, output_field=models.IntegerField()), 0,
+        ))
+
+    def public(self):
+        """Hide requests the community has flagged until staff clear them."""
+        return self.with_report_count().filter(
+            report_total__lt=REPORT_FLAG_THRESHOLD,
+        )
+
+    def flagged(self):
+        return self.with_report_count().filter(
+            report_total__gte=REPORT_FLAG_THRESHOLD,
+        )
+
 
 class BloodRequest(models.Model):
     """A public, urgent call for donors of one blood group."""
@@ -147,6 +185,11 @@ class BloodRequest(models.Model):
     class Status(models.TextChoices):
         OPEN = 'open', _('Open')
         CLOSED = 'closed', _('Closed')
+
+    class Outcome(models.TextChoices):
+        FULFILLED_HERE = 'fulfilled_here', _('Got blood through here')
+        FOUND_ELSEWHERE = 'found_elsewhere', _('Found blood elsewhere')
+        NO_LONGER_NEEDED = 'no_longer_needed', _('No longer needed')
 
     requester = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
@@ -177,9 +220,17 @@ class BloodRequest(models.Model):
         )],
     )
     note = models.CharField(_('Note'), max_length=500, blank=True)
+    patient_name = models.CharField(
+        _('Patient first name or initials'), max_length=30, blank=True,
+    )
     status = models.CharField(
         max_length=10, choices=Status.choices, default=Status.OPEN,
     )
+    outcome = models.CharField(
+        _('Outcome'), max_length=20, choices=Outcome.choices, blank=True,
+        help_text=_('Set by the requester when closing the request.'),
+    )
+    closed_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     objects = BloodRequestQuerySet.as_manager()
@@ -217,6 +268,51 @@ class BloodRequest(models.Model):
             and not self.is_expired
             and not self.is_fulfilled
         )
+
+    @property
+    def days_left(self):
+        return (self.needed_by - timezone.localdate()).days
+
+    @property
+    def urgency(self):
+        """(label, tone) for the urgency pill. Tone is a bb-pill modifier."""
+        days = self.days_left
+        if days <= 0:
+            return 'Needed today', 'bad'
+        if days == 1:
+            return 'Needed tomorrow', 'bad'
+        if days <= 7:
+            return f'In {days} days', 'warn'
+        return f'By {self.needed_by:%b} {self.needed_by.day}', ''
+
+    @property
+    def status_pill(self):
+        """(label, tone) summarising where the request stands."""
+        if self.status == self.Status.CLOSED:
+            return 'Closed', ''
+        if self.is_fulfilled:
+            return 'Fulfilled', 'ok'
+        if self.is_expired:
+            return 'Expired', 'warn'
+        return 'Open', 'info'
+
+    @property
+    def open_report_count(self):
+        if hasattr(self, 'report_total'):
+            return self.report_total
+        return self.reports.filter(cleared=False).count()
+
+    @property
+    def is_flagged(self):
+        """Enough people reported it that it is hidden from the public board
+        until staff clear the reports."""
+        return self.open_report_count >= REPORT_FLAG_THRESHOLD
+
+    def close(self, outcome=''):
+        self.status = self.Status.CLOSED
+        self.outcome = outcome
+        self.closed_at = timezone.now()
+        self.save(update_fields=['status', 'outcome', 'closed_at'])
 
 
 class RequestResponse(models.Model):
@@ -488,3 +584,71 @@ def get_newly_unlocked_badges(before_snapshot, user):
         b for b in after_hero_badges if b.id not in before_hero_ids
     ]
     return newly_unlocked
+
+
+class RequestUpdate(models.Model):
+    """A short public status note from the requester ("2 donors found, 1
+    more bag needed"). Shown on the request's timeline."""
+
+    class Kind(models.TextChoices):
+        NOTE = 'note', _('Update')
+        NEED_MORE = 'need_more', _('Still need more')
+        FOUND_DONOR = 'found_donor', _('Found a donor')
+        OTHER = 'other', _('Other')
+
+    blood_request = models.ForeignKey(
+        BloodRequest, on_delete=models.CASCADE, related_name='updates',
+    )
+    author = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        related_name='request_updates',
+    )
+    kind = models.CharField(
+        max_length=12, choices=Kind.choices, default=Kind.NOTE,
+    )
+    text = models.CharField(_('Update'), max_length=300)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at', '-pk']
+
+    def __str__(self):
+        return f'{self.get_kind_display()}: {self.text[:40]}'
+
+
+class RequestReport(models.Model):
+    """A member flagging a request as spam, fake or stale. REPORT_FLAG_THRESHOLD
+    open reports hide it from the public board until staff clear them."""
+
+    class Reason(models.TextChoices):
+        SPAM = 'spam', _('Spam')
+        FAKE = 'fake', _('Looks fake')
+        ALREADY_FULFILLED = 'already_fulfilled', _('Already fulfilled')
+        OTHER = 'other', _('Something else')
+
+    blood_request = models.ForeignKey(
+        BloodRequest, on_delete=models.CASCADE, related_name='reports',
+    )
+    reporter = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        related_name='request_reports',
+    )
+    reason = models.CharField(max_length=20, choices=Reason.choices)
+    text = models.CharField(_('Details'), max_length=300, blank=True)
+    cleared = models.BooleanField(
+        default=False,
+        help_text=_('Staff reviewed it: it no longer counts toward hiding.'),
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['blood_request', 'reporter'],
+                name='one_report_per_user_per_request',
+            ),
+        ]
+
+    def __str__(self):
+        return f'{self.get_reason_display()} on {self.blood_request}'

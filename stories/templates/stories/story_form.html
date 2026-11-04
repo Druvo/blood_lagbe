@@ -1,0 +1,76 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}Share your story{% endblock title %}
+{% block meta %}<meta name="robots" content="noindex">{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'stories/stories.css' %}">{% endblock extra_style %}
+{% block body %}
+<section class="bb-section">
+  <div class="bb-container bb-container--form">
+    <div class="bb-pagehead">
+      <span class="bb-eyebrow">Community</span>
+      <h1 class="bb-h1">Share your story</h1>
+      <p class="bb-lead">Keep it true and kind. Our team reads every story before it appears.</p>
+    </div>
+
+    <form class="bb-form bb-card bb-mt-2" method="post" novalidate>
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+
+      <div class="bb-field">
+        <label class="bb-label" for="{{ form.kind.id_for_label }}">{{ form.kind.label }}</label>
+        {{ form.kind }}
+        {{ form.kind.errors }}
+      </div>
+
+      <div class="bb-field">
+        <label class="bb-label" for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+        {{ form.title }}
+        {{ form.title.errors }}
+      </div>
+
+      <div class="bb-field">
+        <label class="bb-label" for="{{ form.body.id_for_label }}">{{ form.body.label }}</label>
+        {{ form.body }}
+        <div class="bbs-count" data-count-for="{{ form.body.id_for_label }}" aria-live="polite"></div>
+        <div class="bb-help">Plain text only. Please do not include phone numbers or other private details.</div>
+        {{ form.body.errors }}
+      </div>
+
+      <div class="bb-cols-2">
+        <div class="bb-field">
+          <label class="bb-label" for="{{ form.district.id_for_label }}">{{ form.district.label }} (optional)</label>
+          {{ form.district }}
+          {{ form.district.errors }}
+        </div>
+        <div class="bb-field">
+          <label class="bb-label" for="{{ form.blood_group.id_for_label }}">{{ form.blood_group.label }} (optional)</label>
+          {{ form.blood_group }}
+          {{ form.blood_group.errors }}
+        </div>
+      </div>
+
+      <div class="bb-field">
+        <label class="bb-label" for="{{ form.donation.id_for_label }}">{{ form.donation.label }} (optional)</label>
+        {{ form.donation }}
+        <div class="bb-help">Adds a "Verified donation" mark. Only your own verified donations are listed.</div>
+        {{ form.donation.errors }}
+      </div>
+
+      <div class="bb-field">
+        <label class="bb-check" for="{{ form.anonymous.id_for_label }}">
+          {{ form.anonymous }}
+          <span><strong>{{ form.anonymous.label }}</strong>
+            <span class="bb-help">We will show "A {{ SITE_NAME }} donor" (or family, or volunteer) instead of your name. If you hide yourself from the leaderboard we do this automatically.</span></span>
+        </label>
+        {{ form.anonymous.errors }}
+      </div>
+
+      <div class="bb-row">
+        <button class="bb-btn bb-btn--primary" type="submit">Submit for review</button>
+        <a class="bb-btn bb-btn--ghost" href="{% url 'stories' %}">Cancel</a>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock body %}
+{% block extra_scripts %}<script src="{% static 'stories/stories.js' %}"></script>{% endblock extra_scripts %}

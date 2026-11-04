@@ -1,0 +1,141 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}{{ squad.name }}{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/community.css' %}">{% endblock extra_style %}
+{% block meta %}<meta name="robots" content="noindex">{% endblock meta %}
+
+{% block body %}
+<div class="bb-container cm-page">
+
+  <section class="bb-card bb-card--hero bb-mt-2">
+    <div class="cm-squad">
+      <span class="cm-squad__icon" style="background:rgba(255,255,255,.2);" aria-hidden="true">{{ squad.name|slice:":2"|upper }}</span>
+      <div class="bb-grow">
+        <span class="bb-eyebrow" style="color:#ffd0d8;margin:0;">Squad</span>
+        <h1 class="bb-h3 bb-mb-0 cm-wrap-anywhere" style="font-size:1.5rem;">{{ squad.name }}</h1>
+        <div class="bb-small" style="opacity:.9;">
+          Started by {{ owner_name }}
+          {% if squad.district %}&middot; {{ squad.district }}{% endif %}
+          &middot; {{ totals.members }}/{{ max_members }} members
+          &middot; {% if squad.is_public %}Public{% else %}Private{% endif %}
+        </div>
+      </div>
+    </div>
+    {% if squad.description %}<p class="bb-mt-2 bb-mb-0 cm-wrap-anywhere">{{ squad.description }}</p>{% endif %}
+    <div class="cm-link-row bb-mt-2">
+      {% if is_owner %}
+        <a href="{% url 'squads:edit' squad.pk %}" class="bb-btn bb-btn--white bb-btn--sm"><i class="feather-edit-2"></i> Edit</a>
+      {% elif is_member %}
+        <form method="post" action="{% url 'squads:leave' squad.pk %}" onsubmit="return confirm('Leave this squad?');">
+          {% csrf_token %}
+          <button type="submit" class="bb-btn bb-btn--white bb-btn--sm"><i class="feather-log-out"></i> Leave squad</button>
+        </form>
+      {% elif user.is_authenticated %}
+        <form method="post" action="{% url 'squads:join-public' squad.pk %}">
+          {% csrf_token %}
+          <button type="submit" class="bb-btn bb-btn--white"><i class="feather-user-plus"></i> Join this squad</button>
+        </form>
+      {% else %}
+        <a href="{% url 'login' %}" class="bb-btn bb-btn--white bb-btn--sm">Log in to join</a>
+      {% endif %}
+      <a href="{% url 'squads:list' %}" class="bb-btn bb-btn--sm" style="background:rgba(255,255,255,.18);color:#fff;">All squads</a>
+    </div>
+  </section>
+
+  <div class="cm-statgrid bb-mt-2">
+    <div class="bb-card bb-stat"><div class="bb-stat__value">{{ totals.month }}</div><div class="bb-stat__label">This month</div></div>
+    <div class="bb-card bb-stat"><div class="bb-stat__value">{{ totals.all }}</div><div class="bb-stat__label">All time</div></div>
+    <div class="bb-card bb-stat"><div class="bb-stat__value">{{ totals.lives }}</div><div class="bb-stat__label">Est. people helped</div></div>
+  </div>
+  <p class="bb-xs bb-muted bb-mt-1">Verified donations by squad members. Estimates are upper bounds, not medical figures.</p>
+
+  <div class="bb-split bb-mt-3">
+    <section class="bb-card" aria-labelledby="board-h">
+      <div class="cm-bar bb-mb-2">
+        <h2 class="bb-h3 bb-mb-0" id="board-h">Squad leaderboard</h2>
+        <div class="cm-seg-wrap">
+          <nav class="bb-seg" aria-label="Period">
+            <a href="?period=month" class="{% if period == 'month' %}is-active{% endif %}">This month</a>
+            <a href="?period=all" class="{% if period == 'all' %}is-active{% endif %}">All time</a>
+          </nav>
+        </div>
+      </div>
+
+      {% if board %}
+        <ol class="cm-rows">
+          {% for e in board %}
+            <li class="cm-row {% if e.user.id == user.id %}is-me{% endif %}">
+              <span class="cm-rank">{{ e.rank }}</span>
+              <span class="bb-avatar" aria-hidden="true">{{ e.initials }}</span>
+              <div class="bb-grow">
+                <div class="cm-trunc">
+                  {% if e.card_public %}<a href="{% url 'badge-card' e.user.id %}" class="cm-row__name">{{ e.name }}</a>{% else %}<span class="cm-row__name">{{ e.name }}</span>{% endif %}
+                  {% if e.user.id == user.id %}<span class="bb-pill">You</span>{% endif %}
+                  {% if e.role == 'owner' %}<span class="bb-pill bb-pill--info">Owner</span>{% endif %}
+                </div>
+                <div class="cm-row__meta"><span>{{ e.donations }} verified donation{{ e.donations|pluralize }}</span></div>
+              </div>
+              <div class="cm-row__pts"><strong>{{ e.points }}</strong><small>points</small></div>
+              {% if is_owner and e.role != 'owner' %}
+                <form method="post" action="{% url 'squads:kick' squad.pk e.user.id %}" onsubmit="return confirm('Remove this member from the squad?');">
+                  {% csrf_token %}
+                  <button type="submit" class="bb-iconbtn" aria-label="Remove {{ e.name }} from the squad" title="Remove"><i class="feather-user-x"></i></button>
+                </form>
+              {% endif %}
+            </li>
+          {% endfor %}
+        </ol>
+      {% else %}
+        <div class="bb-empty"><i class="feather-users"></i><p class="bb-small bb-mb-0">Nobody here has chosen to appear on the board yet.</p></div>
+      {% endif %}
+
+      {% if private_count %}
+        <p class="bb-small bb-muted bb-mt-2 bb-mb-0"><i class="feather-eye-off"></i> + {{ private_count }} member{{ private_count|pluralize }} who keep their name private. Their donations still count toward the totals.</p>
+      {% endif %}
+      {% for m in private_kickable %}
+        <div class="cm-row">
+          <span class="bb-avatar" aria-hidden="true"><i class="feather-eye-off"></i></span>
+          <div class="bb-grow"><span class="bb-muted">Private member</span></div>
+          <form method="post" action="{% url 'squads:kick' squad.pk m.user_id %}" onsubmit="return confirm('Remove this member from the squad?');">
+            {% csrf_token %}
+            <button type="submit" class="bb-btn bb-btn--ghost bb-btn--sm">Remove</button>
+          </form>
+        </div>
+      {% endfor %}
+    </section>
+
+    <aside class="bb-stack">
+      {% if is_member %}
+        <section class="bb-card" aria-labelledby="invite-h">
+          <h2 class="bb-card__title" id="invite-h"><i class="feather-user-plus"></i> Invite people</h2>
+          <p class="bb-small bb-muted">Share the link or the code. Anyone who joins needs a free account.</p>
+          <div class="bb-center bb-mb-2"><span class="cm-code" id="join-code">{{ squad.join_code }}</span></div>
+          <div class="bb-stack bb-stack--sm">
+            <button type="button" class="bb-btn bb-btn--soft bb-btn--block" data-copy="#join-code"><i class="feather-copy"></i> Copy code</button>
+            <button type="button" class="bb-btn bb-btn--soft bb-btn--block" data-copy="{{ join_url }}"><i class="feather-link"></i> Copy invite link</button>
+            <a href="{{ whatsapp_url }}" target="_blank" rel="noopener noreferrer" class="bb-btn bb-btn--ok bb-btn--block"><i class="feather-message-circle"></i> Share on WhatsApp</a>
+          </div>
+          {% if is_owner %}
+            <form method="post" action="{% url 'squads:new-code' squad.pk %}" class="bb-mt-2" onsubmit="return confirm('Make a new code? The old code and link will stop working.');">
+              {% csrf_token %}
+              <button type="submit" class="bb-btn bb-btn--ghost bb-btn--sm bb-btn--block">Make a new code</button>
+            </form>
+          {% endif %}
+        </section>
+      {% endif %}
+
+      {% if is_owner %}
+        <section class="bb-card bb-card--warn" aria-labelledby="danger-h">
+          <h2 class="bb-card__title" id="danger-h">Owner tools</h2>
+          <p class="bb-small bb-muted">Owners can't leave. If you no longer want this squad, you can delete it for everyone.</p>
+          <form method="post" action="{% url 'squads:delete' squad.pk %}" onsubmit="return confirm('Delete this squad for everyone? This cannot be undone.');">
+            {% csrf_token %}
+            <button type="submit" class="bb-btn bb-btn--ghost bb-btn--sm bb-btn--block" style="color:var(--bb-red-dark);">Delete squad</button>
+          </form>
+        </section>
+      {% endif %}
+    </aside>
+  </div>
+</div>
+{% endblock body %}

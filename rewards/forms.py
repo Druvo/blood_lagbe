@@ -1,5 +1,7 @@
 from django import forms
+from django.utils import timezone
 
+from rewards.blood import BLOOD_GROUP_CHOICES
 from rewards.models import (
     MAX_OPEN_REQUESTS_PER_USER,
     BloodRequest,
@@ -101,18 +103,52 @@ class BloodRequestForm(PlaceFieldsMixin, forms.ModelForm):
         model = BloodRequest
         fields = (
             'blood_group', 'district', 'place', 'hospital', 'units_needed',
-            'needed_by', 'contact_phone', 'note',
+            'needed_by', 'contact_phone', 'patient_name', 'note',
         )
         widgets = {
+            'blood_group': forms.RadioSelect,
+            'units_needed': forms.Select(
+                choices=[(n, str(n)) for n in range(1, 11)],
+            ),
             'needed_by': forms.DateInput(attrs={'type': 'date'}),
+            'patient_name': forms.TextInput(attrs={
+                'placeholder': 'Optional. First name or initials only',
+                'autocomplete': 'off',
+            }),
+            'note': forms.Textarea(attrs={
+                'rows': 3,
+                'placeholder': 'Optional. Ward, bed, or anything a donor '
+                               'should know',
+            }),
+        }
+        help_texts = {
+            'patient_name': 'Never enter medical record numbers or IDs.',
         }
 
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.user = user
         self.setup_place_fields()
+        # A radio group has no use for the "---------" blank choice.
+        self.fields['blood_group'].choices = BLOOD_GROUP_CHOICES
+        self.fields['needed_by'].widget.attrs['min'] = (
+            timezone.localdate().isoformat()
+        )
         if user is not None and not self.is_bound:
             self.fields['contact_phone'].initial = user.phone
+            profile = getattr(user, 'profile', None)
+            if profile is not None and profile.district:
+                self.fields['district'].initial = profile.district
+            self.fields['needed_by'].initial = timezone.localdate()
+
+    def clean_patient_name(self):
+        name = ' '.join(self.cleaned_data.get('patient_name', '').split())
+        if sum(ch.isdigit() for ch in name) > 1:
+            raise forms.ValidationError(
+                'Use a first name or initials only. Please do not enter '
+                'record numbers or IDs.'
+            )
+        return name
 
     def clean(self):
         cleaned_data = self.clean_place_fields(super().clean())

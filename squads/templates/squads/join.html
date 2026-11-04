@@ -1,0 +1,26 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Join a squad{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/community.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container bb-container--form cm-page">
+  <header class="cm-head">
+    <span class="bb-eyebrow">Squads</span>
+    <h1 class="bb-h2">Join with a code</h1>
+    <p class="bb-lead">Ask the squad owner for their code, or open the invite link they shared.</p>
+  </header>
+  <form method="post" class="bb-card bb-form bb-mt-2">
+    {% csrf_token %}
+    <div class="bb-field">
+      <label class="bb-label" for="id_code">Join code</label>
+      <input type="text" name="code" id="id_code" maxlength="24" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="e.g. K7M2QX9P" required>
+    </div>
+    <div class="bb-row">
+      <button type="submit" class="bb-btn bb-btn--primary">Join squad</button>
+      <a href="{% url 'squads:list' %}" class="bb-btn bb-btn--ghost">Back</a>
+    </div>
+  </form>
+</div>
+{% endblock body %}

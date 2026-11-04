@@ -1,0 +1,31 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#d8213a">
+  <meta name="robots" content="noindex">
+  <title>You are offline | {{ SITE_NAME }}</title>
+  <style>
+    :root { --ink: #101828; --text: #344054; --bg: #fff9f7; --red: #d8213a; --muted: #667085; }
+    @media (prefers-color-scheme: dark) { :root { --ink: #f4f4f6; --text: #d0d5dd; --bg: #12121a; --muted: #98a2b3; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; background: var(--bg); color: var(--text); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; text-align: center; }
+    main { max-width: 420px; }
+    img { width: 72px; height: 72px; }
+    h1 { color: var(--ink); font-size: 1.7rem; margin: 12px 0 8px; }
+    p { margin: 0 0 14px; }
+    .tips { color: var(--muted); font-size: .92rem; }
+    button, a.btn { display: inline-block; min-height: 46px; padding: 12px 24px; border-radius: 999px; border: 0; background: var(--red); color: #fff; font: 700 1rem system-ui, sans-serif; text-decoration: none; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <main>
+    <img src="{% static 'images/brand/bloodbond-mark.svg' %}" alt="" width="72" height="72">
+    <h1>You are offline</h1>
+    <p>{{ SITE_NAME }} could not reach the internet. Check your connection and try again.</p>
+    <p><button type="button" onclick="location.reload()">Try again</button></p>
+    <p class="tips">In an emergency, call the hospital's blood bank directly. Requests and donor details need a connection, so they are not saved on your phone.</p>
+  </main>
+</body>
+</html>

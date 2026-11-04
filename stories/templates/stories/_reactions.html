@@ -1,0 +1,15 @@
+{# Reaction buttons for one story. Works as plain POST + redirect; stories.js upgrades it. #}
+<div class="bbs-reactions" role="group" aria-label="Reactions">
+  {% for r in story.reaction_buttons %}
+    {% if user.is_authenticated %}
+      <form method="post" action="{% url 'story-react' story.pk %}" data-story-react>
+        {% csrf_token %}
+        <input type="hidden" name="kind" value="{{ r.kind }}">
+        <input type="hidden" name="next" value="{{ request.get_full_path }}#story-{{ story.pk }}">
+        <button type="submit" class="bbs-react{% if r.active %} is-on{% endif %}" aria-pressed="{% if r.active %}true{% else %}false{% endif %}" aria-label="{{ r.label }}"><i class="{{ r.icon }}"></i> <span>{{ r.label }}</span> <span class="bbs-react__n">{{ r.count }}</span></button>
+      </form>
+    {% else %}
+      <a class="bbs-react" href="{% url 'login' %}?next={{ request.path|urlencode }}" title="Log in to react"><i class="{{ r.icon }}"></i> <span>{{ r.label }}</span> <span class="bbs-react__n">{{ r.count }}</span></a>
+    {% endif %}
+  {% endfor %}
+</div>

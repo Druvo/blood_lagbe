@@ -1,0 +1,71 @@
+/* Stories feed. Builds on the bb- kit; only adds what the kit lacks. */
+.bbs-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+@media (min-width: 700px) { .bbs-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1040px) { .bbs-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.bbs-card { position: relative; display: flex; flex-direction: column; gap: 12px; padding: 22px 20px 16px; overflow: hidden; }
+.bbs-card::before {
+  content: "\201C"; position: absolute; top: -10px; right: 14px;
+  font: 800 6rem/1 var(--bb-font-display); color: var(--bb-red); opacity: .12; pointer-events: none;
+}
+.bbs-card__title { font-size: 1.1rem; font-weight: 800; color: var(--bb-ink); margin: 0; overflow-wrap: anywhere; }
+.bbs-card__title a { color: inherit; }
+.bbs-card__title a:hover { color: var(--bb-red); }
+.bbs-card__body { margin: 0; color: var(--bb-text); line-height: 1.6; flex: 1; overflow-wrap: anywhere; }
+.bbs-card__more { font-weight: 700; font-size: .9rem; }
+
+.bbs-who { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.bbs-who__name { font-weight: 700; color: var(--bb-ink); line-height: 1.2; overflow-wrap: anywhere; }
+.bbs-who__meta { font-size: .78rem; color: var(--bb-muted); }
+.bbs-avatar--anon { background: var(--bb-surface-2); color: var(--bb-red); }
+
+.bbs-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.bbs-reactions { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding-top: 12px; border-top: 1px dashed var(--bb-line); }
+.bbs-reactions form { margin: 0; }
+.bbs-react {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px;
+  border-radius: 999px; border: 1.5px solid var(--bb-line); background: var(--bb-surface);
+  color: var(--bb-text); font: inherit; font-weight: 600; font-size: .88rem; cursor: pointer;
+}
+.bbs-react:hover { border-color: var(--bb-red); color: var(--bb-red); }
+.bbs-react.is-on { background: var(--bb-red-soft); border-color: var(--bb-red); color: var(--bb-red-dark); }
+.bbs-react[disabled] { opacity: .6; cursor: default; }
+.bbs-react__n { font-variant-numeric: tabular-nums; min-width: .8em; }
+.bbs-reactions--static .bbs-react { min-height: 36px; cursor: default; }
+
+.bbs-filters { display: grid; gap: 10px; margin: 16px 0 24px; }
+.bbs-filters select { max-width: 100%; }
+@media (min-width: 700px) { .bbs-filters { grid-template-columns: auto 1fr; align-items: center; } }
+
+.bbs-pager { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
+
+/* Detail */
+.bbs-story { padding: 28px 22px; }
+.bbs-story__title { font-size: clamp(1.5rem, 4vw, 2.2rem); font-weight: 800; margin: 12px 0 14px; overflow-wrap: anywhere; }
+.bbs-story__body { font-size: 1.08rem; line-height: 1.8; color: var(--bb-text); overflow-wrap: anywhere; }
+.bbs-story__body p { margin: 0 0 1em; }
+.bbs-share { display: flex; flex-wrap: wrap; gap: 8px; }
+.bbs-share [hidden] { display: none !important; }
+.bbs-report summary { cursor: pointer; font-size: .85rem; color: var(--bb-muted); min-height: 44px; display: inline-flex; align-items: center; }
+.bbs-report summary:hover { color: var(--bb-red); }
+.bbs-report form { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 6px; }
+
+/* Mine */
+.bbs-mine { display: grid; gap: 14px; }
+.bbs-mine__row { display: flex; flex-direction: column; gap: 10px; }
+.bbs-mine__actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.bbs-mine__actions form { margin: 0; }
+.bbs-note { background: var(--bb-surface-2); border-radius: var(--bb-radius-sm); padding: 10px 12px; font-size: .9rem; color: var(--bb-text); }
+
+/* Form */
+.bbs-count { text-align: right; font-size: .78rem; color: var(--bb-muted); }
+.bbs-count.is-near { color: var(--bb-red); font-weight: 700; }
+
+/* Home strip */
+.bbs-strip__head { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; justify-content: space-between; margin-bottom: 20px; }
+.bbs-strip__cta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; align-items: center; }
+
+/* Page head: text wraps above the buttons on narrow screens. */
+.bbs-head__text { flex: 1 1 300px; min-width: 0; }
+.bbs-head__text .bb-lead { margin-bottom: 0; }

@@ -1,93 +1,77 @@
 {% extends 'base/base.html' %}
-{% load static %}
-{% block title %}{{ post.title }}{% endblock title %}
-{% block body %}
+{% load static blog_extras %}
 
-    <div class="container">
-      <div class="row">
-        <!-- Post -->
-        <main class="post blog-post col-lg-8">
-          <div class="container">
-            <div class="post-single">
-              <div class="post-thumbnail"><img src="{{ post.thumbnail.url }}" alt="{{ post.title }}" class="img-fluid"></div>
-              <div class="post-details">
-                <div class="post-meta d-flex justify-content-between">
-                  <div class="category">
-                    {% for cat in post.categories.all %}{{ cat.name }}{% if not forloop.last %}, {% endif %}{% endfor %}
-                  </div>
-                </div>
-                <h1>{{ post.title }}</h1>
-                <div class="post-footer d-flex align-items-center flex-column flex-sm-row">
-                  <div class="author d-flex align-items-center flex-wrap">
-                    <div class="avatar"><img src="{{ post.author.image.url }}" alt="{{ post.author }}" class="img-fluid"></div>
-                    <div class="title"><span>{{ post.author }}</span></div>
-                  </div>
-                  <div class="d-flex align-items-center flex-wrap">
-                    <div class="date"><i class="icon-clock"></i> {{ post.timestamp|timesince }} ago</div>
-                    <div class="views"><i class="icon-eye"></i> {{ post.view_count }}</div>
-                  </div>
-                </div>
-                <div class="post-body">
-                  <p class="lead">{{ post.overview }}</p>
-                </div>
-                <div class="posts-nav d-flex justify-content-between align-items-stretch flex-column flex-md-row">
-                  {% if previous_post %}
-                    <a href="{{ previous_post.get_absolute_url }}" class="prev-post text-left d-flex align-items-center">
-                      <div class="icon prev"><i class="feather-chevron-left"></i></div>
-                      <div class="text"><strong class="text-primary">Previous Post</strong>
-                        <h6>{{ previous_post.title }}</h6>
-                      </div>
-                    </a>
-                  {% endif %}
-                  {% if next_post %}
-                    <a href="{{ next_post.get_absolute_url }}" class="next-post text-right d-flex align-items-center justify-content-end">
-                      <div class="text"><strong class="text-primary">Next Post</strong>
-                        <h6>{{ next_post.title }}</h6>
-                      </div>
-                      <div class="icon next"><i class="feather-chevron-right"></i></div>
-                    </a>
-                  {% endif %}
-                </div>
-              </div>
+{% block title %}{{ post.title }}{% endblock title %}
+{% block meta %}
+<meta name="description" content="{{ post.overview|truncatechars:160 }}">
+<meta property="og:site_name" content="{{ SITE_NAME }}">
+<meta property="og:type" content="article">
+<meta property="og:title" content="{{ post.title }}">
+<meta property="og:description" content="{{ post.overview|truncatechars:200 }}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ post.thumbnail.url }}">
+<meta name="twitter:card" content="summary_large_image">
+{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/pages.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<section class="pg-article">
+  <div class="bb-container">
+    <div class="bb-split">
+      <article>
+        <nav class="bb-small bb-mb-1" aria-label="Breadcrumb"><a href="{% url 'blogapp:blog-view' %}"><i class="feather-chevron-left" aria-hidden="true"></i> All posts</a></nav>
+        <div class="bb-chips">{% for cat in post.categories.all %}<span class="bb-pill bb-pill--info">{{ cat.name }}</span>{% endfor %}</div>
+        <h1>{{ post.title }}</h1>
+        {% with words=post.overview|wordcount %}{% widthratio words 200 1 as mins %}
+        <div class="pg-post__meta">
+          <span class="pg-meta-author"><img src="{{ post.author.image.url }}" alt="" onerror="this.style.visibility='hidden'">{{ post.author|author_name }}</span>
+          <span>{{ post.timestamp|date:"j M Y" }}</span>
+          <span>{% if mins == "0" %}1{% else %}{{ mins }}{% endif %} min read</span>
+          <span>{{ post.view_count }} view{{ post.view_count|pluralize }}</span>
+        </div>
+        {% endwith %}
+
+        <img class="pg-article__img" src="{{ post.thumbnail.url }}" alt="" onerror="this.style.display='none'">
+
+        <div class="pg-prose">{{ post.overview|linebreaks }}</div>
+
+        <div class="bb-divider"></div>
+        <div class="pg-share bb-noprint">
+          <strong class="bb-strong bb-small">Share</strong>
+          <a class="bb-btn bb-btn--ghost bb-btn--sm" rel="noopener" target="_blank" href="https://wa.me/?text={{ post.title|urlencode }}%20{{ request.build_absolute_uri|urlencode }}"><i class="feather-message-circle" aria-hidden="true"></i> WhatsApp</a>
+          <a class="bb-btn bb-btn--ghost bb-btn--sm" rel="noopener" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri|urlencode }}"><i class="feather-facebook" aria-hidden="true"></i> Facebook</a>
+          <button type="button" class="bb-btn bb-btn--ghost bb-btn--sm" data-copy="{{ request.build_absolute_uri }}"><i class="feather-link" aria-hidden="true"></i> Copy link</button>
+        </div>
+
+        {% if previous_post or next_post %}
+          <nav class="pg-postnav" aria-label="More posts">
+            {% if previous_post %}<a href="{{ previous_post.get_absolute_url }}" rel="prev"><small>&larr; Older</small>{{ previous_post.title }}</a>{% endif %}
+            {% if next_post %}<a class="is-next" href="{{ next_post.get_absolute_url }}" rel="next"><small>Newer &rarr;</small>{{ next_post.title }}</a>{% endif %}
+          </nav>
+        {% endif %}
+      </article>
+
+      <aside class="bb-stack">
+        {% if latest_post %}
+          <div class="bb-card">
+            <h2 class="bb-card__title">More to read</h2>
+            <div class="bb-stack">
+              {% for article in latest_post %}
+                <a class="pg-side-post" href="{{ article.get_absolute_url }}">
+                  <img src="{{ article.thumbnail.url }}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+                  <span><strong>{{ article.title }}</strong><small class="bb-muted">{{ article.timestamp|date:"j M Y" }}</small></span>
+                </a>
+              {% endfor %}
             </div>
           </div>
-        </main>
-        <aside class="col-lg-4">
-          <!-- Widget [Latest Posts Widget]        -->
-          <div class="widget latest-posts">
-            <header>
-              <h3 class="h6">Latest Posts</h3>
-            </header>
-            {% for article in latest_post %}
-              <div class="blog-posts">
-                <a href="{{ article.get_absolute_url }}">
-                  <div class="item d-flex align-items-center">
-                    <div class="image"><img src="{{ article.thumbnail.url }}" alt="{{ article.title }}" class="img-fluid"></div>
-                    <div class="title"><strong>{{ article.title }}</strong>
-                      <div class="d-flex align-items-center">
-                        <div class="views"><i class="icon-eye"></i>{{ article.view_count }}</div>
-                        <div class="comments"><i class="icon-comment"></i>{{ article.comment_count }}</div>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            {% endfor %}
-          </div>
-          <!-- Widget [Categories Widget]-->
-          <div class="widget categories">
-            <header>
-              <h3 class="h6">Categories</h3>
-            </header>
-            {% for cat in category_count %}
-              <div class="item d-flex justify-content-between">
-                <span>{{ cat.categories__name }}</span>
-                <span>{{ cat.categories__name__count }}</span>
-              </div>
-            {% endfor %}
-          </div>
-        </aside>
-      </div>
+        {% endif %}
+        <div class="bb-card bb-card--soft">
+          <h2 class="bb-card__title">Can I donate?</h2>
+          <p class="bb-small bb-muted">A two-minute pre-check and a guide to what to expect.</p>
+          <a class="bb-btn bb-btn--soft bb-btn--sm" href="{% url 'learn' %}">Open the guide</a>
+        </div>
+      </aside>
     </div>
-
+  </div>
+</section>
 {% endblock body %}

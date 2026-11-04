@@ -1,0 +1,49 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Welcome{% endblock title %}
+{% block meta %}<meta name="robots" content="noindex">{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/pages.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<section class="pg-welcome">
+  <div class="bb-container bb-container--narrow bb-stack">
+    <div>
+      <span class="bb-eyebrow">Getting started</span>
+      <h1 class="bb-h2 bb-mb-1">Welcome{% if user.first_name %}, {{ user.first_name }}{% endif %}.</h1>
+      <p class="bb-lead">{% if all_done %}You are all set. Thank you for being part of {{ SITE_NAME }}.{% else %}A few small steps and you are ready to help. Skip any of them; you can come back anytime.{% endif %}</p>
+    </div>
+
+    <div class="bb-card">
+      <div class="bb-row bb-row--between bb-mb-1">
+        <strong class="bb-strong">{{ done_count }} of {{ total_count }} done</strong>
+        <span class="bb-small bb-muted bb-num">{{ percent }}%</span>
+      </div>
+      <div class="bb-progress{% if all_done %} bb-progress--ok{% endif %}" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ percent }}" aria-label="Setup progress"><span style="width:{{ percent }}%"></span></div>
+    </div>
+
+    <ul class="pg-checklist">
+      {% for step in steps %}
+        <li class="pg-check{% if step.done %} is-done{% endif %}" data-step="{{ step.key }}">
+          <span class="pg-check__mark" aria-hidden="true"><i class="{% if step.done %}feather-check{% else %}{{ step.icon }}{% endif %}"></i></span>
+          <div class="pg-check__body">
+            <strong>{{ step.title }}{% if step.done %} <span class="bb-sr">(done)</span>{% endif %}</strong>
+            <span>{{ step.hint }}</span>
+          </div>
+          <a class="bb-btn bb-btn--sm {% if step.done %}bb-btn--ghost{% else %}bb-btn--primary{% endif %}" href="{% url step.url_name %}">{{ step.cta }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+
+    <div class="pg-disclaimer">
+      <i class="feather-info" aria-hidden="true"></i>
+      <p><strong>Your privacy:</strong> your phone number is never shown on public pages. You choose what appears in the directory and on the leaderboard in <a href="{% url 'privacy' %}">Profile &amp; privacy</a>.</p>
+    </div>
+
+    <div class="bb-row">
+      <a class="bb-btn bb-btn--dark" href="{% url 'home' %}">Go to home</a>
+      <a class="bb-btn bb-btn--ghost" href="{% url 'request-list' %}">See urgent requests</a>
+    </div>
+  </div>
+</section>
+{% endblock body %}

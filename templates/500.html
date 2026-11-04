@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>Something went wrong</title>
+  <style>
+    :root { --ink: #101828; --text: #344054; --bg: #fff9f7; --red: #d8213a; }
+    @media (prefers-color-scheme: dark) { :root { --ink: #f4f4f6; --text: #d0d5dd; --bg: #12121a; } }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; background: var(--bg); color: var(--text); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; text-align: center; }
+    main { max-width: 440px; }
+    .code { font-size: 4.5rem; font-weight: 800; line-height: 1; color: var(--red); }
+    h1 { color: var(--ink); font-size: 1.6rem; margin: 10px 0 8px; }
+    a { display: inline-block; min-height: 46px; padding: 12px 24px; border-radius: 999px; background: var(--red); color: #fff; font-weight: 700; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="code" aria-hidden="true">500</div>
+    <h1>Something went wrong on our side</h1>
+    <p>It is not you. We have been told and will look into it. Please try again in a little while. In an emergency, contact the hospital's blood bank directly.</p>
+    <p><a href="/">Back to the home page</a></p>
+  </main>
+</body>
+</html>

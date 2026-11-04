@@ -1,0 +1,103 @@
+{% extends 'base/base.html' %}
+{% load insights_extras %}
+{% block title %}{{ d.name }} impact{% endblock title %}
+{% block meta %}
+<meta name="description" content="Verified blood donations in {{ d.name }}, {{ d.division }} division. {{ SITE_NAME }}.">
+<meta property="og:site_name" content="{{ SITE_NAME }}">
+<meta property="og:title" content="{{ d.name }} | {{ SITE_NAME }}">
+{% endblock meta %}
+{% block extra_style %}{% include 'insights/_chart_styles.html' %}{% endblock extra_style %}
+
+{% block body %}
+<section class="bb-hero im-hero">
+  <div class="bb-container" style="position:relative;z-index:1">
+    <p class="im-crumbs"><a href="{% url 'impact' %}">Impact</a> / {{ d.division }} division</p>
+    <h1>{{ d.name }}</h1>
+    <p class="bb-lead">Verified donations given in {{ d.name }}, and what is needed there right now.</p>
+    <div class="im-hero__stats">
+      <div class="bb-glass bb-stat">
+        <div class="bb-stat__value"><span data-count="{{ d.donations }}">{{ d.donations|commas }}</span></div>
+        <div class="bb-stat__label">Verified donations</div>
+      </div>
+      <div class="bb-glass bb-stat">
+        <div class="bb-stat__value"><span data-count="{{ d.donors }}">{{ d.donors|commas }}</span></div>
+        <div class="bb-stat__label">Donors who gave</div>
+      </div>
+      <div class="bb-glass bb-stat">
+        <div class="bb-stat__value">~<span data-count="{{ d.lives }}">{{ d.lives|commas }}</span></div>
+        <div class="bb-stat__label">People helped<span class="im-est">estimate</span></div>
+      </div>
+      <div class="bb-glass bb-stat">
+        <div class="bb-stat__value"><span data-count="{{ d.donors_available }}">{{ d.donors_available|commas }}</span></div>
+        <div class="bb-stat__label">Donors available now<span class="im-est">listed in the directory</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bb-section bb-section--tight">
+  <div class="bb-container">
+    <div class="bb-stack bb-stack--lg">
+
+      <div class="im-grid im-grid--trend">
+        <article class="bb-card im-card">
+          <h2>Donations per month</h2>
+          <p class="im-sub">The last 12 months in {{ d.name }}.</p>
+          {{ trend_chart }}
+        </article>
+        <article class="bb-card im-card">
+          <h2>Blood groups</h2>
+          <p class="im-sub">Share of verified donations.</p>
+          {{ group_donut.svg }}
+          {{ group_donut.legend }}
+        </article>
+      </div>
+
+      <div class="im-grid im-grid--even">
+        <article class="bb-card im-card">
+          <h2>Open requests</h2>
+          <p class="im-sub">Still waiting for donors in {{ d.name }}.</p>
+          {% if d.open_requests %}
+            <ul class="im-reqs">
+              {% for r in d.open_requests %}
+              <li>
+                <span class="bb-bloodtag bb-bloodtag--sm"><span>{{ r.blood_group }}</span></span>
+                <div>
+                  <a href="{% url 'request-detail' r.pk %}">{{ r.hospital }}</a>
+                  <small>{{ r.remaining }} bag{{ r.remaining|pluralize }} needed by {{ r.needed_by|date:"j M" }}</small>
+                </div>
+              </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <div class="bb-empty bb-empty--chart"><i class="feather-check-circle" aria-hidden="true"></i><p>No open requests in {{ d.name }} right now.</p></div>
+          {% endif %}
+          <div class="bb-row bb-mt-2">
+            <a class="bb-btn bb-btn--primary bb-btn--sm" href="{% url 'request-create' %}">Post a request</a>
+            <a class="bb-btn bb-btn--ghost bb-btn--sm" href="{{ donors_url }}">Find donors here</a>
+          </div>
+        </article>
+
+        <article class="bb-card im-card">
+          <h2>About {{ d.name }}</h2>
+          <div class="im-compare">
+            <div class="im-compare__row"><span class="bb-muted">Division</span><b>{{ d.division }}</b></div>
+            <div class="im-compare__row"><span class="bb-muted">Rank by donations</span><b>{% if d.rank %}#{{ d.rank }} of {{ d.ranked_districts }}{% else %}Not ranked yet{% endif %}</b></div>
+            <div class="im-compare__row"><span class="bb-muted">Requests posted</span><b>{{ d.requests_posted|commas }}</b></div>
+            <div class="im-compare__row"><span class="bb-muted">Requests fulfilled</span><b>{{ d.requests_fulfilled|commas }}</b></div>
+          </div>
+          <p class="bb-xs bb-muted bb-mt-2">Only verified donations count. People helped is an estimate of up to {{ lives_per_donation }} per donation. Donors are never named here.</p>
+          {% if neighbours %}
+          <p class="bb-small bb-strong bb-mb-1 bb-mt-2">More in {{ d.division }}</p>
+          <div class="bb-chips">
+            {% for n in neighbours %}<a class="bb-chip" href="{% url 'impact-district' n %}">{{ n }}</a>{% endfor %}
+          </div>
+          {% endif %}
+        </article>
+      </div>
+
+      <p><a href="{% url 'impact' %}">&larr; Back to the national picture</a></p>
+    </div>
+  </div>
+</section>
+{% endblock body %}

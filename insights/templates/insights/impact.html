@@ -1,0 +1,194 @@
+{% extends 'base/base.html' %}
+{% load insights_extras %}
+{% block title %}Our impact{% endblock title %}
+{% block meta %}
+<meta name="description" content="Verified blood donations, donors and requests across Bangladesh, shown with open numbers. {{ SITE_NAME }}.">
+<meta property="og:site_name" content="{{ SITE_NAME }}">
+<meta property="og:title" content="Our impact | {{ SITE_NAME }}">
+<meta property="og:description" content="{{ totals.donations|commas }} verified donations from {{ totals.donors|commas }} donors.">
+{% endblock meta %}
+{% block extra_style %}{% include 'insights/_chart_styles.html' %}{% endblock extra_style %}
+
+{% block body %}
+<section class="bb-hero im-hero">
+  <div class="bb-container" style="position:relative;z-index:1">
+    <span class="bb-eyebrow">Our impact</span>
+    <h1>Every number is a person who showed up.</h1>
+    <p class="bb-lead">Open numbers from {{ SITE_NAME }}. Only donations an admin has verified are counted.</p>
+
+    <div class="im-hero__stats">
+      <div class="bb-glass bb-stat">
+        <div class="bb-stat__value"><span data-count="{{ totals.donations }}">{{ totals.donations|commas }}</span></div>
+        <div class="bb-stat__label">Verified donations</div>
+      </div>
+      <div class="bb-glass bb-stat">
+        <div class="bb-stat__value"><span data-count="{{ totals.donors }}">{{ totals.donors|commas }}</span></div>
+        <div class="bb-stat__label">Donors who gave</div>
+      </div>
+      <div class="bb-glass bb-stat">
+        <div class="bb-stat__value">~<span data-count="{{ totals.lives }}">{{ totals.lives|commas }}</span></div>
+        <div class="bb-stat__label">People helped<span class="im-est">estimate, up to {{ lives_per_donation }} per donation</span></div>
+      </div>
+      <div class="bb-glass bb-stat">
+        <div class="bb-stat__value"><span data-count="{{ totals.requests_fulfilled }}">{{ totals.requests_fulfilled|commas }}</span></div>
+        <div class="bb-stat__label">Requests fulfilled{% if totals.fulfilment_rate is not None %}<span class="im-est">{{ totals.fulfilment_rate }}% of {{ totals.requests_posted|commas }} posted</span>{% else %}<span class="im-est">none posted yet</span>{% endif %}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bb-section bb-section--tight">
+  <div class="bb-container">
+
+    <div class="im-bar">
+      <p class="bb-small bb-muted bb-mb-0">Showing <strong class="bb-strong">{{ period_label|lower }}</strong> for totals, groups, places and requests.</p>
+      <nav class="bb-seg" aria-label="Time period">
+        {% for key, label in periods %}
+          <a href="?period={{ key }}" class="{% if key == period %}is-active{% endif %}"{% if key == period %} aria-current="true"{% endif %}>{{ label }}</a>
+        {% endfor %}
+      </nav>
+    </div>
+
+    {% if not has_data %}
+    <div class="bb-alert bb-alert--info" role="status">
+      No verified donations {% if period != 'all' %}in this period {% endif %}yet.
+      <a href="{% url 'log-donation' %}">Log a donation</a> and it will count once an admin verifies it.
+    </div>
+    {% endif %}
+
+    <div class="bb-stack bb-stack--lg">
+
+      {# Trend + this month vs last #}
+      <div class="im-grid im-grid--trend">
+        <article class="bb-card im-card">
+          <h2>Donations per month</h2>
+          <p class="im-sub">The last 12 months, verified donations only.</p>
+          {{ trend_chart }}
+          <details class="im-details">
+            <summary>View as table</summary>
+            <table class="im-table">
+              <thead><tr><th>Month</th><th>Donations</th></tr></thead>
+              <tbody>
+              {% for m in monthly %}<tr><td>{{ m.label }} {{ m.year }}</td><td>{{ m.count|commas }}</td></tr>{% endfor %}
+              </tbody>
+            </table>
+            <p class="bb-mt-1"><a href="{% url 'impact-export' %}">Download CSV</a></p>
+          </details>
+        </article>
+
+        <article class="bb-card im-card">
+          <h2>This month so far</h2>
+          <p class="im-sub">{{ month_compare.this_label }} against {{ month_compare.last_label }}.</p>
+          <div class="im-compare">
+            <div class="im-compare__big"><span data-count="{{ month_compare.this_month }}">{{ month_compare.this_month|commas }}</span></div>
+            <div>
+              {% if month_compare.change is None %}
+                <span class="im-delta im-delta--flat">{% if month_compare.this_month %}New activity{% else %}No donations yet{% endif %}</span>
+              {% elif month_compare.change > 0 %}
+                <span class="im-delta im-delta--up"><i class="feather-trending-up" aria-hidden="true"></i> {{ month_compare.change }}% up</span>
+              {% elif month_compare.change < 0 %}
+                <span class="im-delta im-delta--down"><i class="feather-trending-down" aria-hidden="true"></i> {{ month_compare.change|absval }}% down</span>
+              {% else %}
+                <span class="im-delta im-delta--flat">Same as last month</span>
+              {% endif %}
+            </div>
+            <div class="im-compare__row"><span class="bb-muted">{{ month_compare.last_label }} in full</span><b>{{ month_compare.last_month|commas }}</b></div>
+            <p class="bb-small bb-muted bb-mb-0">This month is not over yet, so the number can still grow.</p>
+          </div>
+        </article>
+      </div>
+
+      {# Supply vs demand #}
+      <article class="bb-card bb-card--accent im-card">
+        <div class="im-cta">
+          <span class="bb-bloodtag bb-bloodtag--lg im-cta__tag"><span>{{ cta.group }}</span></span>
+          <div>
+            {% if cta.kind == 'gap' %}
+              <h2>We need more {{ cta.group }} donors{% if cta.top_district %} in {{ cta.top_district }}{% endif %}</h2>
+              <p>{{ cta.need|commas }} bag{{ cta.need|pluralize }} still needed on open requests, and only {{ cta.donors|commas }} {{ cta.group }} donor{{ cta.donors|pluralize }} listed in the directory.</p>
+            {% elif cta.kind == 'open' %}
+              <h2>{{ cta.group }} requests are open right now</h2>
+              <p>{{ cta.need|commas }} bag{{ cta.need|pluralize }} still needed. There are {{ cta.donors|commas }} {{ cta.group }} donors in the directory who can be asked.</p>
+            {% else %}
+              <h2>Few {{ cta.group }} donors are listed yet</h2>
+              <p>Nothing is urgent right now. Listing yourself in the directory helps the next family find a match fast.</p>
+            {% endif %}
+            <div class="bb-row">
+              {% if cta.kind == 'recruit' %}
+                <a class="bb-btn bb-btn--primary" href="{% url 'privacy' %}">List me as a donor</a>
+              {% else %}
+                <a class="bb-btn bb-btn--primary" href="{{ cta.donors_url }}">Find {{ cta.group }} donors</a>
+                <a class="bb-btn bb-btn--ghost" href="{{ cta.requests_url }}">See {{ cta.group }} requests</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="bb-card im-card">
+        <h2>Supply and demand by blood group</h2>
+        <p class="im-sub">Open requests against donors who chose to be listed. Counts only, never names.</p>
+        <div class="im-key">
+          <span><i style="background:var(--bb-red)"></i>Bags still needed</span>
+          <span><i style="background:var(--bb-blue)"></i>Donors listed in the directory</span>
+        </div>
+        {{ supply_chart }}
+      </article>
+
+      {# Blood groups + map #}
+      <div class="im-grid im-grid--even">
+        <article class="bb-card im-card">
+          <h2>Blood groups</h2>
+          <p class="im-sub">Share of verified donations, {{ period_label|lower }}.</p>
+          {{ group_donut.svg }}
+          {{ group_donut.legend }}
+        </article>
+        <article class="bb-card im-card">
+          <h2>Across Bangladesh</h2>
+          <p class="im-sub">Verified donations by division, {{ period_label|lower }}.</p>
+          {{ division_map.svg }}
+          {{ division_map.legend }}
+          {% if geo.unspecified %}<p class="bb-xs bb-muted bb-center bb-mt-1">{{ geo.unspecified|commas }} donation{{ geo.unspecified|pluralize }} with no district recorded are not on the map.</p>{% endif %}
+        </article>
+      </div>
+
+      {# Districts + places #}
+      <div class="im-grid im-grid--even">
+        <article class="bb-card im-card">
+          <h2>Top districts</h2>
+          <p class="im-sub">Tap a district for its own page.</p>
+          {{ district_bars }}
+        </article>
+        <article class="bb-card im-card">
+          <h2>Where donors give</h2>
+          <p class="im-sub">Hospitals and blood banks with the most verified donations.</p>
+          {{ place_bars }}
+        </article>
+      </div>
+
+      {# Funnel + method #}
+      <div class="im-grid im-grid--even">
+        <article class="bb-card im-card">
+          <h2>What happens to requests</h2>
+          <p class="im-sub">Requests posted {{ period_label|lower }}, and how far they got.</p>
+          {{ funnel_bars }}
+        </article>
+        <article class="bb-card bb-card--soft im-card">
+          <h2>About these numbers</h2>
+          <ul class="bb-small" style="padding-left:1.1rem;margin:10px 0 0">
+            <li>Only donations an admin has verified are counted. Pending and rejected ones are not.</li>
+            <li>People helped is an estimate: up to {{ lives_per_donation }} patients per donation, not a medical record.</li>
+            <li>Donors who hide themselves from the leaderboard are still counted here, but never named.</li>
+            <li>Numbers refresh every few minutes.</li>
+          </ul>
+          <div class="bb-row bb-mt-2">
+            <a class="bb-btn bb-btn--ghost bb-btn--sm" href="{% url 'impact-data' %}">JSON data</a>
+            <a class="bb-btn bb-btn--ghost bb-btn--sm" href="{% url 'impact-export' %}">Monthly CSV</a>
+          </div>
+        </article>
+      </div>
+
+    </div>
+  </div>
+</section>
+{% endblock body %}

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="BloodBond">
+  <defs>
+    <linearGradient id="bbg" x1="12" y1="4" x2="52" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff5d7a"/>
+      <stop offset=".55" stop-color="#d8213a"/>
+      <stop offset="1" stop-color="#8d1128"/>
+    </linearGradient>
+  </defs>
+  <path d="M32 3C32 3 11 26 11 40a21 21 0 0 0 42 0C53 26 32 3 32 3Z" fill="url(#bbg)"/>
+  <path d="M20 22c3-5 7-10 12-16" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="3" stroke-linecap="round"/>
+  <path d="M32 51c-8-5.5-12.5-9.6-12.5-14.2a6.4 6.4 0 0 1 12.5-2 6.4 6.4 0 0 1 12.5 2C44.5 41.4 40 45.500 32 51Z" fill="#fff"/>
+</svg>

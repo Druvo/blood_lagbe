@@ -1,0 +1,58 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}My stories{% endblock title %}
+{% block meta %}<meta name="robots" content="noindex">{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'stories/stories.css' %}">{% endblock extra_style %}
+{% block body %}
+<section class="bb-section">
+  <div class="bb-container bb-container--narrow">
+    <div class="bb-pagehead">
+      <span class="bb-eyebrow">Community</span>
+      <div class="bb-row bb-row--between bb-row--top">
+        <h1 class="bb-h1 bbs-head__text">My stories</h1>
+        <a class="bb-btn bb-btn--primary" href="{% url 'story-create' %}"><i class="feather-plus"></i> New story</a>
+      </div>
+    </div>
+
+    {% if stories %}
+      <div class="bbs-mine bb-mt-2">
+        {% for story in stories %}
+          <article class="bb-card bbs-mine__row {% if story.status == 'approved' %}bb-card--ok{% elif story.status == 'pending' %}bb-card--warn{% else %}bb-card--accent{% endif %}">
+            <div class="bb-row bb-row--between">
+              <span class="bb-pill {% if story.status == 'approved' %}bb-pill--ok{% elif story.status == 'pending' %}bb-pill--warn{% else %}bb-pill--bad{% endif %}">
+                {% if story.status == 'approved' %}<i class="feather-check-circle"></i>{% elif story.status == 'pending' %}<i class="feather-clock"></i>{% else %}<i class="feather-x-circle"></i>{% endif %}
+                {{ story.get_status_display }}
+              </span>
+              <span class="bb-muted bb-xs">{{ story.created_at|date:"j M Y" }}{% if story.anonymous %} &middot; shared anonymously{% endif %}</span>
+            </div>
+            <h2 class="bbs-card__title"><a href="{{ story.get_absolute_url }}">{{ story.title }}</a></h2>
+            <p class="bbs-card__body">{{ story.body|truncatechars:160 }}</p>
+            {% if story.status == 'rejected' and story.moderation_note %}
+              <div class="bbs-note"><strong>Note from the team:</strong> {{ story.moderation_note }}</div>
+            {% elif story.status == 'pending' %}
+              <div class="bbs-note">Waiting for our team to read it. This usually takes a day or two.</div>
+            {% endif %}
+            <div class="bbs-mine__actions">
+              <a class="bb-btn bb-btn--ghost bb-btn--sm" href="{{ story.get_absolute_url }}">{% if story.status == 'approved' %}View{% else %}Preview{% endif %}</a>
+              {% if story.status == 'approved' %}
+                <span class="bb-muted bb-small"><i class="feather-heart"></i> {{ story.heart_count }} &nbsp;<i class="feather-sun"></i> {{ story.thanks_count }} &nbsp;<i class="feather-award"></i> {{ story.proud_count }}</span>
+              {% endif %}
+              <form method="post" action="{% url 'story-delete' story.pk %}" onsubmit="return confirm('Delete this story for good?');">
+                {% csrf_token %}
+                <button class="bb-btn bb-btn--ghost bb-btn--sm" type="submit" aria-label="Delete {{ story.title }}"><i class="feather-trash-2"></i> Delete</button>
+              </form>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="bb-card bb-empty bb-mt-2">
+        <i class="feather-heart"></i>
+        <p class="bb-strong">You have not shared a story yet.</p>
+        <p>A few honest lines about why you gave, or what a donor meant to your family, can move someone to give too.</p>
+        <a class="bb-btn bb-btn--primary" href="{% url 'story-create' %}">Share your story</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock body %}

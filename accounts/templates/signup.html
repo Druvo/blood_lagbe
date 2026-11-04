@@ -1,69 +1,112 @@
 {% extends 'base/base.html' %}
-{% load widget_tweaks %}
+{% load static %}
 
-{% block title %}Register{% endblock title %}
+{% block title %}Join free{% endblock title %}
+{% block meta %}
+<meta name="robots" content="noindex">
+<meta name="description" content="Create a free {{ SITE_NAME }} account to answer urgent blood requests and track your donations.">
+{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/pages.css' %}">{% endblock extra_style %}
 
 {% block body %}
-<div class="middle-sidebar-bottom">
-  <div class="middle-wrap container mt-4 mb-4" style="max-width: 480px;">
-    <div class="card w-100 border-0 shadow-xs p-4">
-      <h2 class="fw-700 font-md mb-3">Register</h2>
+{% with f=registration_form %}
+<section class="pg-auth">
+  <div class="bb-container bb-container--form">
+    <div class="pg-auth__brand">
+      <img src="{% static 'images/brand/bloodbond-mark.svg' %}" alt="" width="56" height="56">
+      <h1>Join {{ SITE_NAME }}</h1>
+      <p>Free, and it takes about a minute.</p>
+    </div>
 
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-danger">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-
-      <form method="post">
+    <div class="bb-card">
+      <form method="post" class="bb-form" novalidate>
         {% csrf_token %}
 
-        <div class="form-group mb-3">
-          {{ registration_form.first_name.errors }}
-          <label for="{{ registration_form.first_name.id_for_label }}">First Name</label>
-          {{ registration_form.first_name|add_class:"form-control" }}
-        </div>
+        {% if f.errors %}
+          <div class="bb-alert bb-alert--bad" role="alert">Please fix the highlighted fields below.</div>
+        {% endif %}
+        {% if f.non_field_errors %}{{ f.non_field_errors }}{% endif %}
 
-        <div class="form-group mb-3">
-          {{ registration_form.last_name.errors }}
-          <label for="{{ registration_form.last_name.id_for_label }}">Last Name</label>
-          {{ registration_form.last_name|add_class:"form-control" }}
-        </div>
+        <fieldset class="pg-fieldset">
+          <legend>About you</legend>
+          <div class="pg-2col">
+            <div class="bb-field">
+              <label class="bb-label" for="{{ f.first_name.id_for_label }}">First name</label>
+              <input type="text" name="{{ f.first_name.html_name }}" id="{{ f.first_name.id_for_label }}" value="{{ f.first_name.value|default_if_none:'' }}" autocomplete="given-name" required autofocus>
+              {{ f.first_name.errors }}
+            </div>
+            <div class="bb-field">
+              <label class="bb-label" for="{{ f.last_name.id_for_label }}">Last name <span class="pg-optional">optional</span></label>
+              <input type="text" name="{{ f.last_name.html_name }}" id="{{ f.last_name.id_for_label }}" value="{{ f.last_name.value|default_if_none:'' }}" autocomplete="family-name">
+              {{ f.last_name.errors }}
+            </div>
+          </div>
 
-        <div class="form-group mb-3">
-          {{ registration_form.phone.errors }}
-          <label for="{{ registration_form.phone.id_for_label }}">Phone Number*</label>
-          {{ registration_form.phone|add_class:"form-control" }}
-          <small class="text-muted">Required. Add a valid phone number</small>
-        </div>
+          <div class="bb-field">
+            <label class="bb-label" for="{{ f.phone.id_for_label }}">Phone number</label>
+            <input type="tel" name="{{ f.phone.html_name }}" id="{{ f.phone.id_for_label }}" value="{{ f.phone.value|default_if_none:'' }}" inputmode="tel" autocomplete="tel" placeholder="01712345678" required>
+            <div class="bb-help">This is your login. It is never shown on public pages.</div>
+            {{ f.phone.errors }}
+          </div>
 
-        <div class="form-group mb-3">
-          {{ registration_form.email.errors }}
-          <label for="{{ registration_form.email.id_for_label }}">Email</label>
-          {{ registration_form.email|add_class:"form-control" }}
-        </div>
+          <div class="bb-field">
+            <label class="bb-label" for="{{ f.email.id_for_label }}">Email <span class="pg-optional">optional</span></label>
+            <input type="email" name="{{ f.email.html_name }}" id="{{ f.email.id_for_label }}" value="{{ f.email.value|default_if_none:'' }}" autocomplete="email">
+            <div class="bb-help">Only needed to reset a forgotten password.</div>
+            {{ f.email.errors }}
+          </div>
+        </fieldset>
 
-        <div class="form-group mb-3">
-          {{ registration_form.password1.errors }}
-          <label for="{{ registration_form.password1.id_for_label }}">Password</label>
-          {{ registration_form.password1|add_class:"form-control" }}
-          <small class="text-muted d-block">Your password can't be too similar to your other personal information.</small>
-          <small class="text-muted d-block">Your password must contain at least 8 characters.</small>
-          <small class="text-muted d-block">Your password can't be a commonly used password.</small>
-          <small class="text-muted d-block">Your password can't be entirely numeric.</small>
-        </div>
+        <fieldset class="pg-fieldset">
+          <legend>Password</legend>
+          <div class="bb-field">
+            <label class="bb-label" for="{{ f.password1.id_for_label }}">Create a password</label>
+            <div class="pg-pw">
+              <input type="password" name="{{ f.password1.html_name }}" id="{{ f.password1.id_for_label }}" autocomplete="new-password" required>
+              <button type="button" data-toggle-password aria-controls="{{ f.password1.id_for_label }}">Show</button>
+            </div>
+            <div class="bb-help">At least 8 characters. Not a common password, and not only numbers.</div>
+            {{ f.password1.errors }}
+          </div>
+          <div class="bb-field">
+            <label class="bb-label" for="{{ f.password2.id_for_label }}">Type it again</label>
+            <input type="password" name="{{ f.password2.html_name }}" id="{{ f.password2.id_for_label }}" autocomplete="new-password" required>
+            {{ f.password2.errors }}
+          </div>
+        </fieldset>
 
-        <div class="form-group mb-3">
-          {{ registration_form.password2.errors }}
-          <label for="{{ registration_form.password2.id_for_label }}">Confirm Password</label>
-          {{ registration_form.password2|add_class:"form-control" }}
-          <small class="text-muted">Enter the same password as before, for verification.</small>
-        </div>
+        <fieldset class="pg-fieldset">
+          <legend>Donor basics <span class="pg-optional" style="text-transform:none;letter-spacing:0">(you can add these later)</span></legend>
+          <div class="pg-2col">
+            <div class="bb-field">
+              <label class="bb-label" for="{{ f.blood_group.id_for_label }}">Blood group</label>
+              {{ f.blood_group }}
+              {{ f.blood_group.errors }}
+            </div>
+            <div class="bb-field">
+              <label class="bb-label" for="{{ f.district.id_for_label }}">District</label>
+              {{ f.district }}
+              {{ f.district.errors }}
+            </div>
+          </div>
+          <label class="bb-check" for="{{ f.in_directory.id_for_label }}">
+            <input type="checkbox" name="{{ f.in_directory.html_name }}" id="{{ f.in_directory.id_for_label }}"{% if f.in_directory.value %} checked{% endif %}>
+            <span>
+              <strong>List me in the donor directory</strong>
+              <span class="bb-help">Optional. Needs a blood group and district. Members can ask you for help; your number is shared only if you accept.</span>
+            </span>
+          </label>
+        </fieldset>
 
-        <button class="btn btn-danger btn-block" type="submit">Register</button>
-        <a href="{% url 'login' %}" class="d-block mt-2">Already have an account? Login</a>
+        <button class="bb-btn bb-btn--primary bb-btn--lg bb-btn--block" type="submit">Create my account</button>
+        <p class="pg-formnote">By joining you agree to keep requests and contact details respectful. Read how we handle <a href="{% url 'about' %}#privacy">privacy</a>.</p>
       </form>
     </div>
+
+    <p class="pg-auth__alt">Already a member? <a href="{% url 'login' %}" class="bb-strong" style="color:var(--bb-red)">Log in</a></p>
   </div>
-</div>
+</section>
+{% endwith %}
 {% endblock body %}
+
+{% block extra_scripts %}<script src="{% static 'js/bb-auth.js' %}"></script>{% endblock extra_scripts %}

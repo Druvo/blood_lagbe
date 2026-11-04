@@ -1,0 +1,111 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Donation history{% endblock title %}
+
+{% block meta %}<meta name="robots" content="noindex">{% endblock meta %}
+
+{% block extra_style %}
+<style>
+  .hist-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+  .hist-brand { font: 800 1.05rem/1 var(--bb-font-display); color: var(--bb-red); letter-spacing: -.01em; }
+  .hist-sum { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); margin: 18px 0; }
+  @media (min-width: 640px) { .hist-sum { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .hist-sum div { border: 1px solid var(--bb-line); border-radius: var(--bb-radius-sm); padding: 10px 12px; background: var(--bb-surface); }
+  .hist-sum b { display: block; font: 800 1.4rem/1.2 var(--bb-font-display); color: var(--bb-ink); }
+  .hist-sum span { font-size: .78rem; color: var(--bb-muted); }
+  .hist-note { font-size: .82rem; color: var(--bb-muted); margin-top: 16px; }
+  .hist-verified td { font-weight: 600; }
+  @media screen and (max-width: 559px) {
+    .hist-table thead { display: none; }
+    .hist-table, .hist-table tbody, .hist-table tr, .hist-table td { display: block; width: 100%; }
+    .hist-table tr { padding: 10px 0; border-bottom: 1px solid var(--bb-line); }
+    .hist-table td { border: 0; padding: 2px 0; display: flex; gap: 10px; justify-content: space-between; text-align: right; overflow-wrap: anywhere; }
+    .hist-table td::before { content: attr(data-label); color: var(--bb-muted); font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; text-align: left; flex: none; }
+  }
+  @media print {
+    @page { margin: 16mm; }
+    body { background: #fff !important; color: #000 !important; font-size: 11pt; }
+    .bb-container { max-width: none; padding: 0; }
+    .bb-section { padding: 0; }
+    .bb-card { border: 0 !important; box-shadow: none !important; padding: 0 !important; background: #fff !important; }
+    .hist-brand { color: #000; }
+    .hist-sum div { border-color: #999; background: #fff; }
+    .hist-sum b, .bb-table td, .hist-head h1 { color: #000; }
+    .hist-sum span, .hist-note { color: #333; }
+    .bb-table th { color: #333; border-bottom: 1px solid #000; }
+    .bb-table td { border-bottom: 1px solid #ccc; }
+    .bb-table tbody tr:hover { background: none; }
+    .bb-table tr { break-inside: avoid; }
+    .bb-pill { background: none !important; color: #000 !important; border: 1px solid #666; }
+    .bb-table-wrap { overflow: visible; }
+  }
+</style>
+{% endblock extra_style %}
+
+{% block body %}
+<section class="bb-section bb-section--tight">
+  <div class="bb-container bb-container--narrow">
+    <div class="bb-card">
+      <div class="hist-head">
+        <div>
+          <div class="hist-brand">{{ SITE_NAME }}</div>
+          <h1 class="bb-h2 bb-mb-0">Donation history</h1>
+          <div class="bb-small bb-muted">{{ display_name }}{% if blood_group %} &middot; Blood group {{ blood_group }}{% endif %}</div>
+        </div>
+        <div class="bb-noprint bb-row">
+          <button type="button" class="bb-btn bb-btn--primary" onclick="window.print()"><i class="feather-printer"></i> Print / Save as PDF</button>
+        </div>
+      </div>
+
+      <div class="hist-sum">
+        <div><b class="bb-num">{{ verified_count }}</b><span>verified donation{{ verified_count|pluralize }}</span></div>
+        <div><b class="bb-num">{{ total_count }}</b><span>logged in total</span></div>
+        <div><b class="bb-num">{% if last_verified %}{{ last_verified|date:"M d, Y" }}{% else %}-{% endif %}</b><span>last verified donation</span></div>
+        <div><b class="bb-num">{% if blood_group %}{{ blood_group }}{% else %}-{% endif %}</b><span>blood group</span></div>
+      </div>
+
+      <div class="bb-seg bb-noprint bb-mb-2" role="group" aria-label="Filter">
+        <a href="{% url 'donation-history' %}" class="{% if not only_verified %}is-active{% endif %}">All</a>
+        <a href="{% url 'donation-history' %}?only=verified" class="{% if only_verified %}is-active{% endif %}">Verified only</a>
+      </div>
+
+      {% if rows %}
+        <div class="bb-table-wrap">
+          <table class="bb-table hist-table">
+            <thead>
+              <tr><th scope="col">Date</th><th scope="col">Blood group</th><th scope="col">District</th><th scope="col">Place</th><th scope="col">Status</th></tr>
+            </thead>
+            <tbody>
+              {% for donation in rows %}
+                <tr class="{% if donation.status == 'approved' %}hist-verified{% endif %}">
+                  <td class="bb-num" data-label="Date">{{ donation.donation_date|date:"Y-m-d" }}</td>
+                  <td data-label="Blood group">{{ donation.blood_group }}</td>
+                  <td data-label="District">{{ donation.district|default:"-" }}</td>
+                  <td data-label="Place">{{ donation.location }}</td>
+                  <td data-label="Status">
+                    {% if donation.status == 'approved' %}<span class="bb-pill bb-pill--ok">Verified</span>
+                    {% elif donation.status == 'rejected' %}<span class="bb-pill bb-pill--bad">Rejected</span>
+                    {% else %}<span class="bb-pill bb-pill--warn">Pending</span>{% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="bb-empty"><i class="feather-droplet"></i>{% if only_verified %}No verified donations yet.{% else %}No donations logged yet.{% endif %}</div>
+      {% endif %}
+
+      <p class="hist-note">
+        This is a self-service history kept by the donor. Entries marked Verified were checked by a {{ SITE_NAME }} admin; pending and rejected entries are listed for completeness only. It is not a medical record. Printed on {{ printed_on|date:"M d, Y" }}.
+      </p>
+
+      <div class="bb-row bb-noprint bb-mt-2">
+        <a href="{% url 'donation-export' %}" class="bb-btn bb-btn--ghost"><i class="feather-download"></i> Download CSV</a>
+        <a href="{% url 'donor-card' %}" class="bb-btn bb-btn--ghost"><i class="feather-credit-card"></i> Donor card</a>
+        <a href="{% url 'log-donation' %}" class="bb-btn bb-btn--ghost"><i class="feather-arrow-left"></i> Back to my hub</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock body %}

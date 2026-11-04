@@ -1,59 +1,105 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
-{% block title %}Contact Requests{% endblock title %}
+{% block title %}Contact requests{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/community.css' %}">{% endblock extra_style %}
 
 {% block body %}
-<div class="middle-sidebar-bottom">
-  <div class="middle-wrap container mt-4 mb-4" style="max-width: 760px;">
-    <h2 class="fw-700 font-md mb-3">Contact Requests</h2>
+<div class="bb-container bb-container--narrow cm-page">
 
-    {% for message in messages %}
-      <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">{{ message }}</div>
-    {% endfor %}
-
-    <div class="card w-100 border-0 shadow-xs p-4 mb-4">
-      <h4 class="fw-700 mb-3">People asking for your help</h4>
-      {% for item in received %}
-        <div class="border-bottom pb-3 mb-3">
-          <div class="fw-700">{{ item.name }}</div>
-          {% if item.req.message %}<p class="mb-2">&ldquo;{{ item.req.message }}&rdquo;</p>{% endif %}
-          <div class="text-muted font-xsss mb-2">{{ item.req.created_at|date:"M d, Y" }}</div>
-          {% if item.req.status == 'pending' %}
-            <form method="post" action="{% url 'contact-respond' item.req.pk %}" class="d-inline">
-              {% csrf_token %}
-              <button name="answer" value="accept" class="btn btn-success btn-sm">Accept and share my number</button>
-              <button name="answer" value="decline" class="btn btn-outline-secondary btn-sm">Decline</button>
-            </form>
-          {% elif item.req.status == 'accepted' %}
-            <span class="badge bg-success text-white">Accepted</span>
-            <a href="tel:{{ item.phone }}" class="ms-2"><i class="feather-phone"></i> {{ item.phone }}</a>
-          {% else %}
-            <span class="badge bg-secondary text-white">Declined</span>
-          {% endif %}
-        </div>
-      {% empty %}
-        <p class="text-muted mb-0">Nobody has asked yet.</p>
-      {% endfor %}
+  <header class="cm-head bb-row bb-row--between bb-row--top">
+    <div>
+      <span class="bb-eyebrow">Inbox</span>
+      <h1 class="bb-h2 bb-mb-1">Contact requests</h1>
+      <p class="bb-lead">A number is shared only when the donor accepts. Declining tells the asker nothing else.</p>
     </div>
+    <a href="{% url 'donor-directory' %}" class="bb-btn bb-btn--soft bb-btn--sm"><i class="feather-search"></i> Find donors</a>
+  </header>
 
-    <div class="card w-100 border-0 shadow-xs p-4">
-      <h4 class="fw-700 mb-3">Requests you sent</h4>
-      {% for item in sent %}
-        <div class="border-bottom pb-3 mb-3">
-          <div class="fw-700">{{ item.name }} <span class="text-danger">{{ item.group }}</span></div>
-          {% if item.req.status == 'accepted' %}
-            <span class="badge bg-success text-white">Accepted</span>
-            <a href="tel:{{ item.phone }}" class="ms-2"><i class="feather-phone"></i> {{ item.phone }}</a>
-          {% elif item.req.status == 'pending' %}
-            <span class="badge bg-warning text-dark">Waiting for an answer</span>
-          {% else %}
-            <span class="badge bg-secondary text-white">Declined</span>
-          {% endif %}
-        </div>
-      {% empty %}
-        <p class="text-muted mb-0">You haven't asked anyone yet. <a href="{% url 'donor-directory' %}">Find donors</a>.</p>
-      {% endfor %}
-    </div>
+  <div class="cm-seg-wrap bb-mt-2 bb-mb-2">
+    <nav class="bb-seg" aria-label="Inbox sections">
+      <a href="#received" class="is-active">People asking you{% if pending_count %} ({{ pending_count }}){% endif %}</a>
+      <a href="#sent">You asked{% if sent_waiting %} ({{ sent_waiting }}){% endif %}</a>
+    </nav>
   </div>
+
+  <section id="received" aria-labelledby="received-h" class="bb-stack">
+    <h2 class="bb-h3 bb-mb-0" id="received-h">People asking for your help</h2>
+    {% for item in received %}
+      <article class="bb-card cm-item {% if item.req.status == 'pending' %}bb-card--accent{% endif %}">
+        <div class="cm-item__top">
+          <span class="bb-avatar" aria-hidden="true">{{ item.initials }}</span>
+          <div class="bb-grow">
+            <div class="bb-strong cm-trunc">{{ item.name }}</div>
+            <div class="cm-item__time">Asked {{ item.req.created_at|date:"j M Y, g:i a" }}</div>
+          </div>
+          {% if item.req.status == 'pending' %}<span class="bb-pill bb-pill--warn">Waiting for you</span>
+          {% elif item.req.status == 'accepted' %}<span class="bb-pill bb-pill--ok">Accepted</span>
+          {% else %}<span class="bb-pill">Declined</span>{% endif %}
+        </div>
+
+        {% if item.req.message %}<blockquote class="cm-quote">{{ item.req.message }}</blockquote>{% endif %}
+
+        {% if item.req.status == 'pending' %}
+          <form method="post" action="{% url 'contact-respond' item.req.pk %}" class="cm-actions">
+            {% csrf_token %}
+            <button name="answer" value="accept" class="bb-btn bb-btn--ok" type="submit"><i class="feather-check"></i> Accept</button>
+            <button name="answer" value="decline" class="bb-btn bb-btn--ghost" type="submit"><i class="feather-x"></i> Decline</button>
+          </form>
+          <p class="bb-help bb-mb-0">Accepting shares your phone number with {{ item.name }}. Only accept if you are happy to be called.</p>
+        {% elif item.req.status == 'accepted' %}
+          <div class="cm-phone">
+            <span>Their number</span>
+            <a href="tel:{{ item.phone }}" class="bb-btn bb-btn--ok bb-btn--sm"><i class="feather-phone"></i> {{ item.phone }}</a>
+          </div>
+          {% if item.req.answered_at %}<ul class="cm-history"><li>You accepted on {{ item.req.answered_at|date:"j M Y" }}.</li></ul>{% endif %}
+        {% else %}
+          {% if item.req.answered_at %}<ul class="cm-history"><li>You declined on {{ item.req.answered_at|date:"j M Y" }}.</li></ul>{% endif %}
+        {% endif %}
+      </article>
+    {% empty %}
+      <div class="bb-card bb-empty">
+        <i class="feather-inbox"></i>
+        <strong class="bb-strong">Nobody has asked yet</strong>
+        <p class="bb-small">{% if not user.profile.in_directory %}You are not in the directory. <a href="{% url 'privacy' %}">Join it</a> if you want to be found.{% else %}You will see requests here when someone needs your help.{% endif %}</p>
+      </div>
+    {% endfor %}
+  </section>
+
+  <section id="sent" aria-labelledby="sent-h" class="bb-stack bb-mt-3">
+    <h2 class="bb-h3 bb-mb-0" id="sent-h">Requests you sent</h2>
+    {% for item in sent %}
+      <article class="bb-card cm-item">
+        <div class="cm-item__top">
+          <span class="bb-bloodtag bb-bloodtag--sm"><span>{{ item.group|default:"?" }}</span></span>
+          <div class="bb-grow">
+            <div class="bb-strong cm-trunc">{{ item.name }}</div>
+            <div class="cm-item__time">Sent {{ item.req.created_at|date:"j M Y, g:i a" }}</div>
+          </div>
+          {% if item.req.status == 'pending' %}<span class="bb-pill bb-pill--warn">Waiting</span>
+          {% elif item.req.status == 'accepted' %}<span class="bb-pill bb-pill--ok">Accepted</span>
+          {% else %}<span class="bb-pill">Declined</span>{% endif %}
+        </div>
+        {% if item.req.message %}<blockquote class="cm-quote">{{ item.req.message }}</blockquote>{% endif %}
+        {% if item.req.status == 'accepted' %}
+          <div class="cm-phone">
+            <span>Their number</span>
+            <a href="tel:{{ item.phone }}" class="bb-btn bb-btn--ok bb-btn--sm"><i class="feather-phone"></i> {{ item.phone }}</a>
+          </div>
+        {% elif item.req.status == 'pending' %}
+          <p class="bb-small bb-muted bb-mb-0">Waiting for an answer. Don't worry: they only see your name and note.</p>
+        {% else %}
+          <p class="bb-small bb-muted bb-mb-0">They can't help this time.{% if item.retry_on %} You can ask again after {{ item.retry_on|date:"j M Y" }}.{% endif %} Meanwhile, try someone else.</p>
+        {% endif %}
+      </article>
+    {% empty %}
+      <div class="bb-card bb-empty">
+        <i class="feather-send"></i>
+        <strong class="bb-strong">You haven't asked anyone yet</strong>
+        <p class="bb-small">Search the directory by blood group and district.</p>
+        <a href="{% url 'donor-directory' %}" class="bb-btn bb-btn--primary bb-btn--sm">Find donors</a>
+      </div>
+    {% endfor %}
+  </section>
 </div>
 {% endblock body %}

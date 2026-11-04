@@ -1,0 +1,26 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Delete donation{% endblock title %}
+
+{% block body %}
+<section class="bb-section bb-section--tight">
+  <div class="bb-container bb-container--form">
+    <div class="bb-card bb-card--warn">
+      <h1 class="bb-h3">Delete this pending donation?</h1>
+      <div class="bb-tile bb-mb-2">
+        <span class="bb-bloodtag bb-bloodtag--sm"><span>{{ donation.blood_group }}</span></span>
+        <div>
+          <strong class="bb-strong">{{ donation.donation_date|date:"M d, Y" }}</strong>
+          <div class="bb-small bb-muted">{{ donation.location }}{% if donation.district %} &middot; {{ donation.district }}{% endif %}</div>
+        </div>
+      </div>
+      <p class="bb-small bb-muted">Use this if you logged it by mistake. It has not been verified yet, so nothing else changes. Verified and rejected entries cannot be deleted.</p>
+      <form method="post" class="bb-row">
+        {% csrf_token %}
+        <button type="submit" class="bb-btn bb-btn--primary"><i class="feather-trash-2"></i> Yes, delete it</button>
+        <a href="{% url 'log-donation' %}" class="bb-btn bb-btn--ghost">Keep it</a>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock body %}

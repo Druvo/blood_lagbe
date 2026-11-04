@@ -1,0 +1,81 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Donor card{% endblock title %}
+
+{% block meta %}<meta name="robots" content="noindex">{% endblock meta %}
+
+{% block extra_style %}
+<style>
+  .dcard-wrap { display: flex; justify-content: center; }
+  .dcard { position: relative; overflow: hidden; width: 100%; max-width: 520px; aspect-ratio: 85.6 / 54; border-radius: 22px; color: #fff; background: var(--bb-hero); padding: 22px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--bb-shadow-lg); }
+  .dcard::before { content: ""; position: absolute; right: -70px; top: -70px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.22), transparent 65%); }
+  .dcard > * { position: relative; z-index: 1; }
+  .dcard__top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+  .dcard__brand { font: 800 1.05rem/1 var(--bb-font-display); letter-spacing: -.01em; }
+  .dcard__label { font-size: .65rem; letter-spacing: .14em; text-transform: uppercase; opacity: .8; }
+  .dcard__type { font-size: .7rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; opacity: .85; text-align: right; }
+  .dcard__mid { display: flex; align-items: center; gap: 16px; }
+  .dcard__blood { flex: none; width: 76px; height: 76px; border-radius: 50%; background: #fff; color: var(--bb-red-dark); font: 800 1.6rem/1 var(--bb-font-display); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,.25); }
+  .dcard__name { font: 800 clamp(1.25rem, 5vw, 1.7rem)/1.15 var(--bb-font-display); overflow-wrap: anywhere; }
+  .dcard__tier { margin-top: 4px; font-weight: 700; font-size: .95rem; }
+  .dcard__foot { display: flex; gap: 22px; flex-wrap: wrap; }
+  .dcard__foot b { display: block; font: 800 1.15rem/1.1 var(--bb-font-display); }
+  .dcard__foot span { font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; opacity: .8; }
+  @media (max-width: 559px) { .dcard { aspect-ratio: auto; gap: 22px; } }
+  .dcard-note { font-size: .8rem; color: var(--bb-muted); text-align: center; max-width: 520px; margin: 16px auto 0; }
+  @media print {
+    @page { size: A4 landscape; margin: 20mm; }
+    body { background: #fff !important; }
+    .bb-section { padding: 0; }
+    .dcard { box-shadow: none; max-width: 520px; margin: 0 auto; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .dcard-note { color: #333; }
+  }
+</style>
+{% endblock extra_style %}
+
+{% block body %}
+<section class="bb-section bb-section--tight">
+  <div class="bb-container bb-container--narrow bb-stack">
+    <div class="bb-row bb-row--between bb-noprint">
+      <h1 class="bb-h3 bb-mb-0">My donor card</h1>
+      <button type="button" class="bb-btn bb-btn--primary" onclick="window.print()"><i class="feather-printer"></i> Print / Save as PDF</button>
+    </div>
+
+    <div class="dcard-wrap">
+      <article class="dcard" aria-label="Donor card for {{ display_name }}">
+        <div class="dcard__top">
+          <div>
+            <div class="dcard__brand">{{ SITE_NAME }}</div>
+            <div class="dcard__label">{{ SITE_TAGLINE }}</div>
+          </div>
+          <div class="dcard__type">Donor card</div>
+        </div>
+        <div class="dcard__mid">
+          <div class="dcard__blood" aria-label="Blood group {{ blood_group|default:'not set' }}">{{ blood_group|default:"?" }}</div>
+          <div>
+            <div class="dcard__name">{{ display_name }}</div>
+            <div class="dcard__tier">{% if current_badge %}{{ current_badge.name }}{% else %}Aspiring Donor{% endif %} &middot; Level {{ level_info.level.number }} {{ level_info.level.name }}</div>
+          </div>
+        </div>
+        <div class="dcard__foot">
+          <div><b class="bb-num">{{ verified_count }}</b><span>verified donation{{ verified_count|pluralize }}</span></div>
+          <div><b>{% if last_verified %}{{ last_verified|date:"M Y" }}{% else %}-{% endif %}</b><span>last verified</span></div>
+          <div><b>{% if member_since %}{{ member_since|date:"M Y" }}{% else %}-{% endif %}</b><span>member since</span></div>
+        </div>
+      </article>
+    </div>
+
+    <p class="dcard-note">A self-service card. Verified donations were checked by a {{ SITE_NAME }} admin. It is not a medical record and does not clear you to donate.</p>
+
+    {% if not blood_group %}
+      <div class="bb-alert bb-alert--info bb-noprint">Add your blood group in <a href="{% url 'privacy' %}">your profile</a> so it shows on the card.</div>
+    {% endif %}
+
+    <div class="bb-row bb-row--center bb-noprint">
+      <a href="{% url 'badge-card' user.id %}" class="bb-btn bb-btn--ghost" target="_blank" rel="noopener"><i class="feather-share-2"></i> Share my badge</a>
+      <a href="{% url 'donation-history' %}" class="bb-btn bb-btn--ghost"><i class="feather-printer"></i> Print history</a>
+      <a href="{% url 'log-donation' %}" class="bb-btn bb-btn--ghost"><i class="feather-arrow-left"></i> My hub</a>
+    </div>
+  </div>
+</section>
+{% endblock body %}

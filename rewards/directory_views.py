@@ -16,11 +16,16 @@ from rewards.directory import (
     contact_block_reason,
     contact_states,
     directory_queryset,
+    pending_contact_count,
+    retry_date,
     tier_badges,
 )
 from rewards.geo import DISTRICT_CHOICES, DISTRICT_NAMES
-from rewards.leaderboard import display_name
-from rewards.models import ContactRequest
+from rewards.leaderboard import display_name, initials
+from rewards.models import (
+    MAX_PENDING_CONTACTS_PER_USER,
+    ContactRequest,
+)
 
 User = get_user_model()
 PAGE_SIZE = 20
@@ -54,28 +59,54 @@ def donor_directory(request):
 
     badges = tier_badges()
     states = contact_states(request.user, [d.pk for d in page])
-    donors = [{
-        'user': donor,
-        'name': display_name(donor),
-        'group': donor.profile.blood_group,
-        'district': donor.profile.district,
-        'donations': donor.approved_count,
-        'badge': _tier_for(badges, donor.approved_count),
-        'available': not donor.unavailable,
-        'contact': states.get(donor.pk),
-    } for donor in page]
+    pending_total = pending_contact_count(request.user)
+    cap_reached = pending_total >= MAX_PENDING_CONTACTS_PER_USER
+    donors = []
+    for donor in page:
+        contact = states.get(donor.pk)
+        reason = ''
+        if contact is None and cap_reached:
+            reason = (
+                f'You have {MAX_PENDING_CONTACTS_PER_USER} requests waiting '
+                'for an answer. Wait for a reply before asking more people.'
+            )
+        donors.append({
+            'user': donor,
+            'name': display_name(donor),
+            'initials': initials(display_name(donor)),
+            'group': donor.profile.blood_group,
+            'district': donor.profile.district,
+            'donations': donor.approved_count,
+            'badge': _tier_for(badges, donor.approved_count),
+            'available': not donor.unavailable,
+            'contact': contact,
+            'retry_on': (
+                retry_date(contact)
+                if contact and contact.status == ContactRequest.Status.DECLINED
+                else None
+            ),
+            'reason': reason,
+            'compatible_only': bool(compatible and group
+                                    and donor.profile.blood_group != group),
+        })
 
+    params = request.GET.copy()
+    params.pop('page', None)
     return render(request, 'rewards/directory.html', {
         'donors': donors,
         'page': page,
+        'total': page.paginator.count,
         'group': group,
         'district': district,
         'compatible': compatible,
         'available_only': available_only,
+        'has_filters': bool(group or district or available_only),
         'blood_groups': [code for code, _ in BLOOD_GROUP_CHOICES],
         'district_choices': DISTRICT_CHOICES,
         'in_directory': request.user.profile.in_directory,
-        'query': request.GET.urlencode(),
+        'cap_reached': cap_reached,
+        'max_pending': MAX_PENDING_CONTACTS_PER_USER,
+        'query': params.urlencode(),
     })
 
 
@@ -100,7 +131,7 @@ def contact_donor(request, user_id):
         )
         if donor.email:
             send_mail(
-                'Someone asked for your help on Blood Lagbe',
+                f'Someone asked for your help on {settings.SITE_NAME}',
                 f'{display_name(request.user)} would like to reach you about '
                 'a blood donation. Review the request, and accept or '
                 'decline:\n'
@@ -121,34 +152,34 @@ def contact_donor(request, user_id):
 
 @login_required
 def contact_inbox(request):
-    received = list(
-        request.user.contact_requests_received
-        .select_related('sender').order_by('status', '-created_at')
+    Status = ContactRequest.Status
+    # Waiting requests first so they are never buried, then newest first.
+    received = sorted(
+        request.user.contact_requests_received.select_related('sender'),
+        key=lambda r: (r.status != Status.PENDING, -r.created_at.timestamp()),
     )
-    sent = list(
-        request.user.contact_requests_sent
-        .select_related('donor__profile')
+    sent = sorted(
+        request.user.contact_requests_sent.select_related('donor__profile'),
+        key=lambda r: (r.status != Status.PENDING, -r.created_at.timestamp()),
     )
     return render(request, 'rewards/contact_inbox.html', {
         'received': [{
             'req': r, 'name': display_name(r.sender),
+            'initials': initials(display_name(r.sender)),
             # The asker's number is shown once the donor accepts.
-            'phone': (
-                r.sender.phone
-                if r.status == ContactRequest.Status.ACCEPTED else ''
-            ),
+            'phone': r.sender.phone if r.status == Status.ACCEPTED else '',
         } for r in received],
         'sent': [{
             'req': r, 'name': display_name(r.donor),
+            'initials': initials(display_name(r.donor)),
             'group': r.donor.profile.blood_group,
-            'phone': (
-                r.donor.phone
-                if r.status == ContactRequest.Status.ACCEPTED else ''
+            'phone': r.donor.phone if r.status == Status.ACCEPTED else '',
+            'retry_on': (
+                retry_date(r) if r.status == Status.DECLINED else None
             ),
         } for r in sent],
-        'pending_count': sum(
-            r.status == ContactRequest.Status.PENDING for r in received
-        ),
+        'pending_count': sum(r.status == Status.PENDING for r in received),
+        'sent_waiting': sum(r.status == Status.PENDING for r in sent),
     })
 
 

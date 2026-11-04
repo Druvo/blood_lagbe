@@ -1,0 +1,76 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}About{% endblock title %}
+{% block meta %}
+<meta name="description" content="{{ SITE_NAME }} is a community that connects blood donors with people who urgently need blood across Bangladesh. {{ SITE_TAGLINE }}">
+<meta property="og:site_name" content="{{ SITE_NAME }}">
+<meta property="og:title" content="About {{ SITE_NAME }}">
+<meta property="og:description" content="{{ SITE_TAGLINE }}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/pages.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<section class="pg-hero">
+  <div class="bb-container bb-container--narrow">
+    <span class="bb-eyebrow">About</span>
+    <h1 class="bb-h1 bb-mb-1">{{ SITE_TAGLINE }}</h1>
+    <p class="bb-lead">{{ SITE_NAME }} is a community that connects blood donors with people who urgently need blood, across Bangladesh.</p>
+  </div>
+</section>
+
+<section class="bb-section bb-section--tight">
+  <div class="bb-container bb-container--narrow bb-stack bb-stack--lg">
+
+    <div>
+      <h2 class="bb-h3">Our mission</h2>
+      <p>When a family needs blood, minutes matter and phone calls go in circles. We want it to be easy to find willing donors nearby, easy to say "I can help", and easy to be thanked for it. Giving blood should feel like belonging to something good.</p>
+    </div>
+
+    <div>
+      <h2 class="bb-h3">How it works</h2>
+      <div class="bb-card">
+        <ol class="pg-steps">
+          <li><div><strong>Ask or answer</strong><span class="bb-muted">Post an urgent request, or see who needs your blood group.</span></div></li>
+          <li><div><strong>Give at a blood bank</strong><span class="bb-muted">Donations happen at hospitals and blood banks, with their screening.</span></div></li>
+          <li><div><strong>Log and get verified</strong><span class="bb-muted">A volunteer checks each logged donation, so the numbers you see are real.</span></div></li>
+        </ol>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="bb-h3">How it is run</h2>
+      <p>{{ SITE_NAME }} is run by volunteers. It is free to use, and has no ads. Staff approve donations, review reports and look after the data. We are a community tool, not a hospital or a medical service.</p>
+    </div>
+
+    <div id="privacy" class="pg-anchor">
+      <h2 class="bb-h3">How privacy works</h2>
+      <div class="bb-card bb-stack">
+        <div class="pg-principle"><span class="pg-principle__icon"><i class="feather-phone-off" aria-hidden="true"></i></span><div><h3>Your number stays private</h3><p>Phone numbers never appear on public pages. A donor shares theirs only after accepting a contact request.</p></div></div>
+        <div class="pg-principle"><span class="pg-principle__icon"><i class="feather-toggle-right" aria-hidden="true"></i></span><div><h3>You choose what is visible</h3><p>Directory listing is opt-in. The leaderboard and badge card can be switched off any time in <a href="{% url 'privacy' %}">Profile &amp; privacy</a>.</p></div></div>
+        <div class="pg-principle"><span class="pg-principle__icon"><i class="feather-user-check" aria-hidden="true"></i></span><div><h3>Names, not numbers</h3><p>Public pages show a name you gave, never your login.</p></div></div>
+      </div>
+    </div>
+
+    <div>
+      <h2 class="bb-h3">Safety principles</h2>
+      <div class="pg-principles">
+        <div class="pg-principle"><span class="pg-principle__icon"><i class="feather-shield" aria-hidden="true"></i></span><div><h3>The blood bank decides</h3><p>Nothing here is medical clearance. Eligibility reminders and recovery gaps are prompts to check with the blood bank.</p></div></div>
+        <div class="pg-principle"><span class="pg-principle__icon"><i class="feather-heart" aria-hidden="true"></i></span><div><h3>Voluntary, never for sale</h3><p>Blood is given freely. Badges and points celebrate giving; they are never a reason to donate when you should rest.</p></div></div>
+        <div class="pg-principle"><span class="pg-principle__icon"><i class="feather-flag" aria-hidden="true"></i></span><div><h3>Report anything that feels off</h3><p>Reported requests are hidden until staff have looked at them.</p></div></div>
+      </div>
+    </div>
+
+    <div class="bb-card bb-card--soft bb-center">
+      <h2 class="bb-h3">Get in touch</h2>
+      {% if SITE_CONTACT_EMAIL %}
+        <p class="bb-muted">Questions, feedback, or want to help run {{ SITE_NAME }}?</p>
+        <a class="bb-btn bb-btn--primary" href="mailto:{{ SITE_CONTACT_EMAIL }}">{{ SITE_CONTACT_EMAIL }}</a>
+      {% else %}
+        <p class="bb-muted bb-mb-0">Questions? Start with the <a href="{% url 'faq' %}">FAQ</a> or the <a href="{% url 'learn' %}">donor guide</a>.</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock body %}

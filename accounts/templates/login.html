@@ -1,40 +1,54 @@
 {% extends 'base/base.html' %}
-{% load widget_tweaks %}
+{% load static %}
 
-{% block title %}Login{% endblock title %}
+{% block title %}Log in{% endblock title %}
+{% block meta %}
+<meta name="robots" content="noindex">
+<meta name="description" content="Log in to {{ SITE_NAME }}.">
+{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/pages.css' %}">{% endblock extra_style %}
 
 {% block body %}
-<div class="middle-sidebar-bottom">
-  <div class="middle-wrap container mt-4 mb-4" style="max-width: 480px;">
-    <div class="card w-100 border-0 shadow-xs p-4">
-      <h2 class="fw-700 font-md mb-3">Login</h2>
+<section class="pg-auth">
+  <div class="bb-container bb-container--form">
+    <div class="pg-auth__brand">
+      <img src="{% static 'images/brand/bloodbond-mark.svg' %}" alt="" width="56" height="56">
+      <h1>Welcome back</h1>
+      <p>Log in with your phone number.</p>
+    </div>
 
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-danger">{{ message }}</div>
-        {% endfor %}
-      {% endif %}
-
-      <form method="POST">
+    <div class="bb-card">
+      <form method="post" class="bb-form" novalidate>
         {% csrf_token %}
+        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
 
-        <div class="form-group mb-3">
+        {% if login_form.non_field_errors %}
+          <div class="bb-alert bb-alert--bad" role="alert">{{ login_form.non_field_errors|join:" " }}</div>
+        {% endif %}
+
+        <div class="bb-field">
+          <label class="bb-label" for="{{ login_form.phone.id_for_label }}">Phone number</label>
+          <input type="tel" name="{{ login_form.phone.html_name }}" id="{{ login_form.phone.id_for_label }}" value="{{ login_form.phone.value|default_if_none:'' }}" inputmode="tel" autocomplete="tel" placeholder="01712345678" required autofocus>
           {{ login_form.phone.errors }}
-          <label for="{{ login_form.phone.id_for_label }}">Phone Number*</label>
-          {{ login_form.phone|add_class:"form-control" }}
         </div>
 
-        <div class="form-group mb-3">
+        <div class="bb-field">
+          <label class="bb-label" for="{{ login_form.password.id_for_label }}">Password</label>
+          <div class="pg-pw">
+            <input type="password" name="{{ login_form.password.html_name }}" id="{{ login_form.password.id_for_label }}" autocomplete="current-password" required>
+            <button type="button" data-toggle-password aria-controls="{{ login_form.password.id_for_label }}">Show</button>
+          </div>
           {{ login_form.password.errors }}
-          <label for="{{ login_form.password.id_for_label }}">Password*</label>
-          {{ login_form.password|add_class:"form-control" }}
         </div>
 
-        <button class="btn btn-danger btn-block" type="submit">Login</button>
-        <a href="{% url 'password_reset' %}" class="d-block mt-2">Forgot your password?</a>
-        <a href="{% url 'signup' %}" class="d-block mt-1">Don't have an account? Register</a>
+        <button class="bb-btn bb-btn--primary bb-btn--lg bb-btn--block" type="submit">Log in</button>
+        <p class="pg-auth__alt bb-mb-0"><a href="{% url 'password_reset' %}">Forgot your password?</a></p>
       </form>
     </div>
+
+    <p class="pg-auth__alt">New here? <a href="{% url 'signup' %}" class="bb-strong" style="color:var(--bb-red)">Create a free account</a></p>
   </div>
-</div>
+</section>
 {% endblock body %}
+
+{% block extra_scripts %}<script src="{% static 'js/bb-auth.js' %}"></script>{% endblock extra_scripts %}

@@ -1,86 +1,170 @@
 {% extends 'base/base.html' %}
-{% load widget_tweaks %}
+{% load static %}
 
 {% block title %}Profile &amp; privacy{% endblock title %}
+{% block meta %}<meta name="robots" content="noindex">{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/community.css' %}">{% endblock extra_style %}
 
 {% block body %}
-<div class="middle-sidebar-bottom">
-  <div class="middle-wrap container mt-4 mb-4" style="max-width: 560px;">
-    <div class="card w-100 border-0 shadow-xs p-4">
-      <h2 class="fw-700 font-md mb-1">Profile &amp; privacy</h2>
-      <p class="text-muted">
-        Choose what other people can see. Your phone number is never shown
-        on public pages, and your donations still count in site-wide totals.
-      </p>
+<div class="bb-container cm-page">
+  <header class="cm-head">
+    <span class="bb-eyebrow">Your account</span>
+    <h1 class="bb-h2 bb-mb-1">Profile &amp; privacy</h1>
+    <p class="bb-lead">You decide what other members see. Your phone number is never shown on public pages, and your donations always count in site-wide totals.</p>
+  </header>
 
-      {% for message in messages %}
-        <div class="alert alert-success">{{ message }}</div>
-      {% endfor %}
+  <form method="post" class="bb-form bb-split bb-mt-3" id="privacy-form" novalidate>
+    {% csrf_token %}
+    <div class="bb-stack">
+      {{ form.non_field_errors }}
 
-      <form method="POST">
-        {% csrf_token %}
-        {{ form.non_field_errors }}
+      <section class="bb-card" aria-labelledby="profile-h">
+        <h2 class="bb-card__title" id="profile-h"><i class="feather-droplet" style="color:var(--bb-red);"></i> Donor profile</h2>
 
-        <h5 class="fw-700 mt-2">Donor profile</h5>
-        <div class="row">
-          <div class="col-6 mb-3">
-            {{ form.blood_group.errors }}
-            <label for="{{ form.blood_group.id_for_label }}">Blood group</label>
-            {{ form.blood_group|add_class:"form-control" }}
+        <fieldset style="border:0;margin:0 0 16px;padding:0;min-width:0;">
+          <legend class="bb-label">Blood group</legend>
+          <div class="cm-chipset">
+            <label class="cm-chip"><input type="radio" name="blood_group" value="" {% if not form.blood_group.value %}checked{% endif %}><span>Not set</span></label>
+            {% for value, label in form.blood_group.field.choices %}{% if value %}
+              <label class="cm-chip"><input type="radio" name="blood_group" value="{{ value }}" {% if value == form.blood_group.value %}checked{% endif %}><span>{{ label }}</span></label>
+            {% endif %}{% endfor %}
           </div>
-          <div class="col-6 mb-3">
-            {{ form.district.errors }}
-            <label for="{{ form.district.id_for_label }}">District</label>
-            {{ form.district|add_class:"form-control" }}
-          </div>
+          {{ form.blood_group.errors }}
+          <div class="bb-help">Only you can change it. Check it with a blood test result if you are not sure.</div>
+        </fieldset>
+
+        <div class="bb-field">
+          <label class="bb-label" for="{{ form.district.id_for_label }}">District</label>
+          {{ form.district }}
+          {{ form.district.errors }}
         </div>
 
-        <div class="custom-control custom-checkbox mb-3">
-          {{ form.in_directory }}
-          <label class="ms-2" for="{{ form.in_directory.id_for_label }}">
-            <strong>List me in the donor directory</strong>
-            <span class="d-block text-muted font-xsss">
-              Opt-in. Members who are logged in can ask you for help. Your
-              phone number is shared only if you accept a request.
-            </span>
+        <div class="cm-toggle-row">
+          <label class="cm-switch" for="{{ form.available_to_donate.id_for_label }}">
+            {{ form.available_to_donate }}<i aria-hidden="true"></i><span class="bb-sr">I am available to donate right now</span>
           </label>
-        </div>
-
-        <div class="custom-control custom-checkbox mb-4">
-          {{ form.available_to_donate }}
-          <label class="ms-2" for="{{ form.available_to_donate.id_for_label }}">
+          <div>
             <strong>I am available to donate right now</strong>
-            <span class="d-block text-muted font-xsss">
-              Switch off when you are away or unwell. You also show as unavailable
-              automatically during your recovery gap after a donation.
-            </span>
-          </label>
+            <span class="bb-help">Switch off when you are away or unwell. You also show as unavailable during the {{ donation_interval_label }} gap after a donation.</span>
+            <ul class="cm-expose"><li>Shown in the directory</li></ul>
+          </div>
         </div>
+        {{ form.available_to_donate.errors }}
 
-        <h5 class="fw-700">Privacy</h5>
-        <div class="custom-control custom-checkbox mb-3">
-          {{ form.show_on_leaderboard }}
-          <label class="ms-2" for="{{ form.show_on_leaderboard.id_for_label }}">
+        <div class="cm-toggle-row">
+          <label class="cm-switch" for="{{ form.in_directory.id_for_label }}">
+            {{ form.in_directory }}<i aria-hidden="true"></i><span class="bb-sr">List me in the donor directory</span>
+          </label>
+          <div>
+            <strong>List me in the donor directory</strong>
+            <span class="bb-help">Logged-in members can search for you and send a request. You choose to accept or decline each one. Needs a blood group and district.</span>
+            <ul class="cm-expose"><li>Name</li><li>Blood group</li><li>District</li><li>Donation count</li><li class="is-private">Phone: only if you accept</li></ul>
+          </div>
+        </div>
+        {{ form.in_directory.errors }}
+      </section>
+
+      <section class="bb-card" aria-labelledby="privacy-h">
+        <h2 class="bb-card__title" id="privacy-h"><i class="feather-shield" style="color:var(--bb-red);"></i> Privacy</h2>
+
+        <div class="cm-toggle-row">
+          <label class="cm-switch" for="{{ form.show_on_leaderboard.id_for_label }}">
+            {{ form.show_on_leaderboard }}<i aria-hidden="true"></i><span class="bb-sr">Show me on the leaderboard and home page</span>
+          </label>
+          <div>
             <strong>Show me on the leaderboard and home page</strong>
-            <span class="d-block text-muted font-xsss">
-              Your name, tier and donation count appear in public rankings and awards.
-            </span>
-          </label>
+            <span class="bb-help">Turn off to leave public rankings, awards and squad boards. Your donations still count in totals.</span>
+            <ul class="cm-expose"><li>Name</li><li>Tier</li><li>Points</li><li class="is-private">Phone: never</li></ul>
+          </div>
         </div>
+        {{ form.show_on_leaderboard.errors }}
 
-        <div class="custom-control custom-checkbox mb-4">
-          {{ form.public_badge_card }}
-          <label class="ms-2" for="{{ form.public_badge_card.id_for_label }}">
+        <div class="cm-toggle-row">
+          <label class="cm-switch" for="{{ form.public_badge_card.id_for_label }}">
+            {{ form.public_badge_card }}<i aria-hidden="true"></i><span class="bb-sr">Let anyone with the link view my badge card</span>
+          </label>
+          <div>
             <strong>Let anyone with the link view my badge card</strong>
-            <span class="d-block text-muted font-xsss">
-              Turn off to disable sharing. Only you and site staff can open it.
-            </span>
-          </label>
+            <span class="bb-help">Turn off to disable sharing. Only you and site staff can open it.</span>
+            <ul class="cm-expose"><li>Name</li><li>Tier</li><li>Donations</li><li>Streak</li><li class="is-private">Phone: never</li></ul>
+          </div>
         </div>
+        {{ form.public_badge_card.errors }}
+      </section>
 
-        <button class="btn btn-danger" type="submit">Save</button>
-      </form>
+      <div class="bb-row">
+        <button class="bb-btn bb-btn--primary bb-btn--lg" type="submit">Save changes</button>
+        <a href="{% url 'badge-card' user.id %}" class="bb-btn bb-btn--ghost">View my badge card</a>
+        <a href="{% url 'squads:list' %}" class="bb-btn bb-btn--ghost">My squads</a>
+      </div>
     </div>
-  </div>
+
+    <aside class="cm-preview bb-mt-2" aria-label="Preview">
+      <div class="bb-card bb-card--soft bb-stack">
+        <div class="cm-preview__label">How others see you</div>
+
+        <div id="pv-dir" class="bb-card bb-card--flat" data-state="on">
+          <div class="cm-preview__label" style="margin-bottom:6px;">In the directory</div>
+          <div class="cm-donor__top">
+            <span class="bb-bloodtag"><span id="pv-group">?</span></span>
+            <div class="bb-grow">
+              <div class="cm-donor__name cm-trunc">{{ preview.name }}</div>
+              <div class="cm-donor__meta"><span><i class="feather-map-pin"></i> <span id="pv-district">Anywhere</span></span><span>{{ preview.donations }} verified donation{{ preview.donations|pluralize }}</span></div>
+              <div class="bb-chips bb-mt-1"><span class="bb-pill bb-pill--ok" id="pv-avail">Available</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="cm-ghost" id="pv-dir-off"><i class="feather-eye-off"></i> You are not listed in the directory.</div>
+
+        <div id="pv-lb" class="bb-card bb-card--flat" data-state="on">
+          <div class="cm-preview__label" style="margin-bottom:6px;">On the leaderboard</div>
+          <div class="cm-row" style="padding:4px 0;">
+            <span class="bb-avatar" aria-hidden="true">{{ preview.initials }}</span>
+            <div class="bb-grow">
+              <div class="cm-row__name cm-trunc">{{ preview.name }}</div>
+              <div class="cm-row__meta">{% if preview.tier %}<span class="cm-tier" style="color:{{ preview.tier.color }};"><i class="feather-{{ preview.tier.icon }}"></i> {{ preview.tier.name }}</span>{% endif %}</div>
+            </div>
+            <div class="cm-row__pts"><strong>{{ preview.points }}</strong><small>points</small></div>
+          </div>
+        </div>
+        <div class="cm-ghost" id="pv-lb-off"><i class="feather-eye-off"></i> You do not appear in rankings, awards or squad boards.</div>
+
+        <div class="bb-small" id="pv-card"><i class="feather-link"></i> <span id="pv-card-text">Anyone with your badge link can open your card.</span></div>
+        <p class="bb-xs bb-muted bb-mb-0">Your phone number is not part of any of these.</p>
+      </div>
+    </aside>
+  </form>
 </div>
 {% endblock body %}
+
+{% block extra_scripts %}
+<script>
+  (function () {
+    var form = document.getElementById('privacy-form');
+    if (!form) return;
+    function $(id) { return document.getElementById(id); }
+    function checked(name) { var el = form.elements[name]; return !!(el && el.checked); }
+    function update() {
+      var group = form.querySelector('input[name="blood_group"]:checked');
+      $('pv-group').textContent = group && group.value ? group.value : '?';
+      var d = form.elements['district'];
+      $('pv-district').textContent = d && d.value ? d.value : 'Anywhere';
+      var avail = checked('available_to_donate');
+      var pill = $('pv-avail');
+      pill.textContent = avail ? 'Available' : 'Not available now';
+      pill.className = 'bb-pill' + (avail ? ' bb-pill--ok' : '');
+      var inDir = checked('in_directory');
+      $('pv-dir').style.display = inDir ? '' : 'none';
+      $('pv-dir-off').classList.toggle('is-on', !inDir);
+      var onBoard = checked('show_on_leaderboard');
+      $('pv-lb').style.display = onBoard ? '' : 'none';
+      $('pv-lb-off').classList.toggle('is-on', !onBoard);
+      $('pv-card-text').textContent = checked('public_badge_card')
+        ? 'Anyone with your badge link can open your card.'
+        : 'Only you and site staff can open your badge card.';
+    }
+    form.addEventListener('change', update);
+    update();
+  })();
+</script>
+{% endblock extra_scripts %}

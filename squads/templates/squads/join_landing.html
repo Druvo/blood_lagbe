@@ -1,0 +1,42 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Squad invite{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/community.css' %}">{% endblock extra_style %}
+{% block meta %}<meta name="robots" content="noindex">{% endblock meta %}
+
+{% block body %}
+<div class="bb-container bb-container--form cm-page">
+  {% if squad %}
+    <div class="bb-card bb-center bb-mt-3">
+      <span class="cm-squad__icon" style="margin:0 auto 12px;" aria-hidden="true">{{ squad.name|slice:":2"|upper }}</span>
+      <span class="bb-eyebrow">You are invited</span>
+      <h1 class="bb-h2 cm-wrap-anywhere">{{ squad.name }}</h1>
+      <p class="bb-muted">{{ member_count }} member{{ member_count|pluralize }} donate blood together on {{ SITE_NAME }}.</p>
+      {% if already_member %}
+        <p class="bb-strong">You are already in this squad.</p>
+        <a href="{% url 'squads:detail' squad.pk %}" class="bb-btn bb-btn--primary bb-btn--block">Open the squad</a>
+      {% elif user.is_authenticated %}
+        <form method="post">
+          {% csrf_token %}
+          <button type="submit" class="bb-btn bb-btn--primary bb-btn--lg bb-btn--block">Join this squad</button>
+        </form>
+        <p class="bb-help bb-mt-1">Your name shows to the squad only if you allow it in your privacy settings. Your phone number is never shown.</p>
+      {% else %}
+        <p class="bb-small bb-muted">Log in or create a free account, then open this link again to join.</p>
+        <div class="bb-stack bb-stack--sm">
+          <a href="{% url 'signup' %}" class="bb-btn bb-btn--primary bb-btn--block">Join {{ SITE_NAME }}</a>
+          <a href="{% url 'login' %}" class="bb-btn bb-btn--ghost bb-btn--block">I have an account</a>
+        </div>
+      {% endif %}
+    </div>
+  {% else %}
+    <div class="bb-card bb-empty bb-mt-3">
+      <i class="feather-link"></i>
+      <strong class="bb-strong">This invite link isn't valid</strong>
+      <p class="bb-small">The code may have been typed wrong, or the owner made a new one. Ask them for a fresh link.</p>
+      {% if user.is_authenticated %}<a href="{% url 'squads:join' %}" class="bb-btn bb-btn--soft bb-btn--sm">Enter a code</a>{% endif %}
+    </div>
+  {% endif %}
+</div>
+{% endblock body %}

@@ -1,65 +1,62 @@
-{% load static %}
-<!DOCTYPE html>
+{% load static %}<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>{% block title %}Home{% endblock title %} | Blood Lagbe</title>
-    {% block meta %}
-    {% static 'images/logo/blood_lagbe_logo-v2.png' as og_logo %}
-    <meta name="description" content="Blood Lagbe connects blood donors with people who urgently need blood.">
-    <meta property="og:site_name" content="Blood Lagbe">
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Blood Lagbe - donate blood, save lives">
-    <meta property="og:description" content="Join the community of blood donors. Answer urgent requests, earn badges, and save lives.">
-    <meta property="og:url" content="{{ request.build_absolute_uri }}">
-    <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_logo }}">
-    <meta name="twitter:card" content="summary">
-    {% endblock meta %}
-    <!-- Favicon icon -->
-    <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="{% static 'images/logo/blood_lagbe_logo.png'%}"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/fontastic.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.red.css' %}">
-    <!-- style -->
-    {% block style %}{% include 'snippets/style.html' %}{% endblock style %}
-    <!-- custom overrides, loaded last so they win the cascade -->
-    <link rel="stylesheet" type="text/css" href="{% static 'css/custom.css' %}">
-    <!--extra style -->
-    {% block extra_style %}{% endblock extra_style %}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#d8213a">
+  <title>{% block title %}Home{% endblock title %} | {{ SITE_NAME }}</title>
+  {% block meta %}
+  {% static 'images/brand/og-default.png' as og_image %}
+  <meta name="description" content="{{ SITE_NAME }} connects blood donors with people who urgently need blood across Bangladesh. {{ SITE_TAGLINE }}">
+  <meta property="og:site_name" content="{{ SITE_NAME }}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ SITE_NAME }}: {{ SITE_TAGLINE }}">
+  <meta property="og:description" content="Join the community of blood donors. Answer urgent requests, earn badges, and save lives.">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_image }}">
+  <meta name="twitter:card" content="summary_large_image">
+  {% endblock meta %}
+  <link rel="icon" type="image/svg+xml" href="{% static 'images/brand/bloodbond-mark.svg' %}">
+  <link rel="manifest" href="{% url 'manifest' %}">
+  <link rel="apple-touch-icon" href="{% static 'images/brand/apple-touch-icon.png' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/feather.css' %}">
+  <link rel="stylesheet" href="{% static 'css/bloodbond.css' %}">
+  {% block extra_style %}{% endblock extra_style %}
 </head>
-<body class="color-theme-red mont-font">
-<!-- preloader -->
-{% block loader %}
-<div class="preloader"></div>
-{% endblock loader %}
+<body>
+  <a class="bb-skip" href="#main">Skip to content</a>
 
-<!-- main content -->
-<div class="main-wrapper">
-    <!-- nav -->
-    {% block nav %}{% include 'snippets/nav.html' %} {% endblock nav %}
-    <!-- body content -->
+  {% block nav %}{% include 'snippets/nav.html' %}{% endblock nav %}
+
+  {% if messages %}
+    <div class="bb-messages" role="region" aria-label="Notifications">
+      {% for message in messages %}
+        <div class="bb-alert {% if message.tags == 'error' %}bb-alert--bad{% elif message.tags == 'warning' %}bb-alert--warn{% elif message.tags == 'info' %}bb-alert--info{% else %}bb-alert--ok{% endif %}" role="{% if message.tags == 'error' %}alert{% else %}status{% endif %}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <main id="main" class="bb-main">
     {% block body %}{% endblock body %}
-    <!-- footer -->
-    {% block footer %}
-    <!-- footer include -->
-    {% include 'snippets/footer.html' %}
-    <!-- footer include -->
-    {% endblock footer %}
-</div>
+  </main>
 
-<!-- script -->
-{% block scipt %}{% include 'snippets/script.html' %}{% endblock scipt %}
-<!-- extra script -->
-{% block extra_scripts %}{% endblock extra_scripts %}
-{% include "scripts.html" %}
+  {% block footer %}{% include 'snippets/footer.html' %}{% endblock footer %}
+
+  {% include 'snippets/tabbar.html' %}
+
+  <script src="{% static 'js/bloodbond.js' %}"></script>
+  {% block extra_scripts %}{% endblock extra_scripts %}
+  <script>
+    try {
+      if ('serviceWorker' in navigator && (window.isSecureContext || location.hostname === 'localhost')) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('{% url "service-worker" %}', { scope: '/' }).catch(function () {});
+        });
+      }
+    } catch (e) { /* PWA features are optional */ }
+  </script>
 </body>
 </html>

@@ -87,6 +87,21 @@ def contact_states(sender, donors):
     return states
 
 
+def pending_contact_count(sender):
+    return ContactRequest.objects.filter(
+        sender=sender, status=ContactRequest.Status.PENDING,
+    ).count()
+
+
+def retry_date(request):
+    """The day a declined sender may ask again."""
+    if request.answered_at is None:
+        return None
+    return timezone.localtime(
+        request.answered_at + timedelta(days=CONTACT_RETRY_DAYS),
+    ).date()
+
+
 def contact_block_reason(sender, donor):
     """Why `sender` may not ask `donor` right now, or None if they may."""
     if sender.pk == donor.pk:

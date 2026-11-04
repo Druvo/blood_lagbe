@@ -1,0 +1,71 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}My requests{% endblock title %}
+
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/requests.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container bb-container--narrow bb-section--tight">
+  <div class="bb-pagehead bb-row bb-row--between">
+    <div>
+      <span class="bb-eyebrow">Your requests</span>
+      <h1 class="bb-h2 bb-mb-0">My requests</h1>
+    </div>
+    {% if at_limit %}
+      <span class="bb-pill bb-pill--warn">{{ max_open }} open: close one to post more</span>
+    {% else %}
+      <a href="{% url 'request-create' %}" class="bb-btn bb-btn--primary"><i class="feather-plus"></i> Post a request</a>
+    {% endif %}
+  </div>
+
+  <div class="bb-stack bb-mt-2">
+    {% for req in my_requests %}
+      {% with st=req.status_pill urg=req.urgency %}
+      <article class="bb-card rq-card{% if req.is_flagged %} rq-card--flag{% endif %}">
+        <span class="bb-bloodtag"><span>{{ req.blood_group }}</span></span>
+        <div>
+          <h2 class="rq-card__title"><a href="{% url 'request-detail' req.pk %}">{{ req.hospital }}</a></h2>
+          <div class="rq-card__meta">
+            <span><i class="feather-map-pin"></i>{{ req.district }}</span>
+            <span><i class="feather-users"></i>{{ req.pledges }} offered</span>
+          </div>
+        </div>
+        <div class="rq-card__foot">
+          <div class="bb-chips">
+            <span class="bb-pill{% if st.1 %} bb-pill--{{ st.1 }}{% endif %}">{{ st.0 }}</span>
+            {% if req.is_active %}<span class="bb-pill{% if urg.1 %} bb-pill--{{ urg.1 }}{% endif %}">{{ urg.0 }}</span>{% endif %}
+            {% if req.outcome %}<span class="bb-pill">{{ req.get_outcome_display }}</span>{% endif %}
+            {% if req.is_flagged %}<span class="bb-pill bb-pill--warn">Reported</span>{% endif %}
+          </div>
+          <div class="rq-card__progress">
+            <div class="rq-bags"><strong>{{ req.units_received }}</strong> of {{ req.units_needed }} bag{{ req.units_needed|pluralize }} covered</div>
+            <div class="bb-progress {% if req.is_fulfilled %}bb-progress--ok{% endif %}" role="progressbar" aria-valuemin="0" aria-valuemax="{{ req.units_needed }}" aria-valuenow="{{ req.units_received }}" aria-label="Bags received"><span style="width:{% widthratio req.units_received req.units_needed 100 %}%"></span></div>
+          </div>
+        </div>
+        {% if req.status == 'open' %}
+          <form method="post" action="{% url 'request-close' req.pk %}" class="bb-form rq-inline">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{% url 'request-mine' %}">
+            <label class="bb-sr" for="out-{{ req.pk }}">What happened?</label>
+            <select id="out-{{ req.pk }}" name="outcome" required>
+              <option value="" disabled selected>Close: what happened?</option>
+              {% for value, label in outcome_choices %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
+            </select>
+            <button class="bb-btn bb-btn--ghost bb-btn--sm" type="submit">Close</button>
+            <a class="bb-btn bb-btn--soft bb-btn--sm" href="{% url 'request-detail' req.pk %}">Open</a>
+          </form>
+        {% endif %}
+      </article>
+      {% endwith %}
+    {% empty %}
+      <div class="bb-card bb-empty">
+        <i class="feather-droplet"></i>
+        <p class="bb-strong bb-mb-1">You have not posted a request.</p>
+        <p>If you or someone you know needs blood, post it here and donors will see it.</p>
+        <a href="{% url 'request-create' %}" class="bb-btn bb-btn--primary">Post a request</a>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock body %}

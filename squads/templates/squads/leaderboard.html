@@ -1,0 +1,51 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Squad ranking{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/community.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container bb-container--narrow cm-page">
+  <header class="cm-head bb-row bb-row--between bb-row--top">
+    <div>
+      <span class="bb-eyebrow">Squads</span>
+      <h1 class="bb-h2 bb-mb-1">Squad ranking</h1>
+      <p class="bb-lead">Public squads, ranked by verified donations from their members.</p>
+    </div>
+    <a href="{% url 'squads:list' %}" class="bb-btn bb-btn--soft bb-btn--sm"><i class="feather-users"></i> All squads</a>
+  </header>
+
+  <div class="cm-seg-wrap bb-mt-2 bb-mb-2">
+    <nav class="bb-seg" aria-label="Period">
+      <a href="?period=month" class="{% if period == 'month' %}is-active{% endif %}">This month</a>
+      <a href="?period=all" class="{% if period == 'all' %}is-active{% endif %}">All time</a>
+    </nav>
+  </div>
+
+  <section class="bb-card" aria-label="Squad ranking">
+    {% if rows %}
+      <ol class="cm-rows">
+        {% for r in rows %}
+          <li class="cm-row">
+            <span class="cm-rank">{{ r.rank }}</span>
+            <span class="cm-squad__icon" style="width:42px;height:42px;font-size:1rem;border-radius:12px;" aria-hidden="true">{{ r.squad.name|slice:":2"|upper }}</span>
+            <div class="bb-grow">
+              <a href="{% url 'squads:detail' r.squad.pk %}" class="cm-row__name cm-trunc" style="display:block;">{{ r.squad.name }}</a>
+              <div class="cm-row__meta"><span>{{ r.members }} member{{ r.members|pluralize }}</span>{% if r.squad.district %}<span><i class="feather-map-pin"></i> {{ r.squad.district }}</span>{% endif %}</div>
+            </div>
+            <div class="cm-row__pts"><strong>{{ r.donations }}</strong><small>donation{{ r.donations|pluralize }}</small></div>
+          </li>
+        {% endfor %}
+      </ol>
+    {% else %}
+      <div class="bb-empty">
+        <i class="feather-award"></i>
+        <strong class="bb-strong">No squad has a verified donation {% if period == 'month' %}this month{% else %}yet{% endif %}</strong>
+        <p class="bb-small">Make your squad public and log a donation to appear here.</p>
+        <a href="{% url 'squads:list' %}" class="bb-btn bb-btn--primary bb-btn--sm">Go to squads</a>
+      </div>
+    {% endif %}
+  </section>
+  <p class="bb-xs bb-muted bb-mt-2">Only admin-verified donations count. Private squads are never listed.</p>
+</div>
+{% endblock body %}

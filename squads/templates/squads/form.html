@@ -1,0 +1,47 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}{% if squad %}Edit squad{% else %}New squad{% endif %}{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/community.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container bb-container--form cm-page">
+  <header class="cm-head">
+    <span class="bb-eyebrow">Squads</span>
+    <h1 class="bb-h2">{% if squad %}Edit your squad{% else %}Start a squad{% endif %}</h1>
+  </header>
+
+  <form method="post" class="bb-card bb-form bb-mt-2" novalidate>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="bb-field">
+      <label class="bb-label" for="{{ form.name.id_for_label }}">Squad name</label>
+      {{ form.name }}
+      {{ form.name.errors }}
+    </div>
+    <div class="bb-field">
+      <label class="bb-label" for="{{ form.description.id_for_label }}">About (optional)</label>
+      {{ form.description }}
+      {{ form.description.errors }}
+    </div>
+    <div class="bb-field">
+      <label class="bb-label" for="{{ form.district.id_for_label }}">District (optional)</label>
+      {{ form.district }}
+      {{ form.district.errors }}
+    </div>
+    <label class="bb-check" for="{{ form.is_public.id_for_label }}">
+      {{ form.is_public }}
+      <span>
+        <strong>Show in the public squad list</strong>
+        <span class="bb-help">Anyone logged in can find and join it, and it can appear in the squad ranking. Private squads are joined by code only.</span>
+      </span>
+    </label>
+    {{ form.is_public.errors }}
+    <p class="bb-help bb-mb-2">Members show up by name only if they allow it in their privacy settings. Phone numbers are never shown.</p>
+    <div class="bb-row">
+      <button type="submit" class="bb-btn bb-btn--primary">{% if squad %}Save changes{% else %}Create squad{% endif %}</button>
+      <a href="{% if squad %}{% url 'squads:detail' squad.pk %}{% else %}{% url 'squads:list' %}{% endif %}" class="bb-btn bb-btn--ghost">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock body %}

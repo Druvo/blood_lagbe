@@ -1,145 +1,66 @@
+{% extends 'base/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{{ display_name }}'s Donor Badge | Blood Lagbe</title>
-  {% static 'images/logo/blood_lagbe_logo-v2.png' as og_logo %}
-  <meta property="og:site_name" content="Blood Lagbe">
+
+{% block title %}{{ display_name }}'s donor badge{% endblock title %}
+
+{% block meta %}
+  {% static 'images/brand/og-default.png' as og_image %}
+  <meta name="description" content="{{ display_name }} has {{ approved_count }} verified donation{{ approved_count|pluralize }} on {{ SITE_NAME }}.">
+  <meta property="og:site_name" content="{{ SITE_NAME }}">
   <meta property="og:type" content="profile">
-  <meta property="og:title" content="{{ display_name }} is a {% if current_badge %}{{ current_badge.name }}{% else %}blood donor{% endif %} on Blood Lagbe">
+  <meta property="og:title" content="{{ display_name }} is a {% if current_badge %}{{ current_badge.name }}{% else %}blood donor{% endif %} on {{ SITE_NAME }}">
   <meta property="og:description" content="{{ approved_count }} verified donation{{ approved_count|pluralize }}, an estimated {{ lives }} people helped at most. Join the community and donate blood.">
   <meta property="og:url" content="{{ share_url }}">
-  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_logo }}">
-  <meta name="twitter:card" content="summary">
-  <link rel="stylesheet" href="{% static 'css/feather.css' %}" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 24px;
-      padding: 24px 12px;
-      box-sizing: border-box;
-      background: linear-gradient(135deg, #e50202 0%, #6b0000 100%);
-      font-family: 'Open Sans', 'Segoe UI', Arial, sans-serif;
-    }
-    .card {
-      width: 100%;
-      max-width: 360px;
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
-      padding: 40px 30px;
-      text-align: center;
-      box-sizing: border-box;
-    }
-    .card .icon {
-      font-size: 64px;
-    }
-    .card h1 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 22px;
-      margin: 10px 0 2px;
-    }
-    .card .tier-name {
-      font-size: 15px;
-      font-weight: 700;
-      margin: 6px 0 6px;
-    }
-    .card .hero-name {
-      font-size: 13px;
-      font-weight: 600;
-      margin: 0 0 14px;
-    }
-    .stats {
-      display: flex;
-      justify-content: center;
-      gap: 22px;
-      margin: 20px 0;
-    }
-    .stats div h2 {
-      margin: 0;
-      font-size: 24px;
-    }
-    .stats div span {
-      font-size: 10px;
-      color: #888;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .brand {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #aaa;
-    }
-    .share-panel {
-      width: 100%;
-      max-width: 360px;
-    }
-    .share-panel .share-btn {
-      background: rgba(255, 255, 255, 0.95);
-    }
-    .share-panel .share-btn-primary {
-      background: #fff;
-      color: #e50202;
-    }
-    .join {
-      color: #fff;
-      font-size: 14px;
-      text-decoration: underline;
-    }
-  </style>
-</head>
-<body>
-  <div class="card">
-    {% if current_badge %}
-      <i class="feather-{{ current_badge.icon }} icon" style="color:{{ current_badge.color }};"></i>
-      <h1>{{ display_name }}</h1>
-      <div class="tier-name" style="color:{{ current_badge.color }};">{{ current_badge.name }}</div>
-    {% else %}
-      <i class="feather-heart icon" style="color:#ccc;"></i>
-      <h1>{{ display_name }}</h1>
-      <div class="tier-name" style="color:#aaa;">Aspiring Donor</div>
-    {% endif %}
-    {% if hero_badge %}
-      <div class="hero-name" style="color:{{ hero_badge.color }};">
-        <i class="feather-{{ hero_badge.icon }}"></i> {{ hero_badge.name }}
-      </div>
-    {% endif %}
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_image }}">
+  <meta name="twitter:card" content="summary_large_image">
+{% endblock meta %}
 
-    <div class="stats">
-      <div>
-        <h2>{{ approved_count }}</h2>
-        <span>Donations</span>
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/community.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="cm-stage">
+  <div class="bb-container">
+    <article class="cm-badge" aria-label="Donor badge">
+      <div class="bb-brand" style="justify-content:center;color:#101828;font-size:1.1rem;">
+        <img src="{% static 'images/brand/bloodbond-mark.svg' %}" alt="" width="30" height="30">
+        <span>{{ SITE_NAME }}</span>
       </div>
-      <div>
-        <h2>{{ lives }}</h2>
-        <span>Est. people helped</span>
+
+      {% if current_badge %}
+        <div style="font-size:3.4rem;line-height:1;margin-top:18px;color:{{ current_badge.color }};"><i class="feather-{{ current_badge.icon }}"></i></div>
+        <h1>{{ display_name }}</h1>
+        <div class="cm-badge__tier" style="color:{{ current_badge.color }};">{{ current_badge.name }}</div>
+      {% else %}
+        <div style="font-size:3.4rem;line-height:1;margin-top:18px;color:#d0d5dd;"><i class="feather-heart"></i></div>
+        <h1>{{ display_name }}</h1>
+        <div class="cm-badge__tier" style="color:#667085;">Aspiring Donor</div>
+      {% endif %}
+      {% if hero_badge %}
+        <div class="cm-badge__hero" style="color:{{ hero_badge.color }};"><i class="feather-{{ hero_badge.icon }}"></i> {{ hero_badge.name }}</div>
+      {% endif %}
+
+      <div class="cm-badge__stats">
+        <div><strong>{{ approved_count }}</strong><span>Verified donations</span></div>
+        <div><strong>{{ lives }}</strong><span>Est. people helped</span></div>
+        <div><strong>{{ current_streak }}</strong><span>Cycle streak</span></div>
+        <div><strong>{{ points }}</strong><span>Points</span></div>
       </div>
-      <div>
-        <h2>{{ current_streak }}</h2>
-        <span>Streak</span>
-      </div>
-      <div>
-        <h2>{{ points }}</h2>
-        <span>Points</span>
-      </div>
+
+      <div class="cm-badge__brand"><i class="feather-droplet" style="color:#d8213a;"></i> {{ SITE_TAGLINE }}</div>
+    </article>
+
+    <div class="cm-share">
+      {% include 'rewards/_share_buttons.html' %}
     </div>
 
-    <div class="brand">🩸 bloodlagbe.com</div>
+    <p class="bb-center bb-mt-3 bb-mb-0">
+      {% if user.is_authenticated %}
+        <a href="{% url 'log-donation' %}" style="color:#fff;text-decoration:underline;">Log your next donation</a>
+      {% else %}
+        <a href="{% url 'signup' %}" style="color:#fff;text-decoration:underline;">Join {{ SITE_NAME }} and start saving lives</a>
+      {% endif %}
+    </p>
   </div>
-
-  <div class="share-panel">
-    {% include 'rewards/_share_buttons.html' %}
-  </div>
-  <a class="join" href="{% url 'signup' %}">Join Blood Lagbe and start saving lives</a>
-</body>
-</html>
+</div>
+<p class="bb-xs bb-muted bb-center bb-mt-2 bb-container">Estimates are upper bounds from verified donations, not medical figures.</p>
+{% endblock body %}

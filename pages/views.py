@@ -3,6 +3,7 @@ from django.db.models import Count, Q
 from django.shortcuts import render
 
 from rewards.leaderboard import display_name
+from rewards.blood import BLOOD_GROUP_CHOICES
 from rewards.models import Badge, BloodRequest, get_community_stats
 
 User = get_user_model()
@@ -47,7 +48,14 @@ def index(request):
     return render(request, "pages/home.html", {
         'leaderboard': leaderboard,
         'community': get_community_stats(),
+        'blood_groups': [code for code, _ in BLOOD_GROUP_CHOICES],
+        'tier_badges': badges_desc[::-1],
         'urgent_requests': list(
             BloodRequest.objects.still_needed().select_related('requester')[:3]
         ),
     })
+
+
+# Content pages live in content_views.py (learn hub, FAQ, about) and seo.py
+# (robots, manifest, service worker, offline page).  Re-exported here.
+from .content_views import about, faq, learn  # noqa: E402,F401

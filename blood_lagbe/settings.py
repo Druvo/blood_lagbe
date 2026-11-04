@@ -40,12 +40,16 @@ INSTALLED_APPS = [
     'pages',
     'accounts',
     'rewards',
+    'squads',
+    'insights',
+    'stories',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sitemaps',
     'widget_tweaks',
 ]
 
@@ -72,6 +76,7 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'pages.context_processors.site',
                 'rewards.context_processors.donation_interval',
                 'rewards.context_processors.contact_inbox',
                 'django.contrib.auth.context_processors.auth',
@@ -151,8 +156,14 @@ EMAIL_BACKEND = os.environ.get(
 # clearance: confirm the figure with the national blood transfusion service.
 DONATION_INTERVAL_DAYS = int(os.environ.get('DONATION_INTERVAL_DAYS', '120'))
 
+# Branding. Every template and email reads these, so renaming is one line.
+SITE_NAME = os.environ.get('SITE_NAME', 'BloodBond')
+SITE_TAGLINE = os.environ.get('SITE_TAGLINE', 'Give blood. Build bonds. Save lives.')
+# Shown in the footer only when set.
+SITE_CONTACT_EMAIL = os.environ.get('SITE_CONTACT_EMAIL', '')
+
 DEFAULT_FROM_EMAIL = os.environ.get(
-    'DEFAULT_FROM_EMAIL', 'noreply@bloodlagbe.com'
+    'DEFAULT_FROM_EMAIL', 'noreply@bloodbond.example'
 )
 
 

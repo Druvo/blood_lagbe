@@ -1,103 +1,95 @@
 {% extends 'base/base.html' %}
-{% load static %}
+{% load static blog_extras %}
+
 {% block title %}Blog{% endblock title %}
+{% block meta %}
+<meta name="description" content="Stories, tips and news about blood donation from the {{ SITE_NAME }} community.">
+<meta property="og:site_name" content="{{ SITE_NAME }}">
+<meta property="og:title" content="Blog | {{ SITE_NAME }}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/pages.css' %}">{% endblock extra_style %}
+
 {% block body %}
+<section class="pg-hero">
+  <div class="bb-container">
+    <span class="bb-eyebrow">Blog</span>
+    <h1 class="bb-h1 bb-mb-1">News and tips</h1>
+    <p class="bb-lead">Stories, advice and updates from the {{ SITE_NAME }} community.</p>
+  </div>
+</section>
 
-<div class="container">
-    <div class="row">
-        <!-- Latest Posts -->
-        <main class="posts-listing col-lg-8">
-            <div class="container">
-                <div class="row">
-
-                    {% for blog in queryset %}
-                    <!-- post -->
-                    <div class="post col-xl-6">
-                        <div class="post-thumbnail">
-                            <a href="{{ blog.get_absolute_url }}">
-                                <img src="{{ blog.thumbnail.url }}" alt="{{ blog.title }}"
-                                     class="img-fluid"></a></div>
-                        <div class="post-details">
-                            <div class="post-meta d-flex justify-content-between">
-                                {% for cat in blog.categories.all %}
-                                <div class="category">{{ cat.name }}</div>
-                                {% endfor %}
-                            </div>
-                            <a href="{{ blog.get_absolute_url }}">
-                                <h3 class="h4">{{ blog.title }}</h3></a>
-                            <p class="text-muted">{{ blog.overview }}</p>
-                            <footer class="post-footer d-flex align-items-center">
-                                <div class="author d-flex align-items-center flex-wrap">
-                                <div class="avatar"><img src="{{ blog.author.image.url }}" alt="{{ blog.author }}" class="img-fluid">
-                                </div>
-                                <div class="title"><span>{{ blog.author }}</span></div>
-                            </div>
-                                <div class="date"><i class="icon-clock"></i>{{ blog.timestamp|timesince }} ago</div>
-                                <div class="comments meta-last"><i class="icon-comment"></i>{{ blog.comment_count }}
-                                </div>
-                            </footer>
-                        </div>
-                    </div>
-                    {% endfor %}
+<section class="bb-section bb-section--tight">
+  <div class="bb-container">
+    <div class="bb-split">
+      <div>
+        {% if queryset %}
+          <div class="pg-posts" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))">
+            {% for blog in queryset %}
+              <article class="bb-card bb-card--lift pg-post">
+                <a class="pg-post__img" href="{{ blog.get_absolute_url }}" tabindex="-1" aria-hidden="true"><img src="{{ blog.thumbnail.url }}" alt="" loading="lazy" onerror="this.style.visibility='hidden'"></a>
+                <div class="pg-post__body">
+                  <div class="bb-chips">{% for cat in blog.categories.all %}<span class="bb-pill bb-pill--info">{{ cat.name }}</span>{% endfor %}</div>
+                  <h2 class="pg-post__title bb-h4"><a href="{{ blog.get_absolute_url }}">{{ blog.title }}</a></h2>
+                  <p class="pg-post__excerpt">{{ blog.overview }}</p>
+                  <div class="pg-post__meta">
+                    <span class="pg-meta-author"><img src="{{ blog.author.image.url }}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">{{ blog.author|author_name }}</span>
+                    <span>{{ blog.timestamp|date:"j M Y" }}</span>
+                  </div>
                 </div>
+              </article>
+            {% endfor %}
+          </div>
 
+          {% if queryset.paginator.num_pages > 1 %}
+            <nav class="pg-pager" aria-label="Pages">
+              {% if queryset.has_previous %}
+                <a class="bb-btn bb-btn--ghost bb-btn--sm" href="?{{ page_request_var }}={{ queryset.previous_page_number }}" rel="prev"><i class="feather-chevron-left" aria-hidden="true"></i> Newer</a>
+              {% endif %}
+              <span class="bb-small bb-muted">Page {{ queryset.number }} of {{ queryset.paginator.num_pages }}</span>
+              {% if queryset.has_next %}
+                <a class="bb-btn bb-btn--ghost bb-btn--sm" href="?{{ page_request_var }}={{ queryset.next_page_number }}" rel="next">Older <i class="feather-chevron-right" aria-hidden="true"></i></a>
+              {% endif %}
+            </nav>
+          {% endif %}
+        {% else %}
+          <div class="bb-empty">
+            <i class="feather-edit-3" aria-hidden="true"></i>
+            <p class="bb-strong bb-mb-1">No posts yet</p>
+            <p>Check back soon. Meanwhile, read the <a href="{% url 'learn' %}">donor guide</a>.</p>
+          </div>
+        {% endif %}
+      </div>
 
-                <!-- Pagination -->
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination pagination-template d-flex justify-content-center">
-                        {% if queryset.has_previous %}
-                        <li class="page-item"><a href="?{{ page_request_var }}={{ queryset.previous_page_number }}"
-                                                 class="page-link"> <i class="feather-chevron-left"></i></a></li>
-                        {% endif %}
-                        <li class="page-item"><a href="?{{ page_request_var }}={{ queryset.number }}"
-                                                 class="page-link active">{{ queryset.number }}</a></li>
-                        {% if queryset.has_next %}
-                        <li class="page-item"><a href="?{{ page_request_var }}={{ queryset.next_page_number }}"
-                                                 class="page-link"> <i class="feather-chevron-right"></i></a></li>
-                        {% endif %}
-                    </ul>
-                </nav>
+      <aside class="bb-stack">
+        {% if latest_post %}
+          <div class="bb-card">
+            <h2 class="bb-card__title">Latest posts</h2>
+            <div class="bb-stack">
+              {% for article in latest_post %}
+                <a class="pg-side-post" href="{{ article.get_absolute_url }}">
+                  <img src="{{ article.thumbnail.url }}" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+                  <span><strong>{{ article.title }}</strong><small class="bb-muted">{{ article.timestamp|date:"j M Y" }}</small></span>
+                </a>
+              {% endfor %}
             </div>
-        </main>
-        <aside class="col-lg-4">
-            <!-- Widget [Latest Posts Widget]        -->
-            <div class="widget latest-posts">
-                <header>
-                    <h3 class="h6">Latest Posts</h3>
-                </header>
-                {% for article in latest_post %}
-                <div class="blog-posts">
-                    <a href="{{ article.get_absolute_url }}">
-                        <div class="item d-flex align-items-center">
-                            <div class="image"><img src="{{ article.thumbnail.url }}" alt="..."
-                                                    class="img-fluid"></div>
-                            <div class="title"><strong>{{ article.title }}</strong>
-                                <div class="d-flex align-items-center">
-                                    <div class="views"><i class="icon-eye"></i>{{ article.view_count }}</div>
-                                    <div class="comments"><i class="icon-comment"></i>{{ article.comment_count }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                {% endfor %}
+          </div>
+        {% endif %}
+        {% if category_count %}
+          <div class="bb-card">
+            <h2 class="bb-card__title">Categories</h2>
+            <div class="bb-chips">
+              {% for cat in category_count %}{% if cat.categories__name %}<span class="bb-pill">{{ cat.categories__name }} &middot; {{ cat.categories__name__count }}</span>{% endif %}{% endfor %}
             </div>
-
-
-            <!-- Widget [Categories Widget]-->
-            <div class="widget categories">
-                <header>
-                    <h3 class="h6">Categories</h3>
-                </header>
-                {% for cat in category_count %}
-                <div class="item d-flex justify-content-between">
-                    <span>{{ cat.categories__name }}</span>
-                    <span>{{ cat.categories__name__count }}</span></div>
-                {% endfor %}
-            </div>
-            <!-- Widget [Tags Cloud Widget]-->
-        </aside>
+          </div>
+        {% endif %}
+        <div class="bb-card bb-card--soft">
+          <h2 class="bb-card__title">Can I donate?</h2>
+          <p class="bb-small bb-muted">A two-minute pre-check and a guide to what to expect.</p>
+          <a class="bb-btn bb-btn--soft bb-btn--sm" href="{% url 'learn' %}">Open the guide</a>
+        </div>
+      </aside>
     </div>
-</div>
-
+  </div>
+</section>
 {% endblock body %}

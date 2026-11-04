@@ -1,0 +1,41 @@
+{% load static story_tags %}{% latest_stories 3 as strip_stories %}
+<link rel="stylesheet" href="{% static 'stories/stories.css' %}">
+<section class="bb-section bb-section--alt" aria-labelledby="bbs-strip-title">
+  <div class="bb-container">
+    <div class="bbs-strip__head">
+      <div>
+        <span class="bb-eyebrow">Stories</span>
+        <h2 class="bb-h2" id="bbs-strip-title">Every bag has a story</h2>
+      </div>
+      {% if strip_stories %}<a class="bb-btn bb-btn--ghost bb-btn--sm" href="{% url 'stories' %}">All stories <i class="feather-arrow-right"></i></a>{% endif %}
+    </div>
+
+    {% if strip_stories %}
+      <div class="bbs-grid">
+        {% for story in strip_stories %}
+          <article class="bb-card bb-card--lift bbs-card">
+            {% include 'stories/_who.html' %}
+            {% include 'stories/_tags.html' %}
+            <h3 class="bbs-card__title"><a href="{{ story.get_absolute_url }}">{{ story.title }}</a></h3>
+            <p class="bbs-card__body">{{ story.body|truncatechars:150 }}</p>
+            <div class="bb-row bb-row--between">
+              <a class="bbs-card__more" href="{{ story.get_absolute_url }}">Read the story <i class="feather-arrow-right"></i></a>
+              {% if story.reaction_total %}<span class="bb-muted bb-small"><i class="feather-heart"></i> {{ story.reaction_total }}</span>{% endif %}
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+      <div class="bbs-strip__cta">
+        <a class="bb-btn bb-btn--primary" href="{% url 'story-create' %}">Share your story</a>
+        <span class="bb-muted bb-small">Donors, recipient families and volunteers are all welcome.</span>
+      </div>
+    {% else %}
+      <div class="bb-card bb-empty">
+        <i class="feather-heart"></i>
+        <p class="bb-strong">No stories yet. Be the first.</p>
+        <p>Tell us about a donation, or about the person who gave blood when your family needed it.</p>
+        <a class="bb-btn bb-btn--primary" href="{% url 'story-create' %}">Share your story</a>
+      </div>
+    {% endif %}
+  </div>
+</section>

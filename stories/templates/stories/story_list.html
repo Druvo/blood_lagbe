@@ -1,0 +1,87 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}Stories{% endblock title %}
+{% block meta %}
+  {% static 'images/brand/og-default.png' as og_image %}
+  <meta name="description" content="Real stories from blood donors, recipient families and volunteers across Bangladesh.">
+  <meta property="og:site_name" content="{{ SITE_NAME }}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Stories from the {{ SITE_NAME }} community">
+  <meta property="og:description" content="Real stories from blood donors, recipient families and volunteers across Bangladesh.">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_image }}">
+  <meta name="twitter:card" content="summary_large_image">
+{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'stories/stories.css' %}">{% endblock extra_style %}
+{% block body %}
+<section class="bb-section">
+  <div class="bb-container">
+    <div class="bb-pagehead">
+      <span class="bb-eyebrow">Community</span>
+      <div class="bb-row bb-row--between bb-row--top">
+        <div class="bbs-head__text">
+          <h1 class="bb-h1">Stories</h1>
+          <p class="bb-lead">True moments from people who gave blood, received it, or helped someone find it.</p>
+        </div>
+        <div class="bb-row">
+          <a class="bb-btn bb-btn--primary" href="{% url 'story-create' %}"><i class="feather-plus"></i> Share your story</a>
+          {% if user.is_authenticated %}<a class="bb-btn bb-btn--ghost" href="{% url 'story-mine' %}">My stories</a>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <form class="bb-form bbs-filters" method="get" action="{% url 'stories' %}" aria-label="Filter stories">
+      <div class="bb-chips" role="group" aria-label="Who is sharing">
+        <a class="bb-chip{% if not kind %} bb-chip--active{% endif %}" href="?{% if district %}district={{ district|urlencode }}{% endif %}">All</a>
+        {% for value, label in kinds %}
+          <a class="bb-chip{% if kind == value %} bb-chip--active{% endif %}" href="?kind={{ value }}{% if district %}&amp;district={{ district|urlencode }}{% endif %}">{{ label }}</a>
+        {% endfor %}
+      </div>
+      <div class="bb-row">
+        {% if kind %}<input type="hidden" name="kind" value="{{ kind }}">{% endif %}
+        <label class="bb-label" for="id_district" style="margin:0">District</label>
+        <select name="district" id="id_district" onchange="this.form.submit()" style="width:auto;min-width:180px">
+          <option value="">All districts</option>
+          {% for division, names in divisions.items %}
+            <optgroup label="{{ division }}">
+              {% for name in names %}<option value="{{ name }}"{% if name == district %} selected{% endif %}>{{ name }}</option>{% endfor %}
+            </optgroup>
+          {% endfor %}
+        </select>
+        <noscript><button class="bb-btn bb-btn--soft bb-btn--sm" type="submit">Apply</button></noscript>
+        {% if has_filters %}<a class="bb-small" href="{% url 'stories' %}">Clear filters</a>{% endif %}
+      </div>
+    </form>
+
+    {% if stories %}
+      <div class="bbs-grid">
+        {% for story in stories %}{% include 'stories/_card.html' %}{% endfor %}
+      </div>
+
+      {% if page.has_other_pages %}
+        <nav class="bbs-pager" aria-label="Pages">
+          {% if page.has_previous %}<a class="bb-btn bb-btn--ghost bb-btn--sm" rel="prev" href="?{% if filters_query %}{{ filters_query }}&amp;{% endif %}page={{ page.previous_page_number }}">Newer</a>{% endif %}
+          <span class="bb-muted bb-small">Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+          {% if page.has_next %}<a class="bb-btn bb-btn--ghost bb-btn--sm" rel="next" href="?{% if filters_query %}{{ filters_query }}&amp;{% endif %}page={{ page.next_page_number }}">Older</a>{% endif %}
+        </nav>
+      {% endif %}
+    {% else %}
+      <div class="bb-card bb-empty">
+        <i class="feather-heart"></i>
+        {% if has_filters %}
+          <p class="bb-strong">No stories match yet.</p>
+          <p>Try another district or group, or be the first to share one.</p>
+          <a class="bb-btn bb-btn--soft" href="{% url 'stories' %}">Show all stories</a>
+        {% else %}
+          <p class="bb-strong">No stories yet.</p>
+          <p>Every donation has a story behind it. Yours could be the first.</p>
+        {% endif %}
+        <p class="bb-mt-2"><a class="bb-btn bb-btn--primary" href="{% url 'story-create' %}">Share your story</a></p>
+      </div>
+    {% endif %}
+
+    <p class="bb-muted bb-xs bb-center bb-mt-3">Stories are shared by members and read by our team before they appear. Nothing here is medical advice.</p>
+  </div>
+</section>
+{% endblock body %}
+{% block extra_scripts %}<script src="{% static 'stories/stories.js' %}"></script>{% endblock extra_scripts %}

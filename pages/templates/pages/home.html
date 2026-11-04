@@ -1,227 +1,194 @@
 {% extends 'base/base.html' %}
-<!-- static -->
 {% load static %}
-<!-- Body content -->
+
+{% block title %}Give blood. Build bonds. Save lives.{% endblock title %}
+
 {% block body %}
 
-<!-- main content -->
-<div class="main-content pt-0 bg-white ps-0 pe-0">
-  <div class="container">
-    <div class="row">
-      <div class="col-xl-6 d-none d-xl-block p-0 vh-80 bg-image-contain
-      bg-image-center bg-no-repeat" style="background-image: url({% static 'images/19198095.jpg' %})">
+<!-- Hero -->
+<section class="bb-hero">
+  <div class="bb-container bb-hero__grid">
+    <div>
+      <span class="bb-eyebrow">Bangladesh's blood community</span>
+      <h1>Every drop is a bond.</h1>
+      <p class="bb-lead bb-mb-3">Find a donor in minutes, answer an urgent call, and earn badges for every life you touch. Free, community-run and built for Bangladesh.</p>
+      <div class="bb-row">
+        <a href="{% url 'request-create' %}" class="bb-btn bb-btn--white bb-btn--lg"><i class="feather-droplet"></i> I need blood</a>
+        <a href="{% if user.is_authenticated %}{% url 'log-donation' %}{% else %}{% url 'signup' %}{% endif %}" class="bb-btn bb-btn--lg" style="background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.4);"><i class="feather-heart"></i> {% if user.is_authenticated %}My donor hub{% else %}Become a donor{% endif %}</a>
+      </div>
     </div>
-    <div
-      class="col-xl-6 vh-80 align-items-center d-flex bg-white rounded-3 overflow-hidden"
-    >
-      <div class="card shadow-none border-0 ps-lg--5 me-auto coming-soon-card">
-        <div class="card-body rounded-0 text-left pt-md-5 mt-md-5 ps-0 pe-0">
-          <h5 class="fw-700 text-grey-900 display3-size display4-md-size lh-2">
-            ব্লাড লাগবে হল রক্তদাতা ও গ্রহীতার জন্য একটি দ্রুত, সহজ এবং নিরাপদ
-            প্ল্যাটফর্ম।
-          </h5>
-          <div class="form-group mt-4 p-1 p-2 bg-white rounded-3">
-            <div class="row">
-              <div class="d-flex justify-contain-space-around m-2 ">
 
-                <a
-                  href="#find-donors"
-                  class="c-border-danger w-100 d-block btn bg-white text-danger font-xssss fw-600 ls-3 style1-input m-2 p-0 border-0 text-uppercase"
-                  >রক্ত খুঁজুন <i class="feather-search font-lg mt-1"></i></a
-                >
-                <a
-                  href="{% if user.is_authenticated %}{% url 'log-donation' %}{% else %}{% url 'signup' %}{% endif %}"
-                  class="border-danger w-100 d-block btn bg-current text-white font-xssss fw-600 ls-3 style1-input m-2 p-0 border-0 text-uppercase"
-                  >আমাদের সাথে যুক্ত হন <i class="feather-arrow-right font-lg mt-1"></i></a
-                >
-              </div>
+    <div class="bb-stack">
+      <div class="bb-glass">
+        <div class="bb-cols-3" style="grid-template-columns:repeat(3,1fr);">
+          <div class="bb-stat"><div class="bb-stat__value" data-count="{{ community.donations }}">{{ community.donations }}</div><div class="bb-stat__label">Verified donations</div></div>
+          <div class="bb-stat"><div class="bb-stat__value" data-count="{{ community.donors }}">{{ community.donors }}</div><div class="bb-stat__label">Donors</div></div>
+          <div class="bb-stat"><div class="bb-stat__value" data-count="{{ community.lives }}">{{ community.lives }}</div><div class="bb-stat__label">Est. people helped</div></div>
+        </div>
+      </div>
+      <div class="bb-center bb-hide-sm">
+        <img class="bb-drop-float" src="{% static 'images/brand/bloodbond-mark.svg' %}" alt="" width="150" height="150">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pick a blood group -->
+<section class="bb-section bb-section--tight">
+  <div class="bb-container">
+    <div class="bb-card">
+      <div class="bb-row bb-row--between">
+        <div>
+          <h2 class="bb-h3 bb-mb-0">Looking for a blood group?</h2>
+          <p class="bb-muted bb-small bb-mb-0">Tap one to see donors who can give it.</p>
+        </div>
+        <div class="bb-chips">
+          {% for code in blood_groups %}
+            <a class="bb-chip" href="{% url 'donor-directory' %}?group={{ code|urlencode:'' }}&amp;compatible=1">{{ code }}</a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Urgent now -->
+<section class="bb-section" id="urgent">
+  <div class="bb-container">
+    <div class="bb-row bb-row--between bb-mb-2">
+      <div>
+        <span class="bb-eyebrow">Urgent now</span>
+        <h2 class="bb-h2 bb-mb-0">Someone needs you today</h2>
+      </div>
+      <a href="{% url 'request-list' %}" class="bb-btn bb-btn--ghost bb-btn--sm">All requests <i class="feather-arrow-right"></i></a>
+    </div>
+
+    <div class="bb-cols-3">
+      {% for req in urgent_requests %}
+        <a href="{% url 'request-detail' req.pk %}" class="bb-card bb-card--lift bb-card--accent" style="color:inherit;">
+          <div class="bb-tile">
+            <span class="bb-bloodtag"><span>{{ req.blood_group }}</span></span>
+            <div class="bb-grow">
+              <div class="bb-strong">{{ req.hospital }}</div>
+              <div class="bb-muted bb-small"><i class="feather-map-pin"></i> {{ req.district }}</div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- main content -->
-
-
-      <!-- ======= Why Us Section ======= -->
-      <section id="why-us" class="why-us">
-        <div class="container">
-          <div class="row">
-            <div
-              class="col-lg-4 mt-4 mt-lg-0"
-              data-aos="fade-up"
-              data-aos-delay="300"
-            >
-              <div class="box">
-                <span>Who can donate?</span>
-                <p>
-                  You need to be 18-65 years old, weigh 45kg or more and be fit
-                  and healthy.
-                </p>
-              </div>
-            </div>
-
-            <div
-              class="col-lg-4 mt-4 mt-lg-0"
-              data-aos="fade-up"
-              data-aos-delay="150"
-            >
-              <div class="box">
-                <span>How long does it take?</span>
-                <p>15 minutes to donate.</p>
-              </div>
-            </div>
-
-            <div
-              class="col-lg-4 mt-4 mt-lg-0"
-              data-aos="fade-up"
-              data-aos-delay="150"
-            >
-              <div class="box">
-                <span>How often can I donate?</span>
-                <p>Every {{ donation_interval_label }}*</p>
-              </div>
-            </div>
+          <div class="bb-divider"></div>
+          <div class="bb-row bb-row--between bb-small">
+            <span><strong>{{ req.units_remaining }}</strong> bag{{ req.units_remaining|pluralize }} needed</span>
+            <span class="bb-pill bb-pill--warn">By {{ req.needed_by|date:"M d" }}</span>
           </div>
+        </a>
+      {% empty %}
+        <div class="bb-card bb-empty" style="grid-column:1/-1;">
+          <i class="feather-check-circle"></i>
+          <div class="bb-strong">No open requests right now</div>
+          <p class="bb-small">That is good news. Be ready: join the donor directory so you can be found.</p>
         </div>
-        <p class="text-center text-muted small mt-3">* A general reminder, not medical advice. Eligibility is decided by the blood bank's screening.</p>
-      </section>
-      <!-- End Why Us Section -->
+      {% endfor %}
+    </div>
+  </div>
+</section>
 
-  <!-- Blood groups -->
-  <div class="container" id="find-donors">
-    <div class="row">
-      <h2 class="fw-700 mb-0 mt-0 font-md text-grey-900">Find Donors</h2>
-      <div class="col-6 row p-3">
-        <div class="col-lg-3">
-          <img src="{% static "images/blood_group/A+ve.png" %}" alt=""
-          width="100%">
-        </div>
-        <div class="col-lg-3">
-          <img src="{% static "images/blood_group/A-ve.png" %}" alt=""
-          width="100%">
-        </div>
-        <div class="col-lg-3">
-          <img src="{% static "images/blood_group/B+ve.png" %}" alt=""
-          width="100%">
-        </div>
-        <div class="col-lg-3">
-          <img src="{% static "images/blood_group/B-ve.png" %}" alt=""
-          width="100%">
-        </div>
-        <div class="col-lg-3">
-          <img src="{% static "images/blood_group/AB+ve.png" %}" alt=""
-          width="100%">
-        </div>
-        <div class="col-lg-3">
-          <img src="{% static "images/blood_group/AB-ve.png" %}" alt=""
-          width="100%">
-        </div>
-        <div class="col-lg-3">
-          <img src="{% static "images/blood_group/O+ve.png" %}" alt=""
-          width="100%">
-        </div>
-        <div class="col-lg-3">
-          <img src="{% static "images/blood_group/O-ve.png" %}" alt=""
-          width="100%">
-        </div>
+<!-- How it works -->
+<section class="bb-section bb-section--alt">
+  <div class="bb-container">
+    <div class="bb-center bb-mb-3">
+      <span class="bb-eyebrow">How it works</span>
+      <h2 class="bb-h2">Three taps from need to help</h2>
+    </div>
+    <div class="bb-cols-3">
+      <div class="bb-card bb-center">
+        <span class="bb-bloodtag bb-bloodtag--lg"><span><i class="feather-user-plus"></i></span></span>
+        <h3 class="bb-h3 bb-mt-2">1. Join in a minute</h3>
+        <p class="bb-muted bb-mb-0">Sign up with your phone number. Add your blood group and district, then choose whether to be found.</p>
       </div>
-      <div class="col-6">
-        <div class="table-responsive">
-          <table class="table table-bordered align-middle">
-            <thead>
-              <tr>
-                <th colspan="3" class="bg-danger text-white">
-                  Compatible Blood Type Donors
-                </th>
-              </tr>
-              <tr>
-                <th>Blood Type</th>
-                <th>Donate Blood To</th>
-                <th>Receive Blood From</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="text-danger fw-700">A+</td>
-                <td>A+ AB+</td>
-                <td>A+ A- O+ O-</td>
-              </tr>
-              <tr>
-                <td class="text-danger fw-700">O+</td>
-                <td>O+ A+ B+ AB+</td>
-                <td>O+ O-</td>
-              </tr>
-              <tr>
-                <td class="text-danger fw-700">B+</td>
-                <td>B+ AB+</td>
-                <td>B+ B- O+ O-</td>
-              </tr>
-              <tr>
-                <td class="text-danger fw-700">AB+</td>
-                <td>AB+</td>
-                <td>Everyone</td>
-              </tr>
-              <tr>
-                <td class="text-danger fw-700">A-</td>
-                <td>A+ A- AB+ AB-</td>
-                <td>A- O-</td>
-              </tr>
-              <tr>
-                <td class="text-danger fw-700">O-</td>
-                <td>Everyone</td>
-                <td>O-</td>
-              </tr>
-              <tr>
-                <td class="text-danger fw-700">B-</td>
-                <td>B+ B- AB+ AB-</td>
-                <td>B- O-</td>
-              </tr>
-              <tr>
-                <td class="text-danger fw-700">AB-</td>
-                <td>AB+ AB-</td>
-                <td>AB- A- B- O-</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="bb-card bb-center">
+        <span class="bb-bloodtag bb-bloodtag--lg"><span><i class="feather-search"></i></span></span>
+        <h3 class="bb-h3 bb-mt-2">2. Ask or answer</h3>
+        <p class="bb-muted bb-mb-0">Post an urgent request, or browse the board and pledge to help. Phone numbers are shared only with consent.</p>
+      </div>
+      <div class="bb-card bb-center">
+        <span class="bb-bloodtag bb-bloodtag--lg"><span><i class="feather-award"></i></span></span>
+        <h3 class="bb-h3 bb-mt-2">3. Earn and share</h3>
+        <p class="bb-muted bb-mb-0">Every verified donation earns points, badges and a shareable card. Climb the leaderboard with your friends.</p>
       </div>
     </div>
   </div>
+</section>
 
-  {% include 'pages/urgent_requests.html' %}
-
-  {% include 'pages/top_donors.html' %}
-
-  <div class="row justify-content-center mb-3">
-    <div class="col-xl-12">
-      <div
-        class="card w-100 border-0 p-0 rounded-3 overflow-hidden bg-image-contain bg-image-center"
-        style="background-image: url({% static 'images/bg-2.png' %})"
-      >
-        <div
-          class="card-body p-md-5 p-4 text-center"
-          style="background-color: rgba(0, 85, 255, 0.8)"
-        >
-          <h2 class="fw-700 display2-size text-white display2-md-size lh-2">
-            Ready to save a life?
-          </h2>
-          <p class="font-xsss ps-lg-5 pe-lg-5 lh-28 text-grey-200">
-            One donation can be separated into components that help up to three patients. Register as a donor
-            today and join the Blood Lagbe community.
-          </p>
-          <a
-            href="{% if user.is_authenticated %}{% url 'log-donation' %}{% else %}{% url 'signup' %}{% endif %}"
-            class="btn bg-white text-danger font-xssss fw-600 ls-3 style1-input mt-3 p-3 border-0 text-uppercase d-inline-block"
-            >{% if user.is_authenticated %}Log a Donation{% else %}Become a Donor{% endif %} <i class="feather-arrow-right font-lg mt-1"></i></a
-          >
+<!-- Game: badges -->
+<section class="bb-section">
+  <div class="bb-container">
+    <div class="bb-row bb-row--between bb-mb-2">
+      <div>
+        <span class="bb-eyebrow">Make it a game</span>
+        <h2 class="bb-h2 bb-mb-0">Earn badges for every life you touch</h2>
+      </div>
+      <a href="{% url 'leaderboard' %}" class="bb-btn bb-btn--ghost bb-btn--sm">See the leaderboard <i class="feather-arrow-right"></i></a>
+    </div>
+    <div class="bb-cols-auto">
+      {% for badge in tier_badges %}
+        <div class="bb-card bb-center bb-card--lift">
+          <i class="feather-{{ badge.icon }}" style="font-size:2.2rem;color:{{ badge.color }};"></i>
+          <div class="bb-strong bb-mt-1">{{ badge.name }}</div>
+          <div class="bb-muted bb-small">{{ badge.min_donations }}+ donation{{ badge.min_donations|pluralize }}</div>
         </div>
-      </div>
-      </div>
-
-
+      {% endfor %}
     </div>
   </div>
+</section>
+
+<!-- Top donors -->
+{% if leaderboard %}
+<section class="bb-section bb-section--alt">
+  <div class="bb-container">
+    <div class="bb-center bb-mb-3">
+      <span class="bb-eyebrow">Heroes</span>
+      <h2 class="bb-h2">Top donors</h2>
+    </div>
+    <div class="bb-cols-3">
+      {% for entry in leaderboard %}
+        <div class="bb-card bb-center">
+          <span class="bb-avatar bb-avatar--lg">{% if entry.donor.profile.image %}<img src="{{ entry.donor.profile.image.url }}" alt="">{% else %}{{ entry.display_name|slice:":1"|upper }}{% endif %}</span>
+          <h3 class="bb-h4 bb-mt-1 bb-mb-0">{{ entry.display_name }}</h3>
+          {% if entry.badge %}<div class="bb-small" style="color:{{ entry.badge.color }};font-weight:700;"><i class="feather-{{ entry.badge.icon }}"></i> {{ entry.badge.name }}</div>{% endif %}
+          <div class="bb-muted bb-small">{{ entry.approved_count }} verified donation{{ entry.approved_count|pluralize }}</div>
+          {% if entry.latest_donation %}<div class="bb-muted bb-xs">Last: {{ entry.latest_donation.donation_date|date:"M d, Y" }}</div>{% endif %}
+        </div>
+      {% endfor %}
+    </div>
   </div>
-  {% endblock body %}
+</section>
+{% endif %}
+
+{% include 'stories/_home_strip.html' %}
+
+<!-- Who can donate -->
+<section class="bb-section">
+  <div class="bb-container">
+    <div class="bb-center bb-mb-3">
+      <span class="bb-eyebrow">Before you give</span>
+      <h2 class="bb-h2">Can I donate?</h2>
+    </div>
+    <div class="bb-cols-3">
+      <div class="bb-card"><h3 class="bb-h4"><i class="feather-user-check" style="color:var(--bb-red)"></i> Who</h3><p class="bb-muted bb-mb-0">Healthy adults aged 18 to 60 who weigh at least 45 kg. The blood bank checks haemoglobin and health on the day.</p></div>
+      <div class="bb-card"><h3 class="bb-h4"><i class="feather-clock" style="color:var(--bb-red)"></i> How often</h3><p class="bb-muted bb-mb-0">About every {{ donation_interval_label }}*. We show a recovery bar after each donation so you know when you are ready.</p></div>
+      <div class="bb-card"><h3 class="bb-h4"><i class="feather-shield" style="color:var(--bb-red)"></i> How safe</h3><p class="bb-muted bb-mb-0">Sterile single-use equipment, and a screening before every donation. You can always say no.</p></div>
+    </div>
+    <p class="bb-muted bb-xs bb-center bb-mt-2">* A general reminder, not medical advice. The blood bank's screening decides your eligibility. <a href="{% url 'learn' %}">Read the full guide</a>.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="bb-section">
+  <div class="bb-container">
+    <div class="bb-card bb-card--hero bb-center" style="padding:40px 20px;">
+      <h2 class="bb-h2">Ready to be someone's miracle?</h2>
+      <p class="bb-muted bb-mb-2" style="margin-left:auto;margin-right:auto;max-width:48ch;">Join {{ community.donors }} donor{{ community.donors|pluralize }} already making a difference.</p>
+      <a href="{% if user.is_authenticated %}{% url 'log-donation' %}{% else %}{% url 'signup' %}{% endif %}" class="bb-btn bb-btn--white bb-btn--lg">{% if user.is_authenticated %}Log a donation{% else %}Join free{% endif %}</a>
+    </div>
+  </div>
+</section>
+
+{% endblock body %}

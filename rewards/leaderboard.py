@@ -38,7 +38,16 @@ def month_bounds(today=None):
     return first, last
 
 
-def _approved(period, public_only=False):
+def initials(name):
+    """Up to two letters for an avatar. Works for Bangla names too."""
+    parts = [p for p in name.split() if p[0].isalpha()]
+    if not parts:
+        return '?'
+    letters = parts[0][0] + (parts[-1][0] if len(parts) > 1 else '')
+    return letters.upper()
+
+
+def _approved(period, public_only=False, district=''):
     # order_by() clears Donation's default ordering: left in place it joins
     # the GROUP BY of every values().annotate() below and splits one donor
     # into one row per donation date.
@@ -48,6 +57,8 @@ def _approved(period, public_only=False):
     if public_only:
         # Donors who opted out stay in aggregate totals, never in rankings.
         approved = approved.filter(donor__profile__show_on_leaderboard=True)
+    if district:
+        approved = approved.filter(district=district)
     if period == PERIOD_MONTH:
         first, last = month_bounds()
         approved = approved.filter(donation_date__range=(first, last))
@@ -61,15 +72,18 @@ def _tier_for(badges_desc, count):
     return None
 
 
-def get_leaderboard(period=PERIOD_ALL, limit=20):
+def get_leaderboard(period=PERIOD_ALL, limit=20, district=''):
     """Top donors, ranked by points earned in the period.
 
     Points = 10 per verified donation + 20 bonus for each one made to an
     urgent request. All-time points also include the 5-per-cycle streak
-    bonus, matching the donor's own points total.
+    bonus, matching the donor's own points total. A district filter ranks
+    only the donations made in that district, so it has no streak bonus.
+    Donors with the same points and donations share a rank.
     """
     rows = list(
-        _approved(period, public_only=True).values('donor').annotate(
+        _approved(period, public_only=True, district=district)
+        .values('donor').annotate(
             count=Count('id'),
             requests=Count('id', filter=Q(blood_request__isnull=False)),
         )
@@ -80,11 +94,9 @@ def get_leaderboard(period=PERIOD_ALL, limit=20):
     rows = rows[:CANDIDATE_POOL]
 
     users = User.objects.select_related('profile').in_bulk([r['donor'] for r in rows])
-    streaks = {}
-    if period == PERIOD_ALL:
+    if period == PERIOD_ALL and not district:
         for row in rows:
-            streaks[row['donor']] = get_current_streak(users[row['donor']])
-            row['points'] += streaks[row['donor']] * 5
+            row['points'] += get_current_streak(users[row['donor']]) * 5
         rows.sort(key=lambda r: (-r['points'], -r['count'], r['donor']))
 
     lifetime = {
@@ -98,13 +110,21 @@ def get_leaderboard(period=PERIOD_ALL, limit=20):
     )
 
     entries = []
-    for rank, row in enumerate(rows[:limit], start=1):
+    previous = None
+    rank = 0
+    for position, row in enumerate(rows[:limit], start=1):
         user = users[row['donor']]
         total = lifetime.get(row['donor'], 0)
+        key = (row['points'], row['count'])
+        if key != previous:
+            rank = position
+            previous = key
         entries.append({
             'rank': rank,
             'user': user,
             'name': display_name(user),
+            'initials': initials(display_name(user)),
+            'district': user.profile.district,
             'points': row['points'],
             'donations': row['count'],
             'request_donations': row['requests'],
@@ -112,7 +132,51 @@ def get_leaderboard(period=PERIOD_ALL, limit=20):
             'badge': _tier_for(badges_desc, total),
             'card_public': user.profile.public_badge_card,
         })
+    rank_counts = {}
+    for entry in entries:
+        rank_counts[entry['rank']] = rank_counts.get(entry['rank'], 0) + 1
+    for i, entry in enumerate(entries):
+        entry['tied'] = rank_counts[entry['rank']] > 1
+        # Points still needed to pass the nearest donor ranked above.
+        above = next(
+            (e for e in reversed(entries[:i]) if e['rank'] < entry['rank']),
+            None,
+        )
+        entry['gap'] = above['points'] - entry['points'] if above else 0
     return entries
+
+
+def get_request_heroes(period=PERIOD_ALL, district='', limit=3):
+    """Public donors with the most verified donations to urgent requests."""
+    rows = list(
+        _approved(period, public_only=True, district=district)
+        .filter(blood_request__isnull=False)
+        .values('donor').annotate(count=Count('id'))
+        .order_by('-count', 'donor')[:limit]
+    )
+    users = User.objects.select_related('profile').in_bulk(
+        [r['donor'] for r in rows],
+    )
+    return [{
+        'user': users[r['donor']],
+        'name': display_name(users[r['donor']]),
+        'initials': initials(display_name(users[r['donor']])),
+        'count': r['count'],
+        'card_public': users[r['donor']].profile.public_badge_card,
+    } for r in rows]
+
+
+def get_user_standing(user, period=PERIOD_ALL, district=''):
+    """The user's own points and donations in the period, even when they
+    are outside the ranked pool. (0, 0) if they have none."""
+    row = _approved(period, district=district).filter(donor=user).aggregate(
+        count=Count('id'),
+        requests=Count('id', filter=Q(blood_request__isnull=False)),
+    )
+    points = row['count'] * 10 + row['requests'] * REQUEST_BONUS_POINTS
+    if period == PERIOD_ALL and not district and row['count']:
+        points += get_current_streak(user) * 5
+    return {'points': points, 'donations': row['count']}
 
 
 def _top(queryset, **annotation):

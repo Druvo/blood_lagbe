@@ -1,115 +1,215 @@
 {% extends 'base/base.html' %}
+{% load static %}
 
 {% block title %}Leaderboard{% endblock title %}
 
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/community.css' %}">{% endblock extra_style %}
+
 {% block body %}
-<div class="middle-sidebar-bottom">
-  <div class="middle-wrap container mt-4 mb-4" style="max-width: 860px;">
+<div class="bb-container cm-page">
 
-    <h2 class="fw-700 font-md mb-3 text-center">Donor Leaderboard</h2>
+  <header class="cm-head bb-row bb-row--between bb-row--top">
+    <div>
+      <span class="bb-eyebrow">Leaderboard</span>
+      <h1 class="bb-h2 bb-mb-1">Who is saving the most lives?</h1>
+      <p class="bb-lead">Only admin-verified donations count. Friendly competition, real blood.</p>
+    </div>
+    <div class="cm-link-row">
+      <a href="{% url 'squads:list' %}" class="bb-btn bb-btn--soft bb-btn--sm"><i class="feather-users"></i> Squads</a>
+      <a href="{% url 'log-donation' %}" class="bb-btn bb-btn--primary bb-btn--sm"><i class="feather-plus"></i> Log a donation</a>
+    </div>
+  </header>
 
-    <div class="card w-100 border-0 shadow-xs p-4 mb-4">
-      <h3 class="fw-700 font-sm mb-3 text-center">{{ monthly.month_label }} awards</h3>
+  <form method="get" class="bb-form cm-bar bb-mt-2 bb-mb-2" id="lb-filter">
+    <div class="cm-seg-wrap">
+      <nav class="bb-seg" aria-label="Period">
+        <a href="?period=all{% if district %}&amp;district={{ district|urlencode }}{% endif %}" class="{% if period == 'all' %}is-active{% endif %}" {% if period == 'all' %}aria-current="true"{% endif %}>All time</a>
+        <a href="?period=month{% if district %}&amp;district={{ district|urlencode }}{% endif %}" class="{% if period == 'month' %}is-active{% endif %}" {% if period == 'month' %}aria-current="true"{% endif %}>This month</a>
+      </nav>
+    </div>
+    <input type="hidden" name="period" value="{{ period }}">
+    <label class="bb-sr" for="lb-district">District</label>
+    <select id="lb-district" name="district" aria-label="Filter by district">
+      <option value="">All districts</option>
+      {% for division, districts in district_choices %}
+        <optgroup label="{{ division }}">
+          {% for value, label in districts %}
+            <option value="{{ value }}" {% if value == district %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </optgroup>
+      {% endfor %}
+    </select>
+    <noscript><button class="bb-btn bb-btn--sm" type="submit">Apply</button></noscript>
+  </form>
 
-      <div class="row text-center mb-3">
-        <div class="col-4">
-          <div class="fw-700 font-lg">{{ monthly.donations }}</div>
-          <div class="text-muted font-xsss">Donations this month</div>
+  {% if district %}
+    <p class="bb-small bb-muted bb-mb-2">
+      Showing donations made in <strong>{{ district }}</strong>.
+      <a href="?period={{ period }}">Show all districts</a>
+    </p>
+  {% endif %}
+
+  {% if user.is_authenticated %}
+    {% if hidden_from_board %}
+      <div class="cm-me cm-me--muted bb-mb-3" role="status">
+        <i class="feather-eye-off cm-me__icon"></i>
+        <div class="bb-grow">
+          <strong class="bb-strong">You're hidden from the leaderboard</strong>
+          <div class="bb-small bb-muted">Your donations still count in site totals, just not in rankings.</div>
         </div>
-        <div class="col-4">
-          <div class="fw-700 font-lg">{{ monthly.lives }}</div>
-          <div class="text-muted font-xsss">Est. people helped</div>
-        </div>
-        <div class="col-4">
-          <div class="fw-700 font-lg">{{ monthly.new_donors }}</div>
-          <div class="text-muted font-xsss">New donors</div>
-        </div>
+        <a href="{% url 'privacy' %}" class="bb-btn bb-btn--ghost bb-btn--sm">Privacy settings</a>
       </div>
-
-      <div class="row justify-content-center">
-        {% for award in monthly.awards %}
-          <div class="col-md-6 text-center mb-2">
-            <i class="feather-{{ award.icon }}" style="font-size:40px;color:{{ award.color }};"></i>
-            <div class="fw-700">{{ award.title }}</div>
-            {% if award.card_public %}<a href="{% url 'badge-card' award.user.id %}" class="fw-600">{{ award.name }}</a>{% else %}<span class="fw-600">{{ award.name }}</span>{% endif %}
-            <div class="text-muted font-xsss">{{ award.detail }}</div>
+    {% elif my_entry %}
+      <div class="cm-me cm-sticky-me bb-mb-3" role="status">
+        <div class="cm-me__rank">#{{ my_entry.rank }}</div>
+        <div class="bb-grow">
+          <strong class="bb-strong">Your rank{% if my_entry.tied %} (tied){% endif %}: {{ my_entry.points }} points</strong>
+          <div class="bb-small bb-muted">
+            {% if my_entry.rank == 1 %}You're leading. Keep it up!
+            {% elif my_entry.gap %}{{ my_entry.gap }} point{{ my_entry.gap|pluralize }} to catch the next rank.
+            {% else %}{{ my_entry.donations }} verified donation{{ my_entry.donations|pluralize }}.{% endif %}
           </div>
-        {% empty %}
-          <p class="text-center text-muted mb-0">
-            No verified donations yet this month. Be the first on the board!
-          </p>
-        {% endfor %}
+        </div>
+        <a href="{% url 'log-donation' %}" class="bb-btn bb-btn--ghost bb-btn--sm">Climb higher</a>
       </div>
-    </div>
-
-    <div class="mb-3 text-center">
-      <a href="?period=all" class="btn btn-sm {% if period == 'all' %}btn-danger{% else %}btn-outline-danger{% endif %}">All time</a>
-      <a href="?period=month" class="btn btn-sm {% if period == 'month' %}btn-danger{% else %}btn-outline-danger{% endif %}">This month</a>
-    </div>
-
-    {% if user.is_authenticated %}
-      <div class="alert {% if my_entry %}alert-success{% else %}alert-secondary{% endif %} text-center">
-        {% if hidden_from_board %}
-          You're hidden from the leaderboard. <a href="{% url 'privacy' %}">Change privacy settings</a>
-        {% elif my_entry %}
-          You're ranked <strong>#{{ my_entry.rank }}</strong> with
-          <strong>{{ my_entry.points }}</strong> points.
-        {% else %}
-          You're not on the board yet. <a href="{% url 'log-donation' %}">Log a donation</a>
-          or <a href="{% url 'request-list' %}">answer an urgent request</a> to climb it.
-        {% endif %}
+    {% elif my_standing and my_standing.donations %}
+      <div class="cm-me cm-sticky-me bb-mb-3" role="status">
+        <div class="cm-me__rank"><i class="feather-trending-up"></i></div>
+        <div class="bb-grow">
+          <strong class="bb-strong">You have {{ my_standing.points }} point{{ my_standing.points|pluralize }}</strong>
+          <div class="bb-small bb-muted">That's outside the top {{ pool_size }} for now. Every verified donation moves you up.</div>
+        </div>
+      </div>
+    {% else %}
+      <div class="cm-me cm-me--muted bb-mb-3" role="status">
+        <i class="feather-flag cm-me__icon"></i>
+        <div class="bb-grow">
+          <strong class="bb-strong">You're not on the board yet</strong>
+          <div class="bb-small bb-muted">{% if district %}No verified donations from you in {{ district }}{% elif period == 'month' %}No verified donations from you this month{% else %}Log a donation{% endif %}. Answer an urgent request for +20 bonus points.</div>
+        </div>
+        <a href="{% url 'request-list' %}" class="bb-btn bb-btn--ghost bb-btn--sm">Urgent requests</a>
       </div>
     {% endif %}
+  {% endif %}
 
-    <div class="card w-100 border-0 shadow-xs p-4">
-      <div class="table-responsive">
-        <table class="table align-middle mb-0">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Donor</th>
-              <th>Tier</th>
-              <th class="text-end">Donations</th>
-              <th class="text-end">Points</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for e in entries %}
-              <tr>
-                <td class="fw-700">
-                  {% if e.rank == 1 %}<i class="feather-award" style="color:#d4af37;font-size:22px;"></i>
-                  {% elif e.rank == 2 %}<i class="feather-award" style="color:#a8a8a8;font-size:22px;"></i>
-                  {% elif e.rank == 3 %}<i class="feather-award" style="color:#cd7f32;font-size:22px;"></i>
-                  {% else %}{{ e.rank }}{% endif %}
-                </td>
-                <td>
-                  {% if e.card_public %}<a href="{% url 'badge-card' e.user.id %}" class="fw-600">{{ e.name }}</a>{% else %}<span class="fw-600">{{ e.name }}</span>{% endif %}
-                  {% if e.request_donations %}
-                    <span class="text-danger" title="Answered {{ e.request_donations }} urgent request{{ e.request_donations|pluralize }}"><i class="feather-heart"></i> {{ e.request_donations }}</span>
-                  {% endif %}
-                  <div class="text-muted font-xsss">est. up to {{ e.lives }} people helped</div>
-                </td>
-                <td>
-                  {% if e.badge %}
-                    <span style="color:{{ e.badge.color }};"><i class="feather-{{ e.badge.icon }}"></i> {{ e.badge.name }}</span>
-                  {% else %}-{% endif %}
-                </td>
-                <td class="text-end">{{ e.donations }}</td>
-                <td class="text-end fw-700">{{ e.points }}</td>
-              </tr>
-            {% empty %}
-              <tr><td colspan="5" class="text-center text-muted py-4">Nobody on the board yet.</td></tr>
-            {% endfor %}
-          </tbody>
-        </table>
+  {% if podium %}
+    <section aria-label="Top three" class="bb-mt-3 bb-mb-3">
+      <div class="cm-podium">
+        {% for e in podium %}
+          <div class="bb-card cm-pod cm-pod--{{ forloop.counter }} {% if e.user.id == user.id %}is-me{% endif %}">
+            <span class="cm-medal" aria-label="Rank {{ e.rank }}">{{ e.rank }}</span>
+            <span class="bb-avatar" aria-hidden="true">{{ e.initials }}</span>
+            {% if e.card_public %}<a href="{% url 'badge-card' e.user.id %}" class="cm-pod__name">{{ e.name }}</a>{% else %}<span class="cm-pod__name">{{ e.name }}</span>{% endif %}
+            <div class="cm-pod__pts">{{ e.points }}<small>points</small></div>
+            <div class="cm-pod__meta">
+              {% if e.badge %}<span class="cm-tier" style="color:{{ e.badge.color }};"><i class="feather-{{ e.badge.icon }}"></i> {{ e.badge.name }}</span><br>{% endif %}
+              {{ e.donations }} donation{{ e.donations|pluralize }}
+              {% if e.request_donations %}<span class="cm-heart"><i class="feather-heart"></i> {{ e.request_donations }}</span>{% endif %}
+            </div>
+          </div>
+        {% endfor %}
       </div>
-      <p class="text-muted font-xsss mt-3 mb-0">
-        Points: 10 per verified donation, +20 for each donation to an urgent
-        request{% if period == 'all' %}, +5 per streak cycle{% endif %}.
-        Only admin-verified donations count.
-      </p>
-    </div>
+    </section>
+  {% endif %}
 
-  </div>
+  <section class="bb-card bb-mb-3" aria-label="Ranking">
+    {% if rest %}
+      <ol class="cm-rows" start="4">
+        {% for e in rest %}
+          <li class="cm-row {% if e.user.id == user.id %}is-me{% endif %}">
+            <span class="cm-rank">{{ e.rank }}</span>
+            <span class="bb-avatar" aria-hidden="true">{{ e.initials }}</span>
+            <div class="bb-grow">
+              <div class="cm-trunc">
+                {% if e.card_public %}<a href="{% url 'badge-card' e.user.id %}" class="cm-row__name">{{ e.name }}</a>{% else %}<span class="cm-row__name">{{ e.name }}</span>{% endif %}
+                {% if e.request_donations %}<span class="cm-heart" title="Answered {{ e.request_donations }} urgent request{{ e.request_donations|pluralize }}"><i class="feather-heart"></i> {{ e.request_donations }}</span>{% endif %}
+              </div>
+              <div class="cm-row__meta">
+                {% if e.badge %}<span class="cm-tier" style="color:{{ e.badge.color }};"><i class="feather-{{ e.badge.icon }}"></i> {{ e.badge.name }}</span>{% endif %}
+                {% if e.district %}<span><i class="feather-map-pin"></i> {{ e.district }}</span>{% endif %}
+                <span>est. up to {{ e.lives }} people helped</span>
+              </div>
+            </div>
+            <div class="cm-row__pts"><strong>{{ e.points }}</strong><small>{{ e.donations }} donation{{ e.donations|pluralize }}</small></div>
+          </li>
+        {% endfor %}
+      </ol>
+    {% elif not podium %}
+      <div class="bb-empty">
+        <i class="feather-award"></i>
+        <strong class="bb-strong">Nobody on the board yet</strong>
+        <p class="bb-small">
+          {% if district %}No verified donations in {{ district }}{% if period == 'month' %} this month{% endif %} yet. Be the first.{% elif period == 'month' %}No verified donations this month yet. Be the first on the board!{% else %}Be the first on the board!{% endif %}
+        </p>
+        <a href="{% url 'log-donation' %}" class="bb-btn bb-btn--primary bb-btn--sm">Log a donation</a>
+      </div>
+    {% else %}
+      <p class="bb-small bb-muted bb-center bb-mb-0">The top {{ podium|length }} {% if podium|length == 1 %}is{% else %}are{% endif %} all there is so far. Room for you!</p>
+    {% endif %}
+    <p class="bb-xs bb-muted bb-mt-2 bb-mb-0">
+      Points: 10 per verified donation, +20 for each donation to an urgent
+      request{% if period == 'all' and not district %}, +5 per streak cycle{% endif %}.
+      Equal points and donations share a rank.
+    </p>
+  </section>
+
+  {% if heroes %}
+    <section class="bb-mb-3" aria-label="Request heroes">
+      <h2 class="bb-h3"><i class="feather-heart" style="color:var(--bb-red);"></i> Request heroes</h2>
+      <p class="bb-small bb-muted">Most verified donations to urgent requests{% if period == 'month' %} this month{% endif %}{% if district %} in {{ district }}{% endif %}.</p>
+      <div class="bb-cols-3">
+        {% for h in heroes %}
+          <div class="bb-card bb-card--flat cm-squad">
+            <span class="bb-avatar" aria-hidden="true">{{ h.initials }}</span>
+            <div class="bb-grow">
+              <div class="cm-trunc">{% if h.card_public %}<a href="{% url 'badge-card' h.user.id %}" class="bb-strong">{{ h.name }}</a>{% else %}<span class="bb-strong">{{ h.name }}</span>{% endif %}</div>
+              <div class="bb-small bb-muted">{{ h.count }} urgent request{{ h.count|pluralize }} answered</div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+
+  <section class="bb-card bb-card--hero bb-mb-3" aria-label="Monthly awards">
+    <h2 class="bb-h3 bb-mb-2">{{ monthly.month_label }} awards <span class="bb-xs" style="font-weight:500;opacity:.8;">(site-wide)</span></h2>
+    <div class="cm-statgrid bb-mb-2">
+      <div class="bb-stat"><div class="bb-stat__value">{{ monthly.donations }}</div><div class="bb-stat__label">Donations</div></div>
+      <div class="bb-stat"><div class="bb-stat__value">{{ monthly.lives }}</div><div class="bb-stat__label">Est. people helped</div></div>
+      <div class="bb-stat"><div class="bb-stat__value">{{ monthly.new_donors }}</div><div class="bb-stat__label">New donors</div></div>
+    </div>
+    <div class="bb-cols-2">
+      {% for award in monthly.awards %}
+        <div class="cm-award">
+          <span class="cm-award__icon"><i class="feather-{{ award.icon }}"></i></span>
+          <div>
+            <div class="bb-xs" style="opacity:.85;text-transform:uppercase;letter-spacing:.08em;font-weight:700;">{{ award.title }}</div>
+            {% if award.card_public %}<a href="{% url 'badge-card' award.user.id %}">{{ award.name }}</a>{% else %}<strong>{{ award.name }}</strong>{% endif %}
+            <div class="bb-small" style="opacity:.85;">{{ award.detail }}</div>
+          </div>
+        </div>
+      {% empty %}
+        <p class="bb-mb-0">No verified donations yet this month. Be the first on the board!</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="bb-card bb-card--soft cm-squad bb-mb-3">
+    <span class="cm-squad__icon"><i class="feather-users"></i></span>
+    <div class="bb-grow">
+      <strong class="bb-strong">Donate better together</strong>
+      <div class="bb-small bb-muted">Start a squad with friends, your office or university and climb the squad ranking.</div>
+    </div>
+    <a href="{% url 'squads:leaderboard' %}" class="bb-btn bb-btn--ghost bb-btn--sm">Squad ranking</a>
+  </section>
 </div>
 {% endblock body %}
+
+{% block extra_scripts %}
+<script>
+  (function () {
+    var select = document.getElementById('lb-district');
+    if (select) select.addEventListener('change', function () { document.getElementById('lb-filter').submit(); });
+  })();
+</script>
+{% endblock extra_scripts %}

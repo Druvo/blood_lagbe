@@ -1,0 +1,19 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}Page not found{% endblock title %}
+{% block meta %}<meta name="robots" content="noindex">{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/pages.css' %}">{% endblock extra_style %}
+{% block body %}
+<section class="pg-error">
+  <div class="bb-container bb-container--narrow">
+    <div class="pg-error__code" aria-hidden="true">404</div>
+    <h1 class="bb-h2">We could not find that page</h1>
+    <p class="bb-muted">The link may be old, or the page may have moved. Here is where people usually go next.</p>
+    <div class="pg-error__actions">
+      <a class="bb-btn bb-btn--primary" href="{% url 'home' %}">Go home</a>
+      <a class="bb-btn bb-btn--ghost" href="{% url 'request-list' %}">Urgent requests</a>
+      <a class="bb-btn bb-btn--ghost" href="{% url 'learn' %}">Can I donate?</a>
+    </div>
+  </div>
+</section>
+{% endblock body %}

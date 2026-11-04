@@ -1,0 +1,9 @@
+{# Author line. Names come from story.public_name, which never exposes anonymous authors. #}
+<div class="bbs-who">
+  {% if story.initial %}<span class="bb-avatar">{{ story.initial }}</span>
+  {% else %}<span class="bb-avatar bbs-avatar--anon" aria-hidden="true"><i class="feather-user"></i></span>{% endif %}
+  <div>
+    <div class="bbs-who__name">{{ story.public_name }}</div>
+    <div class="bbs-who__meta">{% if story.approved_at %}{{ story.approved_at|date:"j M Y" }}{% else %}{{ story.created_at|date:"j M Y" }}{% endif %}{% if story.district %} &middot; {{ story.district }}{% endif %}</div>
+  </div>
+</div>

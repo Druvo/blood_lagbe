@@ -4,126 +4,222 @@
 {% block title %}{{ blood_request.blood_group }} needed at {{ blood_request.hospital }}{% endblock title %}
 
 {% block meta %}
-{% static 'images/logo/blood_lagbe_logo-v2.png' as og_logo %}
-<meta property="og:site_name" content="Blood Lagbe">
+{% static 'images/brand/og-default.png' as og_image %}
+<meta property="og:site_name" content="{{ SITE_NAME }}">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Urgent: {{ blood_request.blood_group }} blood needed at {{ blood_request.hospital }}">
 <meta property="og:description" content="{{ blood_request.units_remaining }} bag{{ blood_request.units_remaining|pluralize }} still needed in {{ blood_request.district }} by {{ blood_request.needed_by|date:'M d' }}. Can you help?">
 <meta property="og:url" content="{{ share_url }}">
-<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_logo }}">
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_image }}">
 <meta name="twitter:card" content="summary">
 {% endblock meta %}
 
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/requests.css' %}">{% endblock extra_style %}
+
 {% block body %}
-<div class="middle-sidebar-bottom">
-  <div class="middle-wrap container mt-4 mb-4" style="max-width: 720px;">
+{% with st=blood_request.status_pill urg=blood_request.urgency %}
+<div class="bb-container bb-section--tight">
+  <p class="bb-mt-2 bb-mb-2"><a href="{% url 'request-list' %}"><i class="feather-arrow-left"></i> All requests</a></p>
 
-    {% if messages %}
-      {% for message in messages %}
-        <div class="alert {% if message.tags == 'error' %}alert-danger{% else %}alert-success{% endif %}">{{ message }}</div>
-      {% endfor %}
-    {% endif %}
+  <div class="bb-split">
+    <div class="bb-stack">
 
-    <div class="card w-100 border-0 shadow-xs p-4 mb-4">
-      <div class="d-flex align-items-center mb-3">
-        <div class="me-4 text-center" style="min-width:84px;">
-          <i class="feather-droplet" style="font-size:56px;color:#e50202;"></i>
-          <div class="fw-700 font-lg" style="color:#e50202;">{{ blood_request.blood_group }}</div>
+      {# ---- Header ---- #}
+      <section class="bb-card">
+        <div class="rq-head">
+          <span class="bb-bloodtag bb-bloodtag--lg"><span>{{ blood_request.blood_group }}</span></span>
+          <div>
+            <h1>{{ blood_request.hospital }}</h1>
+            <div class="bb-muted"><i class="feather-map-pin"></i> {{ blood_request.district }}</div>
+          </div>
         </div>
-        <div>
-          <h2 class="fw-700 font-md mb-1">{{ blood_request.hospital }}</h2>
-          <div class="text-muted"><i class="feather-map-pin"></i> {{ blood_request.district }}</div>
+        <div class="bb-chips bb-mt-2">
+          <span class="bb-pill{% if st.1 %} bb-pill--{{ st.1 }}{% endif %}">{{ st.0 }}</span>
+          {% if blood_request.is_active %}<span class="bb-pill{% if urg.1 %} bb-pill--{{ urg.1 }}{% endif %}"><i class="feather-clock"></i> {{ urg.0 }}</span>{% endif %}
+          {% if blood_request.is_flagged and is_owner %}<span class="bb-pill bb-pill--warn">Reported ({{ blood_request.open_report_count }})</span>{% endif %}
         </div>
-      </div>
 
-      <p class="mb-2">
-        <strong>{{ blood_request.units_remaining }}</strong> of {{ blood_request.units_needed }}
-        bag{{ blood_request.units_needed|pluralize }} still needed &middot;
-        needed by <strong>{{ blood_request.needed_by|date:"M d, Y" }}</strong>
-      </p>
-      <div class="progress mb-3" style="height:10px;">
-        <div class="progress-bar bg-danger" role="progressbar"
-             style="width:{% widthratio blood_request.units_received blood_request.units_needed 100 %}%;"></div>
-      </div>
+        <div class="bb-mt-2">
+          <div class="bb-row bb-row--between bb-small">
+            <span><strong class="bb-strong">{{ blood_request.units_received }}</strong> of {{ blood_request.units_needed }} bag{{ blood_request.units_needed|pluralize }} covered</span>
+            <span class="bb-muted">{{ blood_request.units_remaining }} still needed</span>
+          </div>
+          <div class="bb-progress {% if blood_request.is_fulfilled %}bb-progress--ok{% endif %} bb-mt-1" role="progressbar" aria-valuemin="0" aria-valuemax="{{ blood_request.units_needed }}" aria-valuenow="{{ blood_request.units_received }}" aria-label="Bags received"><span style="width:{% widthratio blood_request.units_received blood_request.units_needed 100 %}%"></span></div>
+        </div>
 
-      {% if blood_request.note %}<p class="text-muted">{{ blood_request.note }}</p>{% endif %}
+        <dl class="rq-facts bb-mt-2 bb-mb-0">
+          <div><dt>Needed by</dt><dd>{{ blood_request.needed_by|date:"D, M d" }}</dd></div>
+          <div><dt>Donors offered</dt><dd>{{ response_count }}</dd></div>
+          {% if user.is_authenticated and blood_request.patient_name %}<div><dt>Patient</dt><dd>{{ blood_request.patient_name }}</dd></div>{% endif %}
+        </dl>
 
-      {% if blood_request.is_active %}
-        {% if user.is_authenticated %}
-          <p class="mb-3">
-            <i class="feather-phone"></i> Contact:
-            <a href="tel:{{ blood_request.contact_phone }}"><strong>{{ blood_request.contact_phone }}</strong></a>
-          </p>
-        {% endif %}
-      {% else %}
-        <div class="alert alert-secondary mb-3">
-          {% if blood_request.is_fulfilled %}
-            This request has been fulfilled. Thank you to every donor!
-          {% elif blood_request.is_expired %}
-            This request has expired.
+        {% if blood_request.note %}<p class="bb-mt-2 bb-mb-0">{{ blood_request.note }}</p>{% endif %}
+      </section>
+
+      {% if under_review %}
+        <div class="bb-alert bb-alert--warn" role="status">
+          Members reported this request, so it is being reviewed. Contact details are hidden until then. Please check with the hospital before acting on it.
+        </div>
+      {% elif not blood_request.is_active %}
+        <div class="bb-alert bb-alert--info" role="status">
+          {% if blood_request.status == 'closed' %}
+            This request is closed{% if blood_request.outcome %}: {{ blood_request.get_outcome_display|lower }}{% endif %}.
+          {% elif blood_request.is_fulfilled %}
+            This request is fulfilled. Thank you to every donor!
           {% else %}
-            This request is closed.
+            This request has expired.
           {% endif %}
         </div>
       {% endif %}
 
-      {% if blood_request.is_active and not is_owner %}
-        {% if not user.is_authenticated %}
-          <a href="{% url 'login' %}?next={{ request.path|urlencode }}" class="btn btn-danger">Log in to respond</a>
-          <a href="{% url 'signup' %}" class="btn btn-outline-danger ms-2">Register as a donor</a>
-        {% elif has_responded %}
-          <div class="alert alert-success mb-0">
-            You're on the list. The requester can see your name and phone.
-            After you donate, log it and pick this request to earn bonus points.
-          </div>
-        {% elif eligibility and not eligibility.eligible %}
-          <div class="alert alert-warning mb-0">
-            You can donate again on <strong>{{ eligibility.next_date|date:"M d, Y" }}</strong>.
-            Please share this request so someone else can help.
-          </div>
-        {% else %}
-          <form method="POST" action="{% url 'request-respond' blood_request.pk %}">
+      {# ---- Contact + pledge ---- #}
+      {% if active %}
+        <section class="bb-card bb-card--accent bb-stack">
+          {% if user.is_authenticated %}
+            <div class="rq-phone">
+              <i class="feather-phone" aria-hidden="true"></i>
+              <div>
+                <div class="bb-xs bb-muted">Contact</div>
+                <a class="bb-strong" href="tel:{{ blood_request.contact_phone }}">{{ blood_request.contact_phone }}</a>
+              </div>
+            </div>
+          {% endif %}
+
+          {% if not is_owner %}
+            {% if not user.is_authenticated %}
+              <p class="bb-mb-0">Log in to see the contact number and offer to help.</p>
+              <div class="bb-row">
+                <a href="{% url 'login' %}?next={{ request.path|urlencode }}" class="bb-btn bb-btn--primary">Log in to help</a>
+                <a href="{% url 'signup' %}" class="bb-btn bb-btn--ghost">Join as a donor</a>
+              </div>
+            {% elif has_responded %}
+              <div class="bb-alert bb-alert--ok bb-mb-0">
+                You're on the list. The requester can see your name and phone.
+                After you donate, <a href="{% url 'log-donation' %}">log it</a> and pick this request to earn bonus points.
+              </div>
+            {% elif eligibility and not eligibility.eligible %}
+              <div class="bb-alert bb-alert--warn bb-mb-0">
+                You can donate again on <strong>{{ eligibility.next_date|date:"M d, Y" }}</strong>. Please share this request so someone else can help.
+              </div>
+            {% else %}
+              <form method="post" action="{% url 'request-respond' blood_request.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="bb-btn bb-btn--primary bb-btn--lg bb-btn--block"><i class="feather-heart"></i> I can help</button>
+                <p class="bb-help bb-mb-0">The requester will see your name and phone. Only offer if you feel well; the blood bank decides if you can donate.</p>
+              </form>
+            {% endif %}
+          {% endif %}
+        </section>
+      {% endif %}
+
+      {# ---- Owner tools ---- #}
+      {% if is_owner and help_panel %}
+        <section class="bb-card rq-help">
+          <h2 class="bb-card__title">Donors who can help</h2>
+          {% if help_panel.total %}
+            <div class="rq-help__nums">
+              <div class="bb-stat"><div class="bb-stat__value bb-num">{{ help_panel.total }}</div><div class="bb-stat__label">compatible in the directory</div></div>
+              <div class="bb-stat"><div class="bb-stat__value bb-num">{{ help_panel.nearby }}</div><div class="bb-stat__label">in {{ blood_request.district }}</div></div>
+            </div>
+          {% else %}
+            <p class="bb-muted">No compatible donors are listed yet. Sharing this request is the fastest way to reach more people.</p>
+          {% endif %}
+          <a href="{{ help_panel.url }}" class="bb-btn bb-btn--soft">Find donors</a>
+          <p class="bb-help">Donors share their number only if they accept your request. Compatibility is a guide; the hospital decides.</p>
+        </section>
+      {% endif %}
+
+      {% if is_owner %}
+        <section class="bb-card">
+          <h2 class="bb-card__title">Donors who offered to help ({{ response_count }})</h2>
+          {% for r in responses %}
+            <div class="rq-resp">
+              <div>
+                <span class="bb-strong">{{ r.name }}</span>
+                <span class="bb-xs bb-muted"> &middot; {{ r.when|date:"M d, H:i" }}</span>
+              </div>
+              <a href="tel:{{ r.phone }}">{{ r.phone }}</a>
+            </div>
+          {% empty %}
+            <p class="bb-muted bb-mb-0">Nobody yet. Share this request to reach more donors.</p>
+          {% endfor %}
+        </section>
+      {% endif %}
+
+      {% if can_update %}
+        <section class="bb-card">
+          <h2 class="bb-card__title">Post an update</h2>
+          <form method="post" action="{% url 'request-update' blood_request.pk %}" class="bb-form rq-inline">
             {% csrf_token %}
-            <button type="submit" class="btn btn-danger">I can help</button>
-            <small class="d-block text-muted mt-2">
-              Make sure your blood group is compatible and you're feeling well.
-              The requester will see your name and phone number.
-            </small>
+            <label class="bb-sr" for="upd-kind">Kind of update</label>
+            <select id="upd-kind" name="kind">
+              {% for value, label in update_kinds %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
+            </select>
+            <label class="bb-sr" for="upd-text">Update</label>
+            <input type="text" id="upd-text" name="text" maxlength="300" required placeholder="e.g. Two donors found, one bag to go">
+            <button class="bb-btn bb-btn--dark" type="submit">Post</button>
           </form>
-        {% endif %}
+        </section>
       {% endif %}
 
       {% if is_owner and blood_request.status == 'open' %}
-        <form method="POST" action="{% url 'request-close' blood_request.pk %}" class="mt-3">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-outline-danger btn-sm">Close this request</button>
-        </form>
+        <section class="bb-card bb-card--soft">
+          <h2 class="bb-card__title">Close this request</h2>
+          <form method="post" action="{% url 'request-close' blood_request.pk %}" class="bb-form rq-inline">
+            {% csrf_token %}
+            <label class="bb-sr" for="close-outcome">What happened?</label>
+            <select id="close-outcome" name="outcome" required>
+              <option value="" disabled selected>What happened?</option>
+              {% for value, label in outcome_choices %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
+            </select>
+            <button class="bb-btn bb-btn--ghost" type="submit">Close request</button>
+          </form>
+        </section>
+      {% endif %}
+
+      {# ---- Share ---- #}
+      {% if active %}
+        <section class="bb-card bb-center">
+          <h2 class="bb-card__title">Know someone who can help? Share this request</h2>
+          {% include 'rewards/_share_buttons.html' %}
+        </section>
       {% endif %}
     </div>
 
-    {% if is_owner %}
-      <div class="card w-100 border-0 shadow-xs p-4 mb-4">
-        <h3 class="fw-700 font-sm mb-3">Donors who offered to help ({{ response_count }})</h3>
-        {% for r in responses %}
-          <div class="d-flex justify-content-between border-bottom py-2">
-            <span>{{ r.name }}</span>
-            <a href="tel:{{ r.phone }}">{{ r.phone }}</a>
-          </div>
-        {% empty %}
-          <p class="text-muted mb-0">Nobody yet. Share this request to reach more donors.</p>
-        {% endfor %}
-      </div>
-    {% elif response_count %}
-      <p class="text-center text-muted">{{ response_count }} donor{{ response_count|pluralize }} offered to help so far.</p>
-    {% endif %}
+    {# ---- Timeline + report ---- #}
+    <aside class="bb-stack">
+      <section class="bb-card">
+        <h2 class="bb-card__title">What has happened</h2>
+        <ol class="bb-timeline bb-mb-0">
+          {% for ev in timeline %}
+            <li{% if ev.done %} class="is-done"{% endif %}>
+              <span class="rq-tl__title">{{ ev.title }}</span>
+              {% if ev.when %}<span class="rq-tl__when">{{ ev.when|date:"M d, H:i" }}</span>{% endif %}
+              {% if ev.text %}<p class="rq-tl__text bb-mb-0">{{ ev.text }}</p>{% endif %}
+            </li>
+          {% endfor %}
+        </ol>
+      </section>
 
-    {% if blood_request.is_active %}
-      <div class="card w-100 border-0 shadow-xs p-4 text-center">
-        <h3 class="fw-700 font-sm mb-3">Know someone who can help? Share this request</h3>
-        {% include 'rewards/_share_buttons.html' %}
-      </div>
-    {% endif %}
-
+      {% if user.is_authenticated and not is_requester %}
+        <details class="rq-details bb-noprint">
+          <summary><i class="feather-flag"></i> {% if has_reported %}You reported this request{% else %}Report this request{% endif %}</summary>
+          {% if not has_reported %}
+            <form method="post" action="{% url 'request-report' blood_request.pk %}" class="bb-form bb-card bb-card--flat bb-stack bb-stack--sm">
+              {% csrf_token %}
+              <label class="bb-label" for="rep-reason">What is wrong?</label>
+              <select id="rep-reason" name="reason" required>
+                {% for value, label in report_reasons %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
+              </select>
+              <label class="bb-label" for="rep-text">Details <span class="bb-muted">(optional)</span></label>
+              <input type="text" id="rep-text" name="text" maxlength="300">
+              <button class="bb-btn bb-btn--ghost bb-btn--sm" type="submit">Send report</button>
+            </form>
+          {% endif %}
+        </details>
+      {% endif %}
+    </aside>
   </div>
 </div>
+{% endwith %}
 {% endblock body %}

@@ -7,7 +7,7 @@ from .category_count_view import get_category_count
 def blogView(request):
     category_count = get_category_count()
     latest_post = Post.objects.order_by('-timestamp')[0:3]
-    blog_list = Post.objects.all()
+    blog_list = Post.objects.order_by('-timestamp', '-id')
     paginator = Paginator(blog_list, 4)
     page_request_var = 'page'
     page = request.GET.get(page_request_var)
