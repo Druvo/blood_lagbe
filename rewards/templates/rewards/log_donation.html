@@ -157,8 +157,20 @@
         </div>
 
         <div class="form-group mb-3">
+          {{ form.district.errors }}
+          <label for="{{ form.district.id_for_label }}">District</label>
+          {{ form.district|add_class:"form-control" }}
+        </div>
+
+        <div class="form-group mb-3">
+          {{ form.place.errors }}
+          <label for="{{ form.place.id_for_label }}">Hospital / blood bank</label>
+          {{ form.place|add_class:"form-control" }}
+        </div>
+
+        <div class="form-group mb-3 js-place-text">
           {{ form.location.errors }}
-          <label for="{{ form.location.id_for_label }}">Location</label>
+          <label for="{{ form.location.id_for_label }}">{{ form.location.label }}</label>
           {{ form.location|add_class:"form-control" }}
         </div>
 
@@ -187,7 +199,7 @@
               <tr>
                 <th>Date</th>
                 <th>Blood Group</th>
-                <th>Location</th>
+                <th>Where</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -196,7 +208,7 @@
                 <tr>
                   <td>{{ donation.donation_date }}</td>
                   <td>{{ donation.blood_group }}</td>
-                  <td>{{ donation.location }}</td>
+                  <td>{{ donation.location }}{% if donation.district %}<div class="text-muted font-xsss">{{ donation.district }}</div>{% endif %}</td>
                   <td>
                     {% if donation.status == 'approved' %}
                       <span class="badge bg-success">Approved</span>
@@ -219,3 +231,5 @@
   </div>
 </div>
 {% endblock body %}
+
+{% block extra_scripts %}{% load static %}<script src="{% static 'js/place-select.js' %}"></script>{% endblock extra_scripts %}

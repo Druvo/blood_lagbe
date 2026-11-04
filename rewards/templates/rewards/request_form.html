@@ -19,7 +19,7 @@
         {% csrf_token %}
 
         {% for field in form %}
-          <div class="form-group mb-3">
+          <div class="form-group mb-3{% if field.name == 'hospital' %} js-place-text{% endif %}">
             {{ field.errors }}
             <label for="{{ field.id_for_label }}">{{ field.label }}</label>
             {{ field|add_class:"form-control" }}
@@ -33,3 +33,5 @@
   </div>
 </div>
 {% endblock body %}
+
+{% block extra_scripts %}{% load static %}<script src="{% static 'js/place-select.js' %}"></script>{% endblock extra_scripts %}

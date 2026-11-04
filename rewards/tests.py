@@ -219,6 +219,7 @@ class LogDonationViewTests(TestCase):
         response = self.client.post(self.url, {
             'blood_group': 'A+',
             'donation_date': timezone.localdate().isoformat(),
+            'district': 'Dhaka',
             'location': 'Test Blood Bank',
         })
         self.assertEqual(response.status_code, 302)

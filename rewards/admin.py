@@ -7,6 +7,7 @@ from rewards.models import (
     Badge,
     BloodRequest,
     Donation,
+    Place,
     RequestResponse,
     get_donor_badge_snapshot,
     get_newly_unlocked_badges,
@@ -69,10 +70,10 @@ def reject_donations(modeladmin, request, queryset):
 @admin.register(Donation)
 class DonationAdmin(admin.ModelAdmin):
     list_display = (
-        'donor', 'blood_group', 'donation_date', 'location',
+        'donor', 'blood_group', 'donation_date', 'location', 'district',
         'status', 'blood_request', 'verified_by',
     )
-    list_filter = ('status', 'blood_group')
+    list_filter = ('status', 'blood_group', 'district')
     search_fields = ('donor__phone', 'donor__email', 'location')
     actions = [approve_donations, reject_donations]
 
@@ -111,3 +112,10 @@ class BloodRequestAdmin(admin.ModelAdmin):
 class RequestResponseAdmin(admin.ModelAdmin):
     list_display = ('blood_request', 'donor', 'created_at')
     search_fields = ('donor__phone', 'blood_request__hospital')
+
+
+@admin.register(Place)
+class PlaceAdmin(admin.ModelAdmin):
+    list_display = ('name', 'district', 'kind', 'is_approved')
+    list_filter = ('kind', 'is_approved', 'district')
+    search_fields = ('name', 'district')

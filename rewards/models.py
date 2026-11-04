@@ -13,6 +13,8 @@ from django.db.models import Count, F, Q
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from rewards.geo import DISTRICT_CHOICES
+
 DONATION_CYCLE_DAYS = settings.DONATION_INTERVAL_DAYS  # see settings.py
 STREAK_GRACE_DAYS = 14  # slack allowed before a streak is considered broken
 LIVES_PER_DONATION = 3  # upper-bound estimate of patients one donation can help
@@ -37,6 +39,42 @@ def validate_not_past(value):
         raise ValidationError(_('Date cannot be in the past.'))
 
 
+class Place(models.Model):
+    """A hospital, blood bank or donation camp donors can pick from.
+
+    Curated by staff: donors who can't find theirs type a name instead,
+    so the list stays free of duplicates and spam.
+    """
+
+    class Kind(models.TextChoices):
+        HOSPITAL = 'hospital', _('Hospital')
+        BLOOD_BANK = 'blood_bank', _('Blood bank')
+        CAMP = 'camp', _('Donation camp')
+
+    name = models.CharField(_('Name'), max_length=255)
+    district = models.CharField(
+        _('District'), max_length=100, choices=DISTRICT_CHOICES,
+    )
+    kind = models.CharField(
+        _('Kind'), max_length=12, choices=Kind.choices, default=Kind.HOSPITAL,
+    )
+    is_approved = models.BooleanField(
+        _('Listed in selects'), default=True,
+        help_text=_('Untick to hide it without deleting past records.'),
+    )
+
+    class Meta:
+        ordering = ['district', 'name']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['name', 'district'], name='unique_place_per_district',
+            ),
+        ]
+
+    def __str__(self):
+        return f'{self.name}, {self.district}'
+
+
 class Donation(models.Model):
     class Status(models.TextChoices):
         PENDING = 'pending', _('Pending')
@@ -53,6 +91,15 @@ class Donation(models.Model):
     donation_date = models.DateField(
         _('Donation Date'), validators=[validate_not_future],
     )
+    district = models.CharField(
+        _('District'), max_length=100, choices=DISTRICT_CHOICES, blank=True,
+    )
+    place = models.ForeignKey(
+        Place, on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='donations', verbose_name=_('Hospital / blood bank'),
+    )
+    # Always filled: the place's name, or what the donor typed when theirs
+    # wasn't listed. Keeps history readable if a Place is later removed.
     location = models.CharField(_('Location'), max_length=255)
     status = models.CharField(
         max_length=10, choices=Status.choices, default=Status.PENDING,
@@ -112,7 +159,13 @@ class BloodRequest(models.Model):
         _('Blood Group'), max_length=3, choices=BLOOD_GROUP_CHOICES,
     )
     hospital = models.CharField(_('Hospital'), max_length=255)
-    district = models.CharField(_('District / Area'), max_length=100)
+    place = models.ForeignKey(
+        Place, on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='blood_requests', verbose_name=_('Hospital / blood bank'),
+    )
+    district = models.CharField(
+        _('District'), max_length=100, choices=DISTRICT_CHOICES,
+    )
     units_needed = models.PositiveSmallIntegerField(
         _('Bags needed'), default=1,
         validators=[MinValueValidator(1), MaxValueValidator(10)],

@@ -290,6 +290,7 @@ class RequestDonationLinkTests(TestCase):
         data = {
             'blood_group': 'A+',
             'donation_date': timezone.localdate().isoformat(),
+            'district': 'Dhaka',
             'location': 'Bank',
         }
         data.update(extra)
