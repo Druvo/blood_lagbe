@@ -35,6 +35,7 @@
       <div class="dropdown-menu dropdown-menu-end p-4 rounded-3 border-0 shadow-lg" aria-labelledby="dropdownMenu3">
         <h4 class="fw-700 font-xss mb-3">{{ user.first_name|default:user.phone }}</h4>
         <a href="{% url 'log-donation' %}" class="d-block mb-2">My Donations</a>
+        <a href="{% url 'privacy' %}" class="d-block mb-2">Privacy</a>
         <a href="{% url 'logout' %}" class="d-block">Logout</a>
       </div>
     {% else %}

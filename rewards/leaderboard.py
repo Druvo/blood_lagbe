@@ -23,7 +23,12 @@ CANDIDATE_POOL = 50
 
 
 def display_name(user):
-    return ' '.join(filter(None, [user.first_name, user.last_name])) or user.phone
+    """Public name. Never falls back to the phone number: it is the login
+    and contact detail, and these names appear on public pages."""
+    return (
+        ' '.join(filter(None, [user.first_name, user.last_name]))
+        or f'Donor #{user.pk}'
+    )
 
 
 def month_bounds(today=None):
@@ -33,13 +38,16 @@ def month_bounds(today=None):
     return first, last
 
 
-def _approved(period):
+def _approved(period, public_only=False):
     # order_by() clears Donation's default ordering: left in place it joins
     # the GROUP BY of every values().annotate() below and splits one donor
     # into one row per donation date.
     approved = Donation.objects.filter(
         status=Donation.Status.APPROVED,
     ).order_by()
+    if public_only:
+        # Donors who opted out stay in aggregate totals, never in rankings.
+        approved = approved.filter(donor__profile__show_on_leaderboard=True)
     if period == PERIOD_MONTH:
         first, last = month_bounds()
         approved = approved.filter(donation_date__range=(first, last))
@@ -61,7 +69,7 @@ def get_leaderboard(period=PERIOD_ALL, limit=20):
     bonus, matching the donor's own points total.
     """
     rows = list(
-        _approved(period).values('donor').annotate(
+        _approved(period, public_only=True).values('donor').annotate(
             count=Count('id'),
             requests=Count('id', filter=Q(blood_request__isnull=False)),
         )
@@ -71,7 +79,7 @@ def get_leaderboard(period=PERIOD_ALL, limit=20):
     rows.sort(key=lambda r: (-r['points'], -r['count'], r['donor']))
     rows = rows[:CANDIDATE_POOL]
 
-    users = User.objects.in_bulk([r['donor'] for r in rows])
+    users = User.objects.select_related('profile').in_bulk([r['donor'] for r in rows])
     streaks = {}
     if period == PERIOD_ALL:
         for row in rows:
@@ -102,6 +110,7 @@ def get_leaderboard(period=PERIOD_ALL, limit=20):
             'request_donations': row['requests'],
             'lives': lives_saved(total),
             'badge': _tier_for(badges_desc, total),
+            'card_public': user.profile.public_badge_card,
         })
     return entries
 
@@ -114,31 +123,35 @@ def _top(queryset, **annotation):
     )
     if not row:
         return None, 0
-    return User.objects.get(pk=row['donor']), row['count']
+    user = User.objects.select_related('profile').get(pk=row['donor'])
+    return user, row['count']
 
 
 def get_monthly_awards():
     """Awards for the current calendar month, plus month-so-far totals."""
     first, last = month_bounds()
     month = _approved(PERIOD_MONTH)
+    public_month = _approved(PERIOD_MONTH, public_only=True)
 
     awards = []
-    top_user, top_count = _top(month)
+    top_user, top_count = _top(public_month)
     if top_user:
         awards.append({
             'title': 'Donor of the Month', 'icon': 'award',
             'color': '#d4af37', 'user': top_user,
             'name': display_name(top_user),
+            'card_public': top_user.profile.public_badge_card,
             'detail': f'{top_count} verified donation'
                       f'{"s" if top_count != 1 else ""} this month',
         })
 
-    hero_user, hero_count = _top(month.filter(blood_request__isnull=False))
+    hero_user, hero_count = _top(public_month.filter(blood_request__isnull=False))
     if hero_user:
         awards.append({
             'title': 'Lifeline Hero', 'icon': 'heart',
             'color': '#e50202', 'user': hero_user,
             'name': display_name(hero_user),
+            'card_public': hero_user.profile.public_badge_card,
             'detail': f'{hero_count} urgent request'
                       f'{"s" if hero_count != 1 else ""} answered this month',
         })

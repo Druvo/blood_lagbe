@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
@@ -81,7 +82,13 @@ def log_donation(request):
 
 def badge_card(request, user_id):
     """Public, shareable card showing a donor's current tier and streak."""
-    donor = get_object_or_404(User, id=user_id)
+    donor = get_object_or_404(User.objects.select_related('profile'), id=user_id)
+    viewer = request.user
+    can_view = donor.profile.public_badge_card or (
+        viewer.is_authenticated and (viewer.pk == donor.pk or viewer.is_staff)
+    )
+    if not can_view:
+        raise Http404('This donor keeps their badge card private.')
     current_badge, _, approved_count, _ = get_donor_badge_progress(donor)
     current_streak = get_current_streak(donor)
     heroes = get_earned_hero_badges(request_donation_count(donor))
@@ -139,6 +146,10 @@ def leaderboard(request):
         'period': period,
         'entries': ranked[:20],
         'my_entry': my_entry,
+        'hidden_from_board': (
+            request.user.is_authenticated
+            and not request.user.profile.show_on_leaderboard
+        ),
         'monthly': get_monthly_awards(),
     })
 

@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.db.models import Count, Q
 from django.shortcuts import render
 
+from rewards.leaderboard import display_name
 from rewards.models import Badge, BloodRequest, get_community_stats
 
 User = get_user_model()
@@ -20,8 +21,9 @@ def index(request):
         .annotate(approved_count=Count(
             'donations', filter=Q(donations__status='approved'),
         ))
-        .filter(approved_count__gt=0)
-        .order_by('-approved_count')[:6]
+        .filter(approved_count__gt=0, profile__show_on_leaderboard=True)
+        .select_related('profile')
+        .order_by('-approved_count', 'pk')[:6]
     )
 
     badges_desc = list(
@@ -30,16 +32,13 @@ def index(request):
 
     leaderboard = []
     for donor in donors:
-        display_name = ' '.join(
-            filter(None, [donor.first_name, donor.last_name])
-        ) or donor.phone
         latest_donation = (
             donor.donations.filter(status='approved')
             .order_by('-donation_date').first()
         )
         leaderboard.append({
             'donor': donor,
-            'display_name': display_name,
+            'display_name': display_name(donor),
             'badge': _badge_for_count(badges_desc, donor.approved_count),
             'approved_count': donor.approved_count,
             'latest_donation': latest_donation,

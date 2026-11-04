@@ -2,7 +2,15 @@ from django import forms
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.forms import UserCreationForm
 
+from accounts.models import Profile
+
 User = get_user_model()
+
+
+class PrivacyForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['show_on_leaderboard', 'public_badge_card']
 
 
 class LoginForm(forms.Form):

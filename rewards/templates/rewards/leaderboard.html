@@ -31,7 +31,7 @@
           <div class="col-md-6 text-center mb-2">
             <i class="feather-{{ award.icon }}" style="font-size:40px;color:{{ award.color }};"></i>
             <div class="fw-700">{{ award.title }}</div>
-            <a href="{% url 'badge-card' award.user.id %}" class="fw-600">{{ award.name }}</a>
+            {% if award.card_public %}<a href="{% url 'badge-card' award.user.id %}" class="fw-600">{{ award.name }}</a>{% else %}<span class="fw-600">{{ award.name }}</span>{% endif %}
             <div class="text-muted font-xsss">{{ award.detail }}</div>
           </div>
         {% empty %}
@@ -49,7 +49,9 @@
 
     {% if user.is_authenticated %}
       <div class="alert {% if my_entry %}alert-success{% else %}alert-secondary{% endif %} text-center">
-        {% if my_entry %}
+        {% if hidden_from_board %}
+          You're hidden from the leaderboard. <a href="{% url 'privacy' %}">Change privacy settings</a>
+        {% elif my_entry %}
           You're ranked <strong>#{{ my_entry.rank }}</strong> with
           <strong>{{ my_entry.points }}</strong> points.
         {% else %}
@@ -81,7 +83,7 @@
                   {% else %}{{ e.rank }}{% endif %}
                 </td>
                 <td>
-                  <a href="{% url 'badge-card' e.user.id %}" class="fw-600">{{ e.name }}</a>
+                  {% if e.card_public %}<a href="{% url 'badge-card' e.user.id %}" class="fw-600">{{ e.name }}</a>{% else %}<span class="fw-600">{{ e.name }}</span>{% endif %}
                   {% if e.request_donations %}
                     <span class="text-danger" title="Answered {{ e.request_donations }} urgent request{{ e.request_donations|pluralize }}"><i class="feather-heart"></i> {{ e.request_donations }}</span>
                   {% endif %}

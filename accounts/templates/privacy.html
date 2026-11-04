@@ -1,0 +1,48 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Privacy{% endblock title %}
+
+{% block body %}
+<div class="middle-sidebar-bottom">
+  <div class="middle-wrap container mt-4 mb-4" style="max-width: 560px;">
+    <div class="card w-100 border-0 shadow-xs p-4">
+      <h2 class="fw-700 font-md mb-1">Privacy</h2>
+      <p class="text-muted">
+        Choose what other people can see. Your phone number is never shown
+        on public pages, and your donations still count in site-wide totals.
+      </p>
+
+      {% for message in messages %}
+        <div class="alert alert-success">{{ message }}</div>
+      {% endfor %}
+
+      <form method="POST">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="custom-control custom-checkbox mb-3">
+          {{ form.show_on_leaderboard }}
+          <label class="ms-2" for="{{ form.show_on_leaderboard.id_for_label }}">
+            <strong>Show me on the leaderboard and home page</strong>
+            <span class="d-block text-muted font-xsss">
+              Your name, tier and donation count appear in public rankings and awards.
+            </span>
+          </label>
+        </div>
+
+        <div class="custom-control custom-checkbox mb-4">
+          {{ form.public_badge_card }}
+          <label class="ms-2" for="{{ form.public_badge_card.id_for_label }}">
+            <strong>Let anyone with the link view my badge card</strong>
+            <span class="d-block text-muted font-xsss">
+              Turn off to disable sharing. Only you and site staff can open it.
+            </span>
+          </label>
+        </div>
+
+        <button class="btn btn-danger" type="submit">Save</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock body %}

@@ -1,8 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from .forms import LoginForm, RegistrationForm
+from .forms import LoginForm, PrivacyForm, RegistrationForm
 
 
 def login_view(request):
@@ -57,3 +58,18 @@ def signup_view(request):
         context = {"registration_form": form}
 
     return render(request, 'signup.html', context)
+
+
+@login_required
+def privacy_view(request):
+    # Not `request.POST or None`: unchecking every box posts an empty dict,
+    # which is falsy, and the opt-out would be silently ignored.
+    form = PrivacyForm(
+        request.POST if request.method == 'POST' else None,
+        instance=request.user.profile,
+    )
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, 'Privacy settings saved.')
+        return redirect('privacy')
+    return render(request, 'privacy.html', {'form': form})

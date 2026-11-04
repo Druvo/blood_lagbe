@@ -133,6 +133,13 @@ class Profile(models.Model):
         choices=[('M', 'Male'), ('F', 'Female')]
     )
 
+    show_on_leaderboard = models.BooleanField(
+        _('Show me on the leaderboard and home page'), default=True,
+    )
+    public_badge_card = models.BooleanField(
+        _('Let anyone with the link view my badge card'), default=True,
+    )
+
     is_active = models.BooleanField(
         _('Active'), default=True, null=True
     )
