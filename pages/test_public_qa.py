@@ -116,8 +116,6 @@ class PublicCrawlTests(TestCase):
         html = self.pages[reverse('request-list')].content.decode()
         self.assertRegex(html, r'class="is-active"[^>]*>Urgent requests<')
         self.assertRegex(html, r'class="is-active"[^>]*><i class="feather-droplet"')
-        html = self.pages[reverse('squads:leaderboard')].content.decode()
-        self.assertRegex(html, r'class="is-active"[^>]*>Leaderboard<')
 
     def test_images_have_alt_and_inputs_have_labels(self):
         for path, response in self.pages.items():

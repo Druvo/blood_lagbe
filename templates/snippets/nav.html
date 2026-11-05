@@ -9,10 +9,7 @@
     <nav class="bb-nav__links" aria-label="Main">
       <a href="{% url 'request-list' %}" class="{% if p|slice:':10' == '/requests/' %}is-active{% endif %}"{% if p|slice:':10' == '/requests/' %} aria-current="page"{% endif %}>Urgent requests</a>
       <a href="{% url 'donor-directory' %}" class="{% if p|slice:':8' == '/donors/' %}is-active{% endif %}"{% if p|slice:':8' == '/donors/' %} aria-current="page"{% endif %}>Find donors</a>
-      <a href="{% url 'leaderboard' %}" class="{% if p|slice:':13' == '/leaderboard/' or p|slice:':8' == '/squads/' %}is-active{% endif %}"{% if p|slice:':13' == '/leaderboard/' or p|slice:':8' == '/squads/' %} aria-current="page"{% endif %}>Leaderboard</a>
-      <a href="{% url 'impact' %}" class="{% if p|slice:':8' == '/impact/' %}is-active{% endif %}"{% if p|slice:':8' == '/impact/' %} aria-current="page"{% endif %}>Impact</a>
       <a href="{% url 'stories' %}" class="{% if p|slice:':9' == '/stories/' %}is-active{% endif %}"{% if p|slice:':9' == '/stories/' %} aria-current="page"{% endif %}>Stories</a>
-      <a href="{% url 'learn' %}" class="{% if p|slice:':7' == '/learn/' or p|slice:':5' == '/faq/' or p|slice:':7' == '/about/' %}is-active{% endif %}"{% if p|slice:':7' == '/learn/' or p|slice:':5' == '/faq/' or p|slice:':7' == '/about/' %} aria-current="page"{% endif %}>Learn</a>
     </nav>
 
     <div class="bb-nav__end">

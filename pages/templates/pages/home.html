@@ -164,6 +164,33 @@
 
 {% include 'stories/_home_strip.html' %}
 
+<!-- Explore: leaderboard, impact, learn -->
+<section class="bb-section bb-section--alt" id="explore">
+  <div class="bb-container">
+    <div class="bb-center bb-mb-3">
+      <span class="bb-eyebrow">Explore</span>
+      <h2 class="bb-h2">More ways to get involved</h2>
+    </div>
+    <div class="bb-cols-3">
+      <a href="{% url 'leaderboard' %}" class="bb-card bb-card--lift" style="color:inherit;">
+        <h3 class="bb-h4"><i class="feather-award" style="color:var(--bb-red-text)"></i> Leaderboard</h3>
+        <p class="bb-muted">See top donors and squads, and climb the ranks with your friends.</p>
+        <span class="bb-strong">View leaderboard <i class="feather-arrow-right"></i></span>
+      </a>
+      <a href="{% url 'impact' %}" class="bb-card bb-card--lift" style="color:inherit;">
+        <h3 class="bb-h4"><i class="feather-bar-chart-2" style="color:var(--bb-red-text)"></i> Impact</h3>
+        <p class="bb-muted">{{ community.donations }} verified donation{{ community.donations|pluralize }} from {{ community.donors }} donor{{ community.donors|pluralize }}, with charts by blood group and district.</p>
+        <span class="bb-strong">See our impact <i class="feather-arrow-right"></i></span>
+      </a>
+      <a href="{% url 'learn' %}" class="bb-card bb-card--lift" style="color:inherit;">
+        <h3 class="bb-h4"><i class="feather-book-open" style="color:var(--bb-red-text)"></i> Learn</h3>
+        <p class="bb-muted">Who can donate, what to expect, answers to common questions, and about {{ SITE_NAME }}.</p>
+        <span class="bb-strong">Start learning <i class="feather-arrow-right"></i></span>
+      </a>
+    </div>
+  </div>
+</section>
+
 <!-- Who can donate -->
 <section class="bb-section">
   <div class="bb-container">

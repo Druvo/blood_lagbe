@@ -271,10 +271,7 @@ class RenderedPageTests(TestCase):
         client = Client()
         cases = {
             reverse('request-list'): 'Urgent requests',
-            reverse('leaderboard'): 'Leaderboard',
-            reverse('impact'): 'Impact',
             reverse('stories'): 'Stories',
-            reverse('learn'): 'Learn',
         }
         for path, label in cases.items():
             page = parse(client.get(path).content.decode())
@@ -283,12 +280,16 @@ class RenderedPageTests(TestCase):
                 if n.attrs.get('aria-current') == 'page'
             ]
             self.assertIn(label, current, path)
-        # no link is marked on a page that belongs to no nav section
+        # Leaderboard, Impact and Learn live on the home page, not the nav
         page = parse(client.get(reverse('faq')).content.decode())
-        self.assertTrue(any(
-            n.attrs.get('aria-current') == 'page' and
-            n.accessible_text().strip() == 'Learn'
-            for n in page.find('a')))
+        self.assertFalse(any(
+            n.attrs.get('aria-current') == 'page' for n in page.find('a')))
+
+    def test_home_page_links_to_leaderboard_impact_and_learn(self):
+        html = Client().get(reverse('home')).content.decode()
+        section = html.split('id="explore"', 1)[1].split('</section>', 1)[0]
+        for name in ('leaderboard', 'impact', 'learn'):
+            self.assertIn(f'href="{reverse(name)}"', section, name)
 
     def test_flash_messages_are_announced(self):
         client = Client()
