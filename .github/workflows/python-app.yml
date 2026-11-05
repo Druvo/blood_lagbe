@@ -6,10 +6,15 @@ on:
   pull_request:
     branches: [main]
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
     - uses: actions/checkout@v4
@@ -22,7 +27,28 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Lint (syntax errors and undefined names)
+      run: >
+        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+        --exclude=migrations,staticfiles,media,.git
+    - name: System check
+      run: python manage.py check
+    - name: Production settings check
+      # Exercises the env-driven production branch of settings.py with a
+      # throwaway key. HSTS preload is only set so the check stays quiet; it
+      # is deliberately off by default for real deployments.
+      env:
+        DJANGO_DEBUG: "0"
+        DJANGO_ALLOWED_HOSTS: ci.example.com
+        DJANGO_HSTS_PRELOAD: "1"
+      run: |
+        DJANGO_SECRET_KEY="$(python -c 'import secrets; print(secrets.token_urlsafe(64))')" \
+          python manage.py check --deploy --fail-level WARNING
+    - name: Check for missing migrations
+      run: python manage.py makemigrations --check --dry-run
     - name: Run migrations
       run: python manage.py migrate
     - name: Run tests
+      # Covers every app: rewards, accounts, pages, blogapp, insights,
+      # stories, squads. No --parallel: the suite shares a cache and hangs.
       run: python manage.py test
