@@ -22,6 +22,9 @@ BODY_MIN = 40
 REPORT_THRESHOLD = 3
 # Stops one account flooding the review queue.
 MAX_PENDING_PER_AUTHOR = 3
+# Rolling 24 hour caps per account, whatever the moderation outcome.
+MAX_STORIES_PER_DAY = 5
+MAX_REPORTS_PER_DAY = 10
 
 _HTML_LIKE = re.compile(r'<\s*[/!?a-zA-Z]')
 

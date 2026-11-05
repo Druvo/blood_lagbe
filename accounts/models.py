@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from django.core.validators import RegexValidator
 
+from accounts.validators import validate_image_extension, validate_image_size
 from rewards.blood import BLOOD_GROUP_CHOICES
 from rewards.geo import DISTRICT_CHOICES
 # Create your models here.
@@ -91,7 +92,7 @@ class User(AbstractBaseUser):
         return self.first_name
 
     def __str__(self):
-        return self.phone
+        return self.phone or f'User #{self.pk}'
 
     def has_perm(self, perm, obj=None):
         "Does the user have a specific permission? yes."
@@ -123,7 +124,8 @@ class Profile(models.Model):
     )
     image = models.ImageField(
         _('Profile Picture'), blank=True, null=True,
-        upload_to=user_directory_path
+        upload_to=user_directory_path,
+        validators=[validate_image_extension, validate_image_size],
     )
     bio = models.TextField(
         _('Bio'), blank=True, null=True
@@ -169,7 +171,9 @@ class Profile(models.Model):
     )
 
     def __str__(self):
-        return self.user.email
+        # Email is optional (and phones are private), so never return None.
+        user = self.user
+        return user.email or user.get_full_name() or f'Profile #{user.pk}'
 
 
 @receiver(post_save, sender=User)

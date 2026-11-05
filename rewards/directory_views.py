@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.core.paginator import Paginator
+from django.db import IntegrityError, transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -37,6 +38,16 @@ class ContactForm(forms.Form):
 
 def _tier_for(badges_desc, count):
     return next((b for b in badges_desc if count >= b.min_donations), None)
+
+
+def _safe_target(request):
+    target = request.POST.get('next', '')
+    if not url_has_allowed_host_and_scheme(
+        target, allowed_hosts={request.get_host()},
+        require_https=request.is_secure(),
+    ):
+        target = reverse('donor-directory')
+    return target
 
 
 @login_required
@@ -121,10 +132,18 @@ def contact_donor(request, user_id):
     if reason or not form.is_valid():
         messages.error(request, reason or 'That message is too long.')
     else:
-        ContactRequest.objects.create(
-            sender=request.user, donor=donor,
-            message=form.cleaned_data['message'].strip(),
-        )
+        try:
+            with transaction.atomic():
+                ContactRequest.objects.create(
+                    sender=request.user, donor=donor,
+                    message=form.cleaned_data['message'].strip(),
+                )
+        except IntegrityError:
+            # A double click raced past the check: the first one won.
+            messages.info(
+                request, 'You already asked this donor. Please wait for an answer.',
+            )
+            return redirect(_safe_target(request))
         messages.success(
             request,
             'Request sent. Their number is shared only if they accept.',
@@ -141,13 +160,7 @@ def contact_donor(request, user_id):
                 fail_silently=True,
             )
 
-    target = request.POST.get('next', '')
-    if not url_has_allowed_host_and_scheme(
-        target, allowed_hosts={request.get_host()},
-        require_https=request.is_secure(),
-    ):
-        target = reverse('donor-directory')
-    return redirect(target)
+    return redirect(_safe_target(request))
 
 
 @login_required

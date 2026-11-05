@@ -8,7 +8,6 @@ from django.urls import reverse
 from django.utils import timezone
 
 from rewards.models import (
-    Badge,
     Donation,
     get_current_streak,
     get_donor_badge_progress,

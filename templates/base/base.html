@@ -25,6 +25,7 @@
   <link rel="stylesheet" href="{% static 'css/feather.css' %}">
   <link rel="stylesheet" href="{% static 'css/bloodbond.css' %}">
   {% block extra_style %}{% endblock extra_style %}
+  <script>try{var t=localStorage.getItem('bb-theme');if(t=='dark'||t=='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 </head>
 <body>
   <a class="bb-skip" href="#main">Skip to content</a>
@@ -39,7 +40,7 @@
     </div>
   {% endif %}
 
-  <main id="main" class="bb-main">
+  <main id="main" class="bb-main" tabindex="-1">
     {% block body %}{% endblock body %}
   </main>
 

@@ -3,12 +3,14 @@ from urllib.parse import quote
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Count
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views.decorators.http import require_POST
 
+from core import ratelimit
 from rewards.geo import DISTRICT_CHOICES, DISTRICT_NAMES
 from rewards.leaderboard import PERIOD_ALL, PERIOD_MONTH, display_name
 from squads.forms import JoinForm, SquadForm
@@ -30,6 +32,7 @@ from squads.services import (
     squad_totals,
 )
 
+JOIN_LINK_MISS_LIMIT = 30
 BAD_CODE = "That code didn't work. Check it and try again."
 TOO_MANY = 'Too many tries. Please wait a few minutes before trying again.'
 
@@ -43,6 +46,16 @@ def _membership(user, squad):
     if not user.is_authenticated:
         return None
     return SquadMember.objects.filter(squad=squad, user=user).first()
+
+
+def _owner_name(squad):
+    """Public name of the squad owner. An owner who hid themselves from
+    public listings stays unnamed on the (possibly public) squad page."""
+    try:
+        listed = squad.owner.profile.show_on_leaderboard
+    except ObjectDoesNotExist:
+        listed = False
+    return display_name(squad.owner) if listed else 'the squad owner'
 
 
 def _owner_only(request, squad, action):
@@ -90,15 +103,22 @@ def squad_list(request):
 def squad_create(request):
     form = SquadForm(request.POST if request.method == 'POST' else None)
     if request.method == 'POST' and form.is_valid():
-        try:
-            squad = create_squad(request.user, **form.cleaned_data)
-        except SquadError as exc:
-            messages.error(request, str(exc))
-            return redirect('squads:list')
-        messages.success(
-            request, 'Squad created. Invite your people with the code below.',
-        )
-        return redirect('squads:detail', pk=squad.pk)
+        if Squad.objects.filter(
+            owner=request.user, name__iexact=form.cleaned_data['name'],
+        ).exists():
+            # Also what a double click on "Create squad" would run into.
+            form.add_error('name', 'You already have a squad with this name.')
+        else:
+            try:
+                squad = create_squad(request.user, **form.cleaned_data)
+            except SquadError as exc:
+                messages.error(request, str(exc))
+                return redirect('squads:list')
+            messages.success(
+                request,
+                'Squad created. Invite your people with the code below.',
+            )
+            return redirect('squads:detail', pk=squad.pk)
     return render(request, 'squads/form.html', {
         'form': form, 'squad': None, 'max_squads': MAX_SQUADS_PER_USER,
     })
@@ -139,7 +159,7 @@ def squad_detail(request, pk):
         'membership': membership,
         'is_member': membership is not None,
         'is_owner': is_owner,
-        'owner_name': display_name(squad.owner),
+        'owner_name': _owner_name(squad),
         'totals': squad_totals(squad),
         'board': board,
         'private_count': len(private_members),
@@ -213,10 +233,20 @@ def _do_join(request, squad):
 
 def join_landing(request, code):
     """An invite link. GET shows which squad is inviting; joining is a POST."""
-    squad = find_by_code(code)
+    # Guessing codes from invite URLs is capped per address as well, so the
+    # link page cannot be used to hunt for squads without signing in.
+    ip = ratelimit.client_ip(request)
+    if ratelimit.is_limited('join-link-ip', ip, JOIN_LINK_MISS_LIMIT):
+        squad = None
+    else:
+        squad = find_by_code(code)
+        if squad is None:
+            ratelimit.hit('join-link-ip', ip)
     if request.method == 'POST':
         if not request.user.is_authenticated:
-            return redirect(f'{settings.LOGIN_URL}?next={request.path}')
+            return redirect(
+                f'{settings.LOGIN_URL}?next={quote(request.path)}'
+            )
         if join_attempts_blocked(request.user):
             messages.error(request, TOO_MANY)
             return redirect('squads:join')

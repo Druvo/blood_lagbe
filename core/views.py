@@ -1,3 +1,1 @@
-from django.shortcuts import render
-
-# Create your views here.
+"""Core app: shared helpers (rate limits, middleware, test runner)."""

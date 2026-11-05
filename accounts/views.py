@@ -6,10 +6,14 @@ from django.contrib.auth.views import PasswordResetView
 from django.shortcuts import redirect, render
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.cache import never_cache
+from django.views.decorators.http import require_http_methods
 
+from core import ratelimit
 from rewards.models import BloodRequest, Donation, RequestResponse
 
-from .forms import LoginForm, PrivacyForm, RegistrationForm
+from .forms import (
+    LoginForm, PrivacyForm, RegistrationForm, normalize_phone,
+)
 
 
 def safe_next_url(request):
@@ -24,13 +28,36 @@ def safe_next_url(request):
     return ''
 
 
+# Abuse limits. Failed logins are counted per phone number + address (so a
+# stranger cannot lock the real owner out from elsewhere) and per address.
+LOGIN_FAIL_LIMIT_PER_PHONE = 8
+LOGIN_FAIL_LIMIT_PER_IP = 40
+RESET_MAIL_LIMIT_PER_IP = 5
+RESET_WINDOW = 60 * 60
+SIGNUPS_PER_IP_PER_HOUR = 20
+TOO_MANY_LOGINS = (
+    'Too many tries. Please wait about 15 minutes before trying again.'
+)
+
+
 class SitePasswordResetView(PasswordResetView):
     """The stock reset view, plus the site name for the email templates
-    (emails are rendered without a request, so context processors do not run)."""
+    (emails are rendered without a request, so context processors do not run).
+
+    Capped per address so the form cannot be used to flood someone's inbox.
+    Over the cap it behaves exactly as if the mail went out (same page), so
+    the cap reveals nothing about which emails have accounts."""
 
     @property
     def extra_email_context(self):
         return {'SITE_NAME': settings.SITE_NAME}
+
+    def form_valid(self, form):
+        ip = ratelimit.client_ip(self.request)
+        if ratelimit.is_limited('reset-ip', ip, RESET_MAIL_LIMIT_PER_IP):
+            return redirect(self.get_success_url())
+        ratelimit.hit('reset-ip', ip, RESET_WINDOW)
+        return super().form_valid(form)
 
 
 @never_cache
@@ -41,9 +68,25 @@ def login_view(request):
 
     if request.method == 'POST':
         form = LoginForm(request.POST)
+        ip = ratelimit.client_ip(request)
+        phone_id = f'{ip}|{normalize_phone(request.POST.get("phone", ""))}'
+        if (
+            ratelimit.is_limited('login-phone', phone_id, LOGIN_FAIL_LIMIT_PER_PHONE)
+            or ratelimit.is_limited('login-ip', ip, LOGIN_FAIL_LIMIT_PER_IP)
+        ):
+            # Checked before the password is even looked at.
+            form.add_error(None, TOO_MANY_LOGINS)
+            return render(request, 'login.html', {
+                'login_form': form, 'next': next_url,
+            }, status=429)
         if form.is_valid():
+            ratelimit.reset('login-phone', phone_id)
+            # login() starts a fresh session key, so a session id planted
+            # before logging in is useless afterwards.
             login(request, form.user)
             return redirect(next_url or 'home')
+        ratelimit.hit('login-phone', phone_id)
+        ratelimit.hit('login-ip', ip)
     else:
         form = LoginForm()
 
@@ -53,7 +96,11 @@ def login_view(request):
     })
 
 
+@never_cache
+@require_http_methods(['GET', 'HEAD', 'POST'])
 def logout_view(request):
+    """Logging out is harmless, so a plain link (GET) still works for old
+    bookmarks. The site's own menu uses a POST form with a CSRF token."""
     was_logged_in = request.user.is_authenticated
     logout(request)
     if was_logged_in:
@@ -63,12 +110,21 @@ def logout_view(request):
 
 @never_cache
 def signup_view(request):
+    next_url = safe_next_url(request)
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect(next_url or 'home')
 
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
+        ip = ratelimit.client_ip(request)
+        if ratelimit.is_limited('signup-ip', ip, SIGNUPS_PER_IP_PER_HOUR):
+            form.add_error(None, 'Too many new accounts from this connection. '
+                                 'Please try again in an hour.')
+            return render(request, 'signup.html', {
+                'registration_form': form, 'next': next_url,
+            }, status=429)
         if form.is_valid():
+            ratelimit.hit('signup-ip', ip, RESET_WINDOW)
             form.save(commit=True)
             account = authenticate(
                 phone=form.cleaned_data['phone'],
@@ -82,12 +138,16 @@ def signup_view(request):
                         'You are not in the donor directory yet. Add your '
                         'blood group and district to join it.',
                     )
-                return redirect('welcome')
+                # Someone who came from an invite or a request link goes
+                # back there; everyone else gets the onboarding checklist.
+                return redirect(next_url or 'welcome')
             return redirect('login')
     else:
         form = RegistrationForm()
 
-    return render(request, 'signup.html', {'registration_form': form})
+    return render(request, 'signup.html', {
+        'registration_form': form, 'next': next_url,
+    })
 
 
 @login_required
@@ -96,10 +156,10 @@ def welcome_view(request):
     profile = user.profile
     open_matching = 0
     if profile.blood_group:
-        open_matching = BloodRequest.objects.still_needed().filter(
+        open_matching = BloodRequest.objects.still_needed().public().filter(
             blood_group=profile.blood_group,
         ).count()
-    open_total = BloodRequest.objects.still_needed().count()
+    open_total = BloodRequest.objects.still_needed().public().count()
 
     profile_done = bool(
         user.first_name and profile.blood_group and profile.district

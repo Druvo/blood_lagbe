@@ -102,7 +102,7 @@
             {% if e.card_public %}<a href="{% url 'badge-card' e.user.id %}" class="cm-pod__name">{{ e.name }}</a>{% else %}<span class="cm-pod__name">{{ e.name }}</span>{% endif %}
             <div class="cm-pod__pts">{{ e.points }}<small>points</small></div>
             <div class="cm-pod__meta">
-              {% if e.badge %}<span class="cm-tier" style="color:{{ e.badge.color }};"><i class="feather-{{ e.badge.icon }}"></i> {{ e.badge.name }}</span><br>{% endif %}
+              {% if e.badge %}<span class="cm-tier" style="--tier:{{ e.badge.color }};"><i class="feather-{{ e.badge.icon }}"></i> {{ e.badge.name }}</span><br>{% endif %}
               {{ e.donations }} donation{{ e.donations|pluralize }}
               {% if e.request_donations %}<span class="cm-heart"><i class="feather-heart"></i> {{ e.request_donations }}</span>{% endif %}
             </div>
@@ -125,7 +125,7 @@
                 {% if e.request_donations %}<span class="cm-heart" title="Answered {{ e.request_donations }} urgent request{{ e.request_donations|pluralize }}"><i class="feather-heart"></i> {{ e.request_donations }}</span>{% endif %}
               </div>
               <div class="cm-row__meta">
-                {% if e.badge %}<span class="cm-tier" style="color:{{ e.badge.color }};"><i class="feather-{{ e.badge.icon }}"></i> {{ e.badge.name }}</span>{% endif %}
+                {% if e.badge %}<span class="cm-tier" style="--tier:{{ e.badge.color }};"><i class="feather-{{ e.badge.icon }}"></i> {{ e.badge.name }}</span>{% endif %}
                 {% if e.district %}<span><i class="feather-map-pin"></i> {{ e.district }}</span>{% endif %}
                 <span>est. up to {{ e.lives }} people helped</span>
               </div>
@@ -155,7 +155,7 @@
 
   {% if heroes %}
     <section class="bb-mb-3" aria-label="Request heroes">
-      <h2 class="bb-h3"><i class="feather-heart" style="color:var(--bb-red);"></i> Request heroes</h2>
+      <h2 class="bb-h3"><i class="feather-heart" style="color:var(--bb-red-text);"></i> Request heroes</h2>
       <p class="bb-small bb-muted">Most verified donations to urgent requests{% if period == 'month' %} this month{% endif %}{% if district %} in {{ district }}{% endif %}.</p>
       <div class="bb-cols-3">
         {% for h in heroes %}

@@ -50,12 +50,17 @@
         <dl class="rq-facts bb-mt-2 bb-mb-0">
           <div><dt>Needed by</dt><dd>{{ blood_request.needed_by|date:"D, M d" }}</dd></div>
           <div><dt>Donors offered</dt><dd>{{ response_count }}</dd></div>
-          {% if user.is_authenticated and blood_request.patient_name %}<div><dt>Patient</dt><dd>{{ blood_request.patient_name }}</dd></div>{% endif %}
+          {% if user.is_authenticated and not under_review and blood_request.patient_name %}<div><dt>Patient</dt><dd>{{ blood_request.patient_name }}</dd></div>{% endif %}
         </dl>
 
         {% if blood_request.note %}<p class="bb-mt-2 bb-mb-0">{{ blood_request.note }}</p>{% endif %}
       </section>
 
+      {% if is_owner and blood_request.is_flagged and blood_request.status == 'open' %}
+        <div class="bb-alert bb-alert--warn" role="status">
+          Several members reported this request, so it is hidden from the public board while our team reviews it. You can still close it from here.
+        </div>
+      {% endif %}
       {% if under_review %}
         <div class="bb-alert bb-alert--warn" role="status">
           Members reported this request, so it is being reviewed. Contact details are hidden until then. Please check with the hospital before acting on it.

@@ -14,6 +14,7 @@ class AuthorAdmin(admin.ModelAdmin):
         'author',
     ]
 
+
 class PostAdmin(admin.ModelAdmin):
 
     list_display = [
@@ -30,4 +31,3 @@ class PostAdmin(admin.ModelAdmin):
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(Category)
 admin.site.register(Post, PostAdmin)
-

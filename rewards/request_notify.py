@@ -5,6 +5,7 @@ carry names and a link, never a phone number: details are behind the login.
 """
 from django.conf import settings
 from django.core.mail import send_mass_mail
+from django.utils import timezone
 
 from rewards.leaderboard import display_name
 from rewards.models import BloodRequest
@@ -76,8 +77,18 @@ def notify_closed(blood_request, url):
 
 def close_and_notify(blood_request, outcome, url):
     """Close a request and email responders, once."""
-    if blood_request.status == BloodRequest.Status.CLOSED:
+    # Decide in the UPDATE itself so two simultaneous closes (a double click,
+    # or the owner and an admin) email the responders only once.
+    now = timezone.now()
+    changed = BloodRequest.objects.filter(pk=blood_request.pk).exclude(
+        status=BloodRequest.Status.CLOSED,
+    ).update(
+        status=BloodRequest.Status.CLOSED, outcome=outcome, closed_at=now,
+    )
+    if not changed:
         return False
-    blood_request.close(outcome)
+    blood_request.status = BloodRequest.Status.CLOSED
+    blood_request.outcome = outcome
+    blood_request.closed_at = now
     notify_closed(blood_request, url)
     return True

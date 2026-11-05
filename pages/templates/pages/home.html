@@ -152,7 +152,7 @@
         <div class="bb-card bb-center">
           <span class="bb-avatar bb-avatar--lg">{% if entry.donor.profile.image %}<img src="{{ entry.donor.profile.image.url }}" alt="">{% else %}{{ entry.display_name|slice:":1"|upper }}{% endif %}</span>
           <h3 class="bb-h4 bb-mt-1 bb-mb-0">{{ entry.display_name }}</h3>
-          {% if entry.badge %}<div class="bb-small" style="color:{{ entry.badge.color }};font-weight:700;"><i class="feather-{{ entry.badge.icon }}"></i> {{ entry.badge.name }}</div>{% endif %}
+          {% if entry.badge %}<div class="bb-small cm-tier" style="--tier:{{ entry.badge.color }};"><i class="feather-{{ entry.badge.icon }}"></i> {{ entry.badge.name }}</div>{% endif %}
           <div class="bb-muted bb-small">{{ entry.approved_count }} verified donation{{ entry.approved_count|pluralize }}</div>
           {% if entry.latest_donation %}<div class="bb-muted bb-xs">Last: {{ entry.latest_donation.donation_date|date:"M d, Y" }}</div>{% endif %}
         </div>
@@ -172,9 +172,9 @@
       <h2 class="bb-h2">Can I donate?</h2>
     </div>
     <div class="bb-cols-3">
-      <div class="bb-card"><h3 class="bb-h4"><i class="feather-user-check" style="color:var(--bb-red)"></i> Who</h3><p class="bb-muted bb-mb-0">Healthy adults aged 18 to 60 who weigh at least 45 kg. The blood bank checks haemoglobin and health on the day.</p></div>
-      <div class="bb-card"><h3 class="bb-h4"><i class="feather-clock" style="color:var(--bb-red)"></i> How often</h3><p class="bb-muted bb-mb-0">About every {{ donation_interval_label }}*. We show a recovery bar after each donation so you know when you are ready.</p></div>
-      <div class="bb-card"><h3 class="bb-h4"><i class="feather-shield" style="color:var(--bb-red)"></i> How safe</h3><p class="bb-muted bb-mb-0">Sterile single-use equipment, and a screening before every donation. You can always say no.</p></div>
+      <div class="bb-card"><h3 class="bb-h4"><i class="feather-user-check" style="color:var(--bb-red-text)"></i> Who</h3><p class="bb-muted bb-mb-0">Healthy adults aged 18 to 60 who weigh at least 45 kg. The blood bank checks haemoglobin and health on the day.</p></div>
+      <div class="bb-card"><h3 class="bb-h4"><i class="feather-clock" style="color:var(--bb-red-text)"></i> How often</h3><p class="bb-muted bb-mb-0">About every {{ donation_interval_label }}*. We show a recovery bar after each donation so you know when you are ready.</p></div>
+      <div class="bb-card"><h3 class="bb-h4"><i class="feather-shield" style="color:var(--bb-red-text)"></i> How safe</h3><p class="bb-muted bb-mb-0">Sterile single-use equipment, and a screening before every donation. You can always say no.</p></div>
     </div>
     <p class="bb-muted bb-xs bb-center bb-mt-2">* A general reminder, not medical advice. The blood bank's screening decides your eligibility. <a href="{% url 'learn' %}">Read the full guide</a>.</p>
   </div>

@@ -12,7 +12,7 @@ from rewards.models import (
     ContactRequest,
     Donation,
 )
-from rewards.test_directory import donate, listed
+from rewards.test_directory import listed
 from rewards.tests import make_user
 
 _n = iter(range(1, 100000))

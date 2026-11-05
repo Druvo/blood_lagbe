@@ -88,6 +88,15 @@ class RegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = ('first_name', 'last_name', 'email', 'phone')
+        error_messages = {
+            'phone': {
+                'unique': 'This phone number already has an account. '
+                          'Try logging in instead.',
+            },
+            'email': {
+                'unique': 'This email is already used by another account.',
+            },
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -105,7 +114,10 @@ class RegistrationForm(UserCreationForm):
     def clean_phone(self):
         phone = normalize_phone(self.cleaned_data.get('phone'))
         if not phone or phone[:2] != '01' or phone[:3] in ('010', '011', '012'):
-            raise forms.ValidationError('Invalid Phone number')
+            raise forms.ValidationError(
+                'Enter a Bangladesh mobile number, like 01712345678.',
+                code='invalid_phone',
+            )
         return phone
 
     @property

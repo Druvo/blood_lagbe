@@ -54,6 +54,7 @@
     </form>
 
     {% if stories %}
+      <h2 class="bb-sr">Stories</h2>
       <div class="bbs-grid">
         {% for story in stories %}{% include 'stories/_card.html' %}{% endfor %}
       </div>

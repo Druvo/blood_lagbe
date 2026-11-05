@@ -20,6 +20,8 @@ from rewards.geo import DISTRICT_CHOICES, DISTRICT_NAMES
 from rewards.leaderboard import display_name as _display_name
 from rewards.models import (
     MAX_OPEN_REQUESTS_PER_USER,
+    MAX_PLEDGES_PER_DAY,
+    MAX_REPORTS_PER_DAY,
     BloodRequest,
     RequestReport,
     RequestResponse,
@@ -34,6 +36,10 @@ PAGE_SIZE = 12
 MAX_UPDATES_PER_REQUEST = 10
 PLEDGE_MILESTONES = (1, 3, 5, 10, 20)
 WHEN_CHOICES = (('today', 'Today'), ('week', 'This week'), ('', 'All'))
+
+
+def _day_ago():
+    return timezone.now() - datetime.timedelta(days=1)
 
 
 def _is_staff(user):
@@ -348,6 +354,16 @@ def request_respond(request, pk):
                 f'You can donate again on {eligibility.next_date:%b %d, %Y}. '
                 'Please let someone else respond to this request.',
             )
+        elif RequestResponse.objects.filter(
+            donor=request.user, created_at__gte=_day_ago(),
+        ).count() >= MAX_PLEDGES_PER_DAY and not RequestResponse.objects.filter(
+            blood_request=blood_request, donor=request.user,
+        ).exists():
+            messages.error(
+                request,
+                'You have offered to help a lot today. Please try again '
+                'tomorrow.',
+            )
         else:
             _, created = RequestResponse.objects.get_or_create(
                 blood_request=blood_request, donor=request.user,
@@ -442,6 +458,14 @@ def request_report(request, pk):
     reason = request.POST.get('reason', '')
     if reason not in RequestReport.Reason.values:
         messages.error(request, 'Pick a reason for the report.')
+        return redirect('request-detail', pk=pk)
+
+    if RequestReport.objects.filter(
+        reporter=request.user, created_at__gte=_day_ago(),
+    ).count() >= MAX_REPORTS_PER_DAY:
+        messages.error(
+            request, 'You have filed a lot of reports today. Please try again tomorrow.',
+        )
         return redirect('request-detail', pk=pk)
 
     _, created = RequestReport.objects.get_or_create(

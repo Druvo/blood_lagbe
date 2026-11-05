@@ -6,18 +6,18 @@
 .bbs-card { position: relative; display: flex; flex-direction: column; gap: 12px; padding: 22px 20px 16px; overflow: hidden; }
 .bbs-card::before {
   content: "\201C"; position: absolute; top: -10px; right: 14px;
-  font: 800 6rem/1 var(--bb-font-display); color: var(--bb-red); opacity: .12; pointer-events: none;
+  font: 800 6rem/1 var(--bb-font-display); color: var(--bb-red-text); opacity: .12; pointer-events: none;
 }
 .bbs-card__title { font-size: 1.1rem; font-weight: 800; color: var(--bb-ink); margin: 0; overflow-wrap: anywhere; }
 .bbs-card__title a { color: inherit; }
-.bbs-card__title a:hover { color: var(--bb-red); }
+.bbs-card__title a:hover { color: var(--bb-red-text); }
 .bbs-card__body { margin: 0; color: var(--bb-text); line-height: 1.6; flex: 1; overflow-wrap: anywhere; }
 .bbs-card__more { font-weight: 700; font-size: .9rem; }
 
 .bbs-who { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .bbs-who__name { font-weight: 700; color: var(--bb-ink); line-height: 1.2; overflow-wrap: anywhere; }
 .bbs-who__meta { font-size: .78rem; color: var(--bb-muted); }
-.bbs-avatar--anon { background: var(--bb-surface-2); color: var(--bb-red); }
+.bbs-avatar--anon { background: var(--bb-surface-2); color: var(--bb-red-text); }
 
 .bbs-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 
@@ -28,8 +28,8 @@
   border-radius: 999px; border: 1.5px solid var(--bb-line); background: var(--bb-surface);
   color: var(--bb-text); font: inherit; font-weight: 600; font-size: .88rem; cursor: pointer;
 }
-.bbs-react:hover { border-color: var(--bb-red); color: var(--bb-red); }
-.bbs-react.is-on { background: var(--bb-red-soft); border-color: var(--bb-red); color: var(--bb-red-dark); }
+.bbs-react:hover { border-color: var(--bb-red); color: var(--bb-red-text); }
+.bbs-react.is-on { background: var(--bb-red-soft); border-color: var(--bb-red); color: var(--bb-red-ink); }
 .bbs-react[disabled] { opacity: .6; cursor: default; }
 .bbs-react__n { font-variant-numeric: tabular-nums; min-width: .8em; }
 .bbs-reactions--static .bbs-react { min-height: 36px; cursor: default; }
@@ -48,7 +48,7 @@
 .bbs-share { display: flex; flex-wrap: wrap; gap: 8px; }
 .bbs-share [hidden] { display: none !important; }
 .bbs-report summary { cursor: pointer; font-size: .85rem; color: var(--bb-muted); min-height: 44px; display: inline-flex; align-items: center; }
-.bbs-report summary:hover { color: var(--bb-red); }
+.bbs-report summary:hover { color: var(--bb-red-text); }
 .bbs-report form { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 6px; }
 
 /* Mine */
@@ -60,7 +60,7 @@
 
 /* Form */
 .bbs-count { text-align: right; font-size: .78rem; color: var(--bb-muted); }
-.bbs-count.is-near { color: var(--bb-red); font-weight: 700; }
+.bbs-count.is-near { color: var(--bb-red-text); font-weight: 700; }
 
 /* Home strip */
 .bbs-strip__head { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; justify-content: space-between; margin-bottom: 20px; }

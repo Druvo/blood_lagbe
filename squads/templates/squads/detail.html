@@ -37,7 +37,7 @@
           <button type="submit" class="bb-btn bb-btn--white"><i class="feather-user-plus"></i> Join this squad</button>
         </form>
       {% else %}
-        <a href="{% url 'login' %}" class="bb-btn bb-btn--white bb-btn--sm">Log in to join</a>
+        <a href="{% url 'login' %}?next={{ request.path|urlencode }}" class="bb-btn bb-btn--white bb-btn--sm">Log in to join</a>
       {% endif %}
       <a href="{% url 'squads:list' %}" class="bb-btn bb-btn--sm" style="background:rgba(255,255,255,.18);color:#fff;">All squads</a>
     </div>
@@ -131,7 +131,7 @@
           <p class="bb-small bb-muted">Owners can't leave. If you no longer want this squad, you can delete it for everyone.</p>
           <form method="post" action="{% url 'squads:delete' squad.pk %}" onsubmit="return confirm('Delete this squad for everyone? This cannot be undone.');">
             {% csrf_token %}
-            <button type="submit" class="bb-btn bb-btn--ghost bb-btn--sm bb-btn--block" style="color:var(--bb-red-dark);">Delete squad</button>
+            <button type="submit" class="bb-btn bb-btn--ghost bb-btn--sm bb-btn--block" style="color:var(--bb-red-ink);">Delete squad</button>
           </form>
         </section>
       {% endif %}

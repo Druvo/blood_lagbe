@@ -216,7 +216,7 @@ class SignupTests(TestCase):
         make_user(phone='01712345678')
         response = self.client.post(reverse('signup'), signup_data())
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'already exists')
+        self.assertContains(response, 'already has an account')
         self.assertEqual(User.objects.filter(phone='01712345678').count(), 1)
 
     def test_duplicate_phone_in_other_format_rejected(self):

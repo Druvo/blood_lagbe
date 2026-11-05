@@ -21,6 +21,7 @@
     <div class="bb-card">
       <form method="post" class="bb-form" novalidate>
         {% csrf_token %}
+        {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
 
         {% if f.errors %}
           <div class="bb-alert bb-alert--bad" role="alert">Please fix the highlighted fields below.</div>
@@ -103,7 +104,7 @@
       </form>
     </div>
 
-    <p class="pg-auth__alt">Already a member? <a href="{% url 'login' %}" class="bb-strong" style="color:var(--bb-red)">Log in</a></p>
+    <p class="pg-auth__alt">Already a member? <a href="{% url 'login' %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="bb-strong" style="color:var(--bb-red-text)">Log in</a></p>
   </div>
 </section>
 {% endwith %}

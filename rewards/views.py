@@ -1,13 +1,9 @@
 from django.conf import settings
-from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
 from django.http import Http404
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 from django.utils.text import slugify
-from django.views.decorators.http import require_POST
 
-from rewards.forms import BloodRequestForm, DonationForm
 from rewards.leaderboard import (
     CANDIDATE_POOL,
     PERIOD_ALL,
@@ -21,17 +17,10 @@ from rewards.leaderboard import (
 )
 from rewards.geo import DISTRICT_CHOICES, DISTRICT_NAMES
 from rewards.models import (
-    BLOOD_GROUP_CHOICES,
-    Badge,
-    BloodRequest,
-    Donation,
-    RequestResponse,
     get_current_streak,
     get_donor_badge_progress,
     get_donor_points,
     get_earned_hero_badges,
-    get_earned_streak_badges,
-    get_eligibility,
     lives_saved,
     request_donation_count,
 )
@@ -47,7 +36,11 @@ def badge_card(request, user_id):
     """Public, shareable card showing a donor's current tier and streak."""
     donor = get_object_or_404(User.objects.select_related('profile'), id=user_id)
     viewer = request.user
-    can_view = donor.profile.public_badge_card or (
+    # Public only for donors who allow card sharing AND have not hidden
+    # themselves from public listings: the card shows their name.
+    can_view = (
+        donor.profile.public_badge_card and donor.profile.show_on_leaderboard
+    ) or (
         viewer.is_authenticated and (viewer.pk == donor.pk or viewer.is_staff)
     )
     if not can_view:

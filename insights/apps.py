@@ -12,12 +12,16 @@ class InsightsConfig(AppConfig):
 
         from accounts.models import Profile
         from insights import stats
-        from rewards.models import BloodRequest, Donation, RequestResponse
+        from rewards.models import (
+            BloodRequest, Donation, RequestReport, RequestResponse,
+        )
 
         def bust(sender, **kwargs):
             stats.clear_cache()
 
-        for model in (Donation, BloodRequest, RequestResponse, Profile):
+        for model in (
+            Donation, BloodRequest, RequestResponse, RequestReport, Profile,
+        ):
             for signal in (post_save, post_delete):
                 signal.connect(
                     bust, sender=model,

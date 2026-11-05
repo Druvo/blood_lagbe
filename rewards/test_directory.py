@@ -180,7 +180,7 @@ class AvailabilityTests(TestCase):
         veteran = listed(name='Veteran')
         donate(veteran, days_ago=500)
         donate(veteran, days_ago=700)
-        newbie = listed(name='Newbie')
+        listed(name='Newbie')
         response = self.client.get(reverse('donor-directory'))
         self.assertEqual(
             [d['name'] for d in response.context['donors']],

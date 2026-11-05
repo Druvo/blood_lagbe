@@ -47,7 +47,7 @@ def _urgent_matches(user, blood_group):
     if not blood_group:
         return 0
     return (
-        BloodRequest.objects.still_needed()
+        BloodRequest.objects.still_needed().public()
         .filter(blood_group=blood_group)
         .exclude(requester=user)
         .exclude(responses__donor=user)

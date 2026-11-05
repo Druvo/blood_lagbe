@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 
 
 class Author(models.Model):
@@ -9,10 +9,13 @@ class Author(models.Model):
     image = models.ImageField(upload_to='post', default='no_pic.jpg')
 
     def __str__(self):
-        return str(self.author)
+        # Never the login phone number: this label can end up in public
+        # markup (blog bylines, admin links), so use the display name.
+        from rewards.leaderboard import display_name
+        return display_name(self.author)
 
     def admin_photo(self):
-        return mark_safe('<img src="{}" width="100" />'.format(self.image.url))
+        return format_html('<img src="{}" width="100" />', self.image.url)
 
     admin_photo.short_description = 'Image'
     admin_photo.allow_tags = True

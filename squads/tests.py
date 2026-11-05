@@ -1,5 +1,6 @@
 """Squads: rules, permissions, privacy and totals."""
 import datetime
+import re
 
 from django.core.cache import cache
 from django.db import IntegrityError, transaction
@@ -357,7 +358,15 @@ class JoinCodeTests(TestCase):
         landing = self.client.get(reverse('squads:join-code', args=['NOSUCHCD']))
         again = self.client.get(reverse('squads:join-code', args=['ANOTHER2']))
         self.assertEqual(landing.status_code, again.status_code)
-        self.assertEqual(landing.content, again.content)
+
+        # The CSRF token (in the account menu's logout form) is different on
+        # every response, so compare the pages with it masked out.
+        def mask(response):
+            return re.sub(
+                rb'name="csrfmiddlewaretoken" value="[^"]+"', b'',
+                response.content,
+            )
+        self.assertEqual(mask(landing), mask(again))
         self.assertContains(landing, "isn't valid")
         self.assertNotContains(landing, 'Codes')
 

@@ -1,13 +1,22 @@
+import datetime
+
 from django import forms
 from django.utils import timezone
 
 from rewards.blood import BLOOD_GROUP_CHOICES
 from rewards.models import (
     MAX_OPEN_REQUESTS_PER_USER,
+    MAX_REQUESTS_PER_DAY,
     BloodRequest,
     Donation,
     Place,
 )
+
+
+# Sanity bounds on typed dates: nobody donated in 1900, and an "urgent"
+# request needed in the year 9999 is a typo or spam.
+MAX_DONATION_AGE_DAYS = 365 * 40
+MAX_REQUEST_LEAD_DAYS = 60
 
 
 class PlaceSelect(forms.Select):
@@ -81,6 +90,7 @@ class DonationForm(PlaceFieldsMixin, forms.ModelForm):
 
     def __init__(self, *args, user=None, **kwargs):
         super().__init__(*args, **kwargs)
+        self.user = user
         self.setup_place_fields()
         field = self.fields['blood_request']
         # Only requests this donor pledged to, so the bonus can't be farmed
@@ -91,6 +101,22 @@ class DonationForm(PlaceFieldsMixin, forms.ModelForm):
         )
         field.required = False
         field.empty_label = '-- none --'
+
+    def clean_donation_date(self):
+        date = self.cleaned_data['donation_date']
+        today = timezone.localdate()
+        if date < today - datetime.timedelta(days=MAX_DONATION_AGE_DAYS):
+            raise forms.ValidationError(
+                'That date is too long ago. Check the year.'
+            )
+        if self.user is not None and Donation.objects.filter(
+            donor=self.user, donation_date=date,
+        ).exclude(status=Donation.Status.REJECTED).exists():
+            # Also what a double click on "Log donation" runs into.
+            raise forms.ValidationError(
+                'You already logged a donation on this date.'
+            )
+        return date
 
     def clean(self):
         return self.clean_place_fields(super().clean())
@@ -131,15 +157,27 @@ class BloodRequestForm(PlaceFieldsMixin, forms.ModelForm):
         self.setup_place_fields()
         # A radio group has no use for the "---------" blank choice.
         self.fields['blood_group'].choices = BLOOD_GROUP_CHOICES
-        self.fields['needed_by'].widget.attrs['min'] = (
-            timezone.localdate().isoformat()
-        )
+        today = timezone.localdate()
+        self.fields['needed_by'].widget.attrs['min'] = today.isoformat()
+        self.fields['needed_by'].widget.attrs['max'] = (
+            today + datetime.timedelta(days=MAX_REQUEST_LEAD_DAYS)
+        ).isoformat()
         if user is not None and not self.is_bound:
             self.fields['contact_phone'].initial = user.phone
             profile = getattr(user, 'profile', None)
             if profile is not None and profile.district:
                 self.fields['district'].initial = profile.district
             self.fields['needed_by'].initial = timezone.localdate()
+
+    def clean_needed_by(self):
+        date = self.cleaned_data['needed_by']
+        if date > timezone.localdate() + datetime.timedelta(
+            days=MAX_REQUEST_LEAD_DAYS,
+        ):
+            raise forms.ValidationError(
+                f'Pick a date within the next {MAX_REQUEST_LEAD_DAYS} days.'
+            )
+        return date
 
     def clean_patient_name(self):
         name = ' '.join(self.cleaned_data.get('patient_name', '').split())
@@ -152,6 +190,20 @@ class BloodRequestForm(PlaceFieldsMixin, forms.ModelForm):
 
     def clean(self):
         cleaned_data = self.clean_place_fields(super().clean())
+        if self.user is not None and not self.errors and (
+            BloodRequest.objects.open_and_current().filter(
+                requester=self.user,
+                blood_group=cleaned_data.get('blood_group'),
+                district=cleaned_data.get('district'),
+                hospital__iexact=cleaned_data.get('hospital'),
+                needed_by=cleaned_data.get('needed_by'),
+            ).exists()
+        ):
+            # Also what a double click on "Post request" would create twice.
+            raise forms.ValidationError(
+                'You already posted this request. Open "My requests" to '
+                'update or close it.'
+            )
         if self.user is not None:
             open_count = BloodRequest.objects.open_and_current().filter(
                 requester=self.user,
@@ -160,5 +212,14 @@ class BloodRequestForm(PlaceFieldsMixin, forms.ModelForm):
                 raise forms.ValidationError(
                     f'You already have {MAX_OPEN_REQUESTS_PER_USER} open '
                     'requests. Close one before posting another.'
+                )
+            posted_today = BloodRequest.objects.filter(
+                requester=self.user,
+                created_at__gte=timezone.now() - datetime.timedelta(days=1),
+            ).count()
+            if posted_today >= MAX_REQUESTS_PER_DAY:
+                raise forms.ValidationError(
+                    'You have posted a lot of requests today. Please try '
+                    'again tomorrow.'
                 )
         return cleaned_data

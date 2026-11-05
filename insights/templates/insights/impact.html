@@ -67,7 +67,7 @@
           <details class="im-details">
             <summary>View as table</summary>
             <table class="im-table">
-              <thead><tr><th>Month</th><th>Donations</th></tr></thead>
+              <thead><tr><th scope="col">Month</th><th scope="col">Donations</th></tr></thead>
               <tbody>
               {% for m in monthly %}<tr><td>{{ m.label }} {{ m.year }}</td><td>{{ m.count|commas }}</td></tr>{% endfor %}
               </tbody>

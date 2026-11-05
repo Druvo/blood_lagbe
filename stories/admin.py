@@ -42,7 +42,8 @@ def approve_stories(modeladmin, request, queryset):
         story.approve()
         _notify_author(story, approved=True)
     modeladmin.message_user(
-        request, f'{len(stories)} stories approved.', messages.SUCCESS,
+        request, f'{len(stories)} {"story" if len(stories) == 1 else "stories"} approved.',
+        messages.SUCCESS,
     )
 
 
@@ -55,7 +56,8 @@ def reject_stories(modeladmin, request, queryset):
         story.reject()
         _notify_author(story, approved=False)
     modeladmin.message_user(
-        request, f'{len(stories)} stories rejected.', messages.SUCCESS,
+        request, f'{len(stories)} {"story" if len(stories) == 1 else "stories"} rejected.',
+        messages.SUCCESS,
     )
 
 

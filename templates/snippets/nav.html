@@ -7,12 +7,12 @@
     </a>
 
     <nav class="bb-nav__links" aria-label="Main">
-      <a href="{% url 'request-list' %}" class="{% if p|slice:':10' == '/requests/' %}is-active{% endif %}">Urgent requests</a>
-      <a href="{% url 'donor-directory' %}" class="{% if p|slice:':8' == '/donors/' %}is-active{% endif %}">Find donors</a>
-      <a href="{% url 'leaderboard' %}" class="{% if p|slice:':13' == '/leaderboard/' or p|slice:':8' == '/squads/' %}is-active{% endif %}">Leaderboard</a>
-      <a href="{% url 'impact' %}" class="{% if p|slice:':8' == '/impact/' %}is-active{% endif %}">Impact</a>
-      <a href="{% url 'stories' %}" class="{% if p|slice:':9' == '/stories/' %}is-active{% endif %}">Stories</a>
-      <a href="{% url 'learn' %}" class="{% if p|slice:':7' == '/learn/' or p|slice:':5' == '/faq/' or p|slice:':7' == '/about/' %}is-active{% endif %}">Learn</a>
+      <a href="{% url 'request-list' %}" class="{% if p|slice:':10' == '/requests/' %}is-active{% endif %}"{% if p|slice:':10' == '/requests/' %} aria-current="page"{% endif %}>Urgent requests</a>
+      <a href="{% url 'donor-directory' %}" class="{% if p|slice:':8' == '/donors/' %}is-active{% endif %}"{% if p|slice:':8' == '/donors/' %} aria-current="page"{% endif %}>Find donors</a>
+      <a href="{% url 'leaderboard' %}" class="{% if p|slice:':13' == '/leaderboard/' or p|slice:':8' == '/squads/' %}is-active{% endif %}"{% if p|slice:':13' == '/leaderboard/' or p|slice:':8' == '/squads/' %} aria-current="page"{% endif %}>Leaderboard</a>
+      <a href="{% url 'impact' %}" class="{% if p|slice:':8' == '/impact/' %}is-active{% endif %}"{% if p|slice:':8' == '/impact/' %} aria-current="page"{% endif %}>Impact</a>
+      <a href="{% url 'stories' %}" class="{% if p|slice:':9' == '/stories/' %}is-active{% endif %}"{% if p|slice:':9' == '/stories/' %} aria-current="page"{% endif %}>Stories</a>
+      <a href="{% url 'learn' %}" class="{% if p|slice:':7' == '/learn/' or p|slice:':5' == '/faq/' or p|slice:':7' == '/about/' %}is-active{% endif %}"{% if p|slice:':7' == '/learn/' or p|slice:':5' == '/faq/' or p|slice:':7' == '/about/' %} aria-current="page"{% endif %}>Learn</a>
     </nav>
 
     <div class="bb-nav__end">
@@ -28,7 +28,7 @@
             <a href="{% url 'contact-inbox' %}" role="menuitem"><i class="feather-inbox"></i> Contact requests{% if contact_pending_count %} ({{ contact_pending_count }}){% endif %}</a>
             <a href="{% url 'request-mine' %}" role="menuitem"><i class="feather-droplet"></i> My requests</a>
             <a href="{% url 'privacy' %}" role="menuitem"><i class="feather-sliders"></i> Profile &amp; privacy</a>
-            <a href="{% url 'logout' %}" role="menuitem"><i class="feather-log-out"></i> Log out</a>
+            <form method="post" action="{% url 'logout' %}" role="none">{% csrf_token %}<button type="submit" role="menuitem"><i class="feather-log-out" aria-hidden="true"></i> Log out</button></form>
           </div>
         </div>
       {% else %}

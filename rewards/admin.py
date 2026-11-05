@@ -8,6 +8,7 @@ from django.utils import timezone
 from rewards.models import (
     Badge,
     BloodRequest,
+    ContactRequest,
     Donation,
     Place,
     RequestReport,
@@ -46,10 +47,11 @@ def approve_donations(modeladmin, request, queryset):
     ))
     before = {donor.id: get_donor_badge_snapshot(donor) for donor in donors}
 
-    queryset.update(
+    approved = queryset.update(
         status=Donation.Status.APPROVED, verified_by=request.user,
         updated_at=timezone.now(),
     )
+    modeladmin.message_user(request, f'Approved {approved} donation(s).')
 
     notified = 0
     for donor in donors:
@@ -66,10 +68,11 @@ def approve_donations(modeladmin, request, queryset):
 
 @admin.action(description='Reject selected donations')
 def reject_donations(modeladmin, request, queryset):
-    queryset.exclude(status=Donation.Status.REJECTED).update(
+    rejected = queryset.exclude(status=Donation.Status.REJECTED).update(
         status=Donation.Status.REJECTED, verified_by=request.user,
         updated_at=timezone.now(),
     )
+    modeladmin.message_user(request, f'Rejected {rejected} donation(s).')
 
 
 @admin.register(Donation)
@@ -81,6 +84,9 @@ class DonationAdmin(admin.ModelAdmin):
     list_filter = ('status', 'blood_group', 'district')
     search_fields = ('donor__phone', 'donor__email', 'location')
     actions = [approve_donations, reject_donations]
+    list_select_related = ('donor', 'blood_request', 'verified_by')
+    raw_id_fields = ('donor', 'blood_request', 'place', 'verified_by')
+    date_hierarchy = 'donation_date'
 
 
 @admin.register(Badge)
@@ -169,6 +175,9 @@ class BloodRequestAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'closed_at')
     inlines = [RequestUpdateInline, RequestReportInline]
     actions = [close_requests, reopen_requests, clear_reports]
+    list_select_related = ('requester',)
+    raw_id_fields = ('requester', 'place')
+    date_hierarchy = 'needed_by'
 
     def get_queryset(self, request):
         return super().get_queryset(request).with_report_count()
@@ -195,6 +204,22 @@ class RequestReportAdmin(admin.ModelAdmin):
 class RequestResponseAdmin(admin.ModelAdmin):
     list_display = ('blood_request', 'donor', 'created_at')
     search_fields = ('donor__phone', 'blood_request__hospital')
+    raw_id_fields = ('blood_request', 'donor')
+
+
+@admin.register(ContactRequest)
+class ContactRequestAdmin(admin.ModelAdmin):
+    """Read-mostly: contact requests are between members. Staff can look
+    for abuse (who asks many donors) but the status is the donor's call."""
+    list_display = (
+        'sender', 'donor', 'status', 'created_at', 'answered_at',
+    )
+    list_filter = ('status',)
+    search_fields = ('sender__phone', 'donor__phone', 'message')
+    raw_id_fields = ('sender', 'donor')
+    list_select_related = ('sender', 'donor')
+    date_hierarchy = 'created_at'
+    readonly_fields = ('created_at', 'answered_at')
 
 
 @admin.register(Place)

@@ -15,6 +15,7 @@ from rewards.blood import donor_groups_for
 from rewards.models import (
     CONTACT_RETRY_DAYS,
     DONATION_CYCLE_DAYS,
+    MAX_CONTACTS_PER_DAY,
     MAX_PENDING_CONTACTS_PER_USER,
     Badge,
     ContactRequest,
@@ -109,6 +110,10 @@ def contact_block_reason(sender, donor):
     profile = donor.profile
     if not (donor.is_active and profile.in_directory and profile.blood_group):
         return 'This donor is not in the directory.'
+    if ContactRequest.objects.filter(
+        sender=sender, donor=donor, status=ContactRequest.Status.ACCEPTED,
+    ).exists():
+        return 'This donor already accepted. Their number is in your inbox.'
     pending = ContactRequest.objects.filter(
         sender=sender, status=ContactRequest.Status.PENDING,
     )
@@ -119,6 +124,10 @@ def contact_block_reason(sender, donor):
             f'You have {MAX_PENDING_CONTACTS_PER_USER} requests waiting for '
             'an answer. Wait for a reply before asking more people.'
         )
+    if ContactRequest.objects.filter(
+        sender=sender, created_at__gte=timezone.now() - timedelta(days=1),
+    ).count() >= MAX_CONTACTS_PER_DAY:
+        return 'You have sent a lot of requests today. Please try again tomorrow.'
     cutoff = timezone.now() - timedelta(days=CONTACT_RETRY_DAYS)
     if ContactRequest.objects.filter(
         sender=sender, donor=donor, status=ContactRequest.Status.DECLINED,

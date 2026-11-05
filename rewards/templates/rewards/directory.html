@@ -92,7 +92,7 @@
             <div class="cm-donor__meta">
               {% if d.district %}<span><i class="feather-map-pin"></i> {{ d.district }}</span>{% endif %}
               <span>{{ d.donations }} verified donation{{ d.donations|pluralize }}</span>
-              {% if d.badge %}<span class="cm-tier" style="color:{{ d.badge.color }};"><i class="feather-{{ d.badge.icon }}"></i> {{ d.badge.name }}</span>{% endif %}
+              {% if d.badge %}<span class="cm-tier" style="--tier:{{ d.badge.color }};"><i class="feather-{{ d.badge.icon }}"></i> {{ d.badge.name }}</span>{% endif %}
             </div>
             <div class="bb-chips bb-mt-1">
               {% if d.available %}<span class="bb-pill bb-pill--ok">Available</span>{% else %}<span class="bb-pill">Not available now</span>{% endif %}

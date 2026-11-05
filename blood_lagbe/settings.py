@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 
+from django.core.exceptions import ImproperlyConfigured
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -20,16 +22,73 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
+def _env_bool(name, default):
+    raw = os.environ.get(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in ('1', 'true', 'yes', 'on')
+
+
+# Everything below that matters for security is read from the environment.
+# The defaults suit local development (DEBUG on, plain HTTP); setting
+# DJANGO_DEBUG=False flips the HTTPS-related defaults on. See README,
+# "Going to production".
+_DEV_SECRET_KEY = 'django-insecure-u^6vz#t8v1ofxkc96z2zuwn(!w&q-ys95b00djrlt+t+b3kw7x'  # noqa
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get(
-    'DJANGO_SECRET_KEY',
-    'django-insecure-u^6vz#t8v1ofxkc96z2zuwn(!w&q-ys95b00djrlt+t+b3kw7x',  # noqa
-)
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', _DEV_SECRET_KEY)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG', 'True') == 'True'
+DEBUG = _env_bool('DJANGO_DEBUG', True)
 
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',') if os.environ.get('DJANGO_ALLOWED_HOSTS') else []
+if not DEBUG and SECRET_KEY == _DEV_SECRET_KEY:
+    raise ImproperlyConfigured(
+        'Set DJANGO_SECRET_KEY when DJANGO_DEBUG is False: the built-in '
+        'development key is public.'
+    )
+
+# Comma separated host names, e.g. "bloodbond.example,www.bloodbond.example".
+# Empty means Django's DEBUG defaults (localhost only). Required in production
+# (it also protects password-reset links from Host header poisoning).
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.environ.get('DJANGO_ALLOWED_HOSTS', '').split(',')
+    if host.strip()
+]
+# Full origins ("https://bloodbond.example") when behind a proxy that changes
+# the host, so CSRF checks on HTTPS still pass.
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get('DJANGO_CSRF_TRUSTED_ORIGINS', '').split(',')
+    if origin.strip()
+]
+
+# HTTPS hardening: on by default when DEBUG is off, each switch overridable.
+_PRODUCTION = not DEBUG
+SECURE_SSL_REDIRECT = _env_bool('DJANGO_SECURE_SSL_REDIRECT', _PRODUCTION)
+SESSION_COOKIE_SECURE = _env_bool('DJANGO_SESSION_COOKIE_SECURE', _PRODUCTION)
+CSRF_COOKIE_SECURE = _env_bool('DJANGO_CSRF_COOKIE_SECURE', _PRODUCTION)
+SECURE_HSTS_SECONDS = int(
+    os.environ.get('DJANGO_HSTS_SECONDS', 31536000 if _PRODUCTION else 0)
+)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = _env_bool(
+    'DJANGO_HSTS_INCLUDE_SUBDOMAINS', _PRODUCTION,
+)
+SECURE_HSTS_PRELOAD = _env_bool('DJANGO_HSTS_PRELOAD', False)
+if _env_bool('DJANGO_BEHIND_PROXY', False):
+    # Only when a proxy you control sets (and strips client-sent copies of)
+    # this header; otherwise anyone could claim their request was HTTPS.
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Fixed on purpose, not env-driven: these are the safe values.
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = 'same-origin'
+X_FRAME_OPTIONS = 'DENY'
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'Lax'
+# Password-reset links stop working after 3 hours (Django's default is 3 days).
+PASSWORD_RESET_TIMEOUT = int(os.environ.get('DJANGO_RESET_TIMEOUT', 3 * 60 * 60))
 
 
 # Application definition
@@ -59,6 +118,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'core.middleware.PrivateResponsesMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -106,9 +166,14 @@ DATABASES = {
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',  # noqa
+        # This site has no username: the login is the phone number.
+        'OPTIONS': {
+            'user_attributes': ('first_name', 'last_name', 'email', 'phone'),
+        },
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',  # noqa
+        'OPTIONS': {'min_length': 8},
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',  # noqa
@@ -172,5 +237,11 @@ DEFAULT_FROM_EMAIL = os.environ.get(
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.User'
-LOGIN_REDIRECT_URL = 'admin'
+LOGIN_REDIRECT_URL = 'home'
+CSRF_FAILURE_VIEW = 'pages.views.csrf_failure'
 LOGOUT_REDIRECT_URL = 'home'
+
+
+# Tests start with an empty cache, so rate-limit counters and cached
+# statistics never leak from one test into the next.
+TEST_RUNNER = 'core.test_runner.CacheIsolatedRunner'

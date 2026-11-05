@@ -183,4 +183,3 @@ def squad_ranking(period=PERIOD_ALL, limit=50):
             rank, previous = position, row['donations']
         row['rank'] = rank
     return rows
-

@@ -1,7 +1,7 @@
 from django.db import models
 from .author import Author
 from .category import Category
-from django.utils.safestring import mark_safe
+from django.utils.html import format_html
 from django.urls import reverse
 
 
@@ -20,7 +20,7 @@ class Post(models.Model):
         return str(self.title)
 
     def admin_photo(self):
-        return mark_safe('<img src="{}" width="100" />'.format(self.thumbnail.url))
+        return format_html('<img src="{}" width="100" />', self.thumbnail.url)
 
     admin_photo.short_description = 'Image'
     admin_photo.allow_tags = True
@@ -29,4 +29,3 @@ class Post(models.Model):
         return reverse('post-view', kwargs={
             'id': self.id,
         })
-

@@ -15,13 +15,13 @@ from datetime import date
 from urllib.parse import quote
 
 from django.core.cache import cache
-from django.db.models import Count, F, Q
+from django.db.models import Count, Q
 from django.db.models.functions import TruncMonth
 from django.utils import timezone
 
 from accounts.models import Profile
 from rewards.blood import BLOOD_GROUP_CHOICES
-from rewards.geo import DISTRICT_NAMES, DISTRICT_TO_DIVISION, DIVISIONS
+from rewards.geo import DISTRICT_TO_DIVISION, DIVISIONS
 from rewards.models import (
     LIVES_PER_DONATION,
     BloodRequest,
@@ -44,6 +44,17 @@ UNSPECIFIED = 'Not specified'
 BLOOD_GROUPS = [code for code, _ in BLOOD_GROUP_CHOICES]
 MIN_FREE_TEXT_PLACE_COUNT = 2  # typed locations must repeat to be shown
 _PHONE_LIKE = re.compile(r'\d{6,}')
+_EMAIL_LIKE = re.compile(r'\S@\S')
+
+
+def looks_private(text):
+    """True for typed text that carries a phone number or an email address,
+    however the digits are spaced (01711 000 001, +880-1711-000001)."""
+    return (
+        bool(_PHONE_LIKE.search(text))
+        or sum(ch.isdigit() for ch in text) >= 7
+        or bool(_EMAIL_LIKE.search(text))
+    )
 
 
 # ---------------------------------------------------------------- caching
@@ -344,7 +355,7 @@ def top_places(period=PERIOD_ALL, limit=8):
                 where = row['place__district']
             else:
                 text = ' '.join((row['location'] or '').split())
-                if not text or _PHONE_LIKE.search(text):
+                if not text or looks_private(text):
                     continue
                 key = ('text', text.lower())
                 label = text[:60]
@@ -467,7 +478,7 @@ def district_detail(name):
                 'remaining': r.units_remaining,
                 'needed_by': r.needed_by,
             }
-            for r in BloodRequest.objects.still_needed().filter(
+            for r in BloodRequest.objects.still_needed().public().filter(
                 district=name,
             ).order_by('needed_by', '-created_at')[:10]
         ]

@@ -19,7 +19,7 @@
       {{ form.non_field_errors }}
 
       <section class="bb-card" aria-labelledby="profile-h">
-        <h2 class="bb-card__title" id="profile-h"><i class="feather-droplet" style="color:var(--bb-red);"></i> Donor profile</h2>
+        <h2 class="bb-card__title" id="profile-h"><i class="feather-droplet" style="color:var(--bb-red-text);"></i> Donor profile</h2>
 
         <fieldset style="border:0;margin:0 0 16px;padding:0;min-width:0;">
           <legend class="bb-label">Blood group</legend>
@@ -65,7 +65,7 @@
       </section>
 
       <section class="bb-card" aria-labelledby="privacy-h">
-        <h2 class="bb-card__title" id="privacy-h"><i class="feather-shield" style="color:var(--bb-red);"></i> Privacy</h2>
+        <h2 class="bb-card__title" id="privacy-h"><i class="feather-shield" style="color:var(--bb-red-text);"></i> Privacy</h2>
 
         <div class="cm-toggle-row">
           <label class="cm-switch" for="{{ form.show_on_leaderboard.id_for_label }}">
@@ -85,7 +85,7 @@
           </label>
           <div>
             <strong>Let anyone with the link view my badge card</strong>
-            <span class="bb-help">Turn off to disable sharing. Only you and site staff can open it.</span>
+            <span class="bb-help">Turn off to disable sharing. Only you and site staff can open it. It is also private whenever you hide yourself from the leaderboard.</span>
             <ul class="cm-expose"><li>Name</li><li>Tier</li><li>Donations</li><li>Streak</li><li class="is-private">Phone: never</li></ul>
           </div>
         </div>
@@ -159,7 +159,7 @@
       var onBoard = checked('show_on_leaderboard');
       $('pv-lb').style.display = onBoard ? '' : 'none';
       $('pv-lb-off').classList.toggle('is-on', !onBoard);
-      $('pv-card-text').textContent = checked('public_badge_card')
+      $('pv-card-text').textContent = (checked('public_badge_card') && onBoard)
         ? 'Anyone with your badge link can open your card.'
         : 'Only you and site staff can open your badge card.';
     }

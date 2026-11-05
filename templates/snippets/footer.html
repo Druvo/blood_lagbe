@@ -8,7 +8,7 @@
         {% if SITE_CONTACT_EMAIL %}<p class="bb-small"><a href="mailto:{{ SITE_CONTACT_EMAIL }}">{{ SITE_CONTACT_EMAIL }}</a></p>{% endif %}
       </div>
       <div>
-        <h4>Give &amp; get blood</h4>
+        <h2>Give &amp; get blood</h2>
         <ul>
           <li><a href="{% url 'request-list' %}">Urgent requests</a></li>
           <li><a href="{% url 'request-create' %}">Ask for blood</a></li>
@@ -17,7 +17,7 @@
         </ul>
       </div>
       <div>
-        <h4>Community</h4>
+        <h2>Community</h2>
         <ul>
           <li><a href="{% url 'leaderboard' %}">Leaderboard</a></li>
           <li><a href="{% url 'squads:list' %}">Squads</a></li>
@@ -27,7 +27,7 @@
         </ul>
       </div>
       <div>
-        <h4>Learn</h4>
+        <h2>Learn</h2>
         <ul>
           <li><a href="{% url 'learn' %}">Can I donate?</a></li>
           <li><a href="{% url 'faq' %}">FAQ</a></li>

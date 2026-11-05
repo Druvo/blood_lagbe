@@ -51,11 +51,18 @@ def index(request):
         'blood_groups': [code for code, _ in BLOOD_GROUP_CHOICES],
         'tier_badges': badges_desc[::-1],
         'urgent_requests': list(
-            BloodRequest.objects.still_needed().select_related('requester')[:3]
+            BloodRequest.objects.still_needed().public()
+            .select_related('requester')[:3]
         ),
     })
 
 
 # Content pages live in content_views.py (learn hub, FAQ, about) and seo.py
 # (robots, manifest, service worker, offline page).  Re-exported here.
+def csrf_failure(request, reason=''):
+    """A friendly page for an expired or cross-site form post (Django's own
+    CSRF 403 page is unstyled and does not say what to do)."""
+    return render(request, '403_csrf.html', status=403)
+
+
 from .content_views import about, faq, learn  # noqa: E402,F401

@@ -46,7 +46,7 @@
       </form>
     </div>
 
-    <p class="pg-auth__alt">New here? <a href="{% url 'signup' %}" class="bb-strong" style="color:var(--bb-red)">Create a free account</a></p>
+    <p class="pg-auth__alt">New here? <a href="{% url 'signup' %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="bb-strong" style="color:var(--bb-red-text)">Create a free account</a></p>
   </div>
 </section>
 {% endblock body %}

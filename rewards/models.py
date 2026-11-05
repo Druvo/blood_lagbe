@@ -27,6 +27,12 @@ REPORT_FLAG_THRESHOLD = 3  # open reports that hide a request until staff clear 
 MAX_PENDING_CONTACTS_PER_USER = 5  # outgoing contact requests awaiting an answer
 CONTACT_RETRY_DAYS = 30  # wait before asking a donor who declined again
 
+# Daily abuse caps, counted over a rolling 24 hours per account.
+MAX_CONTACTS_PER_DAY = 20  # contact requests sent
+MAX_REQUESTS_PER_DAY = 10  # blood requests posted
+MAX_PLEDGES_PER_DAY = 20  # "I can help" answers (each one can send an email)
+MAX_REPORTS_PER_DAY = 10  # request reports filed
+
 
 def validate_not_future(value):
     if value > timezone.localdate():

@@ -1,3 +1,4 @@
+from datetime import timedelta
 from urllib.parse import urlencode
 
 from django.contrib import messages
@@ -7,6 +8,7 @@ from django.db.models import Count, Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
 
@@ -14,6 +16,8 @@ from rewards.geo import DISTRICT_NAMES, DIVISIONS
 from stories.forms import StoryForm
 from stories.models import (
     MAX_PENDING_PER_AUTHOR,
+    MAX_REPORTS_PER_DAY,
+    MAX_STORIES_PER_DAY,
     REPORT_THRESHOLD,
     Story,
     StoryReaction,
@@ -148,6 +152,20 @@ def story_create(request):
                 f'You already have {pending} stories waiting for review. '
                 'Please wait until they are looked at before sharing more.'
             ))
+        elif Story.objects.filter(
+            author=request.user, title=form.instance.title,
+            body=form.instance.body,
+        ).exists():
+            # What a double click on "Share" would otherwise create twice.
+            form.add_error(None, 'You already shared this story.')
+        elif Story.objects.filter(
+            author=request.user,
+            created_at__gte=timezone.now() - timedelta(days=1),
+        ).count() >= MAX_STORIES_PER_DAY:
+            form.add_error(None, (
+                'You have shared several stories today. Please come back '
+                'tomorrow to share more.'
+            ))
         else:
             form.save()
             messages.success(
@@ -222,6 +240,15 @@ def story_report(request, pk):
     reason = request.POST.get('reason', '')
     if reason not in StoryReport.Reason.values:
         reason = StoryReport.Reason.OTHER
+    if StoryReport.objects.filter(
+        reporter=request.user,
+        created_at__gte=timezone.now() - timedelta(days=1),
+    ).count() >= MAX_REPORTS_PER_DAY:
+        messages.error(
+            request,
+            'You have filed a lot of reports today. Please try again tomorrow.',
+        )
+        return redirect(detail)
     _, created = StoryReport.objects.get_or_create(
         reporter=request.user, story=story, defaults={'reason': reason},
     )

@@ -1,0 +1,18 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block title %}Please try again{% endblock title %}
+{% block meta %}<meta name="robots" content="noindex">{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'css/pages.css' %}">{% endblock extra_style %}
+{% block body %}
+<section class="pg-error">
+  <div class="bb-container bb-container--narrow">
+    <div class="pg-error__code" aria-hidden="true">403</div>
+    <h1 class="bb-h2">That page expired</h1>
+    <p class="bb-muted">For your safety, a form can only be sent for a short while after it opens, and only from this site. Nothing was saved. Open the page again and resend it.</p>
+    <div class="pg-error__actions">
+      <a class="bb-btn bb-btn--primary" href="{% url 'home' %}">Go home</a>
+      {% if not user.is_authenticated %}<a class="bb-btn bb-btn--ghost" href="{% url 'login' %}">Log in</a>{% endif %}
+    </div>
+  </div>
+</section>
+{% endblock body %}

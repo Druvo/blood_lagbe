@@ -40,12 +40,12 @@
   .hub-stats { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   @media (min-width: 640px) { .hub-stats { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
   .hub-stat { background: var(--bb-surface); border: 1px solid var(--bb-line); border-radius: var(--bb-radius); padding: 14px 12px; text-align: center; box-shadow: var(--bb-shadow-sm); }
-  .hub-stat i { color: var(--bb-red); font-size: 1.2rem; }
+  .hub-stat i { color: var(--bb-red-text); font-size: 1.2rem; }
   .hub-stat .bb-stat__value { font-size: 1.7rem; }
 
   .hub-step { display: flex; gap: 14px; align-items: center; }
   .hub-step .bb-eyebrow { display: block; }
-  .hub-step__icon { flex: none; width: 46px; height: 46px; border-radius: 14px; background: var(--bb-red-soft); color: var(--bb-red); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+  .hub-step__icon { flex: none; width: 46px; height: 46px; border-radius: 14px; background: var(--bb-red-soft); color: var(--bb-red-text); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
 
   .hub-pair { display: grid; grid-template-columns: minmax(0, 1fr); column-gap: 16px; }
   @media (min-width: 560px) { .hub-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -57,7 +57,7 @@
   .hub-don__place { overflow-wrap: anywhere; }
   .hub-don__side { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex: none; }
   .hub-del { font-size: .78rem; font-weight: 600; color: var(--bb-muted); padding: 6px 4px; min-height: 32px; display: inline-flex; align-items: center; gap: 4px; }
-  .hub-del:hover { color: var(--bb-red-dark); }
+  .hub-del:hover { color: var(--bb-red-ink); }
 
   .hub-quest { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 1px solid var(--bb-line); }
   .hub-quest:last-child { border-bottom: 0; }
@@ -78,8 +78,8 @@
 
   .hub-tools { display: grid; gap: 8px; }
   .hub-tools a { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: var(--bb-radius-sm); border: 1.5px solid var(--bb-line); color: var(--bb-ink); font-weight: 600; min-height: 46px; background: var(--bb-surface); }
-  .hub-tools a:hover { border-color: var(--bb-red); color: var(--bb-red); }
-  .hub-tools i { color: var(--bb-red); font-size: 1.15rem; flex: none; }
+  .hub-tools a:hover { border-color: var(--bb-red); color: var(--bb-red-text); }
+  .hub-tools i { color: var(--bb-red-text); font-size: 1.15rem; flex: none; }
 </style>
 {% endblock extra_style %}
 
@@ -178,7 +178,7 @@
             <div class="hub-stat"><i class="feather-repeat" aria-hidden="true"></i><div class="bb-stat__value">{{ current_streak }}</div><div class="bb-stat__label">cycle streak</div></div>
             <div class="hub-stat"><i class="feather-life-buoy" aria-hidden="true"></i><div class="bb-stat__value">{{ request_donations }}</div><div class="bb-stat__label">request donation{{ request_donations|pluralize }}</div></div>
           </div>
-          <p class="bb-small bb-muted bb-center bb-mb-0 bb-mt-1"><i class="feather-heart" style="color:var(--bb-red)"></i> est. up to <strong class="bb-strong">{{ lives }}</strong> people helped</p>
+          <p class="bb-small bb-muted bb-center bb-mb-0 bb-mt-1"><i class="feather-heart" style="color:var(--bb-red-text)"></i> est. up to <strong class="bb-strong">{{ lives }}</strong> people helped</p>
         </div>
 
         {# ---------- Next step (only while something is open) ---------- #}
@@ -247,7 +247,7 @@
         <div class="bb-card">
           <div class="bb-row bb-row--between bb-mb-1">
             <h2 class="bb-card__title bb-mb-0">My donations</h2>
-            {% if donations %}<a href="{% url 'donation-history' %}" class="bb-small bb-strong" style="color:var(--bb-red)">Print / save</a>{% endif %}
+            {% if donations %}<a href="{% url 'donation-history' %}" class="bb-small bb-strong" style="color:var(--bb-red-text)">Print / save</a>{% endif %}
           </div>
           {% if recent_donations %}
             <div>

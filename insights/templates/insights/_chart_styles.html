@@ -67,7 +67,7 @@
 .bb-chart .bb-dn__sub { font-size: 11px; }
 .bb-legend { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 18px; font-size: .88rem; }
 .bb-legend li { display: flex; align-items: center; gap: 8px; min-width: 0; }
-.bb-legend li.is-zero { opacity: .5; }
+.bb-legend li.is-zero .bb-swatch { opacity: .4; }
 .bb-swatch { width: 12px; height: 12px; border-radius: 4px; flex: none; }
 .bb-swatch--0 { background: var(--bbc-0); } .bb-swatch--1 { background: var(--bbc-1); }
 .bb-swatch--2 { background: var(--bbc-2); } .bb-swatch--3 { background: var(--bbc-3); }
@@ -101,7 +101,7 @@
 .bb-hbar--rank:last-child { border-bottom: 0; }
 .bb-hbar__label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; color: var(--bb-ink); }
 .bb-hbar__label a { color: var(--bb-ink); display: block; overflow: hidden; text-overflow: ellipsis; padding: 10px 0; }
-.bb-hbar__label a:hover { color: var(--bb-red); }
+.bb-hbar__label a:hover { color: var(--bb-red-text); }
 .bb-hbar__value { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--bb-ink); text-align: right; min-width: 2ch; }
 .bb-empty--chart { padding: 28px 12px; }
 .bb-empty--chart p { margin: 0; }
@@ -117,7 +117,7 @@
   .bb-sd__row { grid-template-columns: auto 1fr 150px; grid-template-areas: "tag bars pill"; }
   .bb-sd__row > .bb-pill { justify-self: end; }
 }
-.bb-sd__row--quiet { opacity: .72; }
+.bb-sd__row--quiet .bb-sd__track, .bb-sd__row--quiet .bb-sd__fill { opacity: .55; }
 .bb-sd__bar { display: flex; align-items: center; gap: 10px; margin: 3px 0; }
 .bb-sd__track { flex: 1; height: 10px; border-radius: 999px; background: var(--bb-surface-2); overflow: hidden; }
 .bb-sd__fill { display: block; height: 100%; border-radius: 999px; }
