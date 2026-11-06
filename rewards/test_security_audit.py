@@ -1007,7 +1007,16 @@ class ProductionSettingsTests(TestCase):
         )
 
     def test_production_refuses_the_public_development_key(self):
-        result = self.run_check(DJANGO_DEBUG='False')
+        # Import the settings directly: `manage.py check` on Django 3.2.0
+        # hides this error behind AppRegistryNotReady.
+        base = {k: v for k, v in os.environ.items() if not k.startswith('DJANGO_')}
+        base.update(DJANGO_DEBUG='False', DJANGO_SETTINGS_MODULE='blood_lagbe.settings')
+        result = subprocess.run(
+            [sys.executable, '-c',
+             'from django.conf import settings; settings.INSTALLED_APPS'],
+            cwd=settings.BASE_DIR, env=base, capture_output=True, text=True,
+            timeout=120,
+        )
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('DJANGO_SECRET_KEY', result.stderr)
 
