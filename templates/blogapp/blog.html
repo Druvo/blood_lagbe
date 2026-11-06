@@ -54,7 +54,7 @@
           {% endif %}
         {% else %}
           <div class="bb-empty">
-            <i class="feather-edit-3" aria-hidden="true"></i>
+            {% include 'snippets/empty_art.html' with scene='stories' %}
             <p class="bb-strong bb-mb-1">No posts yet</p>
             <p>Check back soon. Meanwhile, read the <a href="{% url 'learn' %}">donor guide</a>.</p>
           </div>

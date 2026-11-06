@@ -294,6 +294,10 @@ def crawl_paths(cast):
         paths.append(('story-detail', reverse('story-detail', args=[story.pk])))
     paths += growth_paths(cast)
     paths += lanes_paths(cast)
+    from atlas import audit as atlas_audit
+    from spotlight import audit as spotlight_audit
+    paths += spotlight_audit.paths(cast)
+    paths += atlas_audit.paths(cast)
     return paths
 
 

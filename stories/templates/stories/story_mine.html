@@ -47,7 +47,7 @@
       </div>
     {% else %}
       <div class="bb-card bb-empty bb-mt-2">
-        <i class="feather-heart"></i>
+        {% include 'snippets/empty_art.html' with scene='stories' %}
         <p class="bb-strong">You have not shared a story yet.</p>
         <p>A few honest lines about why you gave, or what a donor meant to your family, can move someone to give too.</p>
         <a class="bb-btn bb-btn--primary" href="{% url 'story-create' %}">Share your story</a>

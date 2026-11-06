@@ -1,0 +1,7 @@
+{% load i18n %}<section class="bb-card bb-card--flat bb-mt-3" aria-labelledby="sp-rules-h">
+  <h2 class="bb-h4" id="sp-rules-h">{% trans "How heroes are picked" %}</h2>
+  <ul class="bb-small bb-mb-1">
+    {% for key, info in kinds %}<li><strong>{{ info.title }}:</strong> {{ info.rule }}</li>{% endfor %}
+  </ul>
+  <p class="sp-rule bb-mb-0">{{ tie_rule }}</p>
+</section>

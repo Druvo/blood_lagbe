@@ -1,0 +1,33 @@
+{% extends 'base/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% blocktrans with month=label %}Heroes of {{ month }}{% endblocktrans %}{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'spotlight/spotlight.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container sp-page">
+  <header>
+    <span class="bb-eyebrow"><a href="{% url 'spotlight:home' %}">{% trans "Spotlight" %}</a></span>
+    <h1 class="bb-h2 bb-mb-1">{% blocktrans with month=label %}Heroes of {{ month }}{% endblocktrans %}</h1>
+    {% if final %}
+      <p class="bb-lead">{% trans "The final heroes for this month." %}</p>
+    {% else %}
+      <p class="bb-lead"><span class="bb-pill bb-pill--info">{% trans "So far, not final" %}</span> {% trans "Counts can still change until the month ends." %}</p>
+    {% endif %}
+  </header>
+
+  <nav class="sp-monthnav" aria-label="{% trans 'Other months' %}">
+    {% if nav.prev %}<a href="{{ nav.prev }}" class="bb-btn bb-btn--ghost bb-btn--sm">&larr; {{ nav.prev_label }}</a>{% else %}<span class="sp-nonav"></span>{% endif %}
+    {% if nav.next %}<a href="{{ nav.next }}" class="bb-btn bb-btn--ghost bb-btn--sm">{{ nav.next_label }} &rarr;</a>{% endif %}
+  </nav>
+
+  {% if entries %}
+    <div class="sp-heroes">{% for entry in entries %}{% include 'spotlight/_hero.html' with level=2 %}{% endfor %}</div>
+  {% else %}
+    {% include 'spotlight/_empty.html' %}
+  {% endif %}
+
+  {% include 'spotlight/_rules.html' %}
+  <p class="bb-muted bb-xs bb-mt-2">{% trans "Recognition only. It never changes points, tiers or when anyone may donate again." %}</p>
+</div>
+{% endblock body %}

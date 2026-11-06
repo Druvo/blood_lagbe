@@ -1,0 +1,11 @@
+{% comment %}
+Illustrated empty state. Usage:
+  {% include 'snippets/empty_state.html' with scene='requests' title=_("No requests") text=_("Nothing here yet.") btn_url=some_url btn_label=_("Post a request") %}
+Optional: card=True (wraps in bb-card), compact=True, extra_class, style. Scenes: requests, alerts,
+events, stories, donations, search (see snippets/empty_art.html).
+{% endcomment %}<div class="{% if card %}bb-card {% endif %}bb-empty{% if compact %} bb-empty--compact{% endif %}{% if extra_class %} {{ extra_class }}{% endif %}"{% if style %} style="{{ style }}"{% endif %}>
+  {% include 'snippets/empty_art.html' with scene=scene %}
+  {% if title %}<strong class="bb-empty__title">{{ title }}</strong>{% endif %}
+  {% if text %}<p>{{ text }}</p>{% endif %}
+  {% if btn_url %}<a class="bb-btn bb-btn--primary bb-btn--sm" href="{{ btn_url }}">{{ btn_label }}</a>{% endif %}
+</div>

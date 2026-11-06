@@ -1,0 +1,6 @@
+{% load static i18n %}{% if others %}
+<p class="bb-small at-nearby">
+  <link rel="stylesheet" href="{% static 'atlas/atlas.css' %}">
+  <a href="{% url 'atlas:district' slug %}">{% blocktrans with name=name count n=others %}{{ n }} other open request in {{ name }}{% plural %}{{ n }} other open requests in {{ name }}{% endblocktrans %}</a>
+</p>
+{% endif %}

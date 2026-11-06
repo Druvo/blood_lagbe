@@ -1,0 +1,12 @@
+{% load static i18n %}{% if name %}
+<section class="bb-card at-panel-card" aria-labelledby="at-hub-h">
+  <link rel="stylesheet" href="{% static 'atlas/atlas.css' %}">
+  <h2 class="bb-card__title" id="at-hub-h">{% trans "Your district" %}: {{ name }}</h2>
+  <ul class="at-lines">
+    <li>{% blocktrans count n=requests %}{{ n }} open request{% plural %}{{ n }} open requests{% endblocktrans %}</li>
+    <li>{% blocktrans count n=drives %}{{ n }} upcoming drive{% plural %}{{ n }} upcoming drives{% endblocktrans %}</li>
+    {% if group_short %}<li>{% blocktrans with group=group %}{{ group }} is one of the groups people are asking for here.{% endblocktrans %}</li>{% endif %}
+  </ul>
+  <a class="bb-btn bb-btn--ghost bb-btn--sm" href="{% url 'atlas:district' slug %}">{% trans "See the district page" %}</a>
+</section>
+{% endif %}

@@ -13,7 +13,8 @@
 
 {% block body %}
 <section class="pg-hero">
-  <div class="bb-container bb-container--narrow">
+  <div class="bb-container bb-container--narrow bb-container--art">
+    {% include 'snippets/art/header.html' with which='learn' %}
     <span class="bb-eyebrow">{% trans "Donor guide" %}</span>
     <h1 class="bb-h1 bb-mb-1">{% trans "Can I donate?" %}</h1>
     <p class="bb-lead">{% trans "Short answers to the questions people ask before their first donation." %}</p>

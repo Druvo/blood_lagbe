@@ -99,7 +99,7 @@
       {% endwith %}
     {% empty %}
       <div class="bb-card bb-empty">
-        <i class="feather-heart"></i>
+        {% include 'snippets/empty_art.html' with scene='requests' %}
         {% if filtered %}
           <p class="bb-strong bb-mb-1">{% trans "No open requests match these filters." %}</p>
           <p>{% trans "Try another group or district." %}</p>

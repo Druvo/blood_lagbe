@@ -28,7 +28,7 @@
       {% include 'events/_event_card.html' %}
     {% empty %}
       <div class="bb-card bb-empty">
-        <i class="feather-calendar" aria-hidden="true"></i>
+        {% include 'snippets/empty_art.html' with scene='events' %}
         <strong class="bb-strong">You have not hosted a drive yet</strong>
         <p class="bb-small">New drives are checked by a volunteer before they show in the list.</p>
       </div>
@@ -41,7 +41,7 @@
       {% include 'events/_event_card.html' %}
     {% empty %}
       <div class="bb-card bb-empty">
-        <i class="feather-users" aria-hidden="true"></i>
+        {% include 'snippets/empty_art.html' with scene='events' %}
         <strong class="bb-strong">No RSVPs yet</strong>
         <a href="{% url 'events:list' %}" class="bb-btn bb-btn--soft bb-btn--sm">Find a drive</a>
       </div>

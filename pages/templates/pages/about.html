@@ -13,7 +13,8 @@
 
 {% block body %}
 <section class="pg-hero">
-  <div class="bb-container bb-container--narrow">
+  <div class="bb-container bb-container--narrow bb-container--art">
+    {% include 'snippets/art/header.html' with which='about' %}
     <span class="bb-eyebrow">{% trans "About" %}</span>
     <h1 class="bb-h1 bb-mb-1">{{ SITE_TAGLINE }}</h1>
     <p class="bb-lead">{% blocktrans with site=SITE_NAME %}{{ site }} is a community that connects blood donors with people who urgently need blood, across Bangladesh.{% endblocktrans %}</p>

@@ -32,7 +32,7 @@
     </div>
   {% else %}
     <div class="bb-card bb-empty bb-mt-3">
-      <i class="feather-link"></i>
+      {% include 'snippets/empty_art.html' with scene='stories' %}
       <h1 class="bb-h3 bb-strong">This invite link isn't valid</h1>
       <p class="bb-small">The code may have been typed wrong, or the owner made a new one. Ask them for a fresh link.</p>
       {% if user.is_authenticated %}<a href="{% url 'squads:join' %}" class="bb-btn bb-btn--soft bb-btn--sm">Enter a code</a>{% endif %}

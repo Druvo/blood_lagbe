@@ -1,0 +1,22 @@
+{% comment %}Illustrated error scene. {% include 'snippets/art/error.html' with which='404' %} (404, 403, csrf){% endcomment %}<div class="pg-error__art" aria-hidden="true"><svg class="bb-art" viewBox="0 0 300 200" width="300" height="200" focusable="false">
+<ellipse class="a-blob" cx="150" cy="106" rx="132" ry="84"/>
+<ellipse cx="150" cy="176" rx="70" ry="9" fill="var(--bb-ink)" opacity=".1"/>
+{% if which == '403' %}
+<g class="bb-art-sway"><path class="a-red" d="M150 30c0 0-46 52-46 88a46 46 0 0 0 92 0C196 82 150 30 150 30Z"/>
+<path d="M118 70c7-13 16-25 26-36" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="6" stroke-linecap="round"/></g>
+<rect class="a-amber" x="124" y="108" width="52" height="44" rx="9"/><path d="M134 108v-12a16 16 0 0 1 32 0v12" fill="none" stroke="var(--bb-ink)" stroke-width="7" stroke-linecap="round"/>
+<circle class="a-ink" cx="150" cy="128" r="6"/><rect class="a-ink" x="147" y="130" width="6" height="12" rx="3"/>
+{% elif which == 'csrf' %}
+<g class="bb-art-sway"><path class="a-red" d="M96 40c0 0-30 34-30 58a30 30 0 0 0 60 0C126 74 96 40 96 40Z"/></g>
+<path class="a-paper" d="M168 38h54v10c0 22-14 30-27 36 13 6 27 14 27 36v10h-54v-10c0-22 14-30 27-36-13-6-27-14-27-36Z"/>
+<path class="a-amber" d="M178 48h34c0 12-8 18-17 22-9-4-17-10-17-22Z"/><path class="a-amber" d="M195 100c-6 4-17 10-17 22v6h34v-6c0-12-11-18-17-22Z"/>
+<rect class="a-red" x="162" y="32" width="66" height="9" rx="4.500"/><rect class="a-red" x="162" y="140" width="66" height="9" rx="4.500"/>
+{% else %}
+<path d="M26 150c40-6 54-34 88-42" fill="none" stroke="var(--bb-red)" stroke-width="4" stroke-linecap="round" stroke-dasharray="2 12" opacity=".6"/>
+<g class="bb-art-sway"><path class="a-red" d="M150 26c0 0-48 54-48 92a48 48 0 0 0 96 0C198 80 150 26 150 26Z"/>
+<path d="M118 66c7-13 16-25 26-36" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="6" stroke-linecap="round"/>
+<path d="M134 96c0-10 7-16 16-16s16 6 16 15c0 12-16 12-16 26" fill="none" stroke="#fff" stroke-width="9" stroke-linecap="round"/><circle class="a-white" cx="150" cy="140" r="5.500"/></g>
+<g class="bb-art-float"><circle cx="228" cy="62" r="20" class="a-paper" fill-opacity=".9"/><circle cx="228" cy="62" r="20" fill="none" stroke="var(--bb-red)" stroke-width="5"/><path d="M243 77l16 16" stroke="var(--bb-red-dark)" stroke-width="8" stroke-linecap="round"/></g>
+{% endif %}
+<path class="a-amber" d="M44 46l2.600 6 6 2.600-6 2.600-2.600 6-2.600-6-6-2.600 6-2.600Z"/><path class="a-rose" d="M258 130c0 0-6 6.500-6 10.500a6 6 0 0 0 12 0C264 136.500 258 130 258 130Z" opacity=".8"/>
+</svg></div>

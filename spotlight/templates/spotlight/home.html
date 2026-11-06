@@ -1,0 +1,61 @@
+{% extends 'base/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Heroes of the month" %}{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'spotlight/spotlight.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container sp-page">
+  <header>
+    <span class="bb-eyebrow">{% trans "Spotlight" %}</span>
+    <h1 class="bb-h2 bb-mb-1">{% trans "Heroes of the month" %}</h1>
+    <p class="bb-lead">{% trans "A thank-you to people who gave, helped and brought others along. Only members who allow it on the leaderboard are named." %}</p>
+  </header>
+
+  <section class="bb-mt-3" aria-labelledby="sp-now-h">
+    <div class="bb-row bb-row--between bb-mb-1">
+      <h2 class="bb-h3 bb-mb-0" id="sp-now-h">{{ now_label }}</h2>
+      <span class="bb-pill bb-pill--info">{% trans "So far, not final" %}</span>
+    </div>
+    {% if this_month %}
+      <div class="sp-heroes">{% for entry in this_month %}{% include 'spotlight/_hero.html' %}{% endfor %}</div>
+    {% else %}
+      {% include 'spotlight/_empty.html' %}
+    {% endif %}
+  </section>
+
+  <section class="bb-mt-3" aria-labelledby="sp-last-h">
+    <div class="bb-row bb-row--between bb-mb-1">
+      <h2 class="bb-h3 bb-mb-0" id="sp-last-h">{% blocktrans with month=last_label %}Last month: {{ month }}{% endblocktrans %}</h2>
+      <a href="{{ last_url }}" class="bb-small">{% trans "Open this month" %}</a>
+    </div>
+    {% if last_month %}
+      <div class="sp-heroes">{% for entry in last_month %}{% include 'spotlight/_hero.html' %}{% endfor %}</div>
+    {% else %}
+      {% include 'spotlight/_empty.html' %}
+    {% endif %}
+  </section>
+
+  <section class="bb-mt-3" aria-labelledby="sp-hall-h">
+    <h2 class="bb-h3" id="sp-hall-h">{% trans "Hall of fame" %}</h2>
+    {% if hall %}
+      <div class="bb-card">
+        <ul class="sp-hall">
+          {% for entry in hall %}
+            <li>
+              <span class="sp-hall__month"><a href="{% url 'spotlight:month' entry.year entry.month %}">{{ entry.month_label }}</a></span>
+              <span class="sp-hall__what"><strong>{{ entry.title }}:</strong> {{ entry.name }}</span>
+              <span class="bb-small bb-muted">{% if entry.kind == 'donor' %}{% blocktrans count counter=entry.count %}{{ counter }} verified donation{% plural %}{{ counter }} verified donations{% endblocktrans %}{% elif entry.kind == 'squad' %}{% blocktrans count counter=entry.count %}{{ counter }} verified donation by its members{% plural %}{{ counter }} verified donations by its members{% endblocktrans %}{% else %}{% blocktrans count counter=entry.count %}{{ counter }} pledge on a fulfilled request{% plural %}{{ counter }} pledges on fulfilled requests{% endblocktrans %}{% endif %}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% else %}
+      <div class="bb-card"><p class="bb-muted bb-mb-0">{% trans "The first monthly heroes are saved once a month is over." %}</p></div>
+    {% endif %}
+  </section>
+
+  {% include 'spotlight/_rules.html' %}
+  <p class="bb-muted bb-xs bb-mt-2">{% trans "Recognition only. It never changes points, tiers or when anyone may donate again." %}</p>
+</div>
+{% endblock body %}

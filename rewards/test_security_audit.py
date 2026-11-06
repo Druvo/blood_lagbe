@@ -128,6 +128,9 @@ class CsrfTests(AuditBase):
             RequestReport, ContactRequest, Squad, SquadMember, Story,
             StoryReaction, StoryReport,
         )
+        # Building the crawl list creates some fixture rows, so do it first
+        # and snapshot afterwards.
+        paths = crawl_paths(self.cast)
         before = {m: list(m.objects.order_by('pk').values_list('pk', flat=True))
                   for m in models}
         statuses = {
@@ -137,7 +140,7 @@ class CsrfTests(AuditBase):
         }
         for viewer in (None, 'owner', 'staff', 'squad_owner', 'directory'):
             client = self.client_for(viewer)
-            for _name, path in crawl_paths(self.cast):
+            for _name, path in paths:
                 client.get(path)
         for model in models:
             self.assertEqual(

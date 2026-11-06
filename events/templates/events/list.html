@@ -12,6 +12,7 @@
       <h1 class="bb-h2 bb-mb-1">{% if active_tab == 'past' %}{% trans "Past blood drives" %}{% else %}{% trans "Blood drives" %}{% endif %}</h1>
       <p class="bb-lead">{% trans "Organized, friendly reasons to show up. Join one, or host your own." %}</p>
     </div>
+    {% include 'snippets/art/header.html' with which='events' inline=True %}
     <a href="{% url 'events:create' %}" class="bb-btn bb-btn--primary bb-btn--sm"><i class="feather-plus" aria-hidden="true"></i> {% trans "Host a drive" %}</a>
   </header>
 
@@ -44,7 +45,7 @@
     {% include 'events/_event_card.html' with level=2 %}
   {% empty %}
     <div class="bb-card bb-empty">
-      <i class="feather-calendar" aria-hidden="true"></i>
+      {% include 'snippets/empty_art.html' with scene='events' %}
       <strong class="bb-strong">{% if active_tab == 'past' %}{% trans "No finished drives yet" %}{% else %}{% trans "No upcoming drives" %}{% endif %}</strong>
       <p class="bb-small">{% if district %}{% blocktrans with place=district %}Nothing in {{ place }}. Try all districts, or host one.{% endblocktrans %}{% else %}{% trans "Be the first to host one in your area." %}{% endif %}</p>
       <a href="{% url 'events:create' %}" class="bb-btn bb-btn--primary bb-btn--sm">{% trans "Host a drive" %}</a>

@@ -7,8 +7,8 @@
   <meta name="robots" content="noindex">
   <title>You are offline | {{ SITE_NAME }}</title>
   <style>
-    :root { --ink: #101828; --text: #344054; --bg: #fff9f7; --red: #d8213a; --muted: #667085; }
-    @media (prefers-color-scheme: dark) { :root { --ink: #f4f4f6; --text: #d0d5dd; --bg: #12121a; --muted: #98a2b3; } }
+    :root { --ink: #101828; --text: #344054; --bg: #fff9f7; --red: #d8213a; --muted: #667085; --soft: #ffe8ec; }
+    @media (prefers-color-scheme: dark) { :root { --ink: #f4f4f6; --text: #d0d5dd; --bg: #12121a; --muted: #98a2b3; --soft: #3a1019; } }
     * { box-sizing: border-box; }
     body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; background: var(--bg); color: var(--text); font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif; text-align: center; }
     main { max-width: 420px; }
@@ -21,7 +21,13 @@
 </head>
 <body>
   <main>
-    <img src="{% static 'images/brand/bloodbond-mark.svg' %}" alt="" width="72" height="72">
+    <svg viewBox="0 0 240 150" width="240" height="150" aria-hidden="true" focusable="false" style="width:min(240px,70%);height:auto;display:block;margin:0 auto">
+      <ellipse cx="120" cy="82" rx="104" ry="64" fill="var(--soft)"/>
+      <path d="M120 22c0 0-36 40-36 68a36 36 0 0 0 72 0C156 62 120 22 120 22Z" fill="var(--red)"/>
+      <path d="M96 56c6-9 12-17 20-25" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="5" stroke-linecap="round"/>
+      <g fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"><path d="M102 82a26 26 0 0 1 36 0"/><path d="M110 92a14 14 0 0 1 20 0"/></g><circle cx="120" cy="104" r="4" fill="#fff"/>
+      <path d="M96 118 144 66" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/>
+    </svg>
     <h1>You are offline</h1>
     <p>{{ SITE_NAME }} could not reach the internet. Check your connection and try again.</p>
     <p><button type="button" onclick="location.reload()">Try again</button></p>

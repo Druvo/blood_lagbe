@@ -23,6 +23,7 @@
           <h1 class="bb-h1">{% trans "Stories" %}</h1>
           <p class="bb-lead">{% trans "True moments from people who gave blood, received it, or helped someone find it." %}</p>
         </div>
+        {% include 'snippets/art/header.html' with which='stories' inline=True %}
         <div class="bb-row">
           <a class="bb-btn bb-btn--primary" href="{% url 'story-create' %}"><i class="feather-plus"></i> {% trans "Share your story" %}</a>
           {% if user.is_authenticated %}<a class="bb-btn bb-btn--ghost" href="{% url 'story-mine' %}">{% trans "My stories" %}</a>{% endif %}
@@ -68,7 +69,7 @@
       {% endif %}
     {% else %}
       <div class="bb-card bb-empty">
-        <i class="feather-heart"></i>
+        {% include 'snippets/empty_art.html' with scene='stories' %}
         {% if has_filters %}
           <p class="bb-strong">{% trans "No stories match yet." %}</p>
           <p>{% trans "Try another district or group, or be the first to share one." %}</p>

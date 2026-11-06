@@ -6,6 +6,7 @@
 {% block body %}
 <section class="pg-error">
   <div class="bb-container bb-container--narrow">
+    {% include 'snippets/art/error.html' with which='404' %}
     <div class="pg-error__code" aria-hidden="true">404</div>
     <h1 class="bb-h2">{% trans "We could not find that page" %}</h1>
     <p class="bb-muted">{% trans "The link may be old, or the page may have moved. Here is where people usually go next." %}</p>

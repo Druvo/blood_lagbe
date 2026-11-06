@@ -73,7 +73,7 @@
       </article>
     {% empty %}
       <div class="bb-card bb-empty">
-        <i class="feather-inbox"></i>
+        {% include 'snippets/empty_art.html' with scene='requests' %}
         <strong class="bb-strong">{% trans "Nobody has asked yet" %}</strong>
         <p class="bb-small">{% if not user.profile.in_directory %}{% url 'privacy' as privacy_url %}{% blocktrans %}You are not in the directory. <a href="{{ privacy_url }}">Join it</a> if you want to be found.{% endblocktrans %}{% else %}{% trans "You will see requests here when someone needs your help." %}{% endif %}</p>
       </div>
@@ -111,7 +111,7 @@
       </article>
     {% empty %}
       <div class="bb-card bb-empty">
-        <i class="feather-send"></i>
+        {% include 'snippets/empty_art.html' with scene='search' %}
         <strong class="bb-strong">{% trans "You haven't asked anyone yet" %}</strong>
         <p class="bb-small">{% trans "Search the directory by blood group and district." %}</p>
         <a href="{% url 'donor-directory' %}" class="bb-btn bb-btn--primary bb-btn--sm">{% trans "Find donors" %}</a>

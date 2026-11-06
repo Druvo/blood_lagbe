@@ -31,7 +31,7 @@
       </div>
     {% else %}
       <div class="bb-card bb-empty">
-        <i class="feather-heart"></i>
+        {% include 'snippets/empty_art.html' with scene='stories' %}
         <p class="bb-strong">{% trans "No stories yet. Be the first." %}</p>
         <p>{% trans "Tell us about a donation, or about the person who gave blood when your family needed it." %}</p>
         <a class="bb-btn bb-btn--primary" href="{% url 'story-create' %}">{% trans "Share your story" %}</a>

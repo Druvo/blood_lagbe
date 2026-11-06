@@ -58,7 +58,7 @@
     {% endif %}
   {% else %}
     <div class="bb-empty">
-      <i class="feather-bell" aria-hidden="true"></i>
+      {% include 'snippets/empty_art.html' with scene='alerts' %}
       <p>{% trans "No alerts yet. Turn on request alerts and we will tell you when someone near you needs your blood group." %}</p>
       <a href="{% url 'alerts:settings' %}" class="bb-btn bb-btn--primary">{% trans "Set up alerts" %}</a>
     </div>

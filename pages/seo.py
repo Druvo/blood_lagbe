@@ -21,6 +21,8 @@ class StaticViewSitemap(Sitemap):
         'home', 'learn', 'faq', 'about', 'impact', 'stories',
         'request-list', 'leaderboard', 'blogapp:blog-view',
         'events:list', 'events:campaigns', 'events:challenges',
+        'spotlight:home',
+        'atlas:map', 'atlas:gap', 'atlas:divisions',
     ]
 
     def items(self):

@@ -1,0 +1,8 @@
+{% load i18n %}
+<nav class="at-tabs" aria-label="{% trans 'Atlas sections' %}">
+  <div class="bb-seg">
+    <a href="{% url 'atlas:map' %}"{% if active == 'map' %} class="is-active" aria-current="page"{% endif %}>{% trans "Map" %}</a>
+    <a href="{% url 'atlas:gap' %}"{% if active == 'gap' %} class="is-active" aria-current="page"{% endif %}>{% trans "Blood groups" %}</a>
+    <a href="{% url 'atlas:divisions' %}"{% if active == 'divisions' %} class="is-active" aria-current="page"{% endif %}>{% trans "Divisions" %}</a>
+  </div>
+</nav>

@@ -1,0 +1,109 @@
+{% extends 'base/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Blood group gap" %}{% endblock title %}
+{% block meta %}
+<meta name="description" content="{% trans 'For each blood group: units still needed on open requests, against donors who can give to that group. Counts only, never people.' %}">
+<meta property="og:site_name" content="{{ SITE_NAME }}">
+<meta property="og:title" content="{% trans 'Blood group gap' %} | {{ SITE_NAME }}">
+{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'atlas/atlas.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container at-page">
+  <header>
+    <span class="bb-eyebrow">{% trans "Atlas" %}</span>
+    <h1 class="bb-h2 bb-mb-1">{% trans "Which blood groups are short?" %}</h1>
+    <p class="bb-lead">{% if district %}{% blocktrans with name=district %}Open requests in {{ name }} against donors there who can give.{% endblocktrans %}{% else %}{% trans "Open requests across Bangladesh against donors who can give." %}{% endif %}</p>
+  </header>
+
+  {% include 'atlas/_tabs.html' with active='gap' %}
+
+  <form method="get" class="bb-form at-filter">
+    <label class="bb-label" for="at-district">{% trans "Look at one district" %}</label>
+    <div class="at-filter__row">
+      <select id="at-district" name="district">
+        <option value="">{% trans "All of Bangladesh" %}</option>
+        {% for division, districts in district_choices %}
+          <optgroup label="{{ division }}">
+            {% for value, label in districts %}
+              <option value="{{ value }}"{% if value == district %} selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </optgroup>
+        {% endfor %}
+      </select>
+      <button type="submit" class="bb-btn bb-btn--soft bb-btn--sm">{% trans "Show" %}</button>
+    </div>
+  </form>
+
+  {% if invite_group %}
+  <aside class="bb-card bb-card--soft at-invite" aria-label="{% trans 'An invitation' %}">
+    <p class="bb-strong">{% blocktrans with group=invite_group %}{{ group }} is one of the groups people are asking for.{% endblocktrans %}</p>
+    <p class="bb-small bb-muted">{% trans "If you would like to, you can list yourself in the donor directory. It is your choice, and you can switch it off at any time." %}</p>
+    <a class="bb-btn bb-btn--ghost bb-btn--sm" href="{% url 'privacy' %}">{% trans "Look at my directory setting" %}</a>
+  </aside>
+  {% endif %}
+
+  <section class="bb-card at-card" aria-labelledby="at-top-h">
+    <h2 class="bb-card__title" id="at-top-h">{% trans "Most needed right now" %}</h2>
+    {% if top %}
+      <p class="bb-small bb-muted">{% trans "These groups have the most open requests compared with the donors who can give to them." %}</p>
+      <ol class="at-top">
+        {% for row in top %}
+        <li>
+          <span class="bb-bloodtag"><span>{{ row.group }}</span></span>
+          <span>
+            {% blocktrans with group=row.group supply=row.supply_text count units=row.demand %}{{ units }} unit of {{ group }} is still needed. Donors who can give to this group: {{ supply }}.{% plural %}{{ units }} units of {{ group }} are still needed. Donors who can give to this group: {{ supply }}.{% endblocktrans %}
+            {% if row.short %}<span class="bb-pill bb-pill--bad">{% trans "Needs donors" %}</span>{% endif %}
+          </span>
+        </li>
+        {% endfor %}
+      </ol>
+    {% else %}
+      <p class="bb-muted">{% trans "No open requests right now. Thank you to everyone who helped." %}</p>
+    {% endif %}
+  </section>
+
+  <section class="bb-card at-card" aria-labelledby="at-chart-h">
+    <h2 class="bb-card__title" id="at-chart-h">{% trans "Needed and available, by blood group" %}</h2>
+    <ul class="at-key">
+      <li><i class="at-sw at-sw--need" aria-hidden="true"></i>{% trans "Units still needed" %}</li>
+      <li><i class="at-sw at-sw--supply" aria-hidden="true"></i>{% trans "Donors who can give to this group" %}</li>
+    </ul>
+    {{ chart }}
+    <details class="at-details">
+      <summary>{% trans "See the numbers as a table" %}</summary>
+      <div class="bb-table-wrap">
+        <table class="bb-table at-table">
+          <caption class="bb-sr">{% trans "Units still needed and donors available, for each blood group" %}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{% trans "Blood group" %}</th>
+              <th scope="col" class="bb-right">{% trans "Units still needed" %}</th>
+              <th scope="col" class="bb-right">{% trans "Donors who can give" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+            <tr>
+              <th scope="row">{{ row.group }}</th>
+              <td class="bb-right">{{ row.demand }}</td>
+              <td class="bb-right">{{ row.supply_text }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <div class="bb-small bb-muted at-privacy">
+    <p>{% trans "Donors counted here chose to be listed, said they are available, and are not inside their rest period after a recent donation. Which groups can give to which is a general guide only; the hospital's own tests decide." %}</p>
+    {% if gap.exact %}
+      <p>{% trans "A number below 3 is never shown, to keep people private." %}</p>
+    {% else %}
+      <p>{% trans "Donor numbers are shown as ranges, and anything below 3 is never shown exactly, to keep people private." %}</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock body %}

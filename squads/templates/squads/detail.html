@@ -87,7 +87,7 @@
           {% endfor %}
         </ol>
       {% else %}
-        <div class="bb-empty"><i class="feather-users"></i><p class="bb-small bb-mb-0">Nobody here has chosen to appear on the board yet.</p></div>
+        <div class="bb-empty">{% include 'snippets/empty_art.html' with scene='stories' %}<p class="bb-small bb-mb-0">Nobody here has chosen to appear on the board yet.</p></div>
       {% endif %}
 
       {% if private_count %}

@@ -12,7 +12,8 @@
 
 {% block body %}
 <section class="pg-hero">
-  <div class="bb-container bb-container--narrow">
+  <div class="bb-container bb-container--narrow bb-container--art">
+    {% include 'snippets/art/header.html' with which='faq' %}
     <span class="bb-eyebrow">{% trans "Help" %}</span>
     <h1 class="bb-h1 bb-mb-1">{% trans "Questions, answered" %}</h1>
     <p class="bb-lead">{% trans "Tap a question to open it." %}</p>

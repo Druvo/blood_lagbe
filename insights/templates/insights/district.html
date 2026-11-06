@@ -70,7 +70,7 @@
               {% endfor %}
             </ul>
           {% else %}
-            <div class="bb-empty bb-empty--chart"><i class="feather-check-circle" aria-hidden="true"></i><p>No open requests in {{ d.name }} right now.</p></div>
+            <div class="bb-empty bb-empty--chart">{% include 'snippets/empty_art.html' with scene='requests' %}<p>No open requests in {{ d.name }} right now.</p></div>
           {% endif %}
           <div class="bb-row bb-mt-2">
             <a class="bb-btn bb-btn--primary bb-btn--sm" href="{% url 'request-create' %}">Post a request</a>

@@ -6,6 +6,7 @@
 {% block body %}
 <section class="pg-error">
   <div class="bb-container bb-container--narrow">
+    {% include 'snippets/art/error.html' with which='csrf' %}
     <div class="pg-error__code" aria-hidden="true">403</div>
     <h1 class="bb-h2">{% trans "That page expired" %}</h1>
     <p class="bb-muted">{% trans "For your safety, a form can only be sent for a short while after it opens, and only from this site. Nothing was saved. Open the page again and resend it." %}</p>

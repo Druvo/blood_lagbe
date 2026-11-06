@@ -1,0 +1,53 @@
+{% comment %}Compact illustrated page-header art, one composition per page. Place inside a container with class bb-container--art.
+  {% include 'snippets/art/header.html' with which='learn' %}  (learn, faq, about, impact, stories, events, leaderboard){% endcomment %}<div class="bb-headart{% if inline %} bb-headart--inline{% endif %}" aria-hidden="true"><svg viewBox="0 0 200 130" width="200" height="130" focusable="false">
+{% if which == 'learn' %}
+<ellipse class="a-blob" cx="100" cy="72" rx="92" ry="52"/>
+<path class="a-paper" d="M100 34c-14-9-34-9-52-4v70c18-5 38-5 52 4Z"/><path class="a-paper-2" d="M100 34c14-9 34-9 52-4v70c-18-5-38-5-52 4Z"/>
+<path class="a-stroke-line" d="M58 46c10-2 20-1 30 3M58 58c10-2 20-1 30 3M112 49c10-4 20-5 30-3M112 61c10-4 20-5 30-3"/>
+<g class="bb-art-float"><path class="a-red" d="M100 6c0 0-13 14-13 23a13 13 0 0 0 26 0C113 20 100 6 100 6Z"/></g>
+<circle class="a-amber" cx="158" cy="26" r="6"/><path class="a-green" d="M30 24l2.200 5 5 2.200-5 2.200-2.200 5-2.200-5-5-2.200 5-2.200Z"/>
+{% elif which == 'faq' %}
+<ellipse class="a-blob" cx="100" cy="68" rx="90" ry="50"/>
+<g class="bb-art-sway"><path class="a-red" d="M40 30h66a10 10 0 0 1 10 10v28a10 10 0 0 1-10 10H78L60 94V78H40a10 10 0 0 1-10-10V40a10 10 0 0 1 10-10Z"/>
+<path d="M66 46c0-6 4-9 9-9s9 3 9 8c0 7-9 7-9 14" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/><circle class="a-white" cx="75" cy="66" r="3.200"/></g>
+<path class="a-paper" d="M124 56h46a10 10 0 0 1 10 10v22a10 10 0 0 1-10 10h-12v14l-16-14h-18a10 10 0 0 1-10-10V66a10 10 0 0 1 10-10Z"/>
+<path class="a-green" d="M138 78l8 8 16-17" fill="none" stroke="var(--bb-green)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+<path class="a-amber" d="M164 26l2.200 5 5 2.200-5 2.200-2.200 5-2.200-5-5-2.200 5-2.200Z"/>
+{% elif which == 'about' %}
+<ellipse class="a-blob" cx="100" cy="76" rx="92" ry="48"/>
+<g class="bb-art-beat"><path class="a-red" d="M100 62c-16-11-26-19-26-29a13 13 0 0 1 26-4 13 13 0 0 1 26 4c0 10-10 18-26 29Z"/></g>
+<g><path class="a-indigo" d="M32 118V98a22 22 0 0 1 44 0v20Z"/><circle class="a-skin-3" cx="54" cy="78" r="12"/>
+<path class="a-plum" d="M140 118V98a22 22 0 0 1 44 0v20Z" transform="translate(-16 0)"/><path class="a-cream" d="M130 78a12 14 0 0 1 24 0c0 6 4 10 8 14-10 0-12-3-20-3s-10 3-20 3c4-4 8-8 8-14Z" transform="translate(-6 0)"/><ellipse class="a-skin-2" cx="142" cy="80" rx="8.500" ry="10" transform="translate(-6 0)"/>
+<path class="a-gold" d="M78 118V92a22 22 0 0 1 44 0v26Z"/><circle class="a-skin-4" cx="100" cy="72" r="12.500"/><path class="a-hair" d="M87.500 70a12.500 12.500 0 0 1 25 0c-6-5-18-5-25 0Z"/></g>
+<path class="a-amber" d="M168 30l2.200 5 5 2.200-5 2.200-2.200 5-2.200-5-5-2.200 5-2.200Z"/>
+{% elif which == 'impact' %}
+<ellipse cx="100" cy="76" rx="92" ry="50" fill="#fff" opacity=".12"/>
+<rect class="a-white" x="34" y="84" width="22" height="34" rx="5" opacity=".55"/><rect class="a-white" x="66" y="68" width="22" height="50" rx="5" opacity=".7"/><rect class="a-white" x="98" y="52" width="22" height="66" rx="5" opacity=".85"/><rect class="a-white" x="130" y="34" width="22" height="84" rx="5"/>
+<path d="M40 64l30-14 30-14 42-18" fill="none" stroke="#fff" stroke-width="3.500" stroke-linecap="round" stroke-dasharray="1 8"/>
+<g class="bb-art-float"><path class="a-white" d="M168 12c0 0-12 13-12 21a12 12 0 0 0 24 0C180 25 168 12 168 12Z"/><path d="M168 38c-5-3.500-8-6-8-9a3.800 3.800 0 0 1 8-1 3.800 3.800 0 0 1 8 1c0 3-3 5.500-8 9Z" fill="var(--bb-red)"/></g>
+<path class="a-white" d="M28 36l2.200 5 5 2.200-5 2.200-2.200 5-2.200-5-5-2.200 5-2.200Z" opacity=".8"/>
+{% elif which == 'stories' %}
+<ellipse class="a-blob" cx="100" cy="70" rx="92" ry="50"/>
+<g class="bb-art-sway"><path class="a-paper" d="M44 24h84a10 10 0 0 1 10 10v44a10 10 0 0 1-10 10H92l-22 18V88H44a10 10 0 0 1-10-10V34a10 10 0 0 1 10-10Z"/>
+<path class="a-soft" d="M58 46h18v20H62c0 6-2 8-6 10 0 0 4-4 2-10Z"/><path class="a-soft" d="M84 46h18v20H88c0 6-2 8-6 10 0 0 4-4 2-10Z"/>
+<rect class="a-mute" x="108" y="46" width="20" height="5" rx="2.500"/><rect class="a-mute" x="108" y="57" width="14" height="5" rx="2.500" opacity=".7"/></g>
+<g class="bb-art-beat"><path class="a-red" d="M160 70c-10-7-16-12-16-18a8 8 0 0 1 16-2 8 8 0 0 1 16 2c0 6-6 11-16 18Z"/></g>
+<path class="a-amber" d="M170 20l2.200 5 5 2.200-5 2.200-2.200 5-2.200-5-5-2.200 5-2.200Z"/>
+{% elif which == 'events' %}
+<ellipse class="a-blob" cx="100" cy="76" rx="92" ry="48"/>
+<path d="M14 24Q100 54 186 24" fill="none" stroke="var(--bb-muted)" stroke-width="2" opacity=".6"/>
+<path class="a-red" d="M28 28l14 4-6 14Z"/><path class="a-amber" d="M60 38l14 2-4 15Z"/><path class="a-green" d="M96 43l14-1-2 15Z"/><path class="a-blue" d="M132 40l14-3 0 15Z"/><path class="a-violet" d="M164 33l14-5 2 15Z"/>
+<path class="a-paper" d="M34 86h132v10H34Z"/><rect class="a-paper-2" x="44" y="96" width="8" height="22"/><rect class="a-paper-2" x="148" y="96" width="8" height="22"/>
+<g class="bb-art-float"><path class="a-red" d="M100 56c0 0-12 13-12 21a12 12 0 0 0 24 0C112 69 100 56 100 56Z"/></g>
+<rect class="a-mute" x="120" y="72" width="26" height="14" rx="4"/><rect class="a-red" x="54" y="72" width="26" height="14" rx="4"/>
+{% else %}
+<ellipse class="a-blob" cx="100" cy="76" rx="92" ry="48"/>
+<rect class="a-amber" x="76" y="62" width="48" height="56" rx="6"/><rect class="a-paper-2" x="26" y="82" width="48" height="36" rx="6"/><rect class="a-paper" x="126" y="92" width="48" height="26" rx="6"/>
+<text x="100" y="98" text-anchor="middle" class="a-num a-num--1">1</text>
+<text x="50" y="108" text-anchor="middle" class="a-num a-num--2">2</text>
+<text x="150" y="112" text-anchor="middle" class="a-num a-num--3">3</text>
+<g class="bb-art-float"><circle class="a-amber" cx="100" cy="34" r="17"/><circle cx="100" cy="34" r="12" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2.500"/><path class="a-white" d="M100 24l3.200 7 7.500 1-5.500 5.200 1.500 7.500-6.700-3.800-6.700 3.800 1.500-7.500-5.500-5.200 7.500-1Z"/></g>
+<g class="bb-art-float bb-art-float--c"><path class="a-red" d="M50 52c0 0-7 7.500-7 12a7 7 0 0 0 14 0C57 59.500 50 52 50 52Z"/></g>
+<g class="bb-art-float bb-art-float--b"><path class="a-rose" d="M152 56c0 0-6 6.500-6 10.500a6 6 0 0 0 12 0C158 62.500 152 56 152 56Z"/></g>
+{% endif %}
+</svg></div>

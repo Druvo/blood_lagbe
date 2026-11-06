@@ -1,0 +1,13 @@
+{% load i18n %}<article class="bb-card sp-hero">
+  {% include 'spotlight/_trophy.html' with kind=entry.kind %}
+  <div class="sp-hero__body">
+    <p class="sp-hero__title">{{ entry.title }}{% if show_month %} <span class="bb-muted">· {{ entry.month_label }}</span>{% endif %}</p>
+    <h{{ level|default:3 }} class="sp-hero__name">{% if entry.kind == 'squad' %}<a href="{% url 'squads:detail' entry.id %}">{{ entry.name }}</a>{% else %}{{ entry.name }}{% endif %}</h{{ level|default:3 }}>
+    <p class="sp-hero__meta">
+      {% if entry.kind == 'donor' %}{% blocktrans count counter=entry.count %}{{ counter }} verified donation{% plural %}{{ counter }} verified donations{% endblocktrans %}
+      {% elif entry.kind == 'squad' %}{% blocktrans count counter=entry.count %}{{ counter }} verified donation by its members{% plural %}{{ counter }} verified donations by its members{% endblocktrans %}
+      {% else %}{% blocktrans count counter=entry.count %}{{ counter }} pledge on a fulfilled request{% plural %}{{ counter }} pledges on fulfilled requests{% endblocktrans %}{% endif %}
+      {% if entry.district %}<br><i class="feather-map-pin" aria-hidden="true"></i>{{ entry.district }}{% endif %}
+    </p>
+  </div>
+</article>

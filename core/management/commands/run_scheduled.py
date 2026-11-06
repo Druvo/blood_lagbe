@@ -20,6 +20,7 @@ JOBS = (
     ('send_ready_reminders', True),
     ('send_weekly_digest', True),
     ('award_campaign_badges', True),
+    ('award_monthly_heroes', True),
     ('prune_notifications', True),
 )
 

@@ -1,4 +1,5 @@
 {% extends 'base/base.html' %}
+{% load art_tags %}
 
 {% block title %}Donor card{% endblock title %}
 
@@ -17,6 +18,7 @@
   .dcard__mid { display: flex; align-items: center; gap: 16px; }
   .dcard__blood { flex: none; width: 76px; height: 76px; border-radius: 50%; background: #fff; color: var(--bb-red-dark); font: 800 1.6rem/1 var(--bb-font-display); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,.25); }
   .dcard__name { font: 800 clamp(1.25rem, 5vw, 1.7rem)/1.15 var(--bb-font-display); overflow-wrap: anywhere; }
+  .dcard__medal { display: inline-block; vertical-align: middle; margin-right: 2px; }
   .dcard__tier { margin-top: 4px; font-weight: 700; font-size: .95rem; }
   .dcard__foot { display: flex; gap: 22px; flex-wrap: wrap; }
   .dcard__foot b { display: block; font: 800 1.15rem/1.1 var(--bb-font-display); }
@@ -54,7 +56,7 @@
           <div class="dcard__blood" aria-label="Blood group {{ blood_group|default:'not set' }}">{{ blood_group|default:"?" }}</div>
           <div>
             <div class="dcard__name">{{ display_name }}</div>
-            <div class="dcard__tier">{% if current_badge %}{{ current_badge.name }}{% else %}Aspiring Donor{% endif %} &middot; Level {{ level_info.level.number }} {{ level_info.level.name }}</div>
+            <div class="dcard__tier">{% if current_badge %}<span class="dcard__medal">{% badge_art current_badge 30 %}</span> {{ current_badge.name }}{% else %}Aspiring Donor{% endif %} &middot; Level {{ level_info.level.number }} {{ level_info.level.name }}</div>
           </div>
         </div>
         <div class="dcard__foot">

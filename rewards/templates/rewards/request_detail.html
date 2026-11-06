@@ -1,5 +1,5 @@
 {% extends 'base/base.html' %}
-{% load static moments_tags growth_tags alerts_tags events_tags habits_tags i18n %}
+{% load static moments_tags growth_tags alerts_tags events_tags habits_tags atlas_tags i18n %}
 
 {% block title %}{% blocktrans with group=blood_request.blood_group hospital=blood_request.hospital %}{{ group }} needed at {{ hospital }}{% endblocktrans %}{% endblock title %}
 
@@ -192,6 +192,7 @@
       {% moments_request %}
       {% growth_request %}
       {% alerts_request %}
+      {% atlas_request %}
     </div>
 
     {# ---- Timeline + report ---- #}

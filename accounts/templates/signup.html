@@ -10,7 +10,13 @@
 
 {% block body %}
 {% with f=registration_form %}
-<section class="pg-auth">
+<section class="pg-auth pg-auth--split">
+  <div class="pg-auth__layout">
+  <aside class="pg-auth__art" aria-hidden="true">
+    <span class="bb-eyebrow">{% trans "Bangladesh's blood community" %}</span>
+    <h2>{% trans "Every drop is a bond." %}</h2>
+    {% include 'snippets/art/hero.html' %}
+  </aside>
   <div class="bb-container bb-container--form">
     <div class="pg-auth__brand">
       <img src="{% static 'images/brand/bloodbond-mark.svg' %}" alt="" width="56" height="56">
@@ -105,6 +111,7 @@
     </div>
 
     <p class="pg-auth__alt">{% trans "Already a member?" %} <a href="{% url 'login' %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="bb-strong" style="color:var(--bb-red-text)">{% trans "Log in" %}</a></p>
+  </div>
   </div>
 </section>
 {% endwith %}

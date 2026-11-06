@@ -76,6 +76,29 @@
     if (navigator.clipboard) navigator.clipboard.writeText(text).then(function () { window.bbToast('Copied'); });
   });
 
+
+  // Staggered reveal for grids of cards. CSS hides them only when html.js is
+  // set; if anything here fails the class is removed and content stays visible.
+  window.__bbJs = true;
+  (function () {
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var nodes = document.querySelectorAll('.bb-cols-2 > *, .bb-cols-3 > *, .bb-cols-4 > *, .bb-cols-auto > *, .bb-strip > *, [data-reveal]');
+    if (reduce || !('IntersectionObserver' in window)) { root.classList.remove('js'); return; }
+    var seen = new WeakMap();
+    var ro = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (!en.isIntersecting) return;
+        var el = en.target;
+        ro.unobserve(el);
+        var siblings = el.parentNode ? Array.prototype.indexOf.call(el.parentNode.children, el) : 0;
+        el.style.setProperty('--rv-i', Math.min(siblings, 6));
+        el.classList.add('is-in');
+        setTimeout(function () { el.classList.add('rv-done'); el.classList.remove('is-in'); }, 900);
+      });
+    }, { rootMargin: '0px 0px -6% 0px', threshold: 0.05 });
+    nodes.forEach(function (el) { ro.observe(el); });
+  })();
+
   // Auto-dismiss flash messages.
   document.querySelectorAll('.bb-messages .bb-alert').forEach(function (el) {
     setTimeout(function () { el.style.transition = 'opacity .4s'; el.style.opacity = '0'; setTimeout(function () { el.remove(); }, 450); }, 7000);

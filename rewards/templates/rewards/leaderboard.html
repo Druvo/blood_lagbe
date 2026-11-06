@@ -1,5 +1,5 @@
 {% extends 'base/base.html' %}
-{% load static i18n %}
+{% load static i18n art_tags %}
 
 {% block title %}{% trans "Leaderboard" %}{% endblock title %}
 
@@ -14,6 +14,7 @@
       <h1 class="bb-h2 bb-mb-1">{% trans "Who is saving the most lives?" %}</h1>
       <p class="bb-lead">{% trans "Only admin-verified donations count. Friendly competition, real blood." %}</p>
     </div>
+    {% include 'snippets/art/header.html' with which='leaderboard' inline=True %}
     <div class="cm-link-row">
       <a href="{% url 'squads:list' %}" class="bb-btn bb-btn--soft bb-btn--sm"><i class="feather-users"></i> {% trans "Squads" %}</a>
       <a href="{% url 'log-donation' %}" class="bb-btn bb-btn--primary bb-btn--sm"><i class="feather-plus"></i> {% trans "Log a donation" %}</a>
@@ -102,7 +103,7 @@
             {% if e.card_public %}<a href="{% url 'badge-card' e.user.id %}" class="cm-pod__name">{{ e.name }}</a>{% else %}<span class="cm-pod__name">{{ e.name }}</span>{% endif %}
             <div class="cm-pod__pts">{{ e.points }}<small>{% trans "points" %}</small></div>
             <div class="cm-pod__meta">
-              {% if e.badge %}<span class="cm-tier" style="--tier:{{ e.badge.color }};"><i class="feather-{{ e.badge.icon }}"></i> {{ e.badge.name }}</span><br>{% endif %}
+              {% if e.badge %}<span class="cm-tier" style="--tier:{{ e.badge.color }};">{% badge_art e.badge 44 %} {{ e.badge.name }}</span><br>{% endif %}
               {% blocktrans count counter=e.donations %}{{ counter }} donation{% plural %}{{ counter }} donations{% endblocktrans %}
               {% if e.request_donations %}<span class="cm-heart"><i class="feather-heart"></i> {{ e.request_donations }}</span>{% endif %}
             </div>
@@ -125,7 +126,7 @@
                 {% if e.request_donations %}<span class="cm-heart" title="{% blocktrans count counter=e.request_donations %}Answered {{ counter }} urgent request{% plural %}Answered {{ counter }} urgent requests{% endblocktrans %}"><i class="feather-heart"></i> {{ e.request_donations }}</span>{% endif %}
               </div>
               <div class="cm-row__meta">
-                {% if e.badge %}<span class="cm-tier" style="--tier:{{ e.badge.color }};"><i class="feather-{{ e.badge.icon }}"></i> {{ e.badge.name }}</span>{% endif %}
+                {% if e.badge %}<span class="cm-tier" style="--tier:{{ e.badge.color }};">{% badge_art e.badge 22 %} {{ e.badge.name }}</span>{% endif %}
                 {% if e.district %}<span><i class="feather-map-pin"></i> {{ e.district }}</span>{% endif %}
                 <span>{% blocktrans with n=e.lives %}est. up to {{ n }} people helped{% endblocktrans %}</span>
               </div>
@@ -136,7 +137,7 @@
       </ol>
     {% elif not podium %}
       <div class="bb-empty">
-        <i class="feather-award"></i>
+        {% include 'snippets/empty_art.html' with scene='donations' %}
         <strong class="bb-strong">{% trans "Nobody on the board yet" %}</strong>
         <p class="bb-small">
           {% if district %}No verified donations in {{ district }}{% if period == 'month' %} this month{% endif %} yet. Be the first.{% elif period == 'month' %}No verified donations this month yet. Be the first on the board!{% else %}Be the first on the board!{% endif %}

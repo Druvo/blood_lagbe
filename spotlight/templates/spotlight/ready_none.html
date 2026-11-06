@@ -1,0 +1,16 @@
+{% extends 'base/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Ready-again reminder" %}{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'spotlight/spotlight.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container bb-container--narrow sp-page">
+  <div class="bb-empty">
+    <i class="feather-calendar" aria-hidden="true"></i>
+    <h1 class="bb-h3">{% trans "Nothing to remind you about yet" %}</h1>
+    <p>{% trans "Once you log a donation we can add a ready-again date to your calendar. It is only a reminder, never medical clearance." %}</p>
+    <a href="{% url 'log-donation' %}" class="bb-btn bb-btn--soft">{% trans "Go to my hub" %}</a>
+  </div>
+</div>
+{% endblock body %}

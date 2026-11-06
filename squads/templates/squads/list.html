@@ -42,7 +42,7 @@
           </a>
         {% empty %}
           <div class="bb-card bb-empty">
-            <i class="feather-users"></i>
+            {% include 'snippets/empty_art.html' with scene='stories' %}
             <strong class="bb-strong">No squad yet</strong>
             <p class="bb-small">Start one, or enter a join code a friend sent you.</p>
             <a href="{% url 'squads:create' %}" class="bb-btn bb-btn--primary bb-btn--sm">Create a squad</a>
@@ -83,7 +83,7 @@
           </div>
         {% empty %}
           <div class="bb-card bb-empty">
-            <i class="feather-search"></i>
+            {% include 'snippets/empty_art.html' with scene='stories' %}
             <strong class="bb-strong">{% if district %}No public squads in {{ district }} yet{% else %}No public squads to join yet{% endif %}</strong>
             <p class="bb-small">Be the first: make a squad and tick "Show in the public squad list".</p>
           </div>

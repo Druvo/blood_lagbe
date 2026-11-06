@@ -1,0 +1,30 @@
+{% extends 'base/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Certificate of thanks" %}{% endblock title %}
+{% block meta %}<meta name="robots" content="noindex">{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'spotlight/spotlight.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container sp-cert-wrap">
+  <div class="bb-row bb-row--between bb-mb-2 sp-noprint">
+    <a href="{% url 'log-donation' %}" class="bb-small">&larr; {% trans "My hub" %}</a>
+    <button type="button" class="bb-btn bb-btn--primary bb-btn--sm" onclick="window.print()"><i class="feather-printer" aria-hidden="true"></i> {% trans "Print" %}</button>
+  </div>
+
+  <article class="sp-cert" aria-label="{% trans 'Certificate of thanks' %}">
+    <div class="sp-cert__site">{{ SITE_NAME }}</div>
+    <h1>{% trans "Certificate of thanks" %}</h1>
+    <p>{% trans "With gratitude, this certificate is given to" %}</p>
+    <p class="sp-cert__name">{{ name }}</p>
+    <p>{% trans "Thank you for giving blood. Your gift can help someone in need." %}</p>
+    <dl class="sp-cert__facts">
+      <div><dt>{% trans "Date" %}</dt><dd>{{ donation.donation_date|date:"j F Y" }}</dd></div>
+      <div><dt>{% trans "Place" %}</dt><dd>{{ place }}</dd></div>
+      <div><dt>{% trans "Certificate number" %}</dt><dd>{{ number }}</dd></div>
+    </dl>
+    {% include 'spotlight/_emblem.html' with key='regular' %}
+    <p class="sp-cert__note">{% trans "Recognition of a volunteer-verified donation. This is not a medical record." %}</p>
+  </article>
+</div>
+{% endblock body %}

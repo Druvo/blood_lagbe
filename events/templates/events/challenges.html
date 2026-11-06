@@ -23,7 +23,7 @@
     {% for c in current %}
       {% include 'events/_challenge_card.html' %}
     {% empty %}
-      <div class="bb-card bb-empty"><i class="feather-target" aria-hidden="true"></i><strong class="bb-strong">No challenge right now</strong><p class="bb-small">Check back soon.</p></div>
+      <div class="bb-card bb-empty">{% include 'snippets/empty_art.html' with scene='events' %}<strong class="bb-strong">No challenge right now</strong><p class="bb-small">Check back soon.</p></div>
     {% endfor %}
   </section>
 

@@ -27,6 +27,7 @@
             <a href="{% url 'habits:today' %}" role="menuitem"><i class="feather-sun"></i> {% trans "Today" %}</a>
             <a href="{% url 'alerts:inbox' %}" role="menuitem"><i class="feather-zap"></i> {% trans "Alerts" %}{% if alerts_unread %} ({{ alerts_unread }}){% endif %}</a>
             <a href="{% url 'growth:invite-home' %}" role="menuitem"><i class="feather-user-plus"></i> {% trans "Invite friends" %}</a>
+            <a href="{% url 'spotlight:style' %}" role="menuitem"><i class="feather-star"></i> {% trans "My donor style" %}</a>
             <a href="{% url 'squads:list' %}" role="menuitem"><i class="feather-users"></i> {% trans "My squads" %}</a>
             <a href="{% url 'contact-inbox' %}" role="menuitem"><i class="feather-inbox"></i> {% trans "Contact requests" %}{% if contact_pending_count %} ({{ contact_pending_count }}){% endif %}</a>
             <a href="{% url 'request-mine' %}" role="menuitem"><i class="feather-droplet"></i> {% trans "My requests" %}</a>

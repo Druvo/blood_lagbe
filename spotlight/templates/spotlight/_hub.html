@@ -1,0 +1,31 @@
+{% if show %}{% load static i18n %}
+<link rel="stylesheet" href="{% static 'spotlight/spotlight.css' %}">
+<div class="bb-card">
+  <h3 class="bb-card__title"><i class="feather-award" aria-hidden="true"></i> {% trans "Your spotlight" %}</h3>
+  {% if style %}
+    <div class="sp-mini bb-mb-1">
+      {% include 'spotlight/_emblem.html' with key=style.key %}
+      <div class="bb-grow">
+        <p class="bb-strong bb-mb-0">{{ style.name }}</p>
+        <p class="bb-small bb-muted bb-mb-0">{{ style.progress.label }}</p>
+      </div>
+    </div>
+  {% else %}
+    <p class="bb-small bb-muted bb-mb-1">{% trans "Your donor style appears as you take part." %}</p>
+  {% endif %}
+  {% if award %}
+    <p class="bb-small bb-mb-1"><i class="feather-star" aria-hidden="true"></i> <a href="{% url 'spotlight:month' award.year award.month %}">{% blocktrans with title=award_title month=award_label %}{{ title }}, {{ month }}{% endblocktrans %}</a></p>
+  {% endif %}
+  {% if certificates %}
+    <p class="bb-small bb-strong bb-mb-0">{% trans "Certificates of thanks" %}</p>
+    <ul class="sp-links bb-small bb-mb-1">
+      {% for donation in certificates %}<li><a href="{% url 'spotlight:certificate' donation.pk %}">{{ donation.donation_date|date:"j M Y" }}, {{ donation.location }}</a></li>{% endfor %}
+    </ul>
+  {% endif %}
+  <div class="bb-row">
+    <a href="{% url 'spotlight:style' %}" class="bb-btn bb-btn--soft bb-btn--sm">{% trans "My style" %}</a>
+    {% if has_donation %}<a href="{% url 'spotlight:ready-ics' %}" class="bb-btn bb-btn--ghost bb-btn--sm"><i class="feather-calendar" aria-hidden="true"></i> {% trans "Add ready-again date" %}</a>{% endif %}
+    <a href="{% url 'spotlight:home' %}" class="bb-btn bb-btn--ghost bb-btn--sm">{% trans "Heroes" %}</a>
+  </div>
+</div>
+{% endif %}

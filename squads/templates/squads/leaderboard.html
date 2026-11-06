@@ -39,7 +39,7 @@
       </ol>
     {% else %}
       <div class="bb-empty">
-        <i class="feather-award"></i>
+        {% include 'snippets/empty_art.html' with scene='donations' %}
         <strong class="bb-strong">No squad has a verified donation {% if period == 'month' %}this month{% else %}yet{% endif %}</strong>
         <p class="bb-small">Make your squad public and log a donation to appear here.</p>
         <a href="{% url 'squads:list' %}" class="bb-btn bb-btn--primary bb-btn--sm">Go to squads</a>

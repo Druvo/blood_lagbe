@@ -1,5 +1,5 @@
 {% extends 'base/base.html' %}
-{% load static %}
+{% load static art_tags %}
 
 {% block title %}{{ display_name }}'s donor badge{% endblock title %}
 
@@ -27,7 +27,7 @@
       </div>
 
       {% if current_badge %}
-        <div style="font-size:3.4rem;line-height:1;margin-top:18px;color:{{ current_badge.color }};"><i class="feather-{{ current_badge.icon }}"></i></div>
+        <div class="bb-tier-hero" style="margin-top:18px;">{% badge_art current_badge 108 %}</div>
         <h1>{{ display_name }}</h1>
         <div class="cm-badge__tier" style="color:{{ current_badge.color }};">{{ current_badge.name }}</div>
       {% else %}
@@ -36,7 +36,7 @@
         <div class="cm-badge__tier" style="color:#667085;">Aspiring Donor</div>
       {% endif %}
       {% if hero_badge %}
-        <div class="cm-badge__hero" style="color:{{ hero_badge.color }};"><i class="feather-{{ hero_badge.icon }}"></i> {{ hero_badge.name }}</div>
+        <div class="cm-badge__hero" style="color:{{ hero_badge.color }};">{% badge_art hero_badge 28 %} {{ hero_badge.name }}</div>
       {% endif %}
 
       <div class="cm-badge__stats">

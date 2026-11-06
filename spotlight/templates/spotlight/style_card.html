@@ -1,0 +1,29 @@
+{% extends 'base/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% blocktrans with name=name style_name=style.name %}{{ name }}: {{ style_name }}{% endblocktrans %}{% endblock title %}
+{% block meta %}
+  {% if not is_public %}<meta name="robots" content="noindex">{% endif %}
+  <meta property="og:site_name" content="{{ SITE_NAME }}">
+  <meta property="og:title" content="{% blocktrans with name=name style_name=style.name %}{{ name }}: {{ style_name }}{% endblocktrans %}">
+  <meta property="og:description" content="{{ style.line }}">
+  <meta property="og:url" content="{{ share_url }}">
+{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'spotlight/spotlight.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container sp-page">
+  <article class="bb-card sp-card" aria-label="{% trans 'Donor style card' %}">
+    <p class="sp-hero__title">{{ SITE_NAME }}</p>
+    {% include 'spotlight/_emblem.html' with key=style.key %}
+    <h1 class="bb-h2 bb-mb-0">{{ name }}</h1>
+    <p class="bb-h4 bb-mb-1">{{ style.name }}</p>
+    <p class="bb-muted">{{ style.line }}</p>
+    <p class="bb-xs bb-muted bb-mb-0">{{ SITE_TAGLINE }}</p>
+  </article>
+  <div class="bb-center bb-mt-2 sp-noprint">
+    {% if is_public %}<button type="button" class="bb-btn bb-btn--soft" data-copy="{{ share_url }}">{% trans "Copy link" %}</button>
+    {% else %}<p class="bb-small bb-muted">{% trans "Only you and staff can see this card, because of your privacy settings." %}</p>{% endif %}
+  </div>
+</div>
+{% endblock body %}

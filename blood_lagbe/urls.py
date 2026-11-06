@@ -72,6 +72,8 @@ urlpatterns = [
     path('today/', include('habits.urls')),
     path('events/', include('events.urls')),
     path('alerts/', include('alerts.urls')),
+    path('spotlight/', include('spotlight.urls')),
+    path('atlas/', include('atlas.urls')),
     # growth owns a few root-level paths (invite/, u/, ...), so it goes last
     path('', include('growth.urls')),
 

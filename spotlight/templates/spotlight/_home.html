@@ -1,0 +1,33 @@
+{% if show_feed or heroes %}{% load static i18n %}
+<link rel="stylesheet" href="{% static 'spotlight/spotlight.css' %}">
+<section class="bb-section bb-section--tight" aria-label="{% trans 'Community activity' %}">
+  <div class="bb-container bb-stack">
+    {% if show_feed %}
+    <div class="bb-card" data-sp-pulse data-url="{% url 'spotlight:pulse' %}" data-refresh="{{ refresh }}">
+      <h2 class="bb-card__title"><span class="sp-dot" aria-hidden="true"></span>{% trans "Happening now" %}</h2>
+      <ul class="sp-pulse" aria-live="polite" data-sp-list>
+        {% for e in events %}<li class="sp-pulse__item"><i class="feather-{{ e.icon }}" aria-hidden="true"></i><span class="sp-pulse__text">{{ e.text }}</span><span class="sp-pulse__when">{{ e.when }}</span></li>{% endfor %}
+      </ul>
+      <p class="bb-xs bb-muted bb-mb-0 bb-mt-1">{% trans "Real activity, shown without names." %}</p>
+    </div>
+    <script src="{% static 'spotlight/pulse.js' %}" defer></script>
+    {% endif %}
+    {% if heroes %}
+    <div class="bb-card">
+      <div class="bb-row bb-row--between bb-mb-1">
+        <h2 class="bb-card__title bb-mb-0"><i class="feather-award" aria-hidden="true"></i> {% trans "This month's heroes" %}</h2>
+        <a href="{% url 'spotlight:home' %}" class="bb-small">{% trans "See all" %}</a>
+      </div>
+      <div class="sp-strip">
+        {% for entry in heroes %}
+          <div class="sp-strip__item">
+            {% include 'spotlight/_trophy.html' with kind=entry.kind %}
+            <p><span class="bb-xs bb-muted">{{ entry.title }}</span><br><strong>{{ entry.name }}</strong></p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</section>
+{% endif %}

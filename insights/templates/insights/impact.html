@@ -11,7 +11,8 @@
 
 {% block body %}
 <section class="bb-hero im-hero">
-  <div class="bb-container" style="position:relative;z-index:1">
+  <div class="bb-container bb-container--art" style="position:relative;z-index:1">
+    {% include 'snippets/art/header.html' with which='impact' %}
     <span class="bb-eyebrow">{% trans "Our impact" %}</span>
     <h1>{% trans "Every number is a person who showed up." %}</h1>
     <p class="bb-lead">{% blocktrans with site=SITE_NAME %}Open numbers from {{ site }}. Only donations an admin has verified are counted.{% endblocktrans %}</p>

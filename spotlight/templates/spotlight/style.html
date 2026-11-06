@@ -1,0 +1,61 @@
+{% extends 'base/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "My donor style" %}{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'spotlight/spotlight.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container sp-page">
+  <header>
+    <span class="bb-eyebrow">{% trans "Spotlight" %}</span>
+    <h1 class="bb-h2 bb-mb-1">{% trans "My donor style" %}</h1>
+    <p class="bb-lead">{% trans "A friendly label for how you take part. It is recognition, not a score, and it never asks you to give." %}</p>
+  </header>
+
+  <section class="bb-card bb-mt-2" aria-labelledby="sp-mystyle-h">
+    {% if style %}
+      <div class="sp-style">
+        {% include 'spotlight/_emblem.html' with key=style.key %}
+        <div class="sp-style__body">
+          <h2 class="bb-h3" id="sp-mystyle-h">{{ style.name }}</h2>
+          <p>{{ style.line }}</p>
+          <div class="bb-progress bb-mb-1" role="img" aria-label="{{ style.progress.label }}"><span style="width:{{ style.progress.percent }}%"></span></div>
+          <p class="bb-small bb-muted">{{ style.progress.label }}. {% trans "No rush: it follows your own pace." %}</p>
+          <div class="bb-row">
+            <a href="{{ next_url }}" class="bb-btn bb-btn--soft bb-btn--sm">{{ next_label }}</a>
+            <a href="{% url 'spotlight:style-card' user.pk %}" class="bb-btn bb-btn--ghost bb-btn--sm">{% trans "View my style card" %}</a>
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="bb-empty">
+        <i class="feather-star" aria-hidden="true"></i>
+        <h2 class="bb-h4" id="sp-mystyle-h">{% trans "Your style appears as you take part" %}</h2>
+        <p>{% trans "Say you can help on a request, share a story or join a drive. Whatever you do, it shows up here." %}</p>
+        <a href="{{ next_url }}" class="bb-btn bb-btn--soft bb-btn--sm">{{ next_label }}</a>
+      </div>
+    {% endif %}
+  </section>
+
+  <p class="bb-small bb-muted bb-mt-2">
+    {% url 'privacy' as privacy_url %}
+    {% if card_is_public %}{% blocktrans %}Your style card can be opened by anyone with its link. You can change this in <a href="{{ privacy_url }}">your privacy settings</a>.{% endblocktrans %}
+    {% else %}{% blocktrans %}Your style card is private: only you and staff can open it. You can change this in <a href="{{ privacy_url }}">your privacy settings</a>.{% endblocktrans %}{% endif %}
+  </p>
+
+  <section class="bb-mt-3" aria-labelledby="sp-all-h">
+    <h2 class="bb-h4" id="sp-all-h">{% trans "All the styles" %}</h2>
+    <div class="sp-grid">
+      {% for item in all_styles %}
+        <div class="bb-card bb-card--flat sp-type{% if item.earned %} is-earned{% endif %}">
+          {% include 'spotlight/_emblem.html' with key=item.key %}
+          <div>
+            <h3>{{ item.name }}{% if item.top %} <span class="bb-pill bb-pill--ok">{% trans "Your top style" %}</span>{% elif item.earned %} <span class="bb-pill">{% trans "Earned" %}</span>{% endif %}</h3>
+            <p class="bb-small bb-muted bb-mb-0">{{ item.line }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+</div>
+{% endblock body %}

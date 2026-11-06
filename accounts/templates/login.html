@@ -9,7 +9,13 @@
 {% block extra_style %}<link rel="stylesheet" href="{% static 'css/pages.css' %}">{% endblock extra_style %}
 
 {% block body %}
-<section class="pg-auth">
+<section class="pg-auth pg-auth--split">
+  <div class="pg-auth__layout">
+  <aside class="pg-auth__art" aria-hidden="true">
+    <span class="bb-eyebrow">{% trans "Bangladesh's blood community" %}</span>
+    <h2>{% trans "Every drop is a bond." %}</h2>
+    {% include 'snippets/art/hero.html' %}
+  </aside>
   <div class="bb-container bb-container--form">
     <div class="pg-auth__brand">
       <img src="{% static 'images/brand/bloodbond-mark.svg' %}" alt="" width="56" height="56">
@@ -47,6 +53,7 @@
     </div>
 
     <p class="pg-auth__alt">{% trans "New here?" %} <a href="{% url 'signup' %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="bb-strong" style="color:var(--bb-red-text)">{% trans "Create a free account" %}</a></p>
+  </div>
   </div>
 </section>
 {% endblock body %}

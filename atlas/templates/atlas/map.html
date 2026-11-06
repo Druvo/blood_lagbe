@@ -1,0 +1,89 @@
+{% extends 'base/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Blood needs map" %}{% endblock title %}
+{% block meta %}
+<meta name="description" content="{% trans 'A map of Bangladesh by district: open blood requests, available donors and verified donations. Counts only, never people.' %}">
+<meta property="og:site_name" content="{{ SITE_NAME }}">
+<meta property="og:title" content="{% trans 'Blood needs map' %} | {{ SITE_NAME }}">
+{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'atlas/atlas.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container at-page">
+  <header>
+    <span class="bb-eyebrow">{% trans "Atlas" %}</span>
+    <h1 class="bb-h2 bb-mb-1">{% trans "Where blood is needed" %}</h1>
+    <p class="bb-lead">{% trans "Every district is one tile, placed roughly where it is on the map. Tap a tile to see its page." %}</p>
+  </header>
+
+  {% include 'atlas/_tabs.html' with active='map' %}
+
+  <nav class="at-layers" aria-label="{% trans 'Map layer' %}">
+    <div class="bb-seg">
+      {% for item in switch %}
+        <a href="{{ item.url }}"{% if item.active %} class="is-active" aria-current="page"{% endif %}>{{ item.label }}</a>
+      {% endfor %}
+    </div>
+  </nav>
+
+  {% if built.empty %}
+    <div class="bb-alert bb-alert--info at-note" role="status">
+      {% if layer == 'donors' %}{% trans "Every district has fewer than 3 donors listed so far, so no numbers are shown yet." %}
+      {% elif layer == 'donations' %}{% trans "No verified donations in the last 12 months yet." %}
+      {% else %}{% trans "No open blood requests in any district right now." %}{% endif %}
+    </div>
+  {% endif %}
+
+  <figure class="at-figure">
+    {{ map_svg }}
+    <figcaption class="at-legend">
+      <div class="at-legend__scale">
+        <span>{% trans "Fewer" %}</span>
+        {% for lv in levels %}<i class="at-sw at-l{{ lv }}" aria-hidden="true"></i>{% endfor %}
+        <span>{{ legend_label }}</span>
+      </div>
+      <p class="bb-small bb-muted">{{ legend_note }}</p>
+      <ul class="at-divlegend" aria-label="{% trans 'Divisions' %}">
+        {% for d in divisions %}<li><i class="at-dot at-d{{ d.index }}" aria-hidden="true"></i>{{ d.name }}</li>{% endfor %}
+      </ul>
+    </figcaption>
+  </figure>
+
+  <details class="at-details">
+    <summary>{% trans "See the numbers as a table" %}</summary>
+    <div class="bb-table-wrap">
+      <table class="bb-table at-table">
+        <caption class="bb-sr">{% trans "Every district with its open requests, available donors and verified donations" %}</caption>
+        <thead>
+          <tr>
+            <th scope="col">{% trans "District" %}</th>
+            <th scope="col">{% trans "Division" %}</th>
+            <th scope="col" class="bb-right">{% trans "Open requests" %}</th>
+            <th scope="col" class="bb-right">{% trans "Available donors" %}</th>
+            <th scope="col" class="bb-right">{% trans "Donations (12 months)" %}</th>
+            <th scope="col">{% trans "Gap" %}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+          <tr>
+            <th scope="row"><a href="{% url 'atlas:district' row.slug %}">{{ row.name }}</a></th>
+            <td>{{ row.division }}</td>
+            <td class="bb-right">{{ row.requests }}</td>
+            <td class="bb-right">{{ row.donors }}</td>
+            <td class="bb-right">{{ row.donations }}</td>
+            <td>{{ row.gap }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </details>
+
+  <div class="bb-row bb-row--between at-foot">
+    <p class="bb-small bb-muted at-privacy">{% trans "Only members who chose to be listed are counted as donors. A number below 3 is never shown, to keep people private. Numbers update every few minutes." %}</p>
+    <a class="bb-btn bb-btn--ghost bb-btn--sm" href="{% url 'atlas:data-csv' %}" download><i class="feather-download" aria-hidden="true"></i> {% trans "Download the data (CSV)" %}</a>
+  </div>
+</div>
+{% endblock body %}

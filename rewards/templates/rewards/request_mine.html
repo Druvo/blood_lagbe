@@ -59,12 +59,7 @@
       </article>
       {% endwith %}
     {% empty %}
-      <div class="bb-card bb-empty">
-        <i class="feather-droplet"></i>
-        <p class="bb-strong bb-mb-1">{% trans "You have not posted a request." %}</p>
-        <p>{% trans "If you or someone you know needs blood, post it here and donors will see it." %}</p>
-        <a href="{% url 'request-create' %}" class="bb-btn bb-btn--primary">{% trans "Post a request" %}</a>
-      </div>
+      {% trans "You have not posted a request." as t_title %}{% trans "If you or someone you know needs blood, post it here and donors will see it." as t_text %}{% trans "Post a request" as t_btn %}{% url 'request-create' as create_url %}{% include 'snippets/empty_state.html' with card=True scene='requests' title=t_title text=t_text btn_url=create_url btn_label=t_btn %}
     {% endfor %}
   </div>
 </div>

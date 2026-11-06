@@ -1,5 +1,5 @@
 {% extends 'base/base.html' %}
-{% load static moments_tags habits_tags events_tags growth_tags alerts_tags i18n %}
+{% load static art_tags moments_tags habits_tags events_tags growth_tags alerts_tags spotlight_tags atlas_tags i18n %}
 
 {% block title %}{% trans "My hub" %}{% endblock title %}
 
@@ -18,6 +18,11 @@
   .hub-xp__row { display: flex; justify-content: space-between; gap: 12px; font-size: .85rem; color: rgba(255,255,255,.9); margin-bottom: 6px; font-weight: 600; }
   .hub-xp__track { height: 14px; border-radius: 999px; background: rgba(255,255,255,.25); overflow: hidden; }
   .hub-xp__track > span { display: block; height: 100%; border-radius: 999px; background: #fff; min-width: 6px; transition: width .6s ease; }
+  .hub-hero__ring { flex: none; }
+  .hub-hero .bb-ring__track { stroke: rgba(255,255,255,.25); }
+  .hub-hero .bb-ring__bar { stroke: #fff; }
+  .hub-hero .bb-ring__text { fill: #fff; font-size: 24px; }
+  .hub-tier__medal { flex: none; width: 68px; height: 72px; display: flex; align-items: center; justify-content: center; }
   .hub-hero__cta { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 10px; }
 
   .hub-cols { display: grid; gap: 16px; grid-template-columns: minmax(0, 1fr); align-items: start; }
@@ -70,8 +75,10 @@
   .hub-badges { display: grid; grid-template-columns: repeat(auto-fit, minmax(76px, 1fr)); gap: 10px; text-align: center; }
   .hub-badge { font-size: .75rem; font-weight: 600; color: var(--bb-ink); line-height: 1.25; }
   .hub-badge i { font-size: 1.7rem; display: block; margin-bottom: 4px; }
+  .hub-badge .bb-medal { display: block; margin: 0 auto 4px; }
   .hub-badge small { display: block; color: var(--bb-muted); font-weight: 500; font-size: .7rem; }
-  .hub-badge.is-locked { opacity: .4; filter: grayscale(.6); }
+  .hub-badge.is-locked { color: var(--bb-muted); }
+  .hub-badge.is-locked .bb-medal { filter: grayscale(.85) opacity(.5); }
 
   .hub-tier { display: flex; gap: 14px; align-items: center; margin-bottom: 14px; }
   .hub-tier__icon { flex: none; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; background: var(--bb-surface-2); }
@@ -101,6 +108,7 @@
           <h1>{% if first_name %}{% blocktrans with name=first_name %}Hi, {{ name }}{% endblocktrans %}{% else %}{% trans "Hi, friend" %}{% endif %}</h1>
           <span class="hub-level"><i class="feather-{{ level_info.level.icon }}" aria-hidden="true"></i> {% blocktrans with n=level_info.level.number %}Level {{ n }}{% endblocktrans %} &middot; {{ level_info.level.name }}</span>
         </div>
+        <div class="hub-hero__ring bb-hide-sm">{% progress_ring level_info.progress_percent 84 %}</div>
       </div>
       <div class="hub-xp">
         <div class="hub-xp__row">
@@ -275,7 +283,7 @@
               <div class="bb-center bb-mt-1"><a href="{% url 'donation-history' %}" class="bb-btn bb-btn--ghost bb-btn--sm">{% blocktrans with n=donations|length %}See all {{ n }}{% endblocktrans %}</a></div>
             {% endif %}
           {% else %}
-            <div class="bb-empty"><i class="feather-droplet"></i>{% trans "No donations logged yet." %}<br>{% trans "Your first one starts the journey." %}</div>
+            <div class="bb-empty">{% include 'snippets/empty_art.html' with scene='donations' %}{% trans "No donations logged yet." %}<br>{% trans "Your first one starts the journey." %}</div>
           {% endif %}
         </div>
       </div>
@@ -287,9 +295,9 @@
           <h2 class="bb-card__title">{% trans "Donor tier" %}</h2>
           <div class="hub-tier">
             {% if current_badge %}
-              <span class="hub-tier__icon" style="color:{{ current_badge.color }}"><i class="feather-{{ current_badge.icon }}"></i></span>
+              <span class="hub-tier__medal bb-tier-hero">{% badge_art current_badge 68 %}</span>
               <div>
-                <strong class="bb-strong" style="color:{{ current_badge.color }}">{{ current_badge.name }}</strong>
+                <strong class="bb-strong">{{ current_badge.name }}</strong>
                 <div class="bb-small bb-muted">{% blocktrans count counter=approved_count %}{{ counter }} verified donation{% plural %}{{ counter }} verified donations{% endblocktrans %}</div>
               </div>
             {% else %}
@@ -309,7 +317,7 @@
           <div class="hub-badges bb-mt-2">
             {% for badge in all_badges %}
               <div class="hub-badge {% if badge.min_donations > approved_count %}is-locked{% endif %}">
-                <i class="feather-{{ badge.icon }}" style="color:{{ badge.color }}"></i>
+                {% badge_art badge 52 %}
                 {{ badge.name|cut:" Donor" }}
                 <small>{{ badge.min_donations }}+</small>
               </div>
@@ -347,7 +355,7 @@
           <div class="hub-badges">
             {% for badge in streak_badges %}
               <div class="hub-badge {% if badge not in earned_streak_badges %}is-locked{% endif %}">
-                <i class="feather-{{ badge.icon }}" style="color:{{ badge.color }}"></i>
+                {% badge_art badge 52 %}
                 {{ badge.name }}
                 <small>{% blocktrans with n=badge.min_streak %}{{ n }}+ streak{% endblocktrans %}</small>
               </div>
@@ -361,7 +369,7 @@
           <div class="hub-badges">
             {% for badge in hero_badges %}
               <div class="hub-badge {% if badge not in earned_hero_badges %}is-locked{% endif %}">
-                <i class="feather-{{ badge.icon }}" style="color:{{ badge.color }}"></i>
+                {% badge_art badge 52 %}
                 {{ badge.name }}
                 <small>{% blocktrans count counter=badge.min_request_donations %}{{ counter }}+ request{% plural %}{{ counter }}+ requests{% endblocktrans %}</small>
               </div>
@@ -389,6 +397,8 @@
     {% events_hub %}
     {% growth_hub %}
     {% alerts_hub %}
+    {% spotlight_hub %}
+    {% atlas_hub %}
 
   </div>
 </section>

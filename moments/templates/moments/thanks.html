@@ -37,7 +37,7 @@
       </nav>
     {% endif %}
   {% else %}
-    <div class="bb-empty"><i class="feather-heart" aria-hidden="true"></i>No notes yet. When someone you helped says thanks, it shows up here.</div>
+    <div class="bb-empty">{% include 'snippets/empty_art.html' with scene='stories' %}No notes yet. When someone you helped says thanks, it shows up here.</div>
   {% endif %}
 
   <p class="bb-mt-2"><a href="{% url 'log-donation' %}">Back to my hub</a></p>

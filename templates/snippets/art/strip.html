@@ -1,0 +1,13 @@
+{% comment %}"Who can donate" icons. {% include 'snippets/art/strip.html' with which='who' %} (who, often, safe){% endcomment %}<svg class="bb-art bb-miniart" viewBox="0 0 76 76" width="76" height="76" aria-hidden="true" focusable="false">
+<circle class="a-blob" cx="38" cy="38" r="36"/>
+{% if which == 'who' %}
+<circle class="a-skin-3" cx="34" cy="28" r="9"/><path class="a-teal" d="M16 58c0-11 8-18 18-18s18 7 18 18v4H16Z"/>
+<circle class="a-green" cx="54" cy="24" r="10"/><path d="M49 24l4 4 7-8" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+{% elif which == 'often' %}
+<rect class="a-paper" x="14" y="16" width="48" height="46" rx="8"/><path class="a-red" d="M14 24a8 8 0 0 1 8-8h32a8 8 0 0 1 8 8v6H14Z"/>
+<g class="a-mute" opacity=".8"><circle cx="26" cy="42" r="2.500"/><circle cx="38" cy="42" r="2.500"/><circle cx="50" cy="42" r="2.500"/><circle cx="26" cy="53" r="2.500"/></g>
+<path class="a-red" d="M43 47c0 0-6 6.500-6 10.500a6 6 0 0 0 12 0C49 53.500 43 47 43 47Z"/>
+{% else %}
+<path class="a-teal" d="M38 10 60 18v18c0 14-9 23-22 30-13-7-22-16-22-30V18Z"/><path class="a-white" d="M34 26h8v9h9v8h-9v9h-8v-9h-9v-8h9Z"/>
+{% endif %}
+</svg>

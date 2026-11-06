@@ -1,0 +1,85 @@
+{% extends 'base/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Division challenge" %}{% endblock title %}
+{% block meta %}
+<meta name="description" content="{% trans 'This month, which of the 8 divisions of Bangladesh has the most verified blood donations? Raw counts, friendly competition.' %}">
+<meta property="og:site_name" content="{{ SITE_NAME }}">
+<meta property="og:title" content="{% trans 'Division challenge' %} | {{ SITE_NAME }}">
+{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'atlas/atlas.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container at-page">
+  <header>
+    <span class="bb-eyebrow">{% trans "Atlas" %}</span>
+    <h1 class="bb-h2 bb-mb-1">{% trans "Division challenge" %}</h1>
+    <p class="bb-lead">{% blocktrans with month=this_label %}Standings for {{ month }}: verified donations in each of the 8 divisions.{% endblocktrans %}</p>
+  </header>
+
+  {% include 'atlas/_tabs.html' with active='divisions' %}
+
+  <section class="bb-card at-card" aria-labelledby="at-standings-h">
+    <h2 class="bb-card__title" id="at-standings-h">{% blocktrans with month=this_label %}This month: {{ month }}{% endblocktrans %}</h2>
+    {% if total %}
+      {{ chart }}
+    {% else %}
+      <p class="bb-muted">{% trans "No verified donations yet this month. The first one puts a division on the board." %}</p>
+    {% endif %}
+    <details class="at-details"{% if not total %} open{% endif %}>
+      <summary>{% trans "See the numbers as a table" %}</summary>
+      <div class="bb-table-wrap">
+        <table class="bb-table at-table">
+          <caption class="bb-sr">{% trans "Verified donations this month, by division" %}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{% trans "Rank" %}</th>
+              <th scope="col">{% trans "Division" %}</th>
+              <th scope="col" class="bb-right">{% trans "Verified donations" %}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+            <tr>
+              <td>{{ row.rank }}</td>
+              <th scope="row"><i class="at-dot at-d{{ row.index }}" aria-hidden="true"></i> {{ row.name }}</th>
+              <td class="bb-right">{{ row.count }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </details>
+    {% if total and leaders|length > 1 %}
+      <p class="bb-small bb-muted">{% trans "Divisions on the same number share the same place." %}</p>
+    {% endif %}
+  </section>
+
+  <section class="bb-card at-card" aria-labelledby="at-last-h">
+    <h2 class="bb-card__title" id="at-last-h">{% blocktrans with month=last_label %}Last month: {{ month }}{% endblocktrans %}</h2>
+    {% if last_winners %}
+      <p>
+        {% if last_winners|length == 1 %}
+          {% blocktrans with name=last_winners.0 n=last_top %}{{ name }} led with {{ n }} verified donations.{% endblocktrans %}
+        {% else %}
+          {% blocktrans with names=last_winners|join:", " n=last_top %}Shared first place with {{ n }} verified donations each: {{ names }}.{% endblocktrans %}
+        {% endif %}
+      </p>
+    {% else %}
+      <p class="bb-muted">{% trans "There were no verified donations last month." %}</p>
+    {% endif %}
+  </section>
+
+  <section class="bb-card bb-card--soft at-card" aria-labelledby="at-how-h">
+    <h2 class="bb-card__title" id="at-how-h">{% trans "How it is counted" %}</h2>
+    <ul class="at-how">
+      <li>{% trans "Only verified donations count: a volunteer has checked each one." %}</li>
+      <li>{% trans "A donation counts for the division of the district where it was given." %}</li>
+      <li>{% trans "These are raw counts. We do not adjust for how many people live in a division, because we do not have verified population data. Bigger divisions therefore have an advantage, and that is fine: this is for fun and for encouragement, not a judgement." %}</li>
+      <li>{% trans "Nobody is named here. Divisions on the same number share the same place." %}</li>
+    </ul>
+    <p class="bb-strong">{% trans "Every verified donation moves your division up. Donate only when you feel well and your rest period is over, and invite a friend to do the same." %}</p>
+    <p><a class="bb-btn bb-btn--primary bb-btn--sm" href="{% url 'request-list' %}">{% trans "See who needs blood" %}</a></p>
+  </section>
+</div>
+{% endblock body %}

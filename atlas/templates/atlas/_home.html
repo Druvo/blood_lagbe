@@ -1,0 +1,21 @@
+{% load static i18n %}
+<section class="bb-section bb-section--tight at-panel-section">
+  <div class="bb-container">
+    <link rel="stylesheet" href="{% static 'atlas/atlas.css' %}">
+    <div class="bb-card at-panel">
+      <div class="at-panel__text">
+        <span class="bb-eyebrow">{% trans "Atlas" %}</span>
+        <h2 class="bb-card__title">{% trans "Where blood is needed" %}</h2>
+        {% if mini %}
+          <p class="bb-small bb-muted">{% blocktrans with d=districts count n=requests %}{{ n }} open request across {{ d }} district right now.{% plural %}{{ n }} open requests across {{ d }} districts right now.{% endblocktrans %}</p>
+        {% else %}
+          <p class="bb-small bb-muted">{% trans "See open requests, donors and donations in every district." %}</p>
+        {% endif %}
+        <a class="bb-btn bb-btn--ghost bb-btn--sm" href="{% url 'atlas:map' %}">{% trans "Open the map" %}</a>
+      </div>
+      {% if mini %}
+      <a class="at-panel__map" href="{% url 'atlas:map' %}" tabindex="-1">{{ mini }}</a>
+      {% endif %}
+    </div>
+  </div>
+</section>

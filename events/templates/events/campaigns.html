@@ -53,7 +53,7 @@
       {% endwith %}
     {% empty %}
       <div class="bb-card bb-empty">
-        <i class="feather-calendar" aria-hidden="true"></i>
+        {% include 'snippets/empty_art.html' with scene='events' %}
         <strong class="bb-strong">No campaigns right now</strong>
         <p class="bb-small">Seasonal campaigns appear here when a volunteer switches them on.</p>
       </div>

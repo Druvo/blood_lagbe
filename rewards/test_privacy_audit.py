@@ -121,6 +121,8 @@ ALLOWED_QUERY_KEYS = {
     'blood_group', 'when', 'page', 'kind', 'only',
     # staff desk links into filtered admin lists (status and report state)
     'status__exact', 'cleared__exact',
+    # atlas map layer
+    'layer',
 }
 # The eligibility self-check on /learn/ is hidden unless JavaScript runs and
 # its submit is always intercepted, so those answers never reach a URL.
@@ -196,7 +198,8 @@ class PrivacyAuditCase(TestCase):
                 for key in askers:
                     ok |= {f'{PEOPLE[key][0]} {PEOPLE[key][1]}', PEOPLE[key][1]}
                 ok.add(PEOPLE['asker_ok'][2])
-        elif name in ('badge-card', 'growth:profile', 'habits:year-card-user') and staff:
+        elif name in ('badge-card', 'growth:profile', 'habits:year-card-user',
+                      'spotlight:style-card', 'spotlight:certificate') and staff:
             # staff may open any card, private or opted out: names only
             for key in NAME_PROTECTED:
                 first, last, _phone = PEOPLE[key]

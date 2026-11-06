@@ -6,6 +6,7 @@
 {% block body %}
 <section class="pg-error">
   <div class="bb-container bb-container--narrow">
+    {% include 'snippets/art/error.html' with which='403' %}
     <div class="pg-error__code" aria-hidden="true">403</div>
     <h1 class="bb-h2">{% trans "You cannot open this page" %}</h1>
     <p class="bb-muted">{% trans "Your account does not have access to it. If you think this is a mistake, go back and try again." %}</p>

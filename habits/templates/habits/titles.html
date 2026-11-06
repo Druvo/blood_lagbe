@@ -14,7 +14,7 @@
 
   <div class="bb-stack">
     {% if not earned %}
-      <div class="bb-empty"><i class="feather-award" aria-hidden="true"></i><p>No titles yet. Pick any one below, whenever you like.</p></div>
+      <div class="bb-empty">{% include 'snippets/empty_art.html' with scene='donations' %}<p>No titles yet. Pick any one below, whenever you like.</p></div>
     {% endif %}
     {% for t in earned %}
       <section class="bb-card hb-title is-earned" aria-label="{{ t.name }}">

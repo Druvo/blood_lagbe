@@ -4940,3 +4940,917 @@ msgstr "<strong>শেষ রক্তদানের পর বিরতি:</s
 msgid "<strong>Tell the staff</strong> if you travelled recently, got a tattoo or piercing, take regular medicines, or are pregnant or recently gave birth. They may ask you to wait."
 msgstr "<strong>স্টাফকে জানান,</strong> যদি সম্প্রতি ভ্রমণ করে থাকেন, ট্যাটু বা পিয়ার্সিং করিয়ে থাকেন, নিয়মিত ওষুধ খান, অথবা গর্ভবতী বা সম্প্রতি সন্তান জন্ম দিয়ে থাকেন। তাঁরা আপনাকে অপেক্ষা করতে বলতে পারেন।"
 
+
+#: atlas/render.py
+msgid "%(district)s, %(division)s division: %(detail)s"
+msgstr "%(district)s, %(division)s বিভাগ: %(detail)s"
+
+#: atlas/templates/atlas/district.html
+msgid "%(division)s division"
+msgstr "%(division)s বিভাগ"
+
+#: atlas/templates/atlas/_hub.html
+msgid "%(group)s is one of the groups people are asking for here."
+msgstr "এখানে যেসব গ্রুপের রক্ত চাওয়া হচ্ছে, %(group)s তার মধ্যে একটি।"
+
+#: atlas/templates/atlas/gap.html
+msgid "%(group)s is one of the groups people are asking for."
+msgstr "যেসব গ্রুপের রক্ত চাওয়া হচ্ছে, %(group)s তার মধ্যে একটি।"
+
+#: atlas/render.py
+msgid "%(group)s: %(need)s needed, %(donors)s donors ready"
+msgstr "%(group)s: %(need)s লাগবে, প্রস্তুত দাতা %(donors)s"
+
+#: atlas/layers.py
+msgid "%(n)s available donor"
+msgid_plural "%(n)s available donors"
+msgstr[0] "%(n)s জন প্রস্তুত রক্তদাতা"
+msgstr[1] "%(n)s জন প্রস্তুত রক্তদাতা"
+
+#: atlas/templates/atlas/district.html
+msgid "%(n)s bag needed"
+msgid_plural "%(n)s bags needed"
+msgstr[0] "%(n)sটি ব্যাগ লাগবে"
+msgstr[1] "%(n)sটি ব্যাগ লাগবে"
+
+#: atlas/render.py
+msgid "%(n)s donation"
+msgid_plural "%(n)s donations"
+msgstr[0] "%(n)sটি রক্তদান"
+msgstr[1] "%(n)sটি রক্তদান"
+
+#: atlas/templates/atlas/_home.html
+msgid "%(n)s open request across %(d)s district right now."
+msgid_plural "%(n)s open requests across %(d)s districts right now."
+msgstr[0] "এই মুহূর্তে %(d)sটি জেলায় %(n)sটি চলমান অনুরোধ আছে।"
+msgstr[1] "এই মুহূর্তে %(d)sটি জেলায় %(n)sটি চলমান অনুরোধ আছে।"
+
+#: atlas/layers.py atlas/templates/atlas/_hub.html
+msgid "%(n)s open request"
+msgid_plural "%(n)s open requests"
+msgstr[0] "%(n)sটি চলমান অনুরোধ"
+msgstr[1] "%(n)sটি চলমান অনুরোধ"
+
+#: atlas/templates/atlas/_request.html
+msgid "%(n)s other open request in %(name)s"
+msgid_plural "%(n)s other open requests in %(name)s"
+msgstr[0] "%(name)s জেলায় আরও %(n)sটি চলমান অনুরোধ"
+msgstr[1] "%(name)s জেলায় আরও %(n)sটি চলমান অনুরোধ"
+
+#: atlas/render.py
+msgid "%(n)s unit"
+msgid_plural "%(n)s units"
+msgstr[0] "%(n)s ইউনিট"
+msgstr[1] "%(n)s ইউনিট"
+
+#: atlas/templates/atlas/_hub.html
+msgid "%(n)s upcoming drive"
+msgid_plural "%(n)s upcoming drives"
+msgstr[0] "%(n)sটি আসন্ন রক্তদান কর্মসূচি"
+msgstr[1] "%(n)sটি আসন্ন রক্তদান কর্মসূচি"
+
+#: atlas/layers.py
+msgid "%(n)s verified donation in the last 12 months"
+msgid_plural "%(n)s verified donations in the last 12 months"
+msgstr[0] "গত 12 মাসে %(n)sটি যাচাই করা রক্তদান"
+msgstr[1] "গত 12 মাসে %(n)sটি যাচাই করা রক্তদান"
+
+#: atlas/templates/atlas/district.html
+msgid "%(n)s verified donation in the last 12 months."
+msgid_plural "%(n)s verified donations in the last 12 months."
+msgstr[0] "গত 12 মাসে %(n)sটি যাচাই করা রক্তদান।"
+msgstr[1] "গত 12 মাসে %(n)sটি যাচাই করা রক্তদান।"
+
+#: atlas/templates/atlas/divisions.html
+msgid "%(name)s led with %(n)s verified donations."
+msgstr "%(name)s %(n)sটি যাচাই করা রক্তদান নিয়ে এগিয়ে ছিল।"
+
+#: atlas/render.py
+msgid "%(rank)s. %(division)s: %(text)s"
+msgstr "%(rank)s. %(division)s: %(text)s"
+
+#: atlas/layers.py
+msgid "%(requests)s, %(donors)s"
+msgstr "%(requests)s, %(donors)s"
+
+#: atlas/layers.py
+msgid "%(requests)s, fewer than 3 available donors"
+msgstr "%(requests)s, প্রস্তুত দাতা 3 জনের কম"
+
+#: atlas/templates/atlas/gap.html
+msgid "%(units)s unit of %(group)s is still needed. Donors who can give to this group: %(supply)s."
+msgid_plural "%(units)s units of %(group)s are still needed. Donors who can give to this group: %(supply)s."
+msgstr[0] "%(group)s গ্রুপের %(units)sটি ইউনিট এখনও লাগবে। এই গ্রুপকে যাঁরা রক্ত দিতে পারেন সেই দাতা: %(supply)s।"
+msgstr[1] "%(group)s গ্রুপের %(units)sটি ইউনিট এখনও লাগবে। এই গ্রুপকে যাঁরা রক্ত দিতে পারেন সেই দাতা: %(supply)s।"
+
+#: atlas/data.py
+msgid "10 to 24"
+msgstr "10 থেকে 24"
+
+#: atlas/data.py
+msgid "100 or more"
+msgstr "100 বা তার বেশি"
+
+#: atlas/data.py
+msgid "25 to 49"
+msgstr "25 থেকে 49"
+
+#: atlas/data.py
+msgid "3 to 9"
+msgstr "3 থেকে 9"
+
+#: atlas/data.py
+msgid "50 to 99"
+msgstr "50 থেকে 99"
+
+#: atlas/templates/atlas/divisions.html
+msgid "A donation counts for the division of the district where it was given."
+msgstr "যে জেলায় রক্ত দেওয়া হয়েছে, দানটি সেই জেলার বিভাগের হিসাবে গণ্য হয়।"
+
+#: atlas/templates/atlas/map.html
+msgid "A map of Bangladesh by district: open blood requests, available donors and verified donations. Counts only, never people."
+msgstr "জেলা অনুযায়ী বাংলাদেশের মানচিত্র: চলমান রক্তের অনুরোধ, প্রস্তুত দাতা ও যাচাই করা রক্তদান। শুধু সংখ্যা, কোনো ব্যক্তির তথ্য নয়।"
+
+#: atlas/templates/atlas/gap.html
+msgid "A number below 3 is never shown, to keep people private."
+msgstr "মানুষের গোপনীয়তা রক্ষায় 3-এর কম কোনো সংখ্যা কখনও দেখানো হয় না।"
+
+#: atlas/templates/atlas/gap.html
+msgid "All of Bangladesh"
+msgstr "সারা বাংলাদেশ"
+
+#: atlas/templates/atlas/gap.html
+msgid "An invitation"
+msgstr "একটি আমন্ত্রণ"
+
+#: atlas/templates/atlas/_home.html atlas/templates/atlas/district.html atlas/templates/atlas/divisions.html atlas/templates/atlas/gap.html atlas/templates/atlas/map.html
+msgid "Atlas"
+msgstr "অ্যাটলাস"
+
+#: atlas/templates/atlas/_tabs.html
+msgid "Atlas sections"
+msgstr "অ্যাটলাসের অংশ"
+
+#: atlas/templates/atlas/district.html atlas/templates/atlas/map.html
+msgid "Available donors"
+msgstr "প্রস্তুত রক্তদাতা"
+
+#: atlas/templates/atlas/district.html
+msgid "Available donors by blood group"
+msgstr "রক্তের গ্রুপ অনুযায়ী প্রস্তুত রক্তদাতা"
+
+#: atlas/layers.py
+msgid "Available donors by district. Districts with fewer than 3 show \"<3\". The most is in %(district)s (%(n)s)."
+msgstr "জেলা অনুযায়ী প্রস্তুত রক্তদাতা। যে জেলায় 3 জনের কম, সেখানে \"<3\" দেখানো হয়। সবচেয়ে বেশি %(district)s জেলায় (%(n)s)।"
+
+#: atlas/layers.py
+msgid "Available donors by district. Every district has fewer than 3 donors listed so far."
+msgstr "জেলা অনুযায়ী প্রস্তুত রক্তদাতা। এখনও প্রতিটি জেলায় তালিকাভুক্ত দাতা 3 জনের কম।"
+
+#: atlas/templates/atlas/district.html
+msgid "Back to the map"
+msgstr "মানচিত্রে ফিরে যান"
+
+#: atlas/templates/atlas/gap.html
+msgid "Blood group gap"
+msgstr "রক্তের গ্রুপ অনুযায়ী ঘাটতি"
+
+#: atlas/templates/atlas/district.html
+msgid "Blood needs in %(name)s, %(division)s division: open requests, available donors and verified donations. Counts only, never people."
+msgstr "%(name)s, %(division)s বিভাগ: রক্তের চাহিদা, প্রস্তুত দাতা ও যাচাই করা রক্তদান। শুধু সংখ্যা, কোনো ব্যক্তির তথ্য নয়।"
+
+#: atlas/templates/atlas/map.html
+msgid "Blood needs map"
+msgstr "রক্তের চাহিদার মানচিত্র"
+
+#: atlas/templates/atlas/district.html
+msgid "Busiest month: %(month)s (%(n)s)."
+msgstr "সবচেয়ে ব্যস্ত মাস: %(month)s (%(n)s)।"
+
+#: atlas/templates/atlas/divisions.html atlas/templates/atlas/map.html
+msgid "Division"
+msgstr "বিভাগ"
+
+#: atlas/templates/atlas/divisions.html
+msgid "Division challenge"
+msgstr "বিভাগীয় প্রতিযোগিতা"
+
+#: atlas/templates/atlas/_tabs.html atlas/templates/atlas/map.html
+msgid "Divisions"
+msgstr "বিভাগ"
+
+#: atlas/templates/atlas/divisions.html
+msgid "Divisions on the same number share the same place."
+msgstr "একই সংখ্যায় থাকা বিভাগগুলো একই অবস্থান ভাগ করে নেয়।"
+
+#: atlas/templates/atlas/map.html
+msgid "Donations (12 months)"
+msgstr "রক্তদান (12 মাস)"
+
+#: atlas/templates/atlas/gap.html
+msgid "Donor numbers are shown as ranges, and anything below 3 is never shown exactly, to keep people private."
+msgstr "মানুষের গোপনীয়তা রক্ষায় দাতার সংখ্যা একটি সীমার মধ্যে দেখানো হয়, আর 3-এর কম কখনও সঠিকভাবে দেখানো হয় না।"
+
+#: atlas/templates/atlas/gap.html
+msgid "Donors counted here chose to be listed, said they are available, and are not inside their rest period after a recent donation. Which groups can give to which is a general guide only; the hospital's own tests decide."
+msgstr "এখানে যাঁদের গোনা হয়েছে, তাঁরা নিজে তালিকাভুক্ত হতে চেয়েছেন, রক্ত দিতে প্রস্তুত বলেছেন এবং সাম্প্রতিক রক্তদানের পর বিশ্রামের সময়ের মধ্যে নেই। কোন গ্রুপ কাকে দিতে পারে তা শুধু সাধারণ ধারণা; শেষ সিদ্ধান্ত হাসপাতালের নিজস্ব পরীক্ষার ওপর নির্ভর করে।"
+
+#: atlas/templates/atlas/gap.html
+msgid "Donors who can give"
+msgstr "যাঁরা দিতে পারেন"
+
+#: atlas/templates/atlas/gap.html
+msgid "Donors who can give to this group"
+msgstr "এই গ্রুপকে যাঁরা রক্ত দিতে পারেন"
+
+#: atlas/templates/atlas/map.html
+msgid "Download the data (CSV)"
+msgstr "তথ্য ডাউনলোড করুন (CSV)"
+
+#: atlas/templates/atlas/map.html
+msgid "Every district has fewer than 3 donors listed so far, so no numbers are shown yet."
+msgstr "এখনও প্রতিটি জেলায় তালিকাভুক্ত দাতা 3 জনের কম, তাই কোনো সংখ্যা দেখানো হচ্ছে না।"
+
+#: atlas/templates/atlas/map.html
+msgid "Every district is one tile, placed roughly where it is on the map. Tap a tile to see its page."
+msgstr "প্রতিটি জেলা একটি ঘর, মানচিত্রে যেখানে আছে মোটামুটি সেখানে বসানো। জেলার পাতা দেখতে ঘরে ছুঁয়ে দিন।"
+
+#: atlas/templates/atlas/map.html
+msgid "Every district with its open requests, available donors and verified donations"
+msgstr "প্রতিটি জেলার চলমান অনুরোধ, প্রস্তুত দাতা ও যাচাই করা রক্তদান"
+
+#: atlas/templates/atlas/divisions.html
+msgid "Every verified donation moves your division up. Donate only when you feel well and your rest period is over, and invite a friend to do the same."
+msgstr "প্রতিটি যাচাই করা রক্তদান আপনার বিভাগকে এগিয়ে নেয়। শুধু সুস্থ বোধ করলে এবং বিশ্রামের সময় শেষ হলে রক্ত দিন, আর একজন বন্ধুকেও আমন্ত্রণ জানান।"
+
+#: atlas/templates/atlas/map.html
+msgid "Fewer"
+msgstr "কম"
+
+#: atlas/templates/atlas/gap.html
+msgid "For each blood group: units still needed on open requests, against donors who can give to that group. Counts only, never people."
+msgstr "প্রতিটি রক্তের গ্রুপের জন্য: চলমান অনুরোধে এখনও কত ইউনিট লাগবে, আর সেই গ্রুপকে কতজন দাতা রক্ত দিতে পারেন। শুধু সংখ্যা, কোনো ব্যক্তির তথ্য নয়।"
+
+#: atlas/layers.py atlas/templates/atlas/map.html
+msgid "Gap"
+msgstr "ঘাটতি"
+
+#: atlas/templates/atlas/divisions.html
+msgid "How it is counted"
+msgstr "কীভাবে গোনা হয়"
+
+#: atlas/templates/atlas/gap.html
+msgid "If you would like to, you can list yourself in the donor directory. It is your choice, and you can switch it off at any time."
+msgstr "চাইলে আপনি নিজেকে দাতা তালিকায় যুক্ত করতে পারেন। সিদ্ধান্ত পুরোপুরি আপনার, আর যেকোনো সময় এটি বন্ধ করা যায়।"
+
+#: atlas/templates/atlas/divisions.html
+msgid "Last month: %(month)s"
+msgstr "গত মাস: %(month)s"
+
+#: atlas/templates/atlas/gap.html
+msgid "Look at my directory setting"
+msgstr "আমার তালিকার সেটিং দেখুন"
+
+#: atlas/templates/atlas/gap.html
+msgid "Look at one district"
+msgstr "একটি জেলা দেখুন"
+
+#: atlas/templates/atlas/_tabs.html
+msgid "Map"
+msgstr "মানচিত্র"
+
+#: atlas/templates/atlas/map.html
+msgid "Map layer"
+msgstr "মানচিত্রের স্তর"
+
+#: atlas/layers.py
+msgid "More available donors"
+msgstr "আরও বেশি প্রস্তুত দাতা"
+
+#: atlas/layers.py
+msgid "More donations"
+msgstr "আরও বেশি রক্তদান"
+
+#: atlas/templates/atlas/district.html
+msgid "More in %(division)s division"
+msgstr "%(division)s বিভাগের আরও জেলা"
+
+#: atlas/layers.py
+msgid "More open requests"
+msgstr "আরও বেশি চলমান অনুরোধ"
+
+#: atlas/layers.py
+msgid "More requests for each donor"
+msgstr "প্রতি দাতার জন্য আরও বেশি অনুরোধ"
+
+#: atlas/templates/atlas/district.html
+msgid "Most needed here:"
+msgstr "এখানে সবচেয়ে বেশি লাগছে:"
+
+#: atlas/templates/atlas/gap.html
+msgid "Most needed right now"
+msgstr "এই মুহূর্তে সবচেয়ে বেশি লাগছে"
+
+#: atlas/templates/atlas/gap.html
+msgid "Needed and available, by blood group"
+msgstr "রক্তের গ্রুপ অনুযায়ী প্রয়োজন ও প্রস্তুত দাতা"
+
+#: atlas/templates/atlas/district.html
+msgid "Needed by %(d)s"
+msgstr "%(d)s-এর মধ্যে লাগবে"
+
+#: atlas/templates/atlas/gap.html
+msgid "Needs donors"
+msgstr "দাতা দরকার"
+
+#: atlas/templates/atlas/district.html
+msgid "No drives planned here yet."
+msgstr "এখানে এখনও কোনো রক্তদান কর্মসূচি ঠিক হয়নি।"
+
+#: atlas/layers.py atlas/templates/atlas/map.html
+msgid "No open blood requests in any district right now."
+msgstr "এই মুহূর্তে কোনো জেলায় রক্তের চলমান অনুরোধ নেই।"
+
+#: atlas/templates/atlas/district.html
+msgid "No open requests here right now."
+msgstr "এই মুহূর্তে এখানে কোনো চলমান অনুরোধ নেই।"
+
+#: atlas/templates/atlas/gap.html
+msgid "No open requests right now. Thank you to everyone who helped."
+msgstr "এই মুহূর্তে কোনো চলমান অনুরোধ নেই। যাঁরা সাহায্য করেছেন সবাইকে ধন্যবাদ।"
+
+#: atlas/templates/atlas/district.html
+msgid "No verified donations here in the last 12 months yet."
+msgstr "গত 12 মাসে এখানে এখনও কোনো যাচাই করা রক্তদান নেই।"
+
+#: atlas/layers.py atlas/templates/atlas/map.html
+msgid "No verified donations in the last 12 months yet."
+msgstr "গত 12 মাসে এখনও কোনো যাচাই করা রক্তদান নেই।"
+
+#: atlas/templates/atlas/divisions.html
+msgid "No verified donations yet this month. The first one puts a division on the board."
+msgstr "এই মাসে এখনও কোনো যাচাই করা রক্তদান নেই। প্রথম দানটিই একটি বিভাগকে তালিকায় তুলবে।"
+
+#: atlas/templates/atlas/divisions.html
+msgid "Nobody is named here. Divisions on the same number share the same place."
+msgstr "এখানে কারও নাম দেখানো হয় না। একই সংখ্যায় থাকা বিভাগগুলো একই অবস্থান ভাগ করে নেয়।"
+
+#: atlas/layers.py
+msgid "Number on a tile: available donors. \"<3\" means fewer than 3 are listed."
+msgstr "ঘরের সংখ্যা: প্রস্তুত দাতা। \"<3\" মানে তালিকায় 3 জনের কম আছেন।"
+
+#: atlas/layers.py
+msgid "Number on a tile: open requests for every 10 available donors. \"!\" means fewer than 3 donors are listed. A dash means no open requests."
+msgstr "ঘরের সংখ্যা: প্রতি 10 জন প্রস্তুত দাতার বিপরীতে চলমান অনুরোধ। \"!\" মানে তালিকায় 3 জনের কম দাতা আছেন। ড্যাশ (–) মানে কোনো চলমান অনুরোধ নেই।"
+
+#: atlas/layers.py
+msgid "Number on a tile: open requests."
+msgstr "ঘরের সংখ্যা: চলমান অনুরোধ।"
+
+#: atlas/layers.py
+msgid "Number on a tile: verified donations in the last 12 months."
+msgstr "ঘরের সংখ্যা: গত 12 মাসের যাচাই করা রক্তদান।"
+
+#: atlas/templates/atlas/map.html
+msgid "Only members who chose to be listed are counted as donors. A number below 3 is never shown, to keep people private. Numbers update every few minutes."
+msgstr "শুধু যাঁরা নিজে তালিকাভুক্ত হতে চেয়েছেন তাঁদেরই দাতা হিসেবে গোনা হয়। মানুষের গোপনীয়তা রক্ষায় 3-এর কম কোনো সংখ্যা কখনও দেখানো হয় না। সংখ্যা কয়েক মিনিট পরপর হালনাগাদ হয়।"
+
+#: atlas/templates/atlas/divisions.html
+msgid "Only verified donations count: a volunteer has checked each one."
+msgstr "শুধু যাচাই করা রক্তদান গোনা হয়: একজন স্বেচ্ছাসেবক প্রতিটি দান দেখে নিয়েছেন।"
+
+#: atlas/layers.py
+msgid "Open blood requests by district: %(total)s in total, the most in %(district)s (%(n)s)."
+msgstr "জেলা অনুযায়ী রক্তের চলমান অনুরোধ: মোট %(total)sটি, সবচেয়ে বেশি %(district)s জেলায় (%(n)s)।"
+
+#: atlas/templates/atlas/district.html atlas/templates/atlas/map.html
+msgid "Open requests"
+msgstr "চলমান অনুরোধ"
+
+#: atlas/templates/atlas/gap.html
+msgid "Open requests across Bangladesh against donors who can give."
+msgstr "সারা বাংলাদেশের চলমান অনুরোধ, আর যাঁরা রক্ত দিতে পারেন সেই দাতা।"
+
+#: atlas/layers.py
+msgid "Open requests compared with available donors, by district. Darker means more requests for each donor. %(n)s districts have open requests."
+msgstr "জেলা অনুযায়ী চলমান অনুরোধ ও প্রস্তুত দাতার তুলনা। রং যত গাঢ়, প্রতি দাতার জন্য অনুরোধ তত বেশি। %(n)sটি জেলায় চলমান অনুরোধ আছে।"
+
+#: atlas/templates/atlas/district.html
+msgid "Open requests here"
+msgstr "এখানকার চলমান অনুরোধ"
+
+#: atlas/templates/atlas/gap.html
+msgid "Open requests in %(name)s against donors there who can give."
+msgstr "%(name)s জেলার চলমান অনুরোধ, আর সেখানকার যাঁরা রক্ত দিতে পারেন সেই দাতা।"
+
+#: atlas/templates/atlas/_home.html
+msgid "Open the map"
+msgstr "মানচিত্র খুলুন"
+
+#: atlas/templates/atlas/divisions.html
+msgid "Rank"
+msgstr "অবস্থান"
+
+#: atlas/templates/atlas/district.html
+msgid "See all requests"
+msgstr "সব অনুরোধ দেখুন"
+
+#: atlas/templates/atlas/district.html
+msgid "See how it compares"
+msgstr "তুলনা দেখুন"
+
+#: atlas/templates/atlas/_home.html
+msgid "See open requests, donors and donations in every district."
+msgstr "প্রতিটি জেলার চলমান অনুরোধ, দাতা ও রক্তদান দেখুন।"
+
+#: atlas/templates/atlas/_hub.html
+msgid "See the district page"
+msgstr "জেলার পাতা দেখুন"
+
+#: atlas/templates/atlas/divisions.html atlas/templates/atlas/gap.html atlas/templates/atlas/map.html
+msgid "See the numbers as a table"
+msgstr "সংখ্যাগুলো সারণিতে দেখুন"
+
+#: atlas/templates/atlas/divisions.html
+msgid "See who needs blood"
+msgstr "কার রক্ত লাগছে দেখুন"
+
+#: atlas/templates/atlas/divisions.html
+msgid "Shared first place with %(n)s verified donations each: %(names)s."
+msgstr "প্রত্যেকে %(n)sটি যাচাই করা রক্তদান নিয়ে যৌথভাবে প্রথম: %(names)s।"
+
+#: atlas/templates/atlas/district.html
+msgid "Shown as ranges, and never as a number below 3, to keep people private. Only members who chose to be listed are counted."
+msgstr "মানুষের গোপনীয়তা রক্ষায় সংখ্যা একটি সীমার মধ্যে দেখানো হয়, আর 3-এর কম কোনো সংখ্যা কখনও দেখানো হয় না। শুধু যাঁরা নিজে তালিকাভুক্ত হতে চেয়েছেন তাঁদের গোনা হয়।"
+
+#: atlas/templates/atlas/district.html
+msgid "Squads based here"
+msgstr "এখানকার স্কোয়াড"
+
+#: atlas/templates/atlas/divisions.html
+msgid "Standings for %(month)s: verified donations in each of the 8 divisions."
+msgstr "%(month)s মাসের অবস্থান: 8টি বিভাগের প্রতিটিতে যাচাই করা রক্তদান।"
+
+#: atlas/templates/atlas/divisions.html
+msgid "There were no verified donations last month."
+msgstr "গত মাসে কোনো যাচাই করা রক্তদান ছিল না।"
+
+#: atlas/templates/atlas/divisions.html
+msgid "These are raw counts. We do not adjust for how many people live in a division, because we do not have verified population data. Bigger divisions therefore have an advantage, and that is fine: this is for fun and for encouragement, not a judgement."
+msgstr "এগুলো সরাসরি গোনা সংখ্যা। কোনো বিভাগে কত মানুষ থাকেন সে অনুযায়ী আমরা হিসাব সমন্বয় করি না, কারণ আমাদের কাছে যাচাই করা জনসংখ্যার তথ্য নেই। তাই বড় বিভাগ কিছুটা সুবিধা পায়, এটা ঠিক আছে: এটি মজা ও উৎসাহের জন্য, কোনো বিচার নয়।"
+
+#: atlas/templates/atlas/gap.html
+msgid "These groups have the most open requests compared with the donors who can give to them."
+msgstr "এই গ্রুপগুলোর জন্য চলমান অনুরোধ সবচেয়ে বেশি, তুলনায় যাঁরা এদের রক্ত দিতে পারেন সেই দাতা কম।"
+
+#: atlas/templates/atlas/divisions.html
+msgid "This month, which of the 8 divisions of Bangladesh has the most verified blood donations? Raw counts, friendly competition."
+msgstr "এই মাসে বাংলাদেশের 8টি বিভাগের মধ্যে কোনটিতে সবচেয়ে বেশি যাচাই করা রক্তদান হয়েছে? সরাসরি গোনা সংখ্যা, বন্ধুত্বপূর্ণ প্রতিযোগিতা।"
+
+#: atlas/templates/atlas/divisions.html
+msgid "This month: %(month)s"
+msgstr "এই মাস: %(month)s"
+
+#: atlas/render.py
+msgid "Units needed and donors available, for each blood group. The numbers are in the table below the chart."
+msgstr "প্রতিটি রক্তের গ্রুপের জন্য কত ইউনিট লাগবে ও কতজন দাতা প্রস্তুত। সংখ্যাগুলো চার্টের নিচের সারণিতে আছে।"
+
+#: atlas/templates/atlas/gap.html
+msgid "Units still needed"
+msgstr "এখনও যত ইউনিট লাগবে"
+
+#: atlas/templates/atlas/gap.html
+msgid "Units still needed and donors available, for each blood group"
+msgstr "প্রতিটি রক্তের গ্রুপের জন্য এখনও কত ইউনিট লাগবে ও কতজন দাতা প্রস্তুত"
+
+#: atlas/templates/atlas/district.html
+msgid "Upcoming drives"
+msgstr "আসন্ন রক্তদান কর্মসূচি"
+
+#: atlas/templates/atlas/district.html
+msgid "Verified donations (12 months)"
+msgstr "যাচাই করা রক্তদান (12 মাস)"
+
+#: atlas/templates/atlas/district.html
+msgid "Verified donations by month"
+msgstr "মাস অনুযায়ী যাচাই করা রক্তদান"
+
+#: atlas/layers.py
+msgid "Verified donations in the last 12 months by district: %(total)s in total, the most in %(district)s (%(n)s)."
+msgstr "জেলা অনুযায়ী গত 12 মাসের যাচাই করা রক্তদান: মোট %(total)sটি, সবচেয়ে বেশি %(district)s জেলায় (%(n)s)।"
+
+#: atlas/render.py
+msgid "Verified donations per month, %(first)s to %(last)s: %(values)s"
+msgstr "মাস অনুযায়ী যাচাই করা রক্তদান, %(first)s থেকে %(last)s: %(values)s"
+
+#: atlas/templates/atlas/divisions.html
+msgid "Verified donations this month, by division"
+msgstr "এই মাসে বিভাগ অনুযায়ী যাচাই করা রক্তদান"
+
+#: atlas/render.py
+msgid "Verified donations this month, by division. The numbers are in the table below the chart."
+msgstr "এই মাসে বিভাগ অনুযায়ী যাচাই করা রক্তদান। সংখ্যাগুলো চার্টের নিচের সারণিতে আছে।"
+
+#: atlas/templates/atlas/district.html
+msgid "What is needed here right now, and who is ready to help."
+msgstr "এখানে এই মুহূর্তে কী লাগছে, আর কারা সাহায্য করতে প্রস্তুত।"
+
+#: atlas/templates/atlas/_home.html atlas/templates/atlas/map.html
+msgid "Where blood is needed"
+msgstr "কোথায় রক্ত লাগছে"
+
+#: atlas/templates/atlas/gap.html
+msgid "Which blood groups are short?"
+msgstr "কোন রক্তের গ্রুপের ঘাটতি আছে?"
+
+#: atlas/templates/atlas/_hub.html
+msgid "Your district"
+msgstr "আপনার জেলা"
+
+#: atlas/data.py
+msgid "fewer than 3"
+msgstr "3 জনের কম"
+
+#: atlas/layers.py
+msgid "fewer than 3 available donors"
+msgstr "প্রস্তুত দাতা 3 জনের কম"
+
+#: atlas/layers.py
+msgid "no open requests"
+msgstr "কোনো চলমান অনুরোধ নেই"
+
+#: spotlight/templates/spotlight/_hero.html
+msgid "%(counter)s pledge on a fulfilled request"
+msgid_plural "%(counter)s pledges on fulfilled requests"
+msgstr[0] "পূর্ণ হওয়া অনুরোধে %(counter)sটি প্রতিশ্রুতি"
+msgstr[1] "পূর্ণ হওয়া অনুরোধে %(counter)sটি প্রতিশ্রুতি"
+
+#: spotlight/templates/spotlight/_hero.html
+msgid "%(counter)s verified donation by its members"
+msgid_plural "%(counter)s verified donations by its members"
+msgstr[0] "সদস্যদের %(counter)sটি যাচাই করা রক্তদান"
+msgstr[1] "সদস্যদের %(counter)sটি যাচাই করা রক্তদান"
+
+#: spotlight/styles.py
+msgid "%(current)s of %(target)s approved drives so far"
+msgstr "এ পর্যন্ত %(target)sটির মধ্যে %(current)sটি অনুমোদিত আয়োজন"
+
+#: spotlight/styles.py
+msgid "%(current)s of %(target)s friends so far"
+msgstr "এ পর্যন্ত %(target)s জন বন্ধুর মধ্যে %(current)s জন"
+
+#: spotlight/styles.py
+msgid "%(current)s of %(target)s pledges so far"
+msgstr "এ পর্যন্ত %(target)sটির মধ্যে %(current)sটি প্রতিশ্রুতি"
+
+#: spotlight/styles.py
+msgid "%(current)s of %(target)s stories so far"
+msgstr "এ পর্যন্ত %(target)sটির মধ্যে %(current)sটি গল্প"
+
+#: spotlight/styles.py
+msgid "%(current)s of %(target)s verified donations so far"
+msgstr "এ পর্যন্ত %(target)sটির মধ্যে %(current)sটি যাচাই করা রক্তদান"
+
+#: spotlight/styles.py
+msgid "%(current)s of %(target)s ways to take part so far"
+msgstr "এ পর্যন্ত অংশ নেওয়ার %(target)sটি উপায়ের মধ্যে %(current)sটি"
+
+#: spotlight/templates/spotlight/style_card.html
+msgid "%(name)s: %(style_name)s"
+msgstr "%(name)s: %(style_name)s"
+
+#: spotlight/templates/spotlight/_hub.html
+msgid "%(title)s, %(month)s"
+msgstr "%(title)s, %(month)s"
+
+#: spotlight/pulse.py
+msgid "A %(group)s request in %(district)s was fulfilled"
+msgstr "%(district)s-এ %(group)s রক্তের একটি অনুরোধ পূরণ হয়েছে"
+
+#: spotlight/pulse.py
+msgid "An %(group)s request in %(district)s was fulfilled"
+msgstr "%(district)s-এ %(group)s রক্তের একটি অনুরোধ পূরণ হয়েছে"
+
+#: spotlight/pulse.py
+msgid "A donor completed a verified donation"
+msgstr "একজন রক্তদাতা একটি যাচাই করা রক্তদান সম্পন্ন করেছেন"
+
+#: spotlight/pulse.py
+msgid "A donor in %(district)s completed a verified donation"
+msgstr "%(district)s-এর একজন রক্তদাতা একটি যাচাই করা রক্তদান সম্পন্ন করেছেন"
+
+#: spotlight/pulse.py
+msgid "A donor in %(district)s offered to give %(group)s"
+msgstr "%(district)s-এর একজন রক্তদাতা %(group)s রক্ত দিতে এগিয়ে এসেছেন"
+
+#: spotlight/styles.py
+msgid "A friend you invited gave a verified donation. You widen the circle."
+msgstr "আপনার আমন্ত্রণে আসা এক বন্ধু যাচাই করা রক্তদান করেছেন। আপনি আমাদের পরিবার বড় করছেন।"
+
+#: spotlight/templates/spotlight/style.html
+msgid "A friendly label for how you take part. It is recognition, not a score, and it never asks you to give."
+msgstr "আপনি কীভাবে অংশ নেন তার একটি আন্তরিক পরিচয়। এটি স্বীকৃতি, কোনো স্কোর নয়, আর এটি কখনো আপনাকে রক্ত দিতে চাপ দেয় না।"
+
+#: spotlight/heroes.py
+msgid "A public squad whose members made the most verified donations in the month."
+msgstr "যে পাবলিক স্কোয়াডের সদস্যরা মাসে সবচেয়ে বেশি যাচাই করা রক্তদান করেছেন।"
+
+#: spotlight/views.py
+msgid "A reminder based on the usual gap of %(interval)s between donations. Blood banks may ask for a different gap. This is not medical advice."
+msgstr "দুই রক্তদানের মধ্যে সাধারণ বিরতি %(interval)s ধরে একটি স্মারক। ব্লাড ব্যাংক ভিন্ন বিরতি চাইতে পারে। এটি চিকিৎসা পরামর্শ নয়।"
+
+#: spotlight/templates/spotlight/home.html
+msgid "A thank-you to people who gave, helped and brought others along. Only members who allow it on the leaderboard are named."
+msgstr "যাঁরা রক্ত দিয়েছেন, সাহায্য করেছেন এবং অন্যদের সঙ্গে নিয়ে এসেছেন, তাঁদের প্রতি ধন্যবাদ। শুধু লিডারবোর্ডে নাম দেখানোর অনুমতি দেওয়া সদস্যদের নাম আসে।"
+
+#: spotlight/templates/spotlight/_hub.html
+msgid "Add ready-again date"
+msgstr "আবার প্রস্তুত হওয়ার তারিখ যোগ করুন"
+
+#: spotlight/templates/spotlight/style.html
+msgid "All the styles"
+msgstr "সব স্টাইল"
+
+#: spotlight/templates/spotlight/certificate.html
+msgid "Certificate number"
+msgstr "সনদ নম্বর"
+
+#: spotlight/templates/spotlight/certificate.html
+msgid "Certificate of thanks"
+msgstr "কৃতজ্ঞতার সনদ"
+
+#: spotlight/templates/spotlight/_hub.html
+msgid "Certificates of thanks"
+msgstr "কৃতজ্ঞতার সনদ"
+
+#: spotlight/templates/spotlight/_home.html
+msgid "Community activity"
+msgstr "কমিউনিটির কার্যক্রম"
+
+#: spotlight/templates/spotlight/month.html
+msgid "Counts can still change until the month ends."
+msgstr "মাস শেষ না হওয়া পর্যন্ত সংখ্যা বদলাতে পারে।"
+
+#: spotlight/templates/spotlight/certificate.html
+msgid "Date"
+msgstr "তারিখ"
+
+#: spotlight/heroes.py
+msgid "Donor of the Month"
+msgstr "মাসের সেরা রক্তদাতা"
+
+#: spotlight/templates/spotlight/style_card.html
+msgid "Donor style card"
+msgstr "রক্তদাতার স্টাইল কার্ড"
+
+#: spotlight/templates/spotlight/style.html
+msgid "Earned"
+msgstr "অর্জিত"
+
+#: spotlight/templates/spotlight/ready_none.html
+msgid "Go to my hub"
+msgstr "আমার হাবে যান"
+
+#: spotlight/templates/spotlight/home.html
+msgid "Hall of fame"
+msgstr "সম্মাননার তালিকা"
+
+#: spotlight/templates/spotlight/_home.html
+msgid "Happening now"
+msgstr "এই মুহূর্তে"
+
+#: spotlight/heroes.py
+msgid "Helper of the Month"
+msgstr "মাসের সেরা সহায়ক"
+
+#: spotlight/templates/spotlight/month.html
+msgid "Heroes of %(month)s"
+msgstr "%(month)s মাসের নায়কেরা"
+
+#: spotlight/templates/spotlight/home.html
+msgid "Heroes of the month"
+msgstr "মাসের নায়কেরা"
+
+#: spotlight/templates/spotlight/_rules.html
+msgid "How heroes are picked"
+msgstr "নায়ক কীভাবে বাছাই করা হয়"
+
+#: spotlight/heroes.py
+msgid "Most pledges on requests that ended as fulfilled in the month."
+msgstr "মাসে পূর্ণ হওয়া অনুরোধগুলোতে সবচেয়ে বেশি প্রতিশ্রুতি।"
+
+#: spotlight/heroes.py
+msgid "Most verified donations in the month."
+msgstr "মাসে সবচেয়ে বেশি যাচাই করা রক্তদান।"
+
+#: spotlight/templates/spotlight/style.html
+msgid "My donor style"
+msgstr "আমার রক্তদাতা স্টাইল"
+
+#: spotlight/templates/spotlight/_hub.html
+msgid "My style"
+msgstr "আমার স্টাইল"
+
+#: spotlight/templates/spotlight/_empty.html
+msgid "No heroes yet. They appear here as verified donations and fulfilled requests are recorded."
+msgstr "এখনো কোনো নায়ক নেই। যাচাই করা রক্তদান ও পূর্ণ হওয়া অনুরোধ নথিভুক্ত হলে তাঁরা এখানে আসবেন।"
+
+#: spotlight/templates/spotlight/style.html
+msgid "No rush: it follows your own pace."
+msgstr "তাড়া নেই: এটি আপনার নিজের গতিতেই এগোয়।"
+
+#: spotlight/templates/spotlight/ready_none.html
+msgid "Nothing to remind you about yet"
+msgstr "মনে করিয়ে দেওয়ার মতো কিছু এখনো নেই"
+
+#: spotlight/templates/spotlight/ready_none.html
+msgid "Once you log a donation we can add a ready-again date to your calendar. It is only a reminder, never medical clearance."
+msgstr "আপনি একটি রক্তদান লিখে রাখলে আমরা আপনার ক্যালেন্ডারে আবার প্রস্তুত হওয়ার তারিখ যোগ করতে পারব। এটি শুধু একটি স্মারক, কখনো চিকিৎসাগত ছাড়পত্র নয়।"
+
+#: spotlight/templates/spotlight/style_card.html
+msgid "Only you and staff can see this card, because of your privacy settings."
+msgstr "আপনার গোপনীয়তা সেটিংসের কারণে শুধু আপনি ও স্টাফ এই কার্ড দেখতে পারেন।"
+
+#: spotlight/templates/spotlight/home.html
+msgid "Open this month"
+msgstr "এই মাস দেখুন"
+
+#: spotlight/templates/spotlight/month.html
+msgid "Other months"
+msgstr "অন্যান্য মাস"
+
+#: spotlight/templates/spotlight/certificate.html
+msgid "Place"
+msgstr "স্থান"
+
+#: spotlight/templates/spotlight/certificate.html
+msgid "Print"
+msgstr "প্রিন্ট করুন"
+
+#: spotlight/styles.py
+msgid "Read community stories"
+msgstr "কমিউনিটির গল্প পড়ুন"
+
+#: spotlight/styles.py
+msgid "Read the Learn guide"
+msgstr "শেখার গাইড পড়ুন"
+
+#: spotlight/views.py
+msgid "Ready to donate again (a reminder, not medical clearance)"
+msgstr "আবার রক্ত দেওয়ার জন্য প্রস্তুত (একটি স্মারক, চিকিৎসাগত ছাড়পত্র নয়)"
+
+#: spotlight/templates/spotlight/ready_none.html
+msgid "Ready-again reminder"
+msgstr "আবার প্রস্তুত হওয়ার স্মারক"
+
+#: spotlight/templates/spotlight/_home.html
+msgid "Real activity, shown without names."
+msgstr "সত্যিকারের কার্যক্রম, নাম ছাড়া দেখানো হচ্ছে।"
+
+#: spotlight/templates/spotlight/certificate.html
+msgid "Recognition of a volunteer-verified donation. This is not a medical record."
+msgstr "একজন স্বেচ্ছাসেবক-যাচাই করা রক্তদানের স্বীকৃতি। এটি কোনো চিকিৎসা নথি নয়।"
+
+#: spotlight/templates/spotlight/home.html
+msgid "Recognition only. It never changes points, tiers or when anyone may donate again."
+msgstr "এটি শুধু স্বীকৃতি। এটি পয়েন্ট, স্তর বা কারও আবার রক্ত দেওয়ার সময় কখনো বদলায় না।"
+
+#: spotlight/styles.py
+msgid "Rising Star"
+msgstr "উদীয়মান তারকা"
+
+#: spotlight/templates/spotlight/style.html
+msgid "Say you can help on a request, share a story or join a drive. Whatever you do, it shows up here."
+msgstr "কোনো অনুরোধে বলুন আপনি সাহায্য করতে পারেন, একটি গল্প শেয়ার করুন অথবা কোনো আয়োজনে যোগ দিন। যা-ই করুন, তা এখানে দেখা যাবে।"
+
+#: spotlight/styles.py
+msgid "See open requests"
+msgstr "চলমান অনুরোধ দেখুন"
+
+#: spotlight/styles.py
+msgid "See your drives"
+msgstr "আপনার আয়োজনগুলো দেখুন"
+
+#: spotlight/styles.py
+msgid "Share your invite link"
+msgstr "আপনার আমন্ত্রণ লিংক শেয়ার করুন"
+
+#: spotlight/templates/spotlight/home.html
+msgid "So far, not final"
+msgstr "এ পর্যন্ত, চূড়ান্ত নয়"
+
+#: spotlight/templates/spotlight/home.html
+msgid "Spotlight"
+msgstr "স্পটলাইট"
+
+#: spotlight/heroes.py
+msgid "Squad of the Month"
+msgstr "মাসের সেরা স্কোয়াড"
+
+#: spotlight/templates/spotlight/certificate.html
+msgid "Thank you for giving blood. Your gift can help someone in need."
+msgstr "রক্ত দেওয়ার জন্য ধন্যবাদ। আপনার এই উপহার কোনো প্রয়োজনে থাকা মানুষের কাজে লাগতে পারে।"
+
+#: spotlight/styles.py
+msgid "The Connector"
+msgstr "সংযোগকারী"
+
+#: spotlight/styles.py
+msgid "The First Responder"
+msgstr "প্রথম সাড়াদাতা"
+
+#: spotlight/styles.py
+msgid "The Organizer"
+msgstr "আয়োজক"
+
+#: spotlight/styles.py
+msgid "The Regular"
+msgstr "নিয়মিত রক্তদাতা"
+
+#: spotlight/styles.py
+msgid "The Storyteller"
+msgstr "গল্পকার"
+
+#: spotlight/templates/spotlight/month.html
+msgid "The final heroes for this month."
+msgstr "এই মাসের চূড়ান্ত নায়কেরা।"
+
+#: spotlight/templates/spotlight/home.html
+msgid "The first monthly heroes are saved once a month is over."
+msgstr "মাস শেষ হলে প্রথম মাসিক নায়কদের নাম সংরক্ষণ করা হবে।"
+
+#: spotlight/templates/spotlight/_home.html
+msgid "This month's heroes"
+msgstr "এই মাসের নায়কেরা"
+
+#: spotlight/heroes.py
+msgid "Ties go to whoever made their first qualifying action of the month earlier, then to the lower member number. Only members who allow it on the leaderboard are ever named or ranked."
+msgstr "সমান হলে যিনি মাসে আগে প্রথম যোগ্য কাজটি করেছেন তিনি এগিয়ে থাকেন, তারপর ছোট সদস্য নম্বর। শুধু লিডারবোর্ডে অনুমতি দেওয়া সদস্যদের নাম আসে বা র‍্যাংক করা হয়।"
+
+#: spotlight/templates/spotlight/style.html
+msgid "View my style card"
+msgstr "আমার স্টাইল কার্ড দেখুন"
+
+#: spotlight/templates/spotlight/certificate.html
+msgid "With gratitude, this certificate is given to"
+msgstr "কৃতজ্ঞতার সঙ্গে এই সনদ দেওয়া হলো"
+
+#: spotlight/styles.py
+msgid "You are new here and already taking part. Welcome!"
+msgstr "আপনি এখানে নতুন, তবুও ইতিমধ্যে অংশ নিচ্ছেন। স্বাগতম!"
+
+#: spotlight/styles.py
+msgid "You have 3 or more verified donations. Thank you for showing up, at your own pace."
+msgstr "আপনার 3টি বা তার বেশি যাচাই করা রক্তদান আছে। নিজের গতিতে পাশে থাকার জন্য ধন্যবাদ।"
+
+#: spotlight/styles.py
+msgid "You hosted a blood drive that was approved. You bring people together."
+msgstr "আপনার আয়োজন করা রক্তদান কর্মসূচি অনুমোদিত হয়েছে। আপনি মানুষকে একসঙ্গে আনেন।"
+
+#: spotlight/styles.py
+msgid "You said \"I can help\" on a request. Quick kindness matters."
+msgstr "একটি অনুরোধে আপনি \"আমি সাহায্য করতে পারি\" বলেছেন। দ্রুত সহমর্মিতার মূল্য অনেক।"
+
+#: spotlight/templates/spotlight/_hub.html
+msgid "Your donor style appears as you take part."
+msgstr "আপনি অংশ নিলে আপনার রক্তদাতা স্টাইল এখানে দেখা যাবে।"
+
+#: spotlight/templates/spotlight/_hub.html
+msgid "Your spotlight"
+msgstr "আপনার স্পটলাইট"
+
+#: spotlight/styles.py
+msgid "Your story was published. Real voices make giving blood feel closer."
+msgstr "আপনার গল্প প্রকাশিত হয়েছে। সত্যিকারের কণ্ঠ রক্তদানকে আরও আপন করে তোলে।"
+
+#: spotlight/templates/spotlight/style.html
+msgid "Your style appears as you take part"
+msgstr "আপনি অংশ নিলে আপনার স্টাইল দেখা যাবে"
+
+#: spotlight/templates/spotlight/style.html
+msgid "Your style card can be opened by anyone with its link. You can change this in <a href=\"%(privacy_url)s\">your privacy settings</a>."
+msgstr "আপনার স্টাইল কার্ডের লিংক যাঁর কাছে আছে তিনিই খুলতে পারবেন। <a href=\"%(privacy_url)s\">গোপনীয়তা সেটিংসে</a> এটি বদলাতে পারেন।"
+
+#: spotlight/templates/spotlight/style.html
+msgid "Your style card is private: only you and staff can open it. You can change this in <a href=\"%(privacy_url)s\">your privacy settings</a>."
+msgstr "আপনার স্টাইল কার্ড ব্যক্তিগত: শুধু আপনি ও স্টাফ খুলতে পারেন। <a href=\"%(privacy_url)s\">গোপনীয়তা সেটিংসে</a> এটি বদলাতে পারেন।"
+
+#: spotlight/templates/spotlight/style.html
+msgid "Your top style"
+msgstr "আপনার প্রধান স্টাইল"
+
+#: spotlight/pulse.py
+msgid "about %(n)s day ago"
+msgid_plural "about %(n)s days ago"
+msgstr[0] "প্রায় %(n)s দিন আগে"
+msgstr[1] "প্রায় %(n)s দিন আগে"
+
+#: spotlight/pulse.py
+msgid "about %(n)s hour ago"
+msgid_plural "about %(n)s hours ago"
+msgstr[0] "প্রায় %(n)s ঘণ্টা আগে"
+msgstr[1] "প্রায় %(n)s ঘণ্টা আগে"
+
+#: spotlight/pulse.py
+msgid "about %(n)s minutes ago"
+msgstr "প্রায় %(n)s মিনিট আগে"

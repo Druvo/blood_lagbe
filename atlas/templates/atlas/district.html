@@ -1,0 +1,136 @@
+{% extends 'base/base.html' %}
+{% load static i18n %}
+
+{% block title %}{{ name }}{% endblock title %}
+{% block meta %}
+<meta name="description" content="{% blocktrans with name=name division=division %}Blood needs in {{ name }}, {{ division }} division: open requests, available donors and verified donations. Counts only, never people.{% endblocktrans %}">
+<meta property="og:site_name" content="{{ SITE_NAME }}">
+<meta property="og:title" content="{{ name }} | {{ SITE_NAME }}">
+{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'atlas/atlas.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container at-page">
+  <header>
+    <p class="bb-small"><a href="{% url 'atlas:map' %}">{% trans "Atlas" %}</a> / {% blocktrans with division=division %}{{ division }} division{% endblocktrans %}</p>
+    <h1 class="bb-h2 bb-mb-1">{{ name }}</h1>
+    <p class="bb-lead">{% trans "What is needed here right now, and who is ready to help." %}</p>
+  </header>
+
+  <div class="at-stats">
+    <div class="bb-card at-stat">
+      <div class="at-stat__value">{{ requests }}</div>
+      <div class="at-stat__label">{% trans "Open requests" %}</div>
+    </div>
+    <div class="bb-card at-stat">
+      <div class="at-stat__value{% if available_text|length > 4 %} at-stat__value--text{% endif %}">{{ available_text }}</div>
+      <div class="at-stat__label">{% trans "Available donors" %}</div>
+    </div>
+    <div class="bb-card at-stat">
+      <div class="at-stat__value">{{ donations }}</div>
+      <div class="at-stat__label">{% trans "Verified donations (12 months)" %}</div>
+    </div>
+    <div class="bb-card at-stat">
+      <div class="at-stat__value">{{ drives|length }}</div>
+      <div class="at-stat__label">{% trans "Upcoming drives" %}</div>
+    </div>
+  </div>
+
+  {% if top_groups %}
+  <p class="at-most">
+    <strong>{% trans "Most needed here:" %}</strong>
+    {% for g in top_groups %}<span class="bb-bloodtag bb-bloodtag--sm"><span>{{ g }}</span></span>{% endfor %}
+    <a href="{% url 'atlas:gap' %}?district={{ name|urlencode }}">{% trans "See how it compares" %}</a>
+  </p>
+  {% endif %}
+
+  <section class="bb-card at-card" aria-labelledby="at-urgent-h">
+    <h2 class="bb-card__title" id="at-urgent-h">{% trans "Open requests here" %}</h2>
+    {% if urgent %}
+      <ul class="at-reqs">
+        {% for r in urgent %}
+        <li>
+          <a class="at-req" href="{% url 'request-detail' r.pk %}">
+            <span class="bb-bloodtag"><span>{{ r.blood_group }}</span></span>
+            <span class="at-req__body">
+              <strong>{% blocktrans count n=r.units_remaining %}{{ n }} bag needed{% plural %}{{ n }} bags needed{% endblocktrans %}</strong>
+              <small>{% blocktrans with d=r.needed_by|date:"j M" %}Needed by {{ d }}{% endblocktrans %}</small>
+            </span>
+            {% with u=r.urgency %}<span class="bb-pill{% if u.1 %} bb-pill--{{ u.1 }}{% endif %}">{{ u.0 }}</span>{% endwith %}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="bb-muted">{% trans "No open requests here right now." %}</p>
+    {% endif %}
+    <p class="bb-mt-2"><a class="bb-btn bb-btn--ghost bb-btn--sm" href="{% url 'request-list' %}">{% trans "See all requests" %}</a></p>
+  </section>
+
+  <section class="bb-card at-card" aria-labelledby="at-donors-h">
+    <h2 class="bb-card__title" id="at-donors-h">{% trans "Available donors by blood group" %}</h2>
+    <ul class="at-groups">
+      {% for g in groups %}
+      <li>
+        <span class="bb-bloodtag bb-bloodtag--sm"><span>{{ g.group }}</span></span>
+        <span class="at-groups__v">{{ g.supply.text }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+    <p class="bb-small bb-muted">{% trans "Shown as ranges, and never as a number below 3, to keep people private. Only members who chose to be listed are counted." %}</p>
+  </section>
+
+  <section class="bb-card at-card" aria-labelledby="at-trend-h">
+    <h2 class="bb-card__title" id="at-trend-h">{% trans "Verified donations by month" %}</h2>
+    {% if spark %}
+      {{ spark }}
+      <p class="bb-small bb-muted">
+        {% blocktrans count n=spark_total %}{{ n }} verified donation in the last 12 months.{% plural %}{{ n }} verified donations in the last 12 months.{% endblocktrans %}
+        {% if busiest %}{% blocktrans with month=busiest.label n=busiest.count %}Busiest month: {{ month }} ({{ n }}).{% endblocktrans %}{% endif %}
+      </p>
+    {% else %}
+      <p class="bb-muted">{% trans "No verified donations here in the last 12 months yet." %}</p>
+    {% endif %}
+  </section>
+
+  <section class="bb-card at-card" aria-labelledby="at-drives-h">
+    <h2 class="bb-card__title" id="at-drives-h">{% trans "Upcoming blood drives" %}</h2>
+    {% if drives %}
+      <ul class="at-reqs">
+        {% for e in drives %}
+        <li>
+          <a class="at-req" href="{{ e.url }}">
+            <span class="at-req__body">
+              <strong>{{ e.title }}</strong>
+              <small>{{ e.starts_at|date:"j M, g:i A" }}{% if e.venue %} &middot; {{ e.venue }}{% endif %}</small>
+            </span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="bb-muted">{% trans "No drives planned here yet." %}</p>
+    {% endif %}
+  </section>
+
+  {% if squads %}
+  <section class="bb-card at-card" aria-labelledby="at-squads-h">
+    <h2 class="bb-card__title" id="at-squads-h">{% trans "Squads based here" %}</h2>
+    <div class="bb-chips">
+      {% for s in squads %}<a class="bb-chip" href="{{ s.url }}">{{ s.name }}</a>{% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  {% if siblings %}
+  <section aria-labelledby="at-more-h">
+    <h2 class="bb-small bb-strong bb-mb-1" id="at-more-h">{% blocktrans with division=division %}More in {{ division }} division{% endblocktrans %}</h2>
+    <div class="bb-chips">
+      {% for s in siblings %}<a class="bb-chip" href="{% url 'atlas:district' s.slug %}">{{ s.name }}</a>{% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <p class="bb-mt-3"><a href="{% url 'atlas:map' %}">&larr; {% trans "Back to the map" %}</a></p>
+</div>
+{% endblock body %}
