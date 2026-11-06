@@ -1,5 +1,5 @@
 {% extends 'base/base.html' %}
-{% load static %}
+{% load static moments_tags growth_tags alerts_tags events_tags habits_tags %}
 
 {% block title %}{{ blood_request.blood_group }} needed at {{ blood_request.hospital }}{% endblock title %}
 
@@ -189,6 +189,10 @@
           {% include 'rewards/_share_buttons.html' %}
         </section>
       {% endif %}
+
+      {% moments_request %}
+      {% growth_request %}
+      {% alerts_request %}
     </div>
 
     {# ---- Timeline + report ---- #}

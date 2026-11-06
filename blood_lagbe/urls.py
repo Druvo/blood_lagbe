@@ -57,6 +57,12 @@ urlpatterns = [
     path('squads/', include('squads.urls')),
     path('impact/', include('insights.urls')),
     path('stories/', include('stories.urls')),
+    path('moments/', include('moments.urls')),
+    path('today/', include('habits.urls')),
+    path('events/', include('events.urls')),
+    path('alerts/', include('alerts.urls')),
+    # growth owns a few root-level paths (invite/, u/, ...), so it goes last
+    path('', include('growth.urls')),
 
     # auth urls -----
     path('accounts/', include('django.contrib.auth.urls')),

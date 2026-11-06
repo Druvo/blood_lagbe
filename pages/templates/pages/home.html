@@ -1,5 +1,5 @@
 {% extends 'base/base.html' %}
-{% load static %}
+{% load static moments_tags habits_tags events_tags growth_tags alerts_tags %}
 
 {% block title %}Give blood. Build bonds. Save lives.{% endblock title %}
 
@@ -206,6 +206,12 @@
     <p class="bb-muted bb-xs bb-center bb-mt-2">* A general reminder, not medical advice. The blood bank's screening decides your eligibility. <a href="{% url 'learn' %}">Read the full guide</a>.</p>
   </div>
 </section>
+
+{% events_home %}
+{% habits_home %}
+{% moments_home %}
+{% growth_home %}
+{% alerts_home %}
 
 <!-- CTA -->
 <section class="bb-section">

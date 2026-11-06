@@ -1,5 +1,5 @@
 {% extends 'base/base.html' %}
-{% load static %}
+{% load static moments_tags habits_tags events_tags growth_tags alerts_tags %}
 
 {% block title %}My hub{% endblock title %}
 
@@ -383,6 +383,12 @@
         </div>
       </div>
     </div>
+
+    {% moments_hub %}
+    {% habits_hub %}
+    {% events_hub %}
+    {% growth_hub %}
+    {% alerts_hub %}
 
   </div>
 </section>
