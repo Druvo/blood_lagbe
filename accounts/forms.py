@@ -4,6 +4,7 @@ from django import forms
 from django.contrib.auth import authenticate, get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from django.core.validators import MaxLengthValidator
+from django.utils.translation import gettext_lazy as _
 
 from accounts.models import Profile
 from rewards.blood import BLOOD_GROUP_CHOICES
@@ -19,7 +20,7 @@ class PrivacyForm(forms.ModelForm):
         model = Profile
         fields = [
             'blood_group', 'district', 'in_directory', 'available_to_donate',
-            'show_on_leaderboard', 'public_badge_card',
+            'show_on_leaderboard', 'public_badge_card', 'public_profile',
         ]
 
     def clean(self):
@@ -28,8 +29,18 @@ class PrivacyForm(forms.ModelForm):
             for name in ('blood_group', 'district'):
                 if not cleaned_data.get(name) and name not in self.errors:
                     self.add_error(
-                        name, 'Needed so people can find you in the directory.',
+                        name, _('Needed so people can find you in the directory.'),
                     )
+        if (
+            cleaned_data.get('public_profile')
+            and not cleaned_data.get('show_on_leaderboard')
+        ):
+            # Someone hidden from public listings is never named on a page.
+            self.add_error(
+                'public_profile',
+                _('Turn on "Show me on the leaderboard and home page" first: '
+                  'a public profile shows your name.'),
+            )
         return cleaned_data
 
 
@@ -45,8 +56,8 @@ def normalize_phone(raw):
 
 
 class LoginForm(forms.Form):
-    phone = forms.CharField(label='Phone Number')
-    password = forms.CharField(label='Password', widget=forms.PasswordInput)
+    phone = forms.CharField(label=_('Phone Number'))
+    password = forms.CharField(label=_('Password'), widget=forms.PasswordInput)
 
     user = None
 
@@ -61,8 +72,8 @@ class LoginForm(forms.Form):
             self.user = authenticate(phone=phone, password=password)
             if not self.user:
                 raise forms.ValidationError(
-                    'That phone number and password do not match. '
-                    'Check them and try again.',
+                    _('That phone number and password do not match. '
+                      'Check them and try again.'),
                     code='invalid_login',
                 )
         return cleaned_data
@@ -74,15 +85,15 @@ class RegistrationForm(UserCreationForm):
     donor directory that is honoured only when both are given."""
 
     blood_group = forms.ChoiceField(
-        label='Blood group', required=False,
-        choices=[('', 'Not sure / skip')] + list(BLOOD_GROUP_CHOICES),
+        label=_('Blood group'), required=False,
+        choices=[('', _('Not sure / skip'))] + list(BLOOD_GROUP_CHOICES),
     )
     district = forms.ChoiceField(
-        label='District', required=False,
-        choices=[('', 'Skip for now')] + list(DISTRICT_CHOICES),
+        label=_('District'), required=False,
+        choices=[('', _('Skip for now'))] + list(DISTRICT_CHOICES),
     )
     in_directory = forms.BooleanField(
-        label='List me in the donor directory', required=False,
+        label=_('List me in the donor directory'), required=False,
     )
 
     class Meta:
@@ -90,11 +101,11 @@ class RegistrationForm(UserCreationForm):
         fields = ('first_name', 'last_name', 'email', 'phone')
         error_messages = {
             'phone': {
-                'unique': 'This phone number already has an account. '
-                          'Try logging in instead.',
+                'unique': _('This phone number already has an account. '
+                            'Try logging in instead.'),
             },
             'email': {
-                'unique': 'This email is already used by another account.',
+                'unique': _('This email is already used by another account.'),
             },
         }
 
@@ -115,7 +126,7 @@ class RegistrationForm(UserCreationForm):
         phone = normalize_phone(self.cleaned_data.get('phone'))
         if not phone or phone[:2] != '01' or phone[:3] in ('010', '011', '012'):
             raise forms.ValidationError(
-                'Enter a Bangladesh mobile number, like 01712345678.',
+                _('Enter a Bangladesh mobile number, like 01712345678.'),
                 code='invalid_phone',
             )
         return phone

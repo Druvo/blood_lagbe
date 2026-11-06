@@ -1,36 +1,44 @@
-{% load static %}{% with p=request.path %}
+{% load static i18n %}{% with p=request.path %}
 <header class="bb-nav">
   <div class="bb-container bb-nav__inner">
-    <a href="{% url 'home' %}" class="bb-brand" aria-label="{{ SITE_NAME }} home">
+    <a href="{% url 'home' %}" class="bb-brand" aria-label="{% blocktrans with site=SITE_NAME %}{{ site }} home{% endblocktrans %}">
       <img src="{% static 'images/brand/bloodbond-mark.svg' %}" alt="" width="36" height="36">
       <span>{{ SITE_NAME }}</span>
     </a>
 
-    <nav class="bb-nav__links" aria-label="Main">
-      <a href="{% url 'request-list' %}" class="{% if p|slice:':10' == '/requests/' %}is-active{% endif %}"{% if p|slice:':10' == '/requests/' %} aria-current="page"{% endif %}>Urgent requests</a>
-      <a href="{% url 'donor-directory' %}" class="{% if p|slice:':8' == '/donors/' %}is-active{% endif %}"{% if p|slice:':8' == '/donors/' %} aria-current="page"{% endif %}>Find donors</a>
-      <a href="{% url 'stories' %}" class="{% if p|slice:':9' == '/stories/' %}is-active{% endif %}"{% if p|slice:':9' == '/stories/' %} aria-current="page"{% endif %}>Stories</a>
+    <nav class="bb-nav__links" aria-label="{% trans 'Main' %}">
+      <a href="{% url 'request-list' %}" class="{% if p|slice:':10' == '/requests/' %}is-active{% endif %}"{% if p|slice:':10' == '/requests/' %} aria-current="page"{% endif %}>{% trans "Urgent requests" %}</a>
+      <a href="{% url 'donor-directory' %}" class="{% if p|slice:':8' == '/donors/' %}is-active{% endif %}"{% if p|slice:':8' == '/donors/' %} aria-current="page"{% endif %}>{% trans "Find donors" %}</a>
+      <a href="{% url 'stories' %}" class="{% if p|slice:':9' == '/stories/' %}is-active{% endif %}"{% if p|slice:':9' == '/stories/' %} aria-current="page"{% endif %}>{% trans "Stories" %}</a>
+      <a href="{% url 'events:list' %}" class="{% if p|slice:':8' == '/events/' %}is-active{% endif %}"{% if p|slice:':8' == '/events/' %} aria-current="page"{% endif %}>{% trans "Events" %}</a>
     </nav>
 
     <div class="bb-nav__end">
-      <button type="button" class="bb-iconbtn" data-theme-toggle aria-label="Toggle dark mode"><i class="feather-moon"></i></button>
+      {% include 'snippets/lang_switch.html' with lang_class='bb-hide-sm' lang_id='nav' %}
+      <button type="button" class="bb-iconbtn" data-theme-toggle aria-label="{% trans 'Toggle dark mode' %}"><i class="feather-moon"></i></button>
       {% if user.is_authenticated %}
-        <a href="{% url 'contact-inbox' %}" class="bb-iconbtn" aria-label="Contact requests"><i class="feather-bell"></i>{% if contact_pending_count %}<span class="bb-dot">{{ contact_pending_count }}</span>{% endif %}</a>
+        <a href="{% url 'alerts:inbox' %}" class="bb-iconbtn" aria-label="{% trans 'Alerts' %}{% if alerts_unread %} ({% blocktrans with n=alerts_unread %}{{ n }} unread{% endblocktrans %}){% endif %}"><i class="feather-zap"></i>{% if alerts_unread %}<span class="bb-dot">{{ alerts_unread }}</span>{% endif %}</a>
+        <a href="{% url 'contact-inbox' %}" class="bb-iconbtn bb-hide-sm" aria-label="{% trans 'Contact requests' %}"><i class="feather-bell"></i>{% if contact_pending_count %}<span class="bb-dot">{{ contact_pending_count }}</span>{% endif %}</a>
         <div class="bb-menu">
-          <button type="button" class="bb-iconbtn" data-menu-toggle aria-haspopup="true" aria-expanded="false" aria-label="Account menu"><i class="feather-user"></i></button>
+          <button type="button" class="bb-iconbtn" data-menu-toggle aria-haspopup="true" aria-expanded="false" aria-label="{% trans 'Account menu' %}"><i class="feather-user"></i></button>
           <div class="bb-menu__panel" role="menu">
-            <div class="bb-menu__head">{{ user.first_name|default:"My account" }}</div>
-            <a href="{% url 'log-donation' %}" role="menuitem"><i class="feather-award"></i> My hub</a>
-            <a href="{% url 'squads:list' %}" role="menuitem"><i class="feather-users"></i> My squads</a>
-            <a href="{% url 'contact-inbox' %}" role="menuitem"><i class="feather-inbox"></i> Contact requests{% if contact_pending_count %} ({{ contact_pending_count }}){% endif %}</a>
-            <a href="{% url 'request-mine' %}" role="menuitem"><i class="feather-droplet"></i> My requests</a>
-            <a href="{% url 'privacy' %}" role="menuitem"><i class="feather-sliders"></i> Profile &amp; privacy</a>
-            <form method="post" action="{% url 'logout' %}" role="none">{% csrf_token %}<button type="submit" role="menuitem"><i class="feather-log-out" aria-hidden="true"></i> Log out</button></form>
+            <div class="bb-menu__head">{% if user.first_name %}{{ user.first_name }}{% else %}{% trans "My account" %}{% endif %}</div>
+            <a href="{% url 'log-donation' %}" role="menuitem"><i class="feather-award"></i> {% trans "My hub" %}</a>
+            <a href="{% url 'habits:today' %}" role="menuitem"><i class="feather-sun"></i> {% trans "Today" %}</a>
+            <a href="{% url 'alerts:inbox' %}" role="menuitem"><i class="feather-zap"></i> {% trans "Alerts" %}{% if alerts_unread %} ({{ alerts_unread }}){% endif %}</a>
+            <a href="{% url 'growth:invite-home' %}" role="menuitem"><i class="feather-user-plus"></i> {% trans "Invite friends" %}</a>
+            <a href="{% url 'squads:list' %}" role="menuitem"><i class="feather-users"></i> {% trans "My squads" %}</a>
+            <a href="{% url 'contact-inbox' %}" role="menuitem"><i class="feather-inbox"></i> {% trans "Contact requests" %}{% if contact_pending_count %} ({{ contact_pending_count }}){% endif %}</a>
+            <a href="{% url 'request-mine' %}" role="menuitem"><i class="feather-droplet"></i> {% trans "My requests" %}</a>
+            <a href="{% url 'privacy' %}" role="menuitem"><i class="feather-sliders"></i> {% trans "Profile &amp; privacy" %}</a>
+            <div class="bb-menu__lang bb-only-sm">{% include 'snippets/lang_switch.html' with lang_class='bb-lang--menu' lang_id='menu' %}</div>
+            {% if user.is_staff %}<a href="{% url 'staff-desk' %}" role="menuitem"><i class="feather-clipboard"></i> {% trans "Staff desk" %}</a>{% endif %}
+            <form method="post" action="{% url 'logout' %}" role="none">{% csrf_token %}<button type="submit" role="menuitem"><i class="feather-log-out" aria-hidden="true"></i> {% trans "Log out" %}</button></form>
           </div>
         </div>
       {% else %}
-        <a href="{% url 'login' %}" class="bb-btn bb-btn--ghost bb-btn--sm bb-hide-sm">Log in</a>
-        <a href="{% url 'signup' %}" class="bb-btn bb-btn--primary bb-btn--sm">Join free</a>
+        <a href="{% url 'login' %}" class="bb-btn bb-btn--ghost bb-btn--sm bb-hide-sm">{% trans "Log in" %}</a>
+        <a href="{% url 'signup' %}" class="bb-btn bb-btn--primary bb-btn--sm">{% trans "Join free" %}</a>
       {% endif %}
     </div>
   </div>

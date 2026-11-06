@@ -5,6 +5,7 @@ carry names and a link, never a phone number: details are behind the login.
 """
 from django.conf import settings
 from django.core.mail import send_mass_mail
+from django.db.models.signals import post_save
 from django.utils import timezone
 
 from rewards.leaderboard import display_name
@@ -90,5 +91,11 @@ def close_and_notify(blood_request, outcome, url):
     blood_request.status = BloodRequest.Status.CLOSED
     blood_request.outcome = outcome
     blood_request.closed_at = now
+    # The UPDATE above sends no signal; announce the close so other apps
+    # (impact updates) can react.
+    post_save.send(
+        sender=BloodRequest, instance=blood_request, created=False,
+        raw=False, using=BloodRequest.objects.db, update_fields=None,
+    )
     notify_closed(blood_request, url)
     return True

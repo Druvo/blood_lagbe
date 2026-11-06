@@ -43,4 +43,16 @@ urlpatterns = [
         'donors/contact/<int:pk>/respond/', directory_views.contact_respond,
         name='contact-respond',
     ),
+    path(
+        'donors/contact/<int:pk>/revoke/', directory_views.contact_revoke,
+        name='contact-revoke',
+    ),
+    path(
+        'donors/contact/<int:pk>/block/', directory_views.contact_block,
+        name='contact-block',
+    ),
+    path(
+        'donors/blocked/<int:pk>/remove/', directory_views.contact_unblock,
+        name='contact-unblock',
+    ),
 ]

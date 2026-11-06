@@ -1,0 +1,12 @@
+{% load i18n lang_tags %}{% get_current_language as CURRENT_LANG %}{% comment %}
+Language switcher: a small POST form that works without JavaScript.
+`next` is the current path with its query string, so the page the visitor is on
+(filters, pages, form state in the URL) is kept. Django validates `next`.
+Include with lang_class (extra CSS class) and lang_id (to keep ids unique).
+{% endcomment %}<form class="bb-lang {{ lang_class }}" method="post" action="{% url 'set_language' %}" role="group" aria-label="{% trans 'Language' %}">
+  {% csrf_token %}
+  <input type="hidden" name="next" value="{% language_next %}">
+  <button type="submit" name="language" value="en" lang="en"{% if CURRENT_LANG == 'en' %} aria-current="true" class="is-active"{% endif %}>EN</button>
+  <span class="bb-lang__sep" aria-hidden="true">|</span>
+  <button type="submit" name="language" value="bn" lang="bn"{% if CURRENT_LANG == 'bn' %} aria-current="true" class="is-active"{% endif %}>বাংলা</button>
+</form>

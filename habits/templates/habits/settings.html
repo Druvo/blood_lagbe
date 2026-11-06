@@ -1,0 +1,34 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Weekly email{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'habits/habits.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container bb-container--form hb-page">
+  <header class="bb-stack bb-stack--sm bb-mb-2">
+    <span class="bb-eyebrow">Settings</span>
+    <h1 class="bb-h2 bb-mb-0">Weekly email</h1>
+    <p class="bb-lead bb-mb-0">A short note once a week. It is off until you turn it on.</p>
+  </header>
+
+  <form method="post" class="bb-card bb-form bb-stack">
+    {% csrf_token %}
+    <label class="bb-check">
+      <input type="checkbox" name="enabled" {% if pref.enabled %}checked{% endif %}>
+      <span><strong>Send me the weekly email</strong>
+        <span class="bb-help">Your XP and level, your squad rank if you are in a squad, open urgent requests near you that your blood group can help, and your visit streak. Never anyone's phone number or email address. Every email has a one-click way to turn it off.</span></span>
+    </label>
+    {% if not has_email %}
+      <div class="bb-alert bb-alert--warn" role="note">You have no email address on your account, so nothing can be sent yet.</div>
+    {% endif %}
+    {% if pref.last_sent_week %}<p class="bb-xs bb-muted bb-mb-0">Last sent: week {{ pref.last_sent_week }}.</p>{% endif %}
+    <div class="bb-row">
+      <button class="bb-btn bb-btn--primary" type="submit">Save</button>
+      <a class="bb-btn bb-btn--ghost" href="{% url 'habits:today' %}">Back to Today</a>
+      <a class="bb-btn bb-btn--ghost" href="{% url 'log-donation' %}">My hub</a>
+    </div>
+  </form>
+  <p class="bb-xs bb-muted bb-mt-2">Reminders, not medical advice. The blood bank's screening decides eligibility.</p>
+</div>
+{% endblock body %}

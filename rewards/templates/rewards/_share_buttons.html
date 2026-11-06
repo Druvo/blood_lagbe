@@ -1,17 +1,17 @@
-{% load static %}
+{% load static i18n %}
 {# Needs: share_card (dict), share_url, share_text, share_filename. Optional: share_preview (true shows the image preview) #}
 <div class="share-box" data-share-root data-share-data="share-data"
      data-share-url="{{ share_url }}" data-share-text="{{ share_text }}"
      data-share-filename="{{ share_filename }}">
   {{ share_card|json_script:"share-data" }}
   <div class="bb-row bb-row--center share-actions">
-    <button type="button" class="bb-btn bb-btn--primary" data-share-action="native"><i class="feather-share-2"></i> Share</button>
-    <button type="button" class="bb-btn bb-btn--soft" data-share-action="download"><i class="feather-download"></i> Save image</button>
+    <button type="button" class="bb-btn bb-btn--primary" data-share-action="native"><i class="feather-share-2"></i> {% trans "Share" %}</button>
+    <button type="button" class="bb-btn bb-btn--soft" data-share-action="download"><i class="feather-download"></i> {% trans "Save image" %}</button>
     <a class="bb-btn bb-btn--ok" target="_blank" rel="noopener noreferrer"
-       href="https://wa.me/?text={{ share_text|urlencode:'' }}%20{{ share_url|urlencode:'' }}"><i class="feather-message-circle"></i> WhatsApp</a>
+       href="https://wa.me/?text={{ share_text|urlencode:'' }}%20{{ share_url|urlencode:'' }}"><i class="feather-message-circle"></i> {% trans "WhatsApp" %}</a>
     <a class="bb-btn bb-btn--ghost" target="_blank" rel="noopener noreferrer"
-       href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode:'' }}"><i class="feather-facebook"></i> Facebook</a>
-    <button type="button" class="bb-btn bb-btn--ghost" data-share-action="copy"><i class="feather-copy"></i> Copy link</button>
+       href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode:'' }}"><i class="feather-facebook"></i> {% trans "Facebook" %}</a>
+    <button type="button" class="bb-btn bb-btn--ghost" data-share-action="copy"><i class="feather-copy"></i> {% trans "Copy link" %}</button>
   </div>
   {% if share_preview %}<div data-share-preview class="bb-mt-2"></div>{% endif %}
 </div>

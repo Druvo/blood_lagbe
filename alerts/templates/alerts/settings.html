@@ -1,0 +1,63 @@
+{% extends 'base/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Alert settings" %}{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'alerts/alerts.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container bb-container--form bb-section">
+  <span class="bb-eyebrow">{% trans "Alerts" %}</span>
+  <h1 class="bb-h2">{% trans "Request alerts" %}</h1>
+  <p class="bb-lead">{% trans "Get a heads-up when someone near you posts a request your blood group can help with. It is off until you turn it on, and you can turn it off any time." %}</p>
+
+  {% if not profile_ready %}
+    <div class="bb-alert bb-alert--warn bb-mb-2">{% url 'privacy' as privacy_url %}{% blocktrans %}Alerts need your blood group and district. <a href="{{ privacy_url }}">Add them in Profile &amp; privacy</a>.{% endblocktrans %}</div>
+  {% endif %}
+
+  <form method="post" class="bb-form bb-card">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    <label class="bb-check">
+      {{ form.enabled }}
+      <span><strong>{% trans "Alert me about matching requests" %}</strong>
+      <span class="bb-help">{% blocktrans with interval=donation_interval_label %}Only when your group can help, the request is in your district or one you pick, you are marked available, and your {{ interval }} break since your last donation is over.{% endblocktrans %}</span></span>
+    </label>
+    {{ form.enabled.errors }}
+
+    <label class="bb-check">
+      {{ form.email_enabled }}
+      <span><strong>{% trans "Also email me" %}</strong>
+      <span class="bb-help">{% if has_email %}{% trans "Each email has a one-click link to stop emails." %}{% else %}{% trans "You have no email address yet. Add one in Profile &amp; privacy." %}{% endif %} {% trans "Emails never include another member's phone number or email." %}</span></span>
+    </label>
+    {{ form.email_enabled.errors }}
+
+    <label class="bb-check">
+      {{ form.only_rare_groups }}
+      <span><strong>{% trans "Only for rare blood groups" %}</strong>
+      <span class="bb-help">{% trans "Skip requests for common groups." %}</span></span>
+    </label>
+
+    <div class="bb-field">
+      <label class="bb-label" for="{{ form.extra_districts.id_for_label }}">{{ form.extra_districts.label }}</label>
+      {{ form.extra_districts }}
+      <div class="bb-help">{{ form.extra_districts.help_text }} {% trans "On a computer, hold Ctrl or Cmd to pick more than one." %}</div>
+      {{ form.extra_districts.errors }}
+    </div>
+
+    <div class="bb-field">
+      <label class="bb-label" for="{{ form.daily_cap.id_for_label }}">{{ form.daily_cap.label }}</label>
+      {{ form.daily_cap }}
+      <div class="bb-help">{% trans "We never send more than this in one day (1 to 10)." %}</div>
+      {{ form.daily_cap.errors }}
+    </div>
+
+    <p class="bb-small bb-muted">{% trans "Alerts are reminders only, not medical clearance, and there is no pressure to donate. The hospital decides who can give blood." %}</p>
+
+    <div class="bb-row">
+      <button type="submit" class="bb-btn bb-btn--primary">{% trans "Save settings" %}</button>
+      <a href="{% url 'alerts:inbox' %}" class="bb-btn bb-btn--ghost">{% trans "Back to inbox" %}</a>
+    </div>
+  </form>
+</div>
+{% endblock body %}

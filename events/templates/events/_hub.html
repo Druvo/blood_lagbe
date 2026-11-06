@@ -1,0 +1,23 @@
+{% if badges is not None %}{% load static i18n %}
+<link rel="stylesheet" href="{% static 'events/events.css' %}">
+<div class="bb-card">
+  <h3 class="bb-card__title"><i class="feather-calendar" aria-hidden="true"></i> {% trans "Drives and campaigns" %}</h3>
+  {% if next_rsvp %}
+    <p class="bb-small bb-mb-1">{% url 'events:detail' next_rsvp.event.pk as detail_url %}{% blocktrans with title=next_rsvp.event.title %}Next: <a href="{{ detail_url }}" class="bb-strong">{{ title }}</a>{% endblocktrans %}<br><span class="bb-muted">{{ next_rsvp.event.starts_at|date:"D, j M, g:i A" }}</span></p>
+  {% else %}
+    <p class="bb-small bb-muted bb-mb-1">{% url 'events:list' as list_url %}{% blocktrans %}No RSVP yet. <a href="{{ list_url }}">Find a drive</a>.{% endblocktrans %}</p>
+  {% endif %}
+  {% if attended %}
+    <p class="bb-small bb-mb-1"><i class="feather-check-circle" aria-hidden="true"></i> {% blocktrans count counter=attended %}{{ counter }} drive attended{% plural %}{{ counter }} drives attended{% endblocktrans %}{% if attended_verified %} ({% blocktrans with n=attended_verified %}{{ n }} verified{% endblocktrans %}){% endif %}</p>
+  {% endif %}
+  {% if badges %}
+    <div class="ev-badges bb-mb-1">
+      {% for b in badges %}<span class="ev-badge-chip ev-theme-{{ b.campaign.theme }}"><i class="feather-{{ b.campaign.badge_icon }}" aria-hidden="true"></i> {{ b.campaign.badge_name }}</span>{% endfor %}
+    </div>
+  {% endif %}
+  <div class="bb-row">
+    <a href="{% url 'events:create' %}" class="bb-btn bb-btn--soft bb-btn--sm">{% trans "Host a drive" %}</a>
+    <a href="{% url 'events:campaigns' %}" class="bb-btn bb-btn--ghost bb-btn--sm">{% trans "Campaigns" %}</a>
+  </div>
+</div>
+{% endif %}

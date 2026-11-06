@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Contact requests{% endblock title %}
+{% block title %}{% trans "Contact requests" %}{% endblock title %}
 {% block extra_style %}<link rel="stylesheet" href="{% static 'css/community.css' %}">{% endblock extra_style %}
 
 {% block body %}
@@ -9,33 +9,34 @@
 
   <header class="cm-head bb-row bb-row--between bb-row--top">
     <div>
-      <span class="bb-eyebrow">Inbox</span>
-      <h1 class="bb-h2 bb-mb-1">Contact requests</h1>
-      <p class="bb-lead">A number is shared only when the donor accepts. Declining tells the asker nothing else.</p>
+      <span class="bb-eyebrow">{% trans "Inbox" %}</span>
+      <h1 class="bb-h2 bb-mb-1">{% trans "Contact requests" %}</h1>
+      <p class="bb-lead">{% trans "A number is shared only when the donor accepts. Declining tells the asker nothing else." %}</p>
     </div>
-    <a href="{% url 'donor-directory' %}" class="bb-btn bb-btn--soft bb-btn--sm"><i class="feather-search"></i> Find donors</a>
+    <a href="{% url 'donor-directory' %}" class="bb-btn bb-btn--soft bb-btn--sm"><i class="feather-search"></i> {% trans "Find donors" %}</a>
   </header>
 
   <div class="cm-seg-wrap bb-mt-2 bb-mb-2">
-    <nav class="bb-seg" aria-label="Inbox sections">
-      <a href="#received" class="is-active">People asking you{% if pending_count %} ({{ pending_count }}){% endif %}</a>
-      <a href="#sent">You asked{% if sent_waiting %} ({{ sent_waiting }}){% endif %}</a>
+    <nav class="bb-seg" aria-label="{% trans 'Inbox sections' %}">
+      <a href="#received" class="is-active">{% trans "People asking you" %}{% if pending_count %} ({{ pending_count }}){% endif %}</a>
+      <a href="#sent">{% trans "You asked" %}{% if sent_waiting %} ({{ sent_waiting }}){% endif %}</a>
     </nav>
   </div>
 
   <section id="received" aria-labelledby="received-h" class="bb-stack">
-    <h2 class="bb-h3 bb-mb-0" id="received-h">People asking for your help</h2>
+    <h2 class="bb-h3 bb-mb-0" id="received-h">{% trans "People asking for your help" %}</h2>
     {% for item in received %}
       <article class="bb-card cm-item {% if item.req.status == 'pending' %}bb-card--accent{% endif %}">
         <div class="cm-item__top">
           <span class="bb-avatar" aria-hidden="true">{{ item.initials }}</span>
           <div class="bb-grow">
             <div class="bb-strong cm-trunc">{{ item.name }}</div>
-            <div class="cm-item__time">Asked {{ item.req.created_at|date:"j M Y, g:i a" }}</div>
+            <div class="cm-item__time">{% blocktrans with when=item.req.created_at|date:"j M Y, g:i a" %}Asked {{ when }}{% endblocktrans %}</div>
           </div>
-          {% if item.req.status == 'pending' %}<span class="bb-pill bb-pill--warn">Waiting for you</span>
-          {% elif item.req.status == 'accepted' %}<span class="bb-pill bb-pill--ok">Accepted</span>
-          {% else %}<span class="bb-pill">Declined</span>{% endif %}
+          {% if item.req.status == 'pending' %}<span class="bb-pill bb-pill--warn">{% trans "Waiting for you" %}</span>
+          {% elif item.req.status == 'accepted' %}<span class="bb-pill bb-pill--ok">{% trans "Accepted" %}</span>
+          {% elif item.req.status == 'revoked' %}<span class="bb-pill">{% trans "Number hidden" %}</span>
+          {% else %}<span class="bb-pill">{% trans "Declined" %}</span>{% endif %}
         </div>
 
         {% if item.req.message %}<blockquote class="cm-quote">{{ item.req.message }}</blockquote>{% endif %}
@@ -43,63 +44,96 @@
         {% if item.req.status == 'pending' %}
           <form method="post" action="{% url 'contact-respond' item.req.pk %}" class="cm-actions">
             {% csrf_token %}
-            <button name="answer" value="accept" class="bb-btn bb-btn--ok" type="submit"><i class="feather-check"></i> Accept</button>
-            <button name="answer" value="decline" class="bb-btn bb-btn--ghost" type="submit"><i class="feather-x"></i> Decline</button>
+            <button name="answer" value="accept" class="bb-btn bb-btn--ok" type="submit"><i class="feather-check"></i> {% trans "Accept" %}</button>
+            <button name="answer" value="decline" class="bb-btn bb-btn--ghost" type="submit"><i class="feather-x"></i> {% trans "Decline" %}</button>
           </form>
-          <p class="bb-help bb-mb-0">Accepting shares your phone number with {{ item.name }}. Only accept if you are happy to be called.</p>
+          <p class="bb-help bb-mb-0">{% blocktrans with name=item.name %}Accepting shares your phone number with {{ name }}. Only accept if you are happy to be called.{% endblocktrans %}</p>
         {% elif item.req.status == 'accepted' %}
           <div class="cm-phone">
-            <span>Their number</span>
+            <span>{% trans "Their number" %}</span>
             <a href="tel:{{ item.phone }}" class="bb-btn bb-btn--ok bb-btn--sm"><i class="feather-phone"></i> {{ item.phone }}</a>
           </div>
-          {% if item.req.answered_at %}<ul class="cm-history"><li>You accepted on {{ item.req.answered_at|date:"j M Y" }}.</li></ul>{% endif %}
+          {% if item.req.answered_at %}<ul class="cm-history"><li>{% blocktrans with when=item.req.answered_at|date:"j M Y" %}You accepted on {{ when }}.{% endblocktrans %}</li></ul>{% endif %}
+          <form method="post" action="{% url 'contact-revoke' item.req.pk %}" class="cm-actions">
+            {% csrf_token %}
+            <button class="bb-btn bb-btn--ghost bb-btn--sm" type="submit"><i class="feather-eye-off"></i> {% trans "Hide my number again" %}</button>
+          </form>
+        {% elif item.req.status == 'revoked' %}
+          {% if item.req.revoked_at %}<ul class="cm-history"><li>{% blocktrans with when=item.req.revoked_at|date:"j M Y" %}You hid your number on {{ when }}.{% endblocktrans %}</li></ul>{% endif %}
         {% else %}
-          {% if item.req.answered_at %}<ul class="cm-history"><li>You declined on {{ item.req.answered_at|date:"j M Y" }}.</li></ul>{% endif %}
+          {% if item.req.answered_at %}<ul class="cm-history"><li>{% blocktrans with when=item.req.answered_at|date:"j M Y" %}You declined on {{ when }}.{% endblocktrans %}</li></ul>{% endif %}
+        {% endif %}
+        {% if not item.blocked %}
+          <form method="post" action="{% url 'contact-block' item.req.pk %}" class="cm-actions">
+            {% csrf_token %}
+            <button class="bb-btn bb-btn--ghost bb-btn--sm" type="submit"><i class="feather-slash"></i> {% trans "Block this person" %}</button>
+            <span class="bb-help">{% trans "No more requests from them, and they are not told." %}</span>
+          </form>
         {% endif %}
       </article>
     {% empty %}
       <div class="bb-card bb-empty">
         <i class="feather-inbox"></i>
-        <strong class="bb-strong">Nobody has asked yet</strong>
-        <p class="bb-small">{% if not user.profile.in_directory %}You are not in the directory. <a href="{% url 'privacy' %}">Join it</a> if you want to be found.{% else %}You will see requests here when someone needs your help.{% endif %}</p>
+        <strong class="bb-strong">{% trans "Nobody has asked yet" %}</strong>
+        <p class="bb-small">{% if not user.profile.in_directory %}{% url 'privacy' as privacy_url %}{% blocktrans %}You are not in the directory. <a href="{{ privacy_url }}">Join it</a> if you want to be found.{% endblocktrans %}{% else %}{% trans "You will see requests here when someone needs your help." %}{% endif %}</p>
       </div>
     {% endfor %}
   </section>
 
   <section id="sent" aria-labelledby="sent-h" class="bb-stack bb-mt-3">
-    <h2 class="bb-h3 bb-mb-0" id="sent-h">Requests you sent</h2>
+    <h2 class="bb-h3 bb-mb-0" id="sent-h">{% trans "Requests you sent" %}</h2>
     {% for item in sent %}
       <article class="bb-card cm-item">
         <div class="cm-item__top">
           <span class="bb-bloodtag bb-bloodtag--sm"><span>{{ item.group|default:"?" }}</span></span>
           <div class="bb-grow">
             <div class="bb-strong cm-trunc">{{ item.name }}</div>
-            <div class="cm-item__time">Sent {{ item.req.created_at|date:"j M Y, g:i a" }}</div>
+            <div class="cm-item__time">{% blocktrans with when=item.req.created_at|date:"j M Y, g:i a" %}Sent {{ when }}{% endblocktrans %}</div>
           </div>
-          {% if item.req.status == 'pending' %}<span class="bb-pill bb-pill--warn">Waiting</span>
-          {% elif item.req.status == 'accepted' %}<span class="bb-pill bb-pill--ok">Accepted</span>
-          {% else %}<span class="bb-pill">Declined</span>{% endif %}
+          {% if item.req.status == 'pending' %}<span class="bb-pill bb-pill--warn">{% trans "Waiting" %}</span>
+          {% elif item.req.status == 'accepted' %}<span class="bb-pill bb-pill--ok">{% trans "Accepted" %}</span>
+          {% elif item.req.status == 'revoked' %}<span class="bb-pill">{% trans "No longer shared" %}</span>
+          {% else %}<span class="bb-pill">{% trans "Declined" %}</span>{% endif %}
         </div>
         {% if item.req.message %}<blockquote class="cm-quote">{{ item.req.message }}</blockquote>{% endif %}
-        {% if item.req.status == 'accepted' %}
+        {% if item.req.status == 'revoked' %}
+          <p class="bb-small bb-muted bb-mb-0">{% trans "This donor is not sharing their number any more. It is their choice and nothing you did." %}{% if item.retry_on %} {% blocktrans with when=item.retry_on|date:"j M Y" %}You can ask again after {{ when }}.{% endblocktrans %}{% endif %} {% trans "Meanwhile, try someone else." %}</p>
+        {% elif item.req.status == 'accepted' %}
           <div class="cm-phone">
-            <span>Their number</span>
+            <span>{% trans "Their number" %}</span>
             <a href="tel:{{ item.phone }}" class="bb-btn bb-btn--ok bb-btn--sm"><i class="feather-phone"></i> {{ item.phone }}</a>
           </div>
         {% elif item.req.status == 'pending' %}
-          <p class="bb-small bb-muted bb-mb-0">Waiting for an answer. Don't worry: they only see your name and note.</p>
+          <p class="bb-small bb-muted bb-mb-0">{% trans "Waiting for an answer. Don't worry: they only see your name and note." %}</p>
         {% else %}
-          <p class="bb-small bb-muted bb-mb-0">They can't help this time.{% if item.retry_on %} You can ask again after {{ item.retry_on|date:"j M Y" }}.{% endif %} Meanwhile, try someone else.</p>
+          <p class="bb-small bb-muted bb-mb-0">{% trans "They can't help this time." %}{% if item.retry_on %} {% blocktrans with when=item.retry_on|date:"j M Y" %}You can ask again after {{ when }}.{% endblocktrans %}{% endif %} {% trans "Meanwhile, try someone else." %}</p>
         {% endif %}
       </article>
     {% empty %}
       <div class="bb-card bb-empty">
         <i class="feather-send"></i>
-        <strong class="bb-strong">You haven't asked anyone yet</strong>
-        <p class="bb-small">Search the directory by blood group and district.</p>
-        <a href="{% url 'donor-directory' %}" class="bb-btn bb-btn--primary bb-btn--sm">Find donors</a>
+        <strong class="bb-strong">{% trans "You haven't asked anyone yet" %}</strong>
+        <p class="bb-small">{% trans "Search the directory by blood group and district." %}</p>
+        <a href="{% url 'donor-directory' %}" class="bb-btn bb-btn--primary bb-btn--sm">{% trans "Find donors" %}</a>
       </div>
     {% endfor %}
   </section>
+
+  {% if blocked %}
+  <section id="blocked" aria-labelledby="blocked-h" class="bb-stack bb-mt-3">
+    <h2 class="bb-h3 bb-mb-0" id="blocked-h">{% trans "People you blocked" %}</h2>
+    {% for item in blocked %}
+      <div class="bb-card cm-item">
+        <div class="cm-item__top">
+          <div class="bb-grow bb-strong cm-trunc">{{ item.name }}</div>
+          <form method="post" action="{% url 'contact-unblock' item.block.pk %}">
+            {% csrf_token %}
+            <button class="bb-btn bb-btn--ghost bb-btn--sm" type="submit">{% trans "Unblock" %}</button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+  </section>
+  {% endif %}
 </div>
 {% endblock body %}

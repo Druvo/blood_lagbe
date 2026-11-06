@@ -1,0 +1,45 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Thanks wall{% endblock title %}
+
+{% block extra_style %}<link rel="stylesheet" href="{% static 'moments/moments.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container bb-container--narrow bb-section--tight">
+  <div class="bb-pagehead">
+    <span class="bb-eyebrow">Your moments</span>
+    <h1 class="bb-h2 bb-mb-1">Thanks wall</h1>
+    <p class="bb-muted">Notes from people you offered to help. You can hide any of them.</p>
+  </div>
+
+  {% if page.object_list %}
+    <ul class="mo-notes bb-stack">
+      {% for note in page.object_list %}
+        <li class="bb-card mo-note">
+          <p class="mo-note__text">&ldquo;{{ note.text }}&rdquo;</p>
+          <div class="mo-note__meta">
+            <span class="bb-xs bb-muted">{{ note.sender_label }} &middot; {{ note.blood_request.blood_group }} request in {{ note.blood_request.district }} &middot; {{ note.created_at|date:"M d, Y" }}</span>
+            <form method="post" action="{% url 'moments:note-hide' note.pk %}">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ request.get_full_path }}">
+              <button type="submit" class="mo-link" aria-label="Hide this note">Hide</button>
+            </form>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+    {% if page.has_other_pages %}
+      <nav class="bb-row bb-row--between bb-mt-2" aria-label="Pages">
+        {% if page.has_previous %}<a class="bb-btn bb-btn--ghost" href="?page={{ page.previous_page_number }}">Newer</a>{% else %}<span></span>{% endif %}
+        <span class="bb-small bb-muted">Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+        {% if page.has_next %}<a class="bb-btn bb-btn--ghost" href="?page={{ page.next_page_number }}">Older</a>{% else %}<span></span>{% endif %}
+      </nav>
+    {% endif %}
+  {% else %}
+    <div class="bb-empty"><i class="feather-heart" aria-hidden="true"></i>No notes yet. When someone you helped says thanks, it shows up here.</div>
+  {% endif %}
+
+  <p class="bb-mt-2"><a href="{% url 'log-donation' %}">Back to my hub</a></p>
+</div>
+{% endblock body %}

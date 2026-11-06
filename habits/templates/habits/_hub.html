@@ -1,0 +1,22 @@
+{% load static i18n %}{% if member %}<link rel="stylesheet" href="{% static 'habits/habits.css' %}">
+<section class="bb-card" aria-labelledby="habits-hub-h">
+  <div class="hb-panel__row">
+    <h2 class="bb-card__title bb-mb-0" id="habits-hub-h">{% trans "Today" %}</h2>
+    <span class="bb-pill{% if done_count >= total %} bb-pill--ok{% endif %}">{% blocktrans with done=done_count %}{{ done }} of {{ total }} done{% endblocktrans %}</span>
+  </div>
+  <p class="bb-small bb-muted bb-mt-1 bb-mb-1">
+    {% if streak.current %}{% include 'habits/_flame.html' %} {% blocktrans with n=streak.current %}<strong>{{ n }}-day</strong> visit streak.{% endblocktrans %} {% else %}{% trans "Three small things, no pressure." %} {% endif %}{% trans "A friendly habit, separate from your points." %}
+  </p>
+  {% if earned_titles %}
+    <div class="hb-chips-line bb-mb-1">
+      {% for t in earned_titles %}<span class="hb-mini" title="{{ t.description }}"><i class="feather-{{ t.icon }}" aria-hidden="true"></i> {{ t.name }}</span>{% endfor %}
+    </div>
+  {% elif next_title %}
+    <p class="bb-xs bb-muted bb-mb-1">{% blocktrans with name=next_title.name current=next_title.current target=next_title.target %}Next title: <strong>{{ name }}</strong> ({{ current }} of {{ target }}){% endblocktrans %}</p>
+  {% endif %}
+  <div class="bb-row">
+    <a class="bb-btn bb-btn--primary bb-btn--sm" href="{% url 'habits:today' %}">{% if done_count >= total %}{% trans "See today" %}{% else %}{% trans "Open Today" %}{% endif %}</a>
+    <a class="bb-btn bb-btn--ghost bb-btn--sm" href="{% url 'habits:titles' %}">{% trans "Titles" %}</a>
+    <a class="bb-btn bb-btn--ghost bb-btn--sm" href="{% url 'habits:year' %}">{% trans "My year" %}</a>
+  </div>
+</section>{% endif %}

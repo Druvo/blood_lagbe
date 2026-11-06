@@ -1,0 +1,51 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}My drives{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'events/events.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container ev-page">
+  <header class="bb-row bb-row--between bb-row--top">
+    <div>
+      <span class="bb-eyebrow">Events</span>
+      <h1 class="bb-h2">My drives</h1>
+    </div>
+    <a href="{% url 'events:create' %}" class="bb-btn bb-btn--primary bb-btn--sm"><i class="feather-plus" aria-hidden="true"></i> Host a drive</a>
+  </header>
+
+  <nav class="ev-tabs" aria-label="Event sections">
+    <div class="bb-seg">
+      <a href="{% url 'events:list' %}">Upcoming</a>
+      <a href="{% url 'events:past' %}">Completed</a>
+    </div>
+    <a href="{% url 'events:mine' %}" class="bb-chip bb-chip--active" aria-current="page">My drives</a>
+  </nav>
+
+  <section aria-labelledby="org-h" class="bb-mt-2">
+    <h2 class="bb-h3" id="org-h">Drives I host</h2>
+    {% for event in organized %}
+      {% include 'events/_event_card.html' %}
+    {% empty %}
+      <div class="bb-card bb-empty">
+        <i class="feather-calendar" aria-hidden="true"></i>
+        <strong class="bb-strong">You have not hosted a drive yet</strong>
+        <p class="bb-small">New drives are checked by a volunteer before they show in the list.</p>
+      </div>
+    {% endfor %}
+  </section>
+
+  <section aria-labelledby="going-h" class="bb-mt-3">
+    <h2 class="bb-h3" id="going-h">Drives I am going to</h2>
+    {% for event in going %}
+      {% include 'events/_event_card.html' %}
+    {% empty %}
+      <div class="bb-card bb-empty">
+        <i class="feather-users" aria-hidden="true"></i>
+        <strong class="bb-strong">No RSVPs yet</strong>
+        <a href="{% url 'events:list' %}" class="bb-btn bb-btn--soft bb-btn--sm">Find a drive</a>
+      </div>
+    {% endfor %}
+  </section>
+</div>
+{% endblock body %}

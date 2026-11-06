@@ -1,37 +1,37 @@
 {% extends 'base/base.html' %}
-{% load insights_extras %}
-{% block title %}Our impact{% endblock title %}
+{% load insights_extras i18n %}
+{% block title %}{% trans "Our impact" %}{% endblock title %}
 {% block meta %}
-<meta name="description" content="Verified blood donations, donors and requests across Bangladesh, shown with open numbers. {{ SITE_NAME }}.">
+<meta name="description" content="{% blocktrans with site=SITE_NAME %}Verified blood donations, donors and requests across Bangladesh, shown with open numbers. {{ site }}.{% endblocktrans %}">
 <meta property="og:site_name" content="{{ SITE_NAME }}">
-<meta property="og:title" content="Our impact | {{ SITE_NAME }}">
-<meta property="og:description" content="{{ totals.donations|commas }} verified donations from {{ totals.donors|commas }} donors.">
+<meta property="og:title" content="{% trans 'Our impact' %} | {{ SITE_NAME }}">
+<meta property="og:description" content="{% blocktrans with d=totals.donations|commas n=totals.donors|commas %}{{ d }} verified donations from {{ n }} donors.{% endblocktrans %}">
 {% endblock meta %}
 {% block extra_style %}{% include 'insights/_chart_styles.html' %}{% endblock extra_style %}
 
 {% block body %}
 <section class="bb-hero im-hero">
   <div class="bb-container" style="position:relative;z-index:1">
-    <span class="bb-eyebrow">Our impact</span>
-    <h1>Every number is a person who showed up.</h1>
-    <p class="bb-lead">Open numbers from {{ SITE_NAME }}. Only donations an admin has verified are counted.</p>
+    <span class="bb-eyebrow">{% trans "Our impact" %}</span>
+    <h1>{% trans "Every number is a person who showed up." %}</h1>
+    <p class="bb-lead">{% blocktrans with site=SITE_NAME %}Open numbers from {{ site }}. Only donations an admin has verified are counted.{% endblocktrans %}</p>
 
     <div class="im-hero__stats">
       <div class="bb-glass bb-stat">
         <div class="bb-stat__value"><span data-count="{{ totals.donations }}">{{ totals.donations|commas }}</span></div>
-        <div class="bb-stat__label">Verified donations</div>
+        <div class="bb-stat__label">{% trans "Verified donations" %}</div>
       </div>
       <div class="bb-glass bb-stat">
         <div class="bb-stat__value"><span data-count="{{ totals.donors }}">{{ totals.donors|commas }}</span></div>
-        <div class="bb-stat__label">Donors who gave</div>
+        <div class="bb-stat__label">{% trans "Donors who gave" %}</div>
       </div>
       <div class="bb-glass bb-stat">
         <div class="bb-stat__value">~<span data-count="{{ totals.lives }}">{{ totals.lives|commas }}</span></div>
-        <div class="bb-stat__label">People helped<span class="im-est">estimate, up to {{ lives_per_donation }} per donation</span></div>
+        <div class="bb-stat__label">{% trans "People helped" %}<span class="im-est">{% blocktrans with n=lives_per_donation %}estimate, up to {{ n }} per donation{% endblocktrans %}</span></div>
       </div>
       <div class="bb-glass bb-stat">
         <div class="bb-stat__value"><span data-count="{{ totals.requests_fulfilled }}">{{ totals.requests_fulfilled|commas }}</span></div>
-        <div class="bb-stat__label">Requests fulfilled{% if totals.fulfilment_rate is not None %}<span class="im-est">{{ totals.fulfilment_rate }}% of {{ totals.requests_posted|commas }} posted</span>{% else %}<span class="im-est">none posted yet</span>{% endif %}</div>
+        <div class="bb-stat__label">{% trans "Requests fulfilled" %}{% if totals.fulfilment_rate is not None %}<span class="im-est">{% blocktrans with rate=totals.fulfilment_rate n=totals.requests_posted|commas %}{{ rate }}% of {{ n }} posted{% endblocktrans %}</span>{% else %}<span class="im-est">{% trans "none posted yet" %}</span>{% endif %}</div>
       </div>
     </div>
   </div>
@@ -41,8 +41,8 @@
   <div class="bb-container">
 
     <div class="im-bar">
-      <p class="bb-small bb-muted bb-mb-0">Showing <strong class="bb-strong">{{ period_label|lower }}</strong> for totals, groups, places and requests.</p>
-      <nav class="bb-seg" aria-label="Time period">
+      <p class="bb-small bb-muted bb-mb-0">{% blocktrans with p=period_label|lower %}Showing <strong class="bb-strong">{{ p }}</strong> for totals, groups, places and requests.{% endblocktrans %}</p>
+      <nav class="bb-seg" aria-label="{% trans 'Time period' %}">
         {% for key, label in periods %}
           <a href="?period={{ key }}" class="{% if key == period %}is-active{% endif %}"{% if key == period %} aria-current="true"{% endif %}>{{ label }}</a>
         {% endfor %}
@@ -51,8 +51,8 @@
 
     {% if not has_data %}
     <div class="bb-alert bb-alert--info" role="status">
-      No verified donations {% if period != 'all' %}in this period {% endif %}yet.
-      <a href="{% url 'log-donation' %}">Log a donation</a> and it will count once an admin verifies it.
+      {% if period != 'all' %}{% trans "No verified donations in this period yet." %}{% else %}{% trans "No verified donations yet." %}{% endif %}
+      {% url 'log-donation' as log_url %}{% blocktrans %}<a href="{{ log_url }}">Log a donation</a> and it will count once an admin verifies it.{% endblocktrans %}
     </div>
     {% endif %}
 
@@ -61,39 +61,39 @@
       {# Trend + this month vs last #}
       <div class="im-grid im-grid--trend">
         <article class="bb-card im-card">
-          <h2>Donations per month</h2>
-          <p class="im-sub">The last 12 months, verified donations only.</p>
+          <h2>{% trans "Donations per month" %}</h2>
+          <p class="im-sub">{% trans "The last 12 months, verified donations only." %}</p>
           {{ trend_chart }}
           <details class="im-details">
-            <summary>View as table</summary>
+            <summary>{% trans "View as table" %}</summary>
             <table class="im-table">
-              <thead><tr><th scope="col">Month</th><th scope="col">Donations</th></tr></thead>
+              <thead><tr><th scope="col">{% trans "Month" %}</th><th scope="col">{% trans "Donations" %}</th></tr></thead>
               <tbody>
               {% for m in monthly %}<tr><td>{{ m.label }} {{ m.year }}</td><td>{{ m.count|commas }}</td></tr>{% endfor %}
               </tbody>
             </table>
-            <p class="bb-mt-1"><a href="{% url 'impact-export' %}">Download CSV</a></p>
+            <p class="bb-mt-1"><a href="{% url 'impact-export' %}">{% trans "Download CSV" %}</a></p>
           </details>
         </article>
 
         <article class="bb-card im-card">
-          <h2>This month so far</h2>
-          <p class="im-sub">{{ month_compare.this_label }} against {{ month_compare.last_label }}.</p>
+          <h2>{% trans "This month so far" %}</h2>
+          <p class="im-sub">{% blocktrans with a=month_compare.this_label b=month_compare.last_label %}{{ a }} against {{ b }}.{% endblocktrans %}</p>
           <div class="im-compare">
             <div class="im-compare__big"><span data-count="{{ month_compare.this_month }}">{{ month_compare.this_month|commas }}</span></div>
             <div>
               {% if month_compare.change is None %}
-                <span class="im-delta im-delta--flat">{% if month_compare.this_month %}New activity{% else %}No donations yet{% endif %}</span>
+                <span class="im-delta im-delta--flat">{% if month_compare.this_month %}{% trans "New activity" %}{% else %}{% trans "No donations yet" %}{% endif %}</span>
               {% elif month_compare.change > 0 %}
-                <span class="im-delta im-delta--up"><i class="feather-trending-up" aria-hidden="true"></i> {{ month_compare.change }}% up</span>
+                <span class="im-delta im-delta--up"><i class="feather-trending-up" aria-hidden="true"></i> {% blocktrans with n=month_compare.change %}{{ n }}% up{% endblocktrans %}</span>
               {% elif month_compare.change < 0 %}
-                <span class="im-delta im-delta--down"><i class="feather-trending-down" aria-hidden="true"></i> {{ month_compare.change|absval }}% down</span>
+                <span class="im-delta im-delta--down"><i class="feather-trending-down" aria-hidden="true"></i> {% blocktrans with n=month_compare.change|absval %}{{ n }}% down{% endblocktrans %}</span>
               {% else %}
-                <span class="im-delta im-delta--flat">Same as last month</span>
+                <span class="im-delta im-delta--flat">{% trans "Same as last month" %}</span>
               {% endif %}
             </div>
-            <div class="im-compare__row"><span class="bb-muted">{{ month_compare.last_label }} in full</span><b>{{ month_compare.last_month|commas }}</b></div>
-            <p class="bb-small bb-muted bb-mb-0">This month is not over yet, so the number can still grow.</p>
+            <div class="im-compare__row"><span class="bb-muted">{% blocktrans with m=month_compare.last_label %}{{ m }} in full{% endblocktrans %}</span><b>{{ month_compare.last_month|commas }}</b></div>
+            <p class="bb-small bb-muted bb-mb-0">{% trans "This month is not over yet, so the number can still grow." %}</p>
           </div>
         </article>
       </div>
@@ -104,21 +104,21 @@
           <span class="bb-bloodtag bb-bloodtag--lg im-cta__tag"><span>{{ cta.group }}</span></span>
           <div>
             {% if cta.kind == 'gap' %}
-              <h2>We need more {{ cta.group }} donors{% if cta.top_district %} in {{ cta.top_district }}{% endif %}</h2>
+              <h2>{% if cta.top_district %}{% blocktrans with g=cta.group place=cta.top_district %}We need more {{ g }} donors in {{ place }}{% endblocktrans %}{% else %}{% blocktrans with g=cta.group %}We need more {{ g }} donors{% endblocktrans %}{% endif %}</h2>
               <p>{{ cta.need|commas }} bag{{ cta.need|pluralize }} still needed on open requests, and only {{ cta.donors|commas }} {{ cta.group }} donor{{ cta.donors|pluralize }} listed in the directory.</p>
             {% elif cta.kind == 'open' %}
-              <h2>{{ cta.group }} requests are open right now</h2>
+              <h2>{% blocktrans with g=cta.group %}{{ g }} requests are open right now{% endblocktrans %}</h2>
               <p>{{ cta.need|commas }} bag{{ cta.need|pluralize }} still needed. There are {{ cta.donors|commas }} {{ cta.group }} donors in the directory who can be asked.</p>
             {% else %}
-              <h2>Few {{ cta.group }} donors are listed yet</h2>
-              <p>Nothing is urgent right now. Listing yourself in the directory helps the next family find a match fast.</p>
+              <h2>{% blocktrans with g=cta.group %}Few {{ g }} donors are listed yet{% endblocktrans %}</h2>
+              <p>{% trans "Nothing is urgent right now. Listing yourself in the directory helps the next family find a match fast." %}</p>
             {% endif %}
             <div class="bb-row">
               {% if cta.kind == 'recruit' %}
-                <a class="bb-btn bb-btn--primary" href="{% url 'privacy' %}">List me as a donor</a>
+                <a class="bb-btn bb-btn--primary" href="{% url 'privacy' %}">{% trans "List me as a donor" %}</a>
               {% else %}
-                <a class="bb-btn bb-btn--primary" href="{{ cta.donors_url }}">Find {{ cta.group }} donors</a>
-                <a class="bb-btn bb-btn--ghost" href="{{ cta.requests_url }}">See {{ cta.group }} requests</a>
+                <a class="bb-btn bb-btn--primary" href="{{ cta.donors_url }}">{% blocktrans with g=cta.group %}Find {{ g }} donors{% endblocktrans %}</a>
+                <a class="bb-btn bb-btn--ghost" href="{{ cta.requests_url }}">{% blocktrans with g=cta.group %}See {{ g }} requests{% endblocktrans %}</a>
               {% endif %}
             </div>
           </div>
@@ -126,11 +126,11 @@
       </article>
 
       <article class="bb-card im-card">
-        <h2>Supply and demand by blood group</h2>
-        <p class="im-sub">Open requests against donors who chose to be listed. Counts only, never names.</p>
+        <h2>{% trans "Supply and demand by blood group" %}</h2>
+        <p class="im-sub">{% trans "Open requests against donors who chose to be listed. Counts only, never names." %}</p>
         <div class="im-key">
-          <span><i style="background:var(--bb-red)"></i>Bags still needed</span>
-          <span><i style="background:var(--bb-blue)"></i>Donors listed in the directory</span>
+          <span><i style="background:var(--bb-red)"></i>{% trans "Bags still needed" %}</span>
+          <span><i style="background:var(--bb-blue)"></i>{% trans "Donors listed in the directory" %}</span>
         </div>
         {{ supply_chart }}
       </article>
@@ -138,14 +138,14 @@
       {# Blood groups + map #}
       <div class="im-grid im-grid--even">
         <article class="bb-card im-card">
-          <h2>Blood groups</h2>
-          <p class="im-sub">Share of verified donations, {{ period_label|lower }}.</p>
+          <h2>{% trans "Blood groups" %}</h2>
+          <p class="im-sub">{% blocktrans with p=period_label|lower %}Share of verified donations, {{ p }}.{% endblocktrans %}</p>
           {{ group_donut.svg }}
           {{ group_donut.legend }}
         </article>
         <article class="bb-card im-card">
-          <h2>Across Bangladesh</h2>
-          <p class="im-sub">Verified donations by division, {{ period_label|lower }}.</p>
+          <h2>{% trans "Across Bangladesh" %}</h2>
+          <p class="im-sub">{% blocktrans with p=period_label|lower %}Verified donations by division, {{ p }}.{% endblocktrans %}</p>
           {{ division_map.svg }}
           {{ division_map.legend }}
           {% if geo.unspecified %}<p class="bb-xs bb-muted bb-center bb-mt-1">{{ geo.unspecified|commas }} donation{{ geo.unspecified|pluralize }} with no district recorded are not on the map.</p>{% endif %}
@@ -155,13 +155,13 @@
       {# Districts + places #}
       <div class="im-grid im-grid--even">
         <article class="bb-card im-card">
-          <h2>Top districts</h2>
-          <p class="im-sub">Tap a district for its own page.</p>
+          <h2>{% trans "Top districts" %}</h2>
+          <p class="im-sub">{% trans "Tap a district for its own page." %}</p>
           {{ district_bars }}
         </article>
         <article class="bb-card im-card">
-          <h2>Where donors give</h2>
-          <p class="im-sub">Hospitals and blood banks with the most verified donations.</p>
+          <h2>{% trans "Where donors give" %}</h2>
+          <p class="im-sub">{% trans "Hospitals and blood banks with the most verified donations." %}</p>
           {{ place_bars }}
         </article>
       </div>
@@ -169,21 +169,21 @@
       {# Funnel + method #}
       <div class="im-grid im-grid--even">
         <article class="bb-card im-card">
-          <h2>What happens to requests</h2>
-          <p class="im-sub">Requests posted {{ period_label|lower }}, and how far they got.</p>
+          <h2>{% trans "What happens to requests" %}</h2>
+          <p class="im-sub">{% blocktrans with p=period_label|lower %}Requests posted {{ p }}, and how far they got.{% endblocktrans %}</p>
           {{ funnel_bars }}
         </article>
         <article class="bb-card bb-card--soft im-card">
-          <h2>About these numbers</h2>
+          <h2>{% trans "About these numbers" %}</h2>
           <ul class="bb-small" style="padding-left:1.1rem;margin:10px 0 0">
-            <li>Only donations an admin has verified are counted. Pending and rejected ones are not.</li>
-            <li>People helped is an estimate: up to {{ lives_per_donation }} patients per donation, not a medical record.</li>
-            <li>Donors who hide themselves from the leaderboard are still counted here, but never named.</li>
-            <li>Numbers refresh every few minutes.</li>
+            <li>{% trans "Only donations an admin has verified are counted. Pending and rejected ones are not." %}</li>
+            <li>{% blocktrans with n=lives_per_donation %}People helped is an estimate: up to {{ n }} patients per donation, not a medical record.{% endblocktrans %}</li>
+            <li>{% trans "Donors who hide themselves from the leaderboard are still counted here, but never named." %}</li>
+            <li>{% trans "Numbers refresh every few minutes." %}</li>
           </ul>
           <div class="bb-row bb-mt-2">
-            <a class="bb-btn bb-btn--ghost bb-btn--sm" href="{% url 'impact-data' %}">JSON data</a>
-            <a class="bb-btn bb-btn--ghost bb-btn--sm" href="{% url 'impact-export' %}">Monthly CSV</a>
+            <a class="bb-btn bb-btn--ghost bb-btn--sm" href="{% url 'impact-data' %}">{% trans "JSON data" %}</a>
+            <a class="bb-btn bb-btn--ghost bb-btn--sm" href="{% url 'impact-export' %}">{% trans "Monthly CSV" %}</a>
           </div>
         </article>
       </div>

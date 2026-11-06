@@ -159,6 +159,11 @@ class Profile(models.Model):
     public_badge_card = models.BooleanField(
         _('Let anyone with the link view my badge card'), default=True,
     )
+    public_profile = models.BooleanField(
+        _('Let anyone with the link view my public profile'), default=False,
+        help_text=_('Opt-in. A short page with your name, tier and streak. '
+                    'Never your phone number or email.'),
+    )
 
     is_active = models.BooleanField(
         _('Active'), default=True, null=True

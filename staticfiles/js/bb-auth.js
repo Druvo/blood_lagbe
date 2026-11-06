@@ -8,6 +8,8 @@
     if (!input) return;
     var show = input.type === 'password';
     input.type = show ? 'text' : 'password';
-    btn.textContent = show ? 'Hide' : 'Show';
+    btn.textContent = show
+      ? (btn.getAttribute('data-hide-label') || 'Hide')
+      : (btn.getAttribute('data-show-label') || 'Show');
   });
 })();

@@ -7,6 +7,7 @@ from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.views.decorators.http import require_http_methods
+from django.utils.translation import gettext
 
 from rewards.exports import donations_csv_response
 from rewards.forms import DonationForm
@@ -66,7 +67,7 @@ def hub(request):
             donation.save()
             messages.success(
                 request,
-                "Donation logged! It'll show up once an admin verifies it.",
+                gettext("Donation logged! It'll show up once an admin verifies it."),
             )
             return redirect('log-donation')
     else:
@@ -224,10 +225,10 @@ def delete_donation(request, pk):
             status=Donation.Status.PENDING,
         ).delete()
         if deleted:
-            messages.success(request, 'Pending donation deleted.')
+            messages.success(request, gettext('Pending donation deleted.'))
         else:
             messages.error(
-                request, 'That donation was just reviewed and can no longer be deleted.',
+                request, gettext('That donation was just reviewed and can no longer be deleted.'),
             )
         return redirect('log-donation')
     return render(request, 'rewards/hub_delete_confirm.html', {

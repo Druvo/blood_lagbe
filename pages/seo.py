@@ -5,10 +5,12 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.templatetags.static import static
 from django.urls import reverse
+from django.utils import timezone
 from django.views.decorators.cache import cache_control, never_cache
 from django.views.decorators.http import require_GET
 
 from blogapp.models.post import Post
+from events.models import Challenge, Event
 
 
 class StaticViewSitemap(Sitemap):
@@ -18,6 +20,7 @@ class StaticViewSitemap(Sitemap):
     NAMES = [
         'home', 'learn', 'faq', 'about', 'impact', 'stories',
         'request-list', 'leaderboard', 'blogapp:blog-view',
+        'events:list', 'events:campaigns', 'events:challenges',
     ]
 
     def items(self):
@@ -41,7 +44,40 @@ class PostSitemap(Sitemap):
         return post.timestamp
 
 
-SITEMAPS = {'pages': StaticViewSitemap, 'blog': PostSitemap}
+class EventSitemap(Sitemap):
+    """Approved upcoming drives only: pending and cancelled ones are not
+    public."""
+
+    changefreq = 'daily'
+    priority = 0.6
+
+    def items(self):
+        return Event.objects.filter(
+            status=Event.Status.APPROVED, starts_at__gte=timezone.now(),
+        ).order_by('starts_at')
+
+    def location(self, event):
+        return reverse('events:detail', args=[event.pk])
+
+    def lastmod(self, event):
+        return event.updated_at
+
+
+class ChallengeSitemap(Sitemap):
+    changefreq = 'weekly'
+    priority = 0.4
+
+    def items(self):
+        return Challenge.objects.filter(is_published=True).order_by('-starts_on')
+
+    def location(self, challenge):
+        return reverse('events:challenge-detail', args=[challenge.pk])
+
+
+SITEMAPS = {
+    'pages': StaticViewSitemap, 'blog': PostSitemap,
+    'events': EventSitemap, 'challenges': ChallengeSitemap,
+}
 
 # Private or personal areas: not for search engines. (robots.txt is a
 # courtesy, not access control; these pages also require login.)
@@ -54,6 +90,9 @@ ROBOTS_DISALLOW = [
     '/requests/new/',
     '/requests/*/respond/',
     '/requests/*/close/',
+    '/alerts/',
+    '/today/',
+    '/moments/',
 ]
 
 

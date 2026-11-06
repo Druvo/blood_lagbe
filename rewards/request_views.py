@@ -13,8 +13,10 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.http import require_POST
+from django.utils.translation import gettext, gettext_lazy, ngettext
 
 from rewards.blood import BLOOD_GROUP_CHOICES, donor_groups_for
+from rewards.directory import phone_withheld_from
 from rewards.forms import BloodRequestForm
 from rewards.geo import DISTRICT_CHOICES, DISTRICT_NAMES
 from rewards.leaderboard import display_name as _display_name
@@ -35,7 +37,10 @@ User = get_user_model()
 PAGE_SIZE = 12
 MAX_UPDATES_PER_REQUEST = 10
 PLEDGE_MILESTONES = (1, 3, 5, 10, 20)
-WHEN_CHOICES = (('today', 'Today'), ('week', 'This week'), ('', 'All'))
+WHEN_CHOICES = (
+    ('today', gettext_lazy('Today')), ('week', gettext_lazy('This week')),
+    ('', gettext_lazy('All')),
+)
 
 
 def _day_ago():
@@ -173,10 +178,10 @@ def build_timeline(blood_request, pledge_times=None):
         if len(pledge_times) >= count:
             events.append({
                 'when': pledge_times[count - 1], 'icon': 'users', 'done': True,
-                'title': (
-                    '1 donor offered to help' if count == 1
-                    else f'{count} donors offered to help'
-                ),
+                'title': ngettext(
+                    '%(n)s donor offered to help',
+                    '%(n)s donors offered to help', count,
+                ) % {'n': count},
             })
     donations = list(
         blood_request.donations.filter(status='approved')
@@ -185,11 +190,12 @@ def build_timeline(blood_request, pledge_times=None):
     for number, when in enumerate(donations, start=1):
         events.append({
             'when': when, 'icon': 'check-circle', 'done': True,
-            'title': 'A donation was verified',
-            'text': (
-                f'{number} of {blood_request.units_needed} '
-                f'bag{"s" if blood_request.units_needed != 1 else ""} covered'
-            ),
+            'title': gettext('A donation was verified'),
+            'text': ngettext(
+                '%(number)s of %(n)s bag covered',
+                '%(number)s of %(n)s bags covered',
+                blood_request.units_needed,
+            ) % {'number': number, 'n': blood_request.units_needed},
         })
     for update in blood_request.updates.all():
         events.append({
@@ -200,7 +206,7 @@ def build_timeline(blood_request, pledge_times=None):
     if blood_request.status == BloodRequest.Status.CLOSED:
         events.append({
             'when': blood_request.closed_at, 'icon': 'lock', 'done': True,
-            'title': 'Closed by the requester',
+            'title': gettext('Closed by the requester'),
             'text': (
                 blood_request.get_outcome_display()
                 if blood_request.outcome else ''
@@ -209,7 +215,7 @@ def build_timeline(blood_request, pledge_times=None):
         })
     events.append({
         'when': blood_request.created_at, 'icon': 'send', 'done': True,
-        'title': 'Request posted', 'first': True,
+        'title': gettext('Request posted'), 'first': True,
     })
     far_future = timezone.now() + datetime.timedelta(days=3650)
     # Ties (the clock can repeat) resolve so that "closed" is newest and
@@ -246,12 +252,17 @@ def request_detail(request, pk):
     )
     responses = []
     if is_owner:
+        offered = list(blood_request.responses.select_related('donor'))
+        # A donor who blocked this viewer, or took back their number, stays
+        # hidden here too (see rewards.directory.phone_withheld_from).
+        withheld = phone_withheld_from(user, [r.donor_id for r in offered])
         responses = [
             {
-                'name': _display_name(r.donor), 'phone': r.donor.phone,
+                'name': _display_name(r.donor),
+                'phone': '' if r.donor_id in withheld else r.donor.phone,
                 'when': r.created_at,
             }
-            for r in blood_request.responses.select_related('donor')
+            for r in offered
         ]
 
     has_responded = has_reported = False
@@ -316,7 +327,7 @@ def request_create(request):
             blood_request.requester = request.user
             blood_request.save()
             messages.success(
-                request, 'Your request is posted. Donors can see it now.',
+                request, gettext('Your request is posted. Donors can see it now.'),
             )
             return redirect('request-detail', pk=blood_request.pk)
     else:
@@ -328,7 +339,10 @@ def request_create(request):
         'max_open': MAX_OPEN_REQUESTS_PER_USER,
         'date_chips': [
             {'label': label, 'iso': (today + datetime.timedelta(days=n)).isoformat()}
-            for label, n in (('Today', 0), ('Tomorrow', 1), ('In 3 days', 3))
+            for label, n in (
+                (gettext('Today'), 0), (gettext('Tomorrow'), 1),
+                (gettext('In 3 days'), 3),
+            )
         ],
     })
 
@@ -343,16 +357,18 @@ def request_respond(request, pk):
     )
 
     if blood_request.requester_id == request.user.id:
-        messages.error(request, "You can't respond to your own request.")
+        messages.error(request, gettext("You can't respond to your own request."))
     elif not blood_request.is_active or blood_request.is_flagged:
-        messages.error(request, 'This request is no longer open.')
+        messages.error(request, gettext('This request is no longer open.'))
     else:
         eligibility = get_eligibility(request.user)
         if not eligibility.eligible:
             messages.error(
                 request,
-                f'You can donate again on {eligibility.next_date:%b %d, %Y}. '
-                'Please let someone else respond to this request.',
+                gettext(
+                    'You can donate again on %(date)s. '
+                    'Please let someone else respond to this request.'
+                ) % {'date': f'{eligibility.next_date:%b %d, %Y}'},
             )
         elif RequestResponse.objects.filter(
             donor=request.user, created_at__gte=_day_ago(),
@@ -361,8 +377,8 @@ def request_respond(request, pk):
         ).exists():
             messages.error(
                 request,
-                'You have offered to help a lot today. Please try again '
-                'tomorrow.',
+                gettext('You have offered to help a lot today. Please try again '
+                'tomorrow.'),
             )
         else:
             _, created = RequestResponse.objects.get_or_create(
@@ -377,7 +393,7 @@ def request_respond(request, pk):
                 )
             messages.success(
                 request,
-                'Thank you! The requester can now see your name and phone.',
+                gettext('Thank you! The requester can now see your name and phone.'),
             )
     return redirect('request-detail', pk=pk)
 
@@ -390,12 +406,12 @@ def request_close(request, pk):
     blood_request = get_object_or_404(BloodRequest, pk=pk)
     back = _safe_next(request, reverse('request-detail', args=[pk]))
     if not (request.user == blood_request.requester or request.user.is_staff):
-        messages.error(request, "You can't close someone else's request.")
+        messages.error(request, gettext("You can't close someone else's request."))
         return redirect(back)
 
     outcome = request.POST.get('outcome', '')
     if outcome and outcome not in BloodRequest.Outcome.values:
-        messages.error(request, 'Please pick what happened.')
+        messages.error(request, gettext('Please pick what happened.'))
         return redirect(back)
 
     closed = close_and_notify(
@@ -403,9 +419,9 @@ def request_close(request, pk):
         request.build_absolute_uri(reverse('request-detail', args=[pk])),
     )
     if closed:
-        messages.success(request, 'Request closed. Thank you for letting us know.')
+        messages.success(request, gettext('Request closed. Thank you for letting us know.'))
     else:
-        messages.info(request, 'This request was already closed.')
+        messages.info(request, gettext('This request was already closed.'))
     return redirect(back)
 
 
@@ -416,32 +432,34 @@ def request_close(request, pk):
 def request_update(request, pk):
     blood_request = get_object_or_404(BloodRequest, pk=pk)
     if request.user != blood_request.requester:
-        messages.error(request, 'Only the requester can post updates.')
+        messages.error(request, gettext('Only the requester can post updates.'))
         return redirect('request-detail', pk=pk)
     if blood_request.status != BloodRequest.Status.OPEN:
-        messages.error(request, 'This request is closed.')
+        messages.error(request, gettext('This request is closed.'))
         return redirect('request-detail', pk=pk)
 
     kind = request.POST.get('kind', RequestUpdate.Kind.NOTE)
     text = ' '.join(request.POST.get('text', '').split())
     if kind not in RequestUpdate.Kind.values:
-        messages.error(request, 'Pick the kind of update.')
+        messages.error(request, gettext('Pick the kind of update.'))
     elif not text:
-        messages.error(request, 'Write a short update first.')
+        messages.error(request, gettext('Write a short update first.'))
     elif len(text) > RequestUpdate._meta.get_field('text').max_length:
-        messages.error(request, 'Please keep the update under 300 characters.')
+        messages.error(request, gettext('Please keep the update under 300 characters.'))
     elif blood_request.updates.count() >= MAX_UPDATES_PER_REQUEST:
         messages.error(
             request,
-            f'You can post up to {MAX_UPDATES_PER_REQUEST} updates on one '
-            'request. Close it, or post a new request if things changed.',
+            gettext(
+                'You can post up to %(n)s updates on one request. '
+                'Close it, or post a new request if things changed.'
+            ) % {'n': MAX_UPDATES_PER_REQUEST},
         )
     else:
         RequestUpdate.objects.create(
             blood_request=blood_request, author=request.user,
             kind=kind, text=text,
         )
-        messages.success(request, 'Update posted.')
+        messages.success(request, gettext('Update posted.'))
     return redirect('request-detail', pk=pk)
 
 
@@ -452,19 +470,19 @@ def request_update(request, pk):
 def request_report(request, pk):
     blood_request = get_object_or_404(BloodRequest, pk=pk)
     if blood_request.requester_id == request.user.id:
-        messages.error(request, "You can't report your own request.")
+        messages.error(request, gettext("You can't report your own request."))
         return redirect('request-detail', pk=pk)
 
     reason = request.POST.get('reason', '')
     if reason not in RequestReport.Reason.values:
-        messages.error(request, 'Pick a reason for the report.')
+        messages.error(request, gettext('Pick a reason for the report.'))
         return redirect('request-detail', pk=pk)
 
     if RequestReport.objects.filter(
         reporter=request.user, created_at__gte=_day_ago(),
     ).count() >= MAX_REPORTS_PER_DAY:
         messages.error(
-            request, 'You have filed a lot of reports today. Please try again tomorrow.',
+            request, gettext('You have filed a lot of reports today. Please try again tomorrow.'),
         )
         return redirect('request-detail', pk=pk)
 
@@ -477,10 +495,10 @@ def request_report(request, pk):
     )
     if created:
         messages.success(
-            request, 'Thank you. Our team will look at this request.',
+            request, gettext('Thank you. Our team will look at this request.'),
         )
     else:
-        messages.info(request, 'You already reported this request.')
+        messages.info(request, gettext('You already reported this request.'))
     return redirect('request-detail', pk=pk)
 
 

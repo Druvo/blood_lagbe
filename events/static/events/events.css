@@ -1,0 +1,59 @@
+/* Events lane: classes start with ev-. Colors come from the bb- variables
+   so dark mode works without extra rules. */
+.ev-page { padding-top: 24px; padding-bottom: 40px; }
+.ev-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0; }
+.ev-filter { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 16px; }
+.ev-filter select { min-height: 44px; max-width: 100%; }
+
+.ev-card { display: flex; gap: 14px; align-items: flex-start; color: inherit; margin-bottom: 12px; }
+.ev-card:hover { color: inherit; }
+.ev-date { flex: none; width: 56px; text-align: center; border-radius: var(--bb-radius-sm); background: var(--bb-red-soft); color: var(--bb-red-ink); padding: 6px 0; line-height: 1.1; }
+.ev-date strong { display: block; font-size: 1.4rem; }
+.ev-date span { font-size: .72rem; text-transform: uppercase; font-weight: 700; letter-spacing: .04em; }
+.ev-body { min-width: 0; flex: 1; }
+.ev-title { margin: 0 0 2px; font-size: 1.05rem; color: var(--bb-ink); overflow-wrap: anywhere; }
+.ev-meta { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: .88rem; color: var(--bb-muted); }
+.ev-meta i { margin-right: 4px; }
+.ev-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+
+.ev-detail-grid { display: grid; gap: 16px; }
+@media (min-width: 900px) { .ev-detail-grid { grid-template-columns: 2fr 1fr; align-items: start; } }
+.ev-desc { overflow-wrap: anywhere; }
+.ev-facts { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+.ev-facts li { display: flex; gap: 10px; align-items: flex-start; }
+.ev-facts i { color: var(--bb-red-text); margin-top: 3px; }
+
+.ev-attendee { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; padding: 10px 0; border-top: 1px solid var(--bb-line); }
+.ev-attendee form { margin: 0; }
+.ev-team { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 12px; padding: 8px 0; border-top: 1px solid var(--bb-line); }
+.ev-team > span:first-child { flex: 1 1 140px; min-width: 0; overflow-wrap: anywhere; }
+.ev-team form { margin: 0; }
+
+/* Campaign banner: accent from a safe theme list. */
+.ev-theme-red { --ev-accent: var(--bb-red); --ev-soft: var(--bb-red-soft); --ev-ink: var(--bb-red-ink); }
+.ev-theme-green { --ev-accent: var(--bb-green); --ev-soft: var(--bb-green-soft); --ev-ink: var(--bb-ok-text); }
+.ev-theme-blue { --ev-accent: var(--bb-blue); --ev-soft: var(--bb-blue-soft); --ev-ink: var(--bb-info-text); }
+.ev-theme-amber { --ev-accent: var(--bb-amber); --ev-soft: var(--bb-amber-soft); --ev-ink: var(--bb-warn-text); }
+.ev-theme-violet { --ev-accent: var(--bb-violet); --ev-soft: var(--bb-surface-2); --ev-ink: var(--bb-violet); }
+.ev-banner { display: flex; gap: 16px; align-items: center; border-left: 6px solid var(--ev-accent); background: var(--ev-soft); border-radius: var(--bb-radius); padding: 18px 20px; margin-bottom: 18px; }
+.ev-banner__icon { flex: none; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--bb-surface); color: var(--ev-ink); font-size: 1.5rem; }
+.ev-banner h2, .ev-banner h3 { margin: 0 0 4px; color: var(--bb-ink); }
+.ev-banner p { margin: 0 0 8px; color: var(--bb-text); }
+.ev-badge-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; padding: 2px 12px; border-radius: 999px; background: var(--ev-soft); color: var(--ev-ink); font-weight: 700; font-size: .85rem; }
+
+.ev-cal { display: grid; gap: 14px; }
+@media (min-width: 700px) { .ev-cal { grid-template-columns: 1fr 1fr; } }
+.ev-earned { border: 2px solid var(--ev-accent); }
+
+.ev-bar { height: 12px; border-radius: 999px; background: var(--bb-surface-2); border: 1px solid var(--bb-line); overflow: hidden; }
+.ev-bar > span { display: block; height: 100%; background: var(--bb-red); }
+.ev-bar--ok > span { background: var(--bb-green); }
+.ev-rank { flex: none; width: 32px; text-align: center; font-weight: 800; color: var(--bb-red-text); }
+.ev-row { display: flex; gap: 12px; align-items: center; padding: 12px 0; border-top: 1px solid var(--bb-line); }
+
+@media (max-width: 480px) {
+  .ev-banner { flex-direction: column; align-items: flex-start; }
+  .ev-card { gap: 10px; }
+}
+@media (prefers-reduced-motion: reduce) { .ev-bar > span { transition: none; } }
+.ev-banner .ev-badge-chip { background: var(--bb-surface); }

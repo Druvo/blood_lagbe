@@ -282,6 +282,7 @@ def crawl_paths(cast):
         ('stories', reverse('stories') + '?kind=donor&district=Dhaka'),
         ('story-create', reverse('story-create')),
         ('story-mine', reverse('story-mine')),
+        ('staff-desk', reverse('staff-desk')),
     ]
     for req in (c.req_open, c.req_flagged, c.req_closed, c.req_expired):
         paths.append(('request-detail', reverse('request-detail', args=[req.pk])))
@@ -291,4 +292,114 @@ def crawl_paths(cast):
         paths.append(('squads:detail', reverse('squads:detail', args=[squad.pk])))
     for story in (c.story_anon, c.story_optout, c.story_pending):
         paths.append(('story-detail', reverse('story-detail', args=[story.pk])))
+    paths += growth_paths(cast)
+    paths += lanes_paths(cast)
     return paths
+
+
+def growth_paths(cast):
+    """Invite and public-profile pages (the growth app).
+
+    The opted-out 'hidden' member is the inviter, so the invite page must say
+    "A friend" and never their name; they also switched their public profile
+    on, which must still 404 because they are hidden from public listings.
+    'visible' has a real public profile."""
+    from growth.services import get_or_create_invite
+    u = cast.users
+    for key, on in (('hidden', True), ('visible', True)):
+        profile = u[key].profile
+        profile.public_profile = on
+        profile.save()
+    code = get_or_create_invite(u['hidden']).code
+    return [
+        ('growth:invite-home', reverse('growth:invite-home')),
+        ('growth:invite', reverse('growth:invite', args=[code])),
+        ('growth:invite', reverse('growth:invite', args=['NOSUCHCODE'])),
+        ('growth:profile', reverse('growth:profile', args=[u['hidden'].pk])),
+        ('growth:profile', reverse('growth:profile', args=[u['visible'].pk])),
+        ('growth:profile', reverse('growth:profile', args=[u['owner'].pk])),
+    ]
+
+
+def lanes_paths(cast):
+    """Pages of the moments, habits, events and alerts apps.
+
+    The opted-out 'hidden' member organises a drive and the opted-out 'owner'
+    sends a thank-you note, so those pages must show "Donor #id" and "A
+    requester", never a name. The private squad enters the drive."""
+    from alerts.models import Notification
+    from events.models import (
+        Campaign, Challenge, Event, EventRSVP, EventTeam,
+    )
+    from moments.models import ThankNote
+
+    u = cast.users
+    today = timezone.localdate()
+    event, _ = Event.objects.get_or_create(
+        title='Audit blood drive', organizer=u['hidden'],
+        defaults=dict(
+            starts_at=timezone.now() + datetime.timedelta(days=5),
+            district='Dhaka', venue='Audit hall', description='Come along.',
+            status=Event.Status.APPROVED, approved_at=timezone.now(),
+        ),
+    )
+    for key in ('muted', 'visible'):
+        EventRSVP.objects.get_or_create(event=event, user=u[key])
+    EventTeam.objects.get_or_create(
+        event=event, squad=cast.squad, entered_by=u['squad_owner'],
+    )
+    EventTeam.objects.get_or_create(
+        event=event, squad=cast.private_squad, entered_by=u['visible'],
+    )
+    Campaign.objects.get_or_create(
+        slug='audit-campaign', defaults=dict(
+            name='Audit campaign', starts_on=today - datetime.timedelta(days=1),
+            ends_on=today + datetime.timedelta(days=3),
+            headline='Audit headline', is_active=True,
+            badge_name='Audit badge',
+        ),
+    )
+    challenge, _ = Challenge.objects.get_or_create(
+        title='Audit challenge', defaults=dict(
+            starts_on=today - datetime.timedelta(days=2),
+            ends_on=today + datetime.timedelta(days=20),
+            target_donations=5, is_published=True,
+        ),
+    )
+    notice, _ = Notification.objects.get_or_create(
+        user=u['owner'], kind='info', title='Audit notice', dedupe_key='audit',
+    )
+    note, _ = ThankNote.objects.get_or_create(
+        blood_request=cast.req_closed, sender=u['owner'],
+        recipient=u['responder'], defaults=dict(text='Thank you so much'),
+    )
+    cast.event, cast.notification, cast.thank_note = event, notice, note
+    cast.rsvp = EventRSVP.objects.get(event=event, user=u['muted'])
+    year = today.year
+    return [
+        ('alerts:inbox', reverse('alerts:inbox')),
+        ('alerts:settings', reverse('alerts:settings')),
+        ('events:list', reverse('events:list')),
+        ('events:list', reverse('events:list') + '?district=Dhaka'),
+        ('events:past', reverse('events:past')),
+        ('events:mine', reverse('events:mine')),
+        ('events:create', reverse('events:create')),
+        ('events:campaigns', reverse('events:campaigns')),
+        ('events:challenges', reverse('events:challenges')),
+        ('events:challenge-detail', reverse('events:challenge-detail', args=[challenge.pk])),
+        ('events:detail', reverse('events:detail', args=[event.pk])),
+        ('events:edit', reverse('events:edit', args=[event.pk])),
+        ('events:calendar', reverse('events:calendar', args=[event.pk])),
+        ('habits:today', reverse('habits:today')),
+        ('habits:share', reverse('habits:share', args=[cast.req_open.pk])),
+        ('habits:titles', reverse('habits:titles')),
+        ('habits:settings', reverse('habits:settings')),
+        ('habits:year', reverse('habits:year')),
+        ('habits:year-detail', reverse('habits:year-detail', args=[year])),
+        ('habits:year-card', reverse('habits:year-card', args=[year])),
+        ('habits:year-card-user', reverse('habits:year-card-user', args=[year, u['hidden'].pk])),
+        ('habits:year-card-user', reverse('habits:year-card-user', args=[year, u['visible'].pk])),
+        ('moments:thanks', reverse('moments:thanks')),
+        ('moments:prefs', reverse('moments:prefs')),
+        ('moments:pulse', reverse('moments:pulse', args=[cast.req_open.pk])),
+    ]

@@ -1,11 +1,11 @@
 {% extends 'base/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}FAQ{% endblock title %}
+{% block title %}{% trans "FAQ" %}{% endblock title %}
 {% block meta %}
-<meta name="description" content="Answers about privacy, donation verification, phone number sharing, points and badges, and how blood requests work on {{ SITE_NAME }}.">
+<meta name="description" content="{% blocktrans with site=SITE_NAME %}Answers about privacy, donation verification, phone number sharing, points and badges, and how blood requests work on {{ site }}.{% endblocktrans %}">
 <meta property="og:site_name" content="{{ SITE_NAME }}">
-<meta property="og:title" content="FAQ | {{ SITE_NAME }}">
+<meta property="og:title" content="{% trans 'FAQ' %} | {{ SITE_NAME }}">
 <meta property="og:url" content="{{ request.build_absolute_uri }}">
 {% endblock meta %}
 {% block extra_style %}<link rel="stylesheet" href="{% static 'css/pages.css' %}">{% endblock extra_style %}
@@ -13,9 +13,9 @@
 {% block body %}
 <section class="pg-hero">
   <div class="bb-container bb-container--narrow">
-    <span class="bb-eyebrow">Help</span>
-    <h1 class="bb-h1 bb-mb-1">Questions, answered</h1>
-    <p class="bb-lead">Tap a question to open it.</p>
+    <span class="bb-eyebrow">{% trans "Help" %}</span>
+    <h1 class="bb-h1 bb-mb-1">{% trans "Questions, answered" %}</h1>
+    <p class="bb-lead">{% trans "Tap a question to open it." %}</p>
   </div>
 </section>
 
@@ -23,110 +23,110 @@
   <div class="bb-container bb-container--narrow bb-stack bb-stack--lg">
 
     <div id="privacy" class="pg-anchor">
-      <h2 class="bb-h3">Privacy</h2>
+      <h2 class="bb-h3">{% trans "Privacy" %}</h2>
       <div class="pg-faq">
         <details>
-          <summary>Is my phone number public?</summary>
-          <div class="pg-faq__a"><p>No. Your number is never shown on public pages, in the leaderboard or on share cards. It is only your login. Other members see it only if you accept their contact request.</p></div>
+          <summary>{% trans "Is my phone number public?" %}</summary>
+          <div class="pg-faq__a"><p>{% trans "No. Your number is never shown on public pages, in the leaderboard or on share cards. It is only your login. Other members see it only if you accept their contact request." %}</p></div>
         </details>
         <details>
-          <summary>What can other people see about me?</summary>
-          <div class="pg-faq__a"><p>Your name (or "Donor #" and a number if you gave none), tier and donation count appear on the leaderboard if you allow it. If you join the donor directory, logged-in members also see your blood group, district and whether you are available.</p><p>Change any of this in <a href="{% url 'privacy' %}">Profile &amp; privacy</a>.</p></div>
+          <summary>{% trans "What can other people see about me?" %}</summary>
+          <div class="pg-faq__a">{% url 'privacy' as privacy_url %}<p>{% trans "Your name (or \"Donor #\" and a number if you gave none), tier and donation count appear on the leaderboard if you allow it. If you join the donor directory, logged-in members also see your blood group, district and whether you are available." %}</p><p>{% blocktrans %}Change any of this in <a href="{{ privacy_url }}">Profile &amp; privacy</a>.{% endblocktrans %}</p></div>
         </details>
         <details>
-          <summary>Can I stay off the leaderboard?</summary>
-          <div class="pg-faq__a"><p>Yes. Turn off "Show me on the leaderboard and home page". Your donations still count in the community totals, without your name.</p></div>
+          <summary>{% trans "Can I stay off the leaderboard?" %}</summary>
+          <div class="pg-faq__a"><p>{% trans 'Yes. Turn off "Show me on the leaderboard and home page". Your donations still count in the community totals, without your name.' %}</p></div>
         </details>
         <details>
-          <summary>Who sees my badge card?</summary>
-          <div class="pg-faq__a"><p>Anyone with the link, if you leave sharing on. Turn it off and only you and site staff can open it.</p></div>
+          <summary>{% trans "Who sees my badge card?" %}</summary>
+          <div class="pg-faq__a"><p>{% trans "Anyone with the link, if you leave sharing on. Turn it off and only you and site staff can open it." %}</p></div>
         </details>
       </div>
     </div>
 
     <div id="verification" class="pg-anchor">
-      <h2 class="bb-h3">Verification</h2>
+      <h2 class="bb-h3">{% trans "Verification" %}</h2>
       <div class="pg-faq">
         <details>
-          <summary>How are donations verified?</summary>
-          <div class="pg-faq__a"><p>You log a donation with the date and place. A site volunteer reviews it and approves or rejects it. Only approved donations count towards points, tiers, the leaderboard and community numbers.</p></div>
+          <summary>{% trans "How are donations verified?" %}</summary>
+          <div class="pg-faq__a"><p>{% trans "You log a donation with the date and place. A site volunteer reviews it and approves or rejects it. Only approved donations count towards points, tiers, the leaderboard and community numbers." %}</p></div>
         </details>
         <details>
-          <summary>Why is my donation still pending?</summary>
-          <div class="pg-faq__a"><p>Someone has to check it by hand, which can take a little while. Meanwhile it still starts your recovery gap, so the app will not nudge you to give again too soon.</p></div>
+          <summary>{% trans "Why is my donation still pending?" %}</summary>
+          <div class="pg-faq__a"><p>{% trans "Someone has to check it by hand, which can take a little while. Meanwhile it still starts your recovery gap, so the app will not nudge you to give again too soon." %}</p></div>
         </details>
         <details>
-          <summary>What if a donation is rejected?</summary>
-          <div class="pg-faq__a"><p>It does not count, and it no longer blocks you. Staff may leave a note explaining why. You can log it again with correct details.</p></div>
+          <summary>{% trans "What if a donation is rejected?" %}</summary>
+          <div class="pg-faq__a"><p>{% trans "It does not count, and it no longer blocks you. Staff may leave a note explaining why. You can log it again with correct details." %}</p></div>
         </details>
       </div>
     </div>
 
     <div id="phone-sharing" class="pg-anchor">
-      <h2 class="bb-h3">Phone numbers and contact</h2>
+      <h2 class="bb-h3">{% trans "Phone numbers and contact" %}</h2>
       <div class="pg-faq">
         <details>
-          <summary>How do I contact a donor?</summary>
-          <div class="pg-faq__a"><p>Find them in the <a href="{% url 'donor-directory' %}">donor directory</a> and send a short request. The donor sees your message and chooses to accept or decline. Only if they accept do they share their number with you.</p></div>
+          <summary>{% trans "How do I contact a donor?" %}</summary>
+          <div class="pg-faq__a">{% url 'donor-directory' as directory_url %}<p>{% blocktrans %}Find them in the <a href="{{ directory_url }}">donor directory</a> and send a short request. The donor sees your message and chooses to accept or decline. Only if they accept do they share their number with you.{% endblocktrans %}</p></div>
         </details>
         <details>
-          <summary>Who sees the contact number on a blood request?</summary>
-          <div class="pg-faq__a"><p>The person asking for blood adds a number so donors can reach them. It is shown only to logged-in members, and only while the request is still active.</p></div>
+          <summary>{% trans "Who sees the contact number on a blood request?" %}</summary>
+          <div class="pg-faq__a"><p>{% trans "The person asking for blood adds a number so donors can reach them. It is shown only to logged-in members, and only while the request is still active." %}</p></div>
         </details>
         <details>
-          <summary>Someone is bothering me. What can I do?</summary>
-          <div class="pg-faq__a"><p>Decline their request and do not reply. Report suspicious requests using the report button on the request page. Several reports hide a request until staff have checked it.</p></div>
+          <summary>{% trans "Someone is bothering me. What can I do?" %}</summary>
+          <div class="pg-faq__a"><p>{% trans "Decline their request and do not reply. Report suspicious requests using the report button on the request page. Several reports hide a request until staff have checked it." %}</p></div>
         </details>
       </div>
     </div>
 
     <div id="points" class="pg-anchor">
-      <h2 class="bb-h3">Points and badges</h2>
+      <h2 class="bb-h3">{% trans "Points and badges" %}</h2>
       <div class="pg-faq">
         <details>
-          <summary>How do I earn points?</summary>
-          <div class="pg-faq__a"><p>Each approved donation earns points. You earn a bonus when a donation answers a blood request, and for keeping a steady streak of donations.</p></div>
+          <summary>{% trans "How do I earn points?" %}</summary>
+          <div class="pg-faq__a"><p>{% trans "Each approved donation earns points. You earn a bonus when a donation answers a blood request, and for keeping a steady streak of donations." %}</p></div>
         </details>
         <details>
-          <summary>What are tiers and badges?</summary>
-          <div class="pg-faq__a"><p>Tiers (Bronze up to Platinum) reflect how many verified donations you have given. Other badges mark things like helping on requests and keeping a streak. See yours on <a href="{% url 'log-donation' %}">your hub</a>.</p></div>
+          <summary>{% trans "What are tiers and badges?" %}</summary>
+          <div class="pg-faq__a">{% url 'log-donation' as hub_url %}<p>{% blocktrans %}Tiers (Bronze up to Platinum) reflect how many verified donations you have given. Other badges mark things like helping on requests and keeping a streak. See yours on <a href="{{ hub_url }}">your hub</a>.{% endblocktrans %}</p></div>
         </details>
         <details>
-          <summary>Is this a competition?</summary>
-          <div class="pg-faq__a"><p>Only a friendly one. Giving blood too often is not safe, so waiting out your recovery gap never costs you a streak by itself. The gap we show is a reminder, not medical advice.</p></div>
+          <summary>{% trans "Is this a competition?" %}</summary>
+          <div class="pg-faq__a"><p>{% trans "Only a friendly one. Giving blood too often is not safe, so waiting out your recovery gap never costs you a streak by itself. The gap we show is a reminder, not medical advice." %}</p></div>
         </details>
       </div>
     </div>
 
     <div id="requests" class="pg-anchor">
-      <h2 class="bb-h3">Blood requests</h2>
+      <h2 class="bb-h3">{% trans "Blood requests" %}</h2>
       <div class="pg-faq">
         <details>
-          <summary>How do I ask for blood?</summary>
-          <div class="pg-faq__a"><p>Log in and <a href="{% url 'request-create' %}">post a request</a> with the blood group, hospital, district, how many bags and the date needed. Donors with a matching group can answer with "I can help".</p></div>
+          <summary>{% trans "How do I ask for blood?" %}</summary>
+          <div class="pg-faq__a">{% url 'request-create' as create_url %}<p>{% blocktrans %}Log in and <a href="{{ create_url }}">post a request</a> with the blood group, hospital, district, how many bags and the date needed. Donors with a matching group can answer with "I can help".{% endblocktrans %}</p></div>
         </details>
         <details>
-          <summary>Does "I can help" mean a donation?</summary>
-          <div class="pg-faq__a"><p>No. It tells the requester someone may come. A donation counts only after it is logged and verified.</p></div>
+          <summary>{% trans 'Does "I can help" mean a donation?' %}</summary>
+          <div class="pg-faq__a"><p>{% trans "No. It tells the requester someone may come. A donation counts only after it is logged and verified." %}</p></div>
         </details>
         <details>
-          <summary>When does a request close?</summary>
-          <div class="pg-faq__a"><p>When the date passes, when enough verified donations cover the bags needed, or when the requester closes it. Please close it as soon as you have the blood.</p></div>
+          <summary>{% trans "When does a request close?" %}</summary>
+          <div class="pg-faq__a"><p>{% trans "When the date passes, when enough verified donations cover the bags needed, or when the requester closes it. Please close it as soon as you have the blood." %}</p></div>
         </details>
         <details>
-          <summary>Is this a replacement for the blood bank?</summary>
-          <div class="pg-faq__a"><p>No. {{ SITE_NAME }} helps people find each other. In an emergency, contact the hospital's blood bank directly. The blood bank screens every donor and decides who can give.</p></div>
+          <summary>{% trans "Is this a replacement for the blood bank?" %}</summary>
+          <div class="pg-faq__a"><p>{% blocktrans with site=SITE_NAME %}No. {{ site }} helps people find each other. In an emergency, contact the hospital's blood bank directly. The blood bank screens every donor and decides who can give.{% endblocktrans %}</p></div>
         </details>
       </div>
     </div>
 
     <div class="bb-card bb-card--soft bb-center">
-      <p class="bb-strong bb-mb-1">Not here?</p>
-      <p class="bb-muted bb-mb-2">Check the donor guide, or get in touch.</p>
+      <p class="bb-strong bb-mb-1">{% trans "Not here?" %}</p>
+      <p class="bb-muted bb-mb-2">{% trans "Check the donor guide, or get in touch." %}</p>
       <div class="bb-row bb-row--center">
-        <a class="bb-btn bb-btn--ghost" href="{% url 'learn' %}">Donor guide</a>
-        <a class="bb-btn bb-btn--ghost" href="{% url 'about' %}">About {{ SITE_NAME }}</a>
-        {% if SITE_CONTACT_EMAIL %}<a class="bb-btn bb-btn--primary" href="mailto:{{ SITE_CONTACT_EMAIL }}">Email us</a>{% endif %}
+        <a class="bb-btn bb-btn--ghost" href="{% url 'learn' %}">{% trans "Donor guide" %}</a>
+        <a class="bb-btn bb-btn--ghost" href="{% url 'about' %}">{% blocktrans with site=SITE_NAME %}About {{ site }}{% endblocktrans %}</a>
+        {% if SITE_CONTACT_EMAIL %}<a class="bb-btn bb-btn--primary" href="mailto:{{ SITE_CONTACT_EMAIL }}">{% trans "Email us" %}</a>{% endif %}
       </div>
     </div>
   </div>

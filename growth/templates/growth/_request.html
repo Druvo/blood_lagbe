@@ -1,0 +1,26 @@
+{% load static i18n %}{% if verified or share %}
+<link rel="stylesheet" href="{% static 'growth/growth.css' %}">
+<section class="bb-card gr-panel" aria-labelledby="gr-req-h">
+  {% if verified %}
+    <div class="bb-row">
+      <span class="gr-verified">
+        <span class="gr-verified__chip" tabindex="0" aria-describedby="gr-verified-tip"><i class="feather-check-circle" aria-hidden="true"></i> {% trans "Verified hospital" %}</span>
+        <span class="gr-verified__tip" role="tooltip" id="gr-verified-tip">{% blocktrans with site=SITE_NAME %}The {{ site }} team checked this hospital and it is on our verified list. Still confirm details with the hospital before you travel.{% endblocktrans %}</span>
+      </span>
+    </div>
+  {% endif %}
+  {% if share %}
+    <div>
+      <h2 class="bb-card__title" id="gr-req-h" style="margin-bottom:4px;">{% trans "Send it to your people" %}</h2>
+      <p class="bb-small bb-muted">{% trans "A ready message in Bangla and English. It has the blood group, hospital, district and date, never a phone number." %}</p>
+    </div>
+    <div class="gr-share">
+      <a class="bb-btn bb-btn--ok bb-btn--sm" target="_blank" rel="noopener noreferrer" href="{{ share.whatsapp }}"><i class="feather-message-circle" aria-hidden="true"></i> {% trans "WhatsApp" %}</a>
+      <a class="bb-btn bb-btn--ghost bb-btn--sm" target="_blank" rel="noopener noreferrer" href="{{ share.messenger }}"><i class="feather-send" aria-hidden="true"></i> {% trans "Messenger" %}</a>
+      <button type="button" class="bb-btn bb-btn--ghost bb-btn--sm" data-copy="{{ share.message }}"><i class="feather-copy" aria-hidden="true"></i> {% trans "Copy message" %}</button>
+    </div>
+  {% else %}
+    <h2 class="bb-sr" id="gr-req-h">{% trans "Hospital" %}</h2>
+  {% endif %}
+</section>
+{% endif %}

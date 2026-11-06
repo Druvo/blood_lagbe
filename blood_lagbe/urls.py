@@ -19,14 +19,18 @@ from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from django.templatetags.static import static as static_url
 from django.urls import path, include
+from django.views.decorators.http import require_POST
 from django.views.generic.base import RedirectView
+from django.views.i18n import set_language
 from accounts.views import welcome_view
+from core.desk import desk
 from blogapp.views import postView
 from pages import seo
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('desk/', desk, name='staff-desk'),
 
     path(
         'favicon.ico',
@@ -34,6 +38,13 @@ urlpatterns = [
             url=static_url('images/brand/bloodbond-mark.svg'),
             permanent=True,
         ),
+    ),
+
+    # Language switcher: POST only (the form in the nav and footer), CSRF
+    # protected; Django validates the `next` URL and sets the language cookie.
+    path(
+        'i18n/set-language/', require_POST(set_language),
+        name='set_language',
     ),
 
     # SEO / PWA / ops ----

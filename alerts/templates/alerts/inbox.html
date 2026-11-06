@@ -1,0 +1,67 @@
+{% extends 'base/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Alerts" %}{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'alerts/alerts.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container bb-container--narrow bb-section">
+  <header class="bb-row bb-row--between bb-row--top bb-mb-2">
+    <div>
+      <span class="bb-eyebrow">{% trans "Alerts" %}</span>
+      <h1 class="bb-h2 bb-mb-0">{% trans "Your inbox" %}</h1>
+    </div>
+    <div class="bb-row">
+      <a href="{% url 'alerts:settings' %}" class="bb-btn bb-btn--ghost bb-btn--sm"><i class="feather-sliders" aria-hidden="true"></i> {% trans "Settings" %}</a>
+      {% if alerts_unread %}
+        <form method="post" action="{% url 'alerts:read-all' %}">{% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.get_full_path }}">
+          <button type="submit" class="bb-btn bb-btn--soft bb-btn--sm">{% trans "Mark all read" %}</button>
+        </form>
+      {% endif %}
+    </div>
+  </header>
+
+  {% if notifications %}
+    <ul class="al-list">
+      {% for n in notifications %}
+        <li class="bb-card al-item{% if not n.read_at %} is-unread{% endif %}">
+          <span class="al-dot{% if n.read_at %} is-read{% endif %}" aria-hidden="true"></span>
+          <div class="al-item__main">
+            <div class="al-item__title">{{ n.title }}{% if not n.read_at %} <span class="bb-pill bb-pill--info">{% trans "New" %}</span>{% endif %}</div>
+            {% if n.body %}<p class="bb-small bb-muted bb-mb-0">{{ n.body }}</p>{% endif %}
+            <div class="bb-xs bb-muted">{% blocktrans with t=n.created_at|timesince %}{{ t }} ago{% endblocktrans %}</div>
+            <div class="al-item__actions">
+              {% if n.url %}
+                <form method="post" action="{% url 'alerts:read' n.pk %}">{% csrf_token %}
+                  <input type="hidden" name="go" value="1">
+                  <button type="submit" class="bb-btn bb-btn--primary bb-btn--sm">{% trans "Open" %}</button>
+                </form>
+              {% endif %}
+              {% if not n.read_at %}
+                <form method="post" action="{% url 'alerts:read' n.pk %}">{% csrf_token %}
+                  <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                  <button type="submit" class="bb-btn bb-btn--ghost bb-btn--sm">{% trans "Mark read" %}</button>
+                </form>
+              {% endif %}
+            </div>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+    {% if page.has_other_pages %}
+      <nav class="al-pager bb-mt-3" aria-label="{% trans 'Pages' %}">
+        {% if page.has_previous %}<a class="bb-btn bb-btn--ghost bb-btn--sm" href="?page={{ page.previous_page_number }}">{% trans "Newer" %}</a>{% else %}<span></span>{% endif %}
+        <span class="bb-small bb-muted">{% blocktrans with number=page.number total=page.paginator.num_pages %}Page {{ number }} of {{ total }}{% endblocktrans %}</span>
+        {% if page.has_next %}<a class="bb-btn bb-btn--ghost bb-btn--sm" href="?page={{ page.next_page_number }}">{% trans "Older" %}</a>{% else %}<span></span>{% endif %}
+      </nav>
+    {% endif %}
+  {% else %}
+    <div class="bb-empty">
+      <i class="feather-bell" aria-hidden="true"></i>
+      <p>{% trans "No alerts yet. Turn on request alerts and we will tell you when someone near you needs your blood group." %}</p>
+      <a href="{% url 'alerts:settings' %}" class="bb-btn bb-btn--primary">{% trans "Set up alerts" %}</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock body %}

@@ -3,7 +3,6 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from django.urls import reverse
-from django.utils import timezone
 
 from rewards.models import (
     Badge,
@@ -47,10 +46,14 @@ def approve_donations(modeladmin, request, queryset):
     ))
     before = {donor.id: get_donor_badge_snapshot(donor) for donor in donors}
 
-    approved = queryset.update(
-        status=Donation.Status.APPROVED, verified_by=request.user,
-        updated_at=timezone.now(),
-    )
+    # Save row by row, not queryset.update(): other apps react to the
+    # post_save signal (campaign badges, friend rewards).
+    approved = 0
+    for donation in list(queryset):
+        donation.status = Donation.Status.APPROVED
+        donation.verified_by = request.user
+        donation.save()
+        approved += 1
     modeladmin.message_user(request, f'Approved {approved} donation(s).')
 
     notified = 0
@@ -68,10 +71,12 @@ def approve_donations(modeladmin, request, queryset):
 
 @admin.action(description='Reject selected donations')
 def reject_donations(modeladmin, request, queryset):
-    rejected = queryset.exclude(status=Donation.Status.REJECTED).update(
-        status=Donation.Status.REJECTED, verified_by=request.user,
-        updated_at=timezone.now(),
-    )
+    rejected = 0
+    for donation in list(queryset.exclude(status=Donation.Status.REJECTED)):
+        donation.status = Donation.Status.REJECTED
+        donation.verified_by = request.user
+        donation.save()
+        rejected += 1
     modeladmin.message_user(request, f'Rejected {rejected} donation(s).')
 
 

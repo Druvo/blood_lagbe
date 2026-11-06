@@ -1,0 +1,10 @@
+{% load i18n %}
+{% if mode == 'owner' %}
+<section class="bb-card bb-card--flat" aria-labelledby="al-req-h">
+  <h2 class="bb-card__title" id="al-req-h"><i class="feather-bell" aria-hidden="true"></i> {% trans "Donor alerts" %}</h2>
+  <p class="bb-mb-0" aria-live="polite">{% blocktrans count counter=notified %}{{ counter }} matching donor was notified.{% plural %}{{ counter }} matching donors were notified.{% endblocktrans %}</p>
+  <p class="bb-small bb-muted bb-mb-0">{% trans "Only members who opted in to alerts are told. Names stay private." %}</p>
+</section>
+{% elif mode == 'invite' %}
+<p class="bb-small bb-center bb-mb-0"><i class="feather-bell" aria-hidden="true"></i> <a href="{% url 'alerts:settings' %}">{% trans "Get alerts for requests like this" %}</a></p>
+{% endif %}

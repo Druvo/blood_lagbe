@@ -1,0 +1,74 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}{{ challenge.title }}{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'events/events.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container ev-page">
+  <p class="bb-small"><a href="{% url 'events:challenges' %}"><i class="feather-arrow-left" aria-hidden="true"></i> All challenges</a></p>
+  <header class="bb-mb-2">
+    <div class="ev-badges">
+      <span class="bb-pill bb-pill--info">{{ challenge.get_scope_display }}</span>
+      {% if state == 'active' %}<span class="bb-pill bb-pill--ok">On now</span>{% elif state == 'upcoming' %}<span class="bb-pill bb-pill--warn">Starts {{ challenge.starts_on|date:"j M" }}</span>{% else %}<span class="bb-pill">Finished</span>{% endif %}
+    </div>
+    <h1 class="bb-h2 bb-mt-1">{{ challenge.title }}</h1>
+    {% if challenge.description %}<p class="bb-lead">{{ challenge.description }}</p>{% endif %}
+    <p class="bb-muted">{{ challenge.starts_on|date:"j M Y" }} to {{ challenge.ends_on|date:"j M Y" }}. Target: {{ challenge.target_donations }} verified donation{{ challenge.target_donations|pluralize }} per squad.</p>
+  </header>
+
+  <section class="bb-card bb-mb-2" aria-labelledby="prog-h">
+    <h2 class="bb-card__title" id="prog-h">{% if challenge.scope == 'versus' %}Leading squad{% else %}Closest squad{% endif %}</h2>
+    {% if head.leader %}
+      <div class="bb-row bb-row--between">
+        <strong class="bb-strong">{{ head.leader.squad.name }}</strong>
+        <span class="bb-small bb-muted">{{ head.leader.donations }} of {{ head.target }}</span>
+      </div>
+      <div class="ev-bar {% if head.leader.reached %}ev-bar--ok{% endif %} bb-mt-1" role="progressbar" aria-valuemin="0" aria-valuemax="{{ head.target }}" aria-valuenow="{{ head.leader.donations }}" aria-label="Leading squad progress"><span style="width:{{ head.leader_percent }}%"></span></div>
+      <p class="bb-small bb-muted bb-mt-1 bb-mb-0">{{ head.squads }} squad{{ head.squads|pluralize }} taking part{% if challenge.scope == 'goal' %} &middot; {{ head.reached }} reached the target{% endif %}.</p>
+    {% else %}
+      <p class="bb-muted bb-mb-0">No squad has a counted donation yet.</p>
+    {% endif %}
+  </section>
+
+  {% if mine %}
+    <section class="bb-card bb-mb-2" aria-labelledby="mine-h">
+      <h2 class="bb-card__title" id="mine-h">Your squads</h2>
+      {% for r in mine %}
+        <div class="bb-mb-1">
+          <div class="bb-row bb-row--between"><strong class="bb-strong">{{ r.squad.name }}{% if not r.is_public %} <span class="bb-pill">Private</span>{% endif %}</strong><span class="bb-small bb-muted">{{ r.donations }} of {{ challenge.target_donations }}</span></div>
+          <div class="ev-bar {% if r.reached %}ev-bar--ok{% endif %}" role="progressbar" aria-valuemin="0" aria-valuemax="{{ challenge.target_donations }}" aria-valuenow="{{ r.donations }}" aria-label="{{ r.squad.name }} progress"><span style="width:{{ r.percent }}%"></span></div>
+        </div>
+      {% endfor %}
+    </section>
+  {% endif %}
+
+  <div class="bb-split bb-split--even">
+    <section class="bb-card" aria-labelledby="board-h">
+      <h2 class="bb-card__title" id="board-h">Squad leaderboard</h2>
+      {% for r in rows %}
+        <div class="ev-row">
+          <span class="ev-rank">{{ r.rank }}</span>
+          <div class="bb-grow">
+            <a href="{% url 'squads:detail' r.squad.pk %}" class="bb-strong">{{ r.squad.name }}</a>
+            <div class="ev-bar {% if r.reached %}ev-bar--ok{% endif %} bb-mt-1" role="progressbar" aria-valuemin="0" aria-valuemax="{{ challenge.target_donations }}" aria-valuenow="{{ r.donations }}" aria-label="{{ r.squad.name }} progress"><span style="width:{{ r.percent }}%"></span></div>
+          </div>
+          <span class="bb-small bb-muted">{{ r.donations }}{% if r.reached %} <i class="feather-check-circle" aria-hidden="true"></i><span class="bb-sr">target reached</span>{% endif %}</span>
+        </div>
+      {% empty %}
+        <p class="bb-muted bb-mb-0">Public squads show up here after their first verified donation in the dates. <a href="{% url 'squads:list' %}">Find or start a squad</a>.</p>
+      {% endfor %}
+    </section>
+
+    <section class="bb-card" aria-labelledby="top-h">
+      <h2 class="bb-card__title" id="top-h">Top donors</h2>
+      {% for d in top %}
+        <div class="ev-row"><span class="bb-avatar" aria-hidden="true">{{ d.initials }}</span><span class="bb-grow bb-strong">{{ d.name }}</span><span class="bb-small bb-muted">{{ d.donations }}</span></div>
+      {% empty %}
+        <p class="bb-muted bb-mb-0">Nobody to show yet. Donors who hide themselves from the leaderboard are never named, but their donations still count for the squad.</p>
+      {% endfor %}
+    </section>
+  </div>
+  <p class="bb-help bb-mt-2">Only admin-approved donations count. At most one donation per member per recovery interval ({{ donation_interval_label }}) counts. This is a reminder, not medical advice.</p>
+</div>
+{% endblock body %}

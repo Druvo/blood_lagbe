@@ -426,7 +426,7 @@ class StylesheetTests(TestCase):
         base = (Path(settings.BASE_DIR) / 'templates' / 'base' / 'base.html').read_text(
             encoding='utf-8')
         self.assertNotIn('css/style.css', base)
-        self.assertIn('<html lang="en">', base)
+        self.assertIn('<html lang="{{ LANGUAGE_CODE }}"', base)
 
 
 class CheckerSelfTests(TestCase):

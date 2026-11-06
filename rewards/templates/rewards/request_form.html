@@ -1,21 +1,21 @@
 {% extends 'base/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Post a blood request{% endblock title %}
+{% block title %}{% trans "Post a blood request" %}{% endblock title %}
 
 {% block extra_style %}<link rel="stylesheet" href="{% static 'css/requests.css' %}">{% endblock extra_style %}
 
 {% block body %}
 <div class="bb-container bb-container--narrow bb-section--tight">
   <div class="bb-pagehead">
-    <span class="bb-eyebrow">Urgent</span>
-    <h1 class="bb-h2 bb-mb-1">Post a blood request</h1>
-    <p class="bb-muted">Three quick steps. Logged-in donors will see the hospital and your phone number.</p>
+    <span class="bb-eyebrow">{% trans "Urgent" %}</span>
+    <h1 class="bb-h2 bb-mb-1">{% trans "Post a blood request" %}</h1>
+    <p class="bb-muted">{% trans "Three quick steps. Logged-in donors will see the hospital and your phone number." %}</p>
   </div>
 
   {% if at_limit %}
     <div class="bb-alert bb-alert--warn">
-      You already have {{ max_open }} open requests. <a href="{% url 'request-mine' %}">Close one</a> before posting another.
+      {% url 'request-mine' as mine_url %}{% blocktrans with n=max_open %}You already have {{ n }} open requests. <a href="{{ mine_url }}">Close one</a> before posting another.{% endblocktrans %}
     </div>
   {% endif %}
   {% if form.non_field_errors %}
@@ -27,10 +27,10 @@
 
     <section class="bb-card rq-step" aria-labelledby="s1">
       <span class="rq-step__num" aria-hidden="true">1</span>
-      <h2 class="rq-step__head" id="s1">Who needs blood?</h2>
+      <h2 class="rq-step__head" id="s1">{% trans "Who needs blood?" %}</h2>
       <div class="rq-step__body">
         <div class="bb-field">
-          <span class="bb-label" id="lbl-bg">Patient's blood group</span>
+          <span class="bb-label" id="lbl-bg">{% trans "Patient's blood group" %}</span>
           {{ form.blood_group.errors }}
           <ul class="rq-radiochips" role="radiogroup" aria-labelledby="lbl-bg">
             {% for radio in form.blood_group %}
@@ -40,12 +40,12 @@
         </div>
         <div class="rq-two">
           <div class="bb-field">
-            <label class="bb-label" for="{{ form.units_needed.id_for_label }}">Bags needed</label>
+            <label class="bb-label" for="{{ form.units_needed.id_for_label }}">{% trans "Bags needed" %}</label>
             {{ form.units_needed }}
             {{ form.units_needed.errors }}
           </div>
           <div class="bb-field">
-            <label class="bb-label" for="{{ form.patient_name.id_for_label }}">Patient name <span class="bb-muted">(optional)</span></label>
+            <label class="bb-label" for="{{ form.patient_name.id_for_label }}">{% trans "Patient name" %} <span class="bb-muted">{% trans "(optional)" %}</span></label>
             {{ form.patient_name }}
             <div class="bb-help">{{ form.patient_name.help_text }}</div>
             {{ form.patient_name.errors }}
@@ -56,22 +56,22 @@
 
     <section class="bb-card rq-step" aria-labelledby="s2">
       <span class="rq-step__num" aria-hidden="true">2</span>
-      <h2 class="rq-step__head" id="s2">Where is it needed?</h2>
+      <h2 class="rq-step__head" id="s2">{% trans "Where is it needed?" %}</h2>
       <div class="rq-step__body">
         <div class="rq-two">
           <div class="bb-field">
-            <label class="bb-label" for="{{ form.district.id_for_label }}">District</label>
+            <label class="bb-label" for="{{ form.district.id_for_label }}">{% trans "District" %}</label>
             {{ form.district }}
             {{ form.district.errors }}
           </div>
           <div class="bb-field">
-            <label class="bb-label" for="{{ form.place.id_for_label }}">Hospital or blood bank</label>
+            <label class="bb-label" for="{{ form.place.id_for_label }}">{% trans "Hospital or blood bank" %}</label>
             {{ form.place }}
             {{ form.place.errors }}
           </div>
         </div>
         <div class="bb-field js-place-text">
-          <label class="bb-label" for="{{ form.hospital.id_for_label }}">Hospital not listed? Type its name</label>
+          <label class="bb-label" for="{{ form.hospital.id_for_label }}">{% trans "Hospital not listed? Type its name" %}</label>
           {{ form.hospital }}
           {{ form.hospital.errors }}
         </div>
@@ -80,12 +80,12 @@
 
     <section class="bb-card rq-step" aria-labelledby="s3">
       <span class="rq-step__num" aria-hidden="true">3</span>
-      <h2 class="rq-step__head" id="s3">When, and how to reach you</h2>
+      <h2 class="rq-step__head" id="s3">{% trans "When, and how to reach you" %}</h2>
       <div class="rq-step__body">
         <div class="bb-field">
-          <label class="bb-label" for="{{ form.needed_by.id_for_label }}">Needed by</label>
+          <label class="bb-label" for="{{ form.needed_by.id_for_label }}">{% trans "Needed by" %}</label>
           {{ form.needed_by }}
-          <div class="rq-datechips" aria-label="Quick dates">
+          <div class="rq-datechips" aria-label="{% trans 'Quick dates' %}">
             {% for chip in date_chips %}
               <button type="button" class="bb-chip" data-date="{{ chip.iso }}" data-target="{{ form.needed_by.id_for_label }}">{{ chip.label }}</button>
             {% endfor %}
@@ -93,13 +93,13 @@
           {{ form.needed_by.errors }}
         </div>
         <div class="bb-field">
-          <label class="bb-label" for="{{ form.contact_phone.id_for_label }}">Contact phone</label>
+          <label class="bb-label" for="{{ form.contact_phone.id_for_label }}">{% trans "Contact phone" %}</label>
           {{ form.contact_phone }}
-          <div class="bb-help">Shown only to logged-in members.</div>
+          <div class="bb-help">{% trans "Shown only to logged-in members." %}</div>
           {{ form.contact_phone.errors }}
         </div>
         <div class="bb-field">
-          <label class="bb-label" for="{{ form.note.id_for_label }}">Note <span class="bb-muted">(optional)</span></label>
+          <label class="bb-label" for="{{ form.note.id_for_label }}">{% trans "Note" %} <span class="bb-muted">{% trans "(optional)" %}</span></label>
           {{ form.note }}
           {{ form.note.errors }}
         </div>
@@ -107,11 +107,11 @@
     </section>
 
     <div class="rq-submit bb-stack bb-stack--sm">
-      <button class="bb-btn bb-btn--primary bb-btn--lg bb-btn--block" type="submit"{% if at_limit %} disabled{% endif %}>Post request</button>
-      <p class="bb-muted bb-xs bb-center bb-mb-0">Please post only real, current needs. Never share medical record numbers.</p>
+      <button class="bb-btn bb-btn--primary bb-btn--lg bb-btn--block" type="submit"{% if at_limit %} disabled{% endif %}>{% trans "Post request" %}</button>
+      <p class="bb-muted bb-xs bb-center bb-mb-0">{% trans "Please post only real, current needs. Never share medical record numbers." %}</p>
     </div>
   </form>
-  <p class="bb-center bb-mt-2"><a href="{% url 'request-list' %}">Back to requests</a></p>
+  <p class="bb-center bb-mt-2"><a href="{% url 'request-list' %}">{% trans "Back to requests" %}</a></p>
 </div>
 {% endblock body %}
 

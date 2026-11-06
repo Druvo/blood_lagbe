@@ -1,0 +1,47 @@
+/* Moments lane. All classes are prefixed mo-. Colours come from the shared
+   design tokens so dark mode follows automatically. */
+
+.mo-panel { margin-top: 16px; }
+
+.mo-row { display: flex; gap: 12px; align-items: flex-start; padding: 8px 0; }
+.mo-row + .mo-row { border-top: 1px solid var(--bb-line); }
+.mo-icon { flex: none; width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; background: var(--bb-red-soft); color: var(--bb-red-text); font-size: 1.05rem; }
+.mo-update .mo-icon { background: var(--bb-green-soft); color: var(--bb-ok-text); }
+.mo-row strong { color: var(--bb-ink); }
+
+.mo-x { min-width: 44px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; border: 0; border-radius: 50%; background: transparent; color: var(--bb-muted); cursor: pointer; }
+.mo-x:hover { background: var(--bb-surface-2); color: var(--bb-ink); }
+
+.mo-sub { margin: 0 0 8px; font-size: 1rem; font-weight: 800; color: var(--bb-ink); }
+.mo-notes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.mo-note { overflow-wrap: anywhere; }
+li.mo-note:not(.bb-card) { padding: 10px 12px; border-radius: var(--bb-radius-sm); background: var(--bb-surface-2); }
+.mo-note__text { margin: 0 0 6px; color: var(--bb-ink); }
+.mo-note__meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.mo-link { min-height: 44px; min-width: 44px; padding: 0 8px; border: 0; background: transparent; color: var(--bb-red-text); font-weight: 700; font-size: .85rem; cursor: pointer; text-decoration: underline; }
+
+.mo-prefs { margin-top: 12px; }
+.mo-prefs summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-weight: 700; color: var(--bb-ink); }
+
+.mo-pulse { font-weight: 700; color: var(--bb-ink); overflow-wrap: anywhere; }
+
+/* Celebration. Without JS it is an ordinary card in the page; the script
+   adds .is-overlay to make it a focus-trapped dialog. */
+.mo-celebrate { position: relative; margin-top: 16px; }
+.mo-confetti { display: none; }
+.mo-celebrate__box { position: relative; text-align: center; padding: 24px 20px; border-radius: var(--bb-radius); background: var(--bb-surface); border: 1px solid var(--bb-line); box-shadow: var(--bb-shadow-sm); }
+.mo-celebrate__icon { width: 72px; height: 72px; margin: 0 auto 12px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; background: var(--bb-red-soft); color: var(--bb-red-text); }
+.mo-celebrate__actions { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 16px; }
+
+.mo-celebrate.is-overlay { position: fixed; inset: 0; z-index: 1000; margin: 0; display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(16, 24, 40, .72); overflow-y: auto; }
+.mo-celebrate.is-overlay .mo-confetti { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.mo-celebrate.is-overlay .mo-celebrate__box { width: 100%; max-width: 420px; box-shadow: var(--bb-shadow-lg); }
+.mo-celebrate.is-overlay:focus { outline: none; }
+html.mo-lock, html.mo-lock body { overflow: hidden; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .mo-celebrate.is-overlay .mo-celebrate__box { animation: mo-pop .35s cubic-bezier(.2, .9, .3, 1.2) both; }
+  .mo-celebrate.is-overlay .mo-celebrate__icon { animation: mo-beat 1.4s ease-in-out .4s 2; }
+}
+@keyframes mo-pop { from { opacity: 0; transform: translateY(14px) scale(.94); } to { opacity: 1; transform: none; } }
+@keyframes mo-beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.12); } }

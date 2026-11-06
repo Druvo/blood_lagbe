@@ -1,44 +1,48 @@
-{% load static %}
+{% load static i18n %}
 <footer class="bb-footer">
   <div class="bb-container">
     <div class="bb-footer__grid">
       <div>
         <a href="{% url 'home' %}" class="bb-brand"><img src="{% static 'images/brand/bloodbond-mark.svg' %}" alt="" width="36" height="36"><span>{{ SITE_NAME }}</span></a>
-        <p class="bb-small" style="margin-top:12px;max-width:34ch;">{{ SITE_TAGLINE }} A community that connects blood donors with the people who need them, across Bangladesh.</p>
+        <p class="bb-small" style="margin-top:12px;max-width:34ch;">{{ SITE_TAGLINE }} {% trans "A community that connects blood donors with the people who need them, across Bangladesh." %}</p>
         {% if SITE_CONTACT_EMAIL %}<p class="bb-small"><a href="mailto:{{ SITE_CONTACT_EMAIL }}">{{ SITE_CONTACT_EMAIL }}</a></p>{% endif %}
       </div>
       <div>
-        <h2>Give &amp; get blood</h2>
+        <h2>{% trans "Give &amp; get blood" %}</h2>
         <ul>
-          <li><a href="{% url 'request-list' %}">Urgent requests</a></li>
-          <li><a href="{% url 'request-create' %}">Ask for blood</a></li>
-          <li><a href="{% url 'donor-directory' %}">Find donors</a></li>
-          <li><a href="{% url 'log-donation' %}">Log a donation</a></li>
+          <li><a href="{% url 'request-list' %}">{% trans "Urgent requests" %}</a></li>
+          <li><a href="{% url 'request-create' %}">{% trans "Ask for blood" %}</a></li>
+          <li><a href="{% url 'donor-directory' %}">{% trans "Find donors" %}</a></li>
+          <li><a href="{% url 'log-donation' %}">{% trans "Log a donation" %}</a></li>
         </ul>
       </div>
       <div>
-        <h2>Community</h2>
+        <h2>{% trans "Community" %}</h2>
         <ul>
-          <li><a href="{% url 'leaderboard' %}">Leaderboard</a></li>
-          <li><a href="{% url 'squads:list' %}">Squads</a></li>
-          <li><a href="{% url 'impact' %}">Impact</a></li>
-          <li><a href="{% url 'stories' %}">Stories</a></li>
-          <li><a href="{% url 'blogapp:blog-view' %}">Blog</a></li>
+          <li><a href="{% url 'leaderboard' %}">{% trans "Leaderboard" %}</a></li>
+          <li><a href="{% url 'squads:list' %}">{% trans "Squads" %}</a></li>
+          <li><a href="{% url 'impact' %}">{% trans "Impact" %}</a></li>
+          <li><a href="{% url 'stories' %}">{% trans "Stories" %}</a></li>
+          <li><a href="{% url 'events:list' %}">{% trans "Events" %}</a></li>
+          <li><a href="{% url 'events:campaigns' %}">{% trans "Campaigns" %}</a></li>
+          <li><a href="{% url 'events:challenges' %}">{% trans "Challenges" %}</a></li>
+          <li><a href="{% url 'blogapp:blog-view' %}">{% trans "Blog" %}</a></li>
         </ul>
       </div>
       <div>
-        <h2>Learn</h2>
+        <h2>{% trans "Learn" %}</h2>
         <ul>
-          <li><a href="{% url 'learn' %}">Can I donate?</a></li>
-          <li><a href="{% url 'faq' %}">FAQ</a></li>
-          <li><a href="{% url 'about' %}">About</a></li>
-          <li><a href="{% url 'privacy' %}">Privacy settings</a></li>
+          <li><a href="{% url 'learn' %}">{% trans "Can I donate?" %}</a></li>
+          <li><a href="{% url 'faq' %}">{% trans "FAQ" %}</a></li>
+          <li><a href="{% url 'about' %}">{% trans "About" %}</a></li>
+          <li><a href="{% url 'privacy' %}">{% trans "Privacy settings" %}</a></li>
         </ul>
       </div>
     </div>
     <div class="bb-footer__legal">
-      <p style="margin-bottom:6px;">{{ SITE_NAME }} is a community tool, not a medical service. Eligibility and safety are decided by the blood bank's screening. In an emergency, contact the hospital's blood bank directly.</p>
-      <p style="margin:0;">&copy; {% now "Y" %} {{ SITE_NAME }}. Made in Bangladesh.</p>
+      {% include 'snippets/lang_switch.html' with lang_class='bb-lang--footer' lang_id='footer' %}
+      <p style="margin-bottom:6px;">{% blocktrans with site=SITE_NAME %}{{ site }} is a community tool, not a medical service. Eligibility and safety are decided by the blood bank's screening. In an emergency, contact the hospital's blood bank directly.{% endblocktrans %}</p>
+      <p style="margin:0;">&copy; {% now "Y" %} {{ SITE_NAME }}. {% trans "Made in Bangladesh." %}</p>
     </div>
   </div>
 </footer>

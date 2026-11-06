@@ -38,6 +38,7 @@ from rewards.audit_fixtures import (
     build_cast,
     crawl_paths,
     email_for,
+    lanes_paths,
 )
 from rewards.models import Donation
 
@@ -98,16 +99,28 @@ def named_urls():
 # list honest: a new URL name must be added to the crawl or to one of these.
 POST_ONLY = {
     'request-respond', 'request-close', 'request-update', 'request-report',
-    'contact-donor', 'contact-respond', 'squads:join-public', 'squads:leave',
+    'contact-donor', 'contact-respond', 'contact-revoke', 'contact-block',
+    'contact-unblock', 'squads:join-public', 'squads:leave',
     'squads:delete', 'squads:new-code', 'squads:kick', 'story-react',
     'story-report', 'story-delete',
+    'alerts:read-all', 'alerts:read', 'events:cancel', 'events:rsvp',
+    'events:rsvp-cancel', 'events:checkin', 'events:enter-squad',
+    'events:withdraw-squad', 'habits:availability', 'habits:fact',
+    'habits:quiz', 'moments:thank-send', 'moments:note-hide',
+    'moments:update-dismiss', 'moments:freeze', 'set_language',
 }
-NOT_CRAWLED = {'logout', 'password_reset_confirm'}
+# Token links open without a login and change one setting each.
+NOT_CRAWLED = {
+    'logout', 'password_reset_confirm', 'alerts:email-off',
+    'habits:unsubscribe', 'moments:reminder-off',
+}
 
 # Query parameters that may appear in links: filters and navigation only.
 ALLOWED_QUERY_KEYS = {
     'next', 'period', 'district', 'group', 'compatible', 'available',
     'blood_group', 'when', 'page', 'kind', 'only',
+    # staff desk links into filtered admin lists (status and report state)
+    'status__exact', 'cleared__exact',
 }
 # The eligibility self-check on /learn/ is hidden unless JavaScript runs and
 # its submit is always intercepted, so those answers never reach a URL.
@@ -183,7 +196,7 @@ class PrivacyAuditCase(TestCase):
                 for key in askers:
                     ok |= {f'{PEOPLE[key][0]} {PEOPLE[key][1]}', PEOPLE[key][1]}
                 ok.add(PEOPLE['asker_ok'][2])
-        elif name == 'badge-card' and staff:
+        elif name in ('badge-card', 'growth:profile', 'habits:year-card-user') and staff:
             # staff may open any card, private or opted out: names only
             for key in NAME_PROTECTED:
                 first, last, _phone = PEOPLE[key]
@@ -262,6 +275,7 @@ class PrivacyAuditCase(TestCase):
     def test_post_only_views_refuse_get(self):
         client = self.client_for('owner')
         c = self.cast
+        lanes_paths(c)  # creates the drive, notice and thank-you note
         samples = {
             'request-respond': [c.req_open.pk],
             'request-close': [c.req_open.pk],
@@ -269,6 +283,9 @@ class PrivacyAuditCase(TestCase):
             'request-report': [c.req_open.pk],
             'contact-donor': [self.users['directory'].pk],
             'contact-respond': [c.contact_wait.pk],
+            'contact-revoke': [c.contact_ok.pk],
+            'contact-block': [c.contact_ok.pk],
+            'contact-unblock': [c.contact_ok.pk],
             'squads:join-public': [c.squad.pk],
             'squads:leave': [c.squad.pk],
             'squads:delete': [c.squad.pk],
@@ -277,6 +294,22 @@ class PrivacyAuditCase(TestCase):
             'story-react': [c.story_anon.pk],
             'story-report': [c.story_anon.pk],
             'story-delete': [c.story_anon.pk],
+            'alerts:read-all': [],
+            'alerts:read': [c.notification.pk],
+            'events:cancel': [c.event.pk],
+            'events:rsvp': [c.event.pk],
+            'events:rsvp-cancel': [c.event.pk],
+            'events:checkin': [c.event.pk, c.rsvp.pk],
+            'events:enter-squad': [c.event.pk],
+            'events:withdraw-squad': [c.event.pk, c.squad.pk],
+            'habits:availability': [],
+            'habits:fact': [],
+            'habits:quiz': [],
+            'moments:thank-send': [c.req_closed.pk],
+            'moments:note-hide': [c.thank_note.pk],
+            'moments:update-dismiss': [1],
+            'moments:freeze': [],
+            'set_language': [],
         }
         self.assertEqual(set(samples), POST_ONLY)
         for name, args in samples.items():

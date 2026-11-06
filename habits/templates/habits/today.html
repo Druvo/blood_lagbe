@@ -1,0 +1,153 @@
+{% extends 'base/base.html' %}
+{% load static i18n %}
+
+{% block title %}{% trans "Today" %}{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'habits/habits.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container bb-container--narrow hb-page">
+  <header class="bb-stack bb-stack--sm bb-mb-2">
+    <span class="bb-eyebrow">{% trans "Today" %}</span>
+    <h1 class="bb-h2 bb-mb-0">{% trans "Three small things, no pressure" %}</h1>
+    <p class="bb-lead bb-mb-0">{% trans "Do what you like, skip what you do not. None of this asks you to donate sooner." %}</p>
+  </header>
+
+  <section class="bb-card bb-mb-2" aria-label="{% trans 'Your progress' %}">
+    <div class="hb-panel__row">
+      <div class="hb-streak">
+        <div class="hb-streak__num">{% if streak.current %}{% include 'habits/_flame.html' %}{% else %}{% include 'habits/_flame.html' with off=True %}{% endif %}{{ streak.current }}</div>
+        <div>
+          <div class="bb-strong">{% blocktrans count counter=streak.current %}day visit streak{% plural %}days visit streak{% endblocktrans %}</div>
+          <div class="bb-xs bb-muted">
+            {% if streak.current == 0 %}{% trans "Finish one small action to start one." %}{% elif streak.done_today %}{% trans "Today is counted." %}{% else %}{% trans "Finish one action to keep it going." %}{% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="hb-dots" role="img" aria-label="{% blocktrans with done=done_count %}{{ done }} of {{ total }} done today{% endblocktrans %}">
+        {% for t in tasks %}<span class="hb-dot{% if t.done %} is-done{% endif %}"></span>{% endfor %}
+        <span class="bb-small bb-muted">{% blocktrans with done=done_count %}{{ done }} of {{ total }}{% endblocktrans %}</span>
+      </div>
+    </div>
+    <p class="bb-xs bb-muted bb-mt-1 bb-mb-0">{% trans "A friendly habit only. It never counts toward points, levels, the leaderboard or your donation streak. One missed day a week is forgiven" %}{% if streak.grace_used %} {% trans "(this week's is used)" %}{% endif %}.</p>
+  </section>
+
+  {% if all_done %}
+    <div class="bb-alert bb-alert--ok bb-mb-2" role="status"><i class="feather-check-circle" aria-hidden="true"></i> {% trans "That is today's set. Thank you. See you tomorrow, there is nothing more to do." %}</div>
+  {% endif %}
+
+  <div class="bb-stack">
+    {% for t in tasks %}
+      {% if t.key == 'share' %}
+      <section class="bb-card hb-task{% if t.done %} is-done{% endif %}" id="task-share" aria-labelledby="h-share">
+        <div class="hb-task__head">
+          <span class="hb-task__icon"><i class="feather-send" aria-hidden="true"></i></span>
+          <h2 class="hb-task__title bb-grow" id="h-share">{% trans "Share an urgent request" %}</h2>
+          {% if t.done %}<span class="bb-pill bb-pill--ok">{% trans "Done" %}</span>{% endif %}
+        </div>
+        {% if share_request %}
+          <div class="hb-req">
+            <span class="bb-bloodtag bb-bloodtag--sm"><span>{{ share_request.blood_group }}</span></span>
+            <div class="hb-req__text">
+              <div class="bb-strong">{{ share_request.hospital }}</div>
+              <div class="bb-small bb-muted">{{ share_request.district }} &middot; {{ share_request.urgency.0 }}</div>
+            </div>
+          </div>
+          <p class="bb-small bb-muted bb-mb-0">{% trans "You do not need to be a match. Passing a request on can reach someone who is." %}</p>
+          <div><a class="bb-btn {% if t.done %}bb-btn--ghost{% else %}bb-btn--primary{% endif %}" href="{% url 'habits:share' share_request.pk %}"><i class="feather-share-2" aria-hidden="true"></i> {% if t.done %}{% trans "Open it again" %}{% else %}{% trans "Open and share" %}{% endif %}</a></div>
+        {% else %}
+          <p class="bb-muted bb-mb-0">{% trans "Thanks for sharing today." %}</p>
+        {% endif %}
+      </section>
+
+      {% elif t.key == 'availability' %}
+      <section class="bb-card hb-task{% if t.done %} is-done{% endif %}" id="task-availability" aria-labelledby="h-avail">
+        <div class="hb-task__head">
+          <span class="hb-task__icon"><i class="feather-check-circle" aria-hidden="true"></i></span>
+          <h2 class="hb-task__title bb-grow" id="h-avail">{% trans "Confirm your availability" %}</h2>
+          {% if t.done %}<span class="bb-pill bb-pill--ok">{% trans "Done" %}</span>{% endif %}
+        </div>
+        <p class="bb-mb-0">{% if available %}{% blocktrans %}Right now you are marked <strong>available to donate</strong>.{% endblocktrans %}{% else %}{% blocktrans %}Right now you are marked <strong>not available</strong>.{% endblocktrans %}{% endif %}</p>
+        {% if resting %}<p class="bb-small bb-muted bb-mb-0">{% trans "You are inside your recovery gap, so \"Not right now\" is a perfectly good answer." %}</p>{% endif %}
+        <form method="post" action="{% url 'habits:availability' %}" class="bb-row">
+          {% csrf_token %}
+          <button class="bb-btn {% if available %}bb-btn--primary{% else %}bb-btn--ghost{% endif %}" type="submit" name="available" value="yes">{% trans "Yes, I am available" %}</button>
+          <button class="bb-btn {% if available %}bb-btn--ghost{% else %}bb-btn--primary{% endif %}" type="submit" name="available" value="no">{% trans "Not right now" %}</button>
+        </form>
+      </section>
+
+      {% elif t.key == 'fact' %}
+      <section class="bb-card hb-task{% if t.done %} is-done{% endif %}" id="task-fact" aria-labelledby="h-fact">
+        <div class="hb-task__head">
+          <span class="hb-task__icon"><i class="feather-book-open" aria-hidden="true"></i></span>
+          <h2 class="hb-task__title bb-grow" id="h-fact">{% trans "Read one fact" %}</h2>
+          {% if t.done %}<span class="bb-pill bb-pill--ok">{% trans "Done" %}</span>{% endif %}
+        </div>
+        <p class="hb-fact">{{ fact.text }}</p>
+        <p class="hb-fact__foot">{{ fact.footer }}</p>
+        {% if not t.done %}
+          <form method="post" action="{% url 'habits:fact' %}">
+            {% csrf_token %}
+            <button class="bb-btn bb-btn--primary" type="submit"><i class="feather-check" aria-hidden="true"></i> {% trans "Got it" %}</button>
+          </form>
+        {% endif %}
+      </section>
+
+      {% elif t.key == 'quiz' %}
+      <section class="bb-card hb-task{% if t.done %} is-done{% endif %}" id="task-quiz" aria-labelledby="h-quiz">
+        <div class="hb-task__head">
+          <span class="hb-task__icon"><i class="feather-help-circle" aria-hidden="true"></i></span>
+          <h2 class="hb-task__title bb-grow" id="h-quiz">{% trans "Myth or fact?" %}</h2>
+          {% if t.done %}<span class="bb-pill bb-pill--ok">{% blocktrans with n=quiz_score %}{{ n }} of 3{% endblocktrans %}</span>{% endif %}
+        </div>
+        {% if quiz_done %}
+          <div class="bb-stack bb-stack--sm" aria-live="polite">
+            {% for row in quiz_rows %}
+              <div class="hb-reveal {% if row.correct %}is-right{% else %}is-wrong{% endif %}">
+                <p class="bb-strong">{{ row.statement }}</p>
+                {% if row.given %}<p class="bb-small bb-mb-0">{% if row.given == 'F' %}{% trans "You said fact." %}{% else %}{% trans "You said myth." %}{% endif %}</p>{% endif %}
+                <p class="bb-small bb-muted">{{ row.explanation }}</p>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <form method="post" action="{% url 'habits:quiz' %}" class="hb-quiz">
+            {% csrf_token %}
+            {% for row in quiz_rows %}
+              <fieldset class="hb-q">
+                <legend>{{ forloop.counter }}. {{ row.statement }}</legend>
+                <div class="hb-choices">
+                  <label class="hb-choice"><input type="radio" name="q{{ row.index }}" value="M" required><span>{% trans "Myth" %}</span></label>
+                  <label class="hb-choice"><input type="radio" name="q{{ row.index }}" value="F" required><span>{% trans "Fact" %}</span></label>
+                </div>
+              </fieldset>
+            {% endfor %}
+            <div><button class="bb-btn bb-btn--primary" type="submit">{% trans "See the answers" %}</button></div>
+          </form>
+        {% endif %}
+      </section>
+      {% endif %}
+    {% endfor %}
+  </div>
+
+  {% if next_title %}
+    <section class="bb-card bb-card--soft bb-mt-2" aria-label="{% trans 'Next title' %}">
+      <div class="hb-title">
+        <span class="hb-title__icon"><i class="feather-{{ next_title.icon }}" aria-hidden="true"></i></span>
+        <div class="hb-title__body">
+          <h2 class="hb-title__name">{% blocktrans with name=next_title.name %}Next title: {{ name }}{% endblocktrans %}</h2>
+          <div class="bb-progress" role="progressbar" aria-valuenow="{{ next_title.percent }}" aria-valuemin="0" aria-valuemax="100" aria-label="{% blocktrans with name=next_title.name %}Progress to {{ name }}{% endblocktrans %}"><span style="width:{{ next_title.percent }}%"></span></div>
+          <span class="bb-small bb-muted">{{ next_title.hint }} ({% blocktrans with current=next_title.current target=next_title.target %}{{ current }} of {{ target }}{% endblocktrans %})</span>
+        </div>
+      </div>
+    </section>
+  {% endif %}
+
+  <nav class="bb-row bb-mt-2" aria-label="{% trans 'More' %}">
+    <a class="bb-btn bb-btn--soft bb-btn--sm" href="{% url 'habits:titles' %}"><i class="feather-award" aria-hidden="true"></i> {% trans "Titles" %}</a>
+    <a class="bb-btn bb-btn--soft bb-btn--sm" href="{% url 'habits:year' %}"><i class="feather-calendar" aria-hidden="true"></i> {% trans "My year" %}</a>
+    <a class="bb-btn bb-btn--soft bb-btn--sm" href="{% url 'habits:settings' %}"><i class="feather-mail" aria-hidden="true"></i> {% trans "Weekly email" %}</a>
+    <a class="bb-btn bb-btn--ghost bb-btn--sm" href="{% url 'log-donation' %}">{% trans "Back to my hub" %}</a>
+  </nav>
+  <p class="bb-xs bb-muted bb-mt-2">{{ safety_note }}</p>
+</div>
+{% endblock body %}

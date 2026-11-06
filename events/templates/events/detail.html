@@ -1,0 +1,150 @@
+{% extends 'base/base.html' %}
+{% load static i18n %}
+
+{% block title %}{{ event.title }}{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'events/events.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container ev-page">
+  <p class="bb-small"><a href="{% url 'events:list' %}"><i class="feather-arrow-left" aria-hidden="true"></i> {% trans "All drives" %}</a></p>
+
+  <header class="bb-mb-2">
+    <div class="ev-badges">
+      {% if event.status == 'cancelled' %}<span class="bb-pill bb-pill--bad">{% trans "Cancelled" %}</span>{% endif %}
+      {% if event.status == 'pending' %}<span class="bb-pill bb-pill--warn">{% trans "Waiting for approval" %}</span>{% endif %}
+      {% if event.status == 'completed' or event.status == 'approved' and event.is_past %}<span class="bb-pill">{% trans "Completed" %}</span>{% endif %}
+      {% if event.is_verified_organizer %}<span class="bb-pill bb-pill--ok"><i class="feather-check-circle" aria-hidden="true"></i> {% trans "Verified organizer" %}</span>{% endif %}
+    </div>
+    <h1 class="bb-h2 bb-mt-1" style="overflow-wrap:anywhere">{{ event.title }}</h1>
+    <p class="bb-muted">{% blocktrans with name=event.public_organizer %}Hosted by {{ name }}{% endblocktrans %}</p>
+  </header>
+
+  {% if event.status == 'pending' %}
+    <div class="bb-alert bb-alert--warn bb-mb-2" role="status">{% trans "Only you and our volunteers can see this drive until it is approved." %}</div>
+  {% elif event.status == 'cancelled' %}
+    <div class="bb-alert bb-alert--bad bb-mb-2" role="status">{% trans "This drive was cancelled." %}</div>
+  {% endif %}
+
+  <div class="ev-detail-grid">
+    <div class="bb-stack">
+      <section class="bb-card" aria-label="{% trans 'Drive details' %}">
+        <ul class="ev-facts">
+          <li><i class="feather-calendar" aria-hidden="true"></i><span><strong class="bb-strong">{{ event.starts_at|date:"l, j F Y" }}</strong><br>{% if event.ends_at %}{% blocktrans with start=event.starts_at|date:"g:i A" end=event.ends_at|date:"g:i A" %}{{ start }} to {{ end }}{% endblocktrans %}{% else %}{{ event.starts_at|date:"g:i A" }}{% endif %}</span></li>
+          <li><i class="feather-map-pin" aria-hidden="true"></i><span>{{ event.where }}{% if event.place %}<br><span class="bb-small bb-muted">{{ event.place.get_kind_display }}: {{ event.place.name }}</span>{% endif %}</span></li>
+          <li><i class="feather-users" aria-hidden="true"></i><span>{% blocktrans with n=event.going_count %}{{ n }} going{% endblocktrans %}{% if event.capacity %} &middot; {% if is_full %}{% trans "full" %}{% else %}{% blocktrans count counter=spots_left %}{{ counter }} spot left{% plural %}{{ counter }} spots left{% endblocktrans %}{% endif %}{% endif %}</span></li>
+        </ul>
+        {% if event.description %}<div class="ev-desc bb-mt-2">{{ event.description|linebreaks }}</div>{% endif %}
+        <div class="bb-row bb-mt-2">
+          <a href="{% url 'events:calendar' event.pk %}" class="bb-btn bb-btn--soft bb-btn--sm"><i class="feather-download" aria-hidden="true"></i> {% trans "Add to calendar" %}</a>
+        </div>
+        <p class="bb-help bb-mt-2 bb-mb-0">{% trans "Eligibility and the donation interval are reminders, not medical advice. The blood bank decides on the day." %}</p>
+      </section>
+
+      <section class="bb-card" aria-labelledby="teams-h">
+        <h2 class="bb-card__title" id="teams-h">{% trans "Squad teams" %}</h2>
+        {% for t in teams %}
+          <div class="ev-team">
+            <span>
+              {% if t.squad.is_public %}
+                <a href="{% url 'squads:detail' t.squad.pk %}" class="bb-strong">{{ t.squad.name }}</a>
+              {% else %}
+                <span class="bb-strong">{% trans "A private squad" %}</span>
+              {% endif %}
+            </span>
+            <span class="bb-small bb-muted">{% blocktrans count counter=t.going %}{{ counter }} member going{% plural %}{{ counter }} members going{% endblocktrans %}</span>
+            {% if t.squad.owner_id == user.id %}
+              <form method="post" action="{% url 'events:withdraw-squad' event.pk t.squad.pk %}">{% csrf_token %}
+                <button type="submit" class="bb-btn bb-btn--ghost bb-btn--sm">{% trans "Withdraw" %}</button>
+              </form>
+            {% endif %}
+          </div>
+        {% empty %}
+          <p class="bb-small bb-muted bb-mb-0">{% trans "No squad has entered yet." %}</p>
+        {% endfor %}
+        {% if rsvp_open and my_squads %}
+          <form method="post" action="{% url 'events:enter-squad' event.pk %}" class="bb-form bb-mt-2">
+            {% csrf_token %}
+            <label class="bb-label" for="ev-squad">{% trans "Enter a squad you own" %}</label>
+            <div class="bb-row">
+              <select id="ev-squad" name="squad">{% for s in my_squads %}<option value="{{ s.pk }}">{{ s.name }}</option>{% endfor %}</select>
+              <button type="submit" class="bb-btn bb-btn--primary bb-btn--sm">{% trans "Enter squad" %}</button>
+            </div>
+            <p class="bb-help bb-mb-0">{% trans "Private squads are shown only as \"A private squad\"." %}</p>
+          </form>
+        {% endif %}
+      </section>
+
+      {% if is_organizer or user.is_staff %}
+        <section class="bb-card" id="attendance" aria-labelledby="att-h">
+          <h2 class="bb-card__title" id="att-h">{% blocktrans with n=attendees|length %}Who is going ({{ n }}){% endblocktrans %}</h2>
+          <p class="bb-small bb-muted">{% if user.is_staff and not is_organizer %}{% trans "Only you and staff can see this list. People who did not share their name show as a number." %}{% else %}{% trans "Only you can see this list. People who did not share their name show as a number." %}{% endif %}{% if can_check_in %} {% blocktrans with n=checked_in_count %}{{ n }} checked in.{% endblocktrans %}{% endif %}</p>
+          {% for a in attendees %}
+            <div class="ev-attendee">
+              <span class="bb-strong">{{ a.organizer_label }}</span>
+              <span class="bb-row">
+                {% if a.verified %}<span class="bb-pill bb-pill--ok">{% trans "Verified" %}</span>{% endif %}
+                {% if a.checked_in %}<span class="bb-pill bb-pill--info">{% trans "Checked in" %}</span>{% endif %}
+                {% if can_check_in %}
+                  <form method="post" action="{% url 'events:checkin' event.pk a.pk %}">{% csrf_token %}
+                    {% if a.checked_in %}
+                      <input type="hidden" name="action" value="out">
+                      <button type="submit" class="bb-btn bb-btn--ghost bb-btn--sm">{% trans "Undo" %}</button>
+                    {% else %}
+                      <input type="hidden" name="action" value="in">
+                      <button type="submit" class="bb-btn bb-btn--soft bb-btn--sm">{% trans "Check in" %}</button>
+                    {% endif %}
+                  </form>
+                {% endif %}
+              </span>
+            </div>
+          {% empty %}
+            <p class="bb-small bb-muted bb-mb-0">{% trans "Nobody has RSVPed yet." %}</p>
+          {% endfor %}
+        </section>
+      {% endif %}
+    </div>
+
+    <aside class="bb-stack">
+      <section class="bb-card bb-card--accent" aria-labelledby="rsvp-h">
+        <h2 class="bb-card__title" id="rsvp-h">{% trans "Are you going?" %}</h2>
+        {% if not rsvp_open %}
+          <p class="bb-small bb-muted bb-mb-0">{% if event.status == 'pending' %}{% trans "RSVPs open once the drive is approved." %}{% elif event.status == 'cancelled' %}{% trans "This drive was cancelled." %}{% else %}{% trans "This drive has finished." %}{% endif %}</p>
+        {% elif not user.is_authenticated %}
+          <p class="bb-small">{% trans "Log in to RSVP." %}</p>
+          <a href="{% url 'login' %}?next={{ request.path|urlencode }}" class="bb-btn bb-btn--primary bb-btn--block">{% trans "Log in to RSVP" %}</a>
+        {% elif my_rsvp %}
+          <p class="bb-pill bb-pill--ok"><i class="feather-check" aria-hidden="true"></i> {% trans "You are going" %}</p>
+          <form method="post" action="{% url 'events:rsvp-cancel' event.pk %}">{% csrf_token %}
+            <button type="submit" class="bb-btn bb-btn--ghost bb-btn--block">{% trans "Cancel my RSVP" %}</button>
+          </form>
+        {% elif is_full %}
+          <p class="bb-small bb-mb-0">{% trans "Sorry, this drive is full." %}</p>
+        {% else %}
+          <form method="post" action="{% url 'events:rsvp' event.pk %}" class="bb-form">
+            {% csrf_token %}
+            <label class="bb-check" for="ev-share">
+              <input type="checkbox" id="ev-share" name="share_name" {% if default_share %}checked{% endif %}>
+              <span><strong>{% trans "Let the organizer see my name" %}</strong><span class="bb-help">{% trans "Only the organizer, never other people. Otherwise they see a number." %}</span></span>
+            </label>
+            <button type="submit" class="bb-btn bb-btn--primary bb-btn--block">{% trans "I am going" %}</button>
+          </form>
+        {% endif %}
+      </section>
+
+      {% if can_edit or is_organizer %}
+        <section class="bb-card" aria-labelledby="org-h">
+          <h2 class="bb-card__title" id="org-h">{% trans "Organizer" %}</h2>
+          <div class="bb-row">
+            {% if can_edit %}<a href="{% url 'events:edit' event.pk %}" class="bb-btn bb-btn--soft bb-btn--sm"><i class="feather-edit-2" aria-hidden="true"></i> {% trans "Edit" %}</a>{% endif %}
+            {% if event.status == 'pending' or event.status == 'approved' and not event.is_past %}
+              <form method="post" action="{% url 'events:cancel' event.pk %}" onsubmit="return confirm('{% trans 'Cancel this drive?' as t %}{{ t|escapejs }}');">{% csrf_token %}
+                <button type="submit" class="bb-btn bb-btn--ghost bb-btn--sm">{% trans "Cancel drive" %}</button>
+              </form>
+            {% endif %}
+          </div>
+        </section>
+      {% endif %}
+    </aside>
+  </div>
+</div>
+{% endblock body %}

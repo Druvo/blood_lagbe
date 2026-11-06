@@ -1,13 +1,13 @@
-{% with p=request.path %}
-<nav class="bb-tabbar" aria-label="Quick navigation">
-  <a href="{% url 'home' %}" class="{% if p == '/' %}is-active{% endif %}"{% if p == '/' %} aria-current="page"{% endif %}><i class="feather-home"></i><span>Home</span></a>
-  <a href="{% url 'request-list' %}" class="{% if p|slice:':10' == '/requests/' and p != '/requests/new/' %}is-active{% endif %}"{% if p|slice:':10' == '/requests/' and p != '/requests/new/' %} aria-current="page"{% endif %}><i class="feather-droplet"></i><span>Requests</span></a>
-  <a href="{% url 'request-create' %}" class="bb-tabbar__cta" aria-label="Ask for blood"><span class="bb-fab"><i class="feather-plus"></i></span><small>Ask</small></a>
-  <a href="{% url 'donor-directory' %}" class="{% if p|slice:':8' == '/donors/' %}is-active{% endif %}"{% if p|slice:':8' == '/donors/' %} aria-current="page"{% endif %}><i class="feather-users"></i><span>Donors</span></a>
+{% load i18n %}{% with p=request.path %}
+<nav class="bb-tabbar" aria-label="{% trans 'Quick navigation' %}">
+  <a href="{% url 'home' %}" class="{% if p == '/' %}is-active{% endif %}"{% if p == '/' %} aria-current="page"{% endif %}><i class="feather-home"></i><span>{% trans "Home" %}</span></a>
+  <a href="{% url 'request-list' %}" class="{% if p|slice:':10' == '/requests/' and p != '/requests/new/' %}is-active{% endif %}"{% if p|slice:':10' == '/requests/' and p != '/requests/new/' %} aria-current="page"{% endif %}><i class="feather-droplet"></i><span>{% trans "Requests" %}</span></a>
+  <a href="{% url 'request-create' %}" class="bb-tabbar__cta" aria-label="{% trans 'Ask for blood' %}"><span class="bb-fab"><i class="feather-plus"></i></span><small>{% trans "Ask" %}</small></a>
+  <a href="{% url 'donor-directory' %}" class="{% if p|slice:':8' == '/donors/' %}is-active{% endif %}"{% if p|slice:':8' == '/donors/' %} aria-current="page"{% endif %}><i class="feather-users"></i><span>{% trans "Donors" %}</span></a>
   {% if user.is_authenticated %}
-    <a href="{% url 'log-donation' %}" class="{% if p|slice:':11' == '/donations/' or p == '/welcome/' %}is-active{% endif %}"{% if p|slice:':11' == '/donations/' or p == '/welcome/' %} aria-current="page"{% endif %}><i class="feather-user"></i><span>Me</span>{% if contact_pending_count %}<span class="bb-dot">{{ contact_pending_count }}</span>{% endif %}</a>
+    <a href="{% url 'log-donation' %}" class="{% if p|slice:':11' == '/donations/' or p == '/welcome/' %}is-active{% endif %}"{% if p|slice:':11' == '/donations/' or p == '/welcome/' %} aria-current="page"{% endif %}><i class="feather-user"></i><span>{% trans "Me" %}</span>{% if contact_pending_count %}<span class="bb-dot">{{ contact_pending_count }}</span>{% endif %}</a>
   {% else %}
-    <a href="{% url 'login' %}" class="{% if p|slice:':10' == '/accounts/' %}is-active{% endif %}"{% if p|slice:':10' == '/accounts/' %} aria-current="page"{% endif %}><i class="feather-log-in"></i><span>Log in</span></a>
+    <a href="{% url 'login' %}" class="{% if p|slice:':10' == '/accounts/' %}is-active{% endif %}"{% if p|slice:':10' == '/accounts/' %} aria-current="page"{% endif %}><i class="feather-log-in"></i><span>{% trans "Log in" %}</span></a>
   {% endif %}
 </nav>
 {% endwith %}

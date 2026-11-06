@@ -1,0 +1,7 @@
+{% load static i18n %}{% if invite %}
+<link rel="stylesheet" href="{% static 'growth/growth.css' %}">
+{% include 'growth/_invite_card.html' with link_id='gr-hub-link' heading_id='gr-hub-h' %}
+{% if public_profile %}
+<p class="bb-small bb-mt-1"><i class="feather-link" aria-hidden="true"></i> {% url 'growth:profile' user.pk as profile_url %}{% url 'privacy' as privacy_url %}{% blocktrans %}<a href="{{ profile_url }}">Your public profile</a> is on. <a href="{{ privacy_url }}">Change</a>{% endblocktrans %}</p>
+{% endif %}
+{% endif %}

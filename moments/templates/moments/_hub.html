@@ -1,0 +1,115 @@
+{% load static i18n %}{% if show %}
+<link rel="stylesheet" href="{% static 'moments/moments.css' %}">
+
+<section class="bb-card mo-panel" aria-labelledby="mo-hub-title">
+  <h2 class="bb-card__title" id="mo-hub-title">{% trans "Your moments" %}</h2>
+
+  {% for u in updates %}
+    <div class="mo-row mo-update">
+      <i class="feather-heart mo-icon" aria-hidden="true"></i>
+      <div class="bb-grow">
+        <strong>{% if u.donated %}{% trans "Your blood reached someone." %}{% else %}{% trans "Thank you for stepping up." %}{% endif %}</strong>
+        <div class="bb-small bb-muted">{% if u.district %}{% blocktrans with g=u.blood_group place=u.district %}A {{ g }} request in {{ place }} you offered to help with was fulfilled.{% endblocktrans %}{% else %}{% blocktrans with g=u.blood_group %}A {{ g }} request you offered to help with was fulfilled.{% endblocktrans %}{% endif %}</div>
+      </div>
+      <form method="post" action="{% url 'moments:update-dismiss' u.pk %}">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next_url }}">
+        <button type="submit" class="mo-x" aria-label="{% trans 'Dismiss this update' %}"><i class="feather-x" aria-hidden="true"></i></button>
+      </form>
+    </div>
+  {% endfor %}
+
+  {% if rare_label %}
+    <div class="mo-row">
+      <i class="feather-star mo-icon" aria-hidden="true"></i>
+      <div class="bb-grow"><span class="bb-pill bb-pill--bad">{{ rare_label }}</span> <span class="bb-small bb-muted">{% trans "Your blood group is in short supply." %}</span></div>
+    </div>
+  {% endif %}
+
+  {% if ready_days is not None %}
+    <div class="mo-row">
+      <i class="feather-clock mo-icon" aria-hidden="true"></i>
+      <div class="bb-grow">
+        {% if ready_now %}
+          <strong>{% trans "Your recovery interval is over." %}</strong>
+        {% else %}
+          <strong>{% blocktrans count counter=ready_days %}Ready again in {{ counter }} day{% plural %}Ready again in {{ counter }} days{% endblocktrans %}</strong>
+        {% endif %}
+        <div class="bb-small bb-muted">{% trans "A reminder, not medical clearance. The blood bank decides on the day." %}</div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if freeze_offer %}
+    <div class="mo-row mo-freeze">
+      <i class="feather-shield mo-icon" aria-hidden="true"></i>
+      <div class="bb-grow">
+        <strong>{% trans "Save your streak" %}</strong>
+        <div class="bb-small bb-muted">{% blocktrans with current=freeze_offer.current restored=freeze_offer.restored %}A long gap reset it to {{ current }}. Your once-a-year freeze restores it to {{ restored }}. It never changes when you can donate.{% endblocktrans %}</div>
+        <form method="post" action="{% url 'moments:freeze' %}" class="bb-mt-1">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ next_url }}">
+          <button type="submit" class="bb-btn bb-btn--soft bb-btn--sm">{% trans "Use my streak freeze" %}</button>
+        </form>
+      </div>
+    </div>
+  {% endif %}
+
+  {% if thanks %}
+    <div class="bb-divider"></div>
+    <h3 class="mo-sub">{% trans "Thanks wall" %}</h3>
+    <ul class="mo-notes">
+      {% for note in thanks %}
+        <li class="mo-note">
+          <p class="mo-note__text">&ldquo;{{ note.text }}&rdquo;</p>
+          <div class="mo-note__meta">
+            <span class="bb-xs bb-muted">{{ note.sender_label }} &middot; {{ note.created_at|date:"M d" }}</span>
+            <form method="post" action="{% url 'moments:note-hide' note.pk %}">
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ next_url }}">
+              <button type="submit" class="mo-link" aria-label="{% trans 'Hide this note' %}">{% trans "Hide" %}</button>
+            </form>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+    {% if thanks_more %}<a href="{% url 'moments:thanks' %}" class="bb-small">{% blocktrans with n=thanks_more %}See all notes ({{ n }} more){% endblocktrans %}</a>{% endif %}
+  {% endif %}
+
+  {% if ready_days is not None or updates %}
+    <details class="mo-prefs">
+      <summary>{% trans "Email options" %}</summary>
+      <form method="post" action="{% url 'moments:prefs' %}" class="bb-form">
+        {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next_url }}">
+        <label class="bb-check">
+          <input type="checkbox" name="email_enabled"{% if pref.email_enabled %} checked{% endif %}>
+          <span><strong>{% trans "Remind me when I am ready again" %}</strong><span class="bb-help">{% trans "One email per cycle. A reminder, not medical clearance." %}</span></span>
+        </label>
+        <label class="bb-check">
+          <input type="checkbox" name="impact_email"{% if pref.impact_email %} checked{% endif %}>
+          <span><strong>{% trans "Email me when a request I helped is fulfilled" %}</strong><span class="bb-help">{% trans "No patient details. One-click off in every email." %}</span></span>
+        </label>
+        {% if not has_email %}<div class="bb-help">{% url 'privacy' as privacy_url %}{% blocktrans %}Add an email in <a href="{{ privacy_url }}">Profile &amp; privacy</a> to turn these on.{% endblocktrans %}</div>{% endif %}
+        <button type="submit" class="bb-btn bb-btn--dark bb-btn--sm">{% trans "Save" %}</button>
+      </form>
+    </details>
+  {% endif %}
+</section>
+
+{% if celebration %}
+  <div class="mo-celebrate" data-mo-celebrate role="dialog" aria-modal="true" aria-labelledby="mo-cel-title" aria-describedby="mo-cel-text" tabindex="-1">
+    <canvas class="mo-confetti" data-mo-confetti aria-hidden="true"></canvas>
+    <div class="mo-celebrate__box">
+      <div class="mo-celebrate__icon" aria-hidden="true"><i class="feather-{{ celebration.icon }}"{% if celebration.color %} style="color:{{ celebration.color }}"{% endif %}></i></div>
+      <h2 class="bb-h3" id="mo-cel-title">{{ celebration.title }}</h2>
+      <p class="bb-muted" id="mo-cel-text">{{ celebration.text }}</p>
+      <div class="mo-celebrate__actions">
+        <a href="{% url 'badge-card' hub_user.pk %}" class="bb-btn bb-btn--primary" data-mo-share><i class="feather-share-2" aria-hidden="true"></i> {% trans "Share my card" %}</a>
+        <button type="button" class="bb-btn bb-btn--ghost" data-mo-close>{% trans "Keep going" %}</button>
+      </div>
+    </div>
+  </div>
+  <script src="{% static 'moments/celebrate.js' %}" defer></script>
+{% endif %}
+{% endif %}

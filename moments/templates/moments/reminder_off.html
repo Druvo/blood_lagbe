@@ -1,0 +1,18 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Emails turned off{% endblock title %}
+
+{% block body %}
+<div class="bb-container bb-container--narrow bb-section--tight">
+  <div class="bb-card bb-center">
+    <h1 class="bb-h2">Done, no more emails</h1>
+    {% if kind == 'ready' %}
+      <p class="bb-muted">We will not email you when you are ready to donate again. You can still see your countdown on your hub.</p>
+    {% else %}
+      <p class="bb-muted">We will not email you when a request you offered to help with is fulfilled. You will still see updates on your hub.</p>
+    {% endif %}
+    <p class="bb-help">You can turn this back on any time in your hub, under Email options.</p>
+    <a href="{% url 'home' %}" class="bb-btn bb-btn--soft">Back to {{ SITE_NAME }}</a>
+  </div>
+</div>
+{% endblock body %}

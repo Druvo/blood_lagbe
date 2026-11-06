@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
-{% load static moments_tags habits_tags events_tags growth_tags alerts_tags %}
+{% load static moments_tags habits_tags events_tags growth_tags alerts_tags i18n %}
 
-{% block title %}Give blood. Build bonds. Save lives.{% endblock title %}
+{% block title %}{% trans "Give blood. Build bonds. Save lives." %}{% endblock title %}
 
 {% block body %}
 
@@ -9,21 +9,21 @@
 <section class="bb-hero">
   <div class="bb-container bb-hero__grid">
     <div>
-      <span class="bb-eyebrow">Bangladesh's blood community</span>
-      <h1>Every drop is a bond.</h1>
-      <p class="bb-lead bb-mb-3">Find a donor in minutes, answer an urgent call, and earn badges for every life you touch. Free, community-run and built for Bangladesh.</p>
+      <span class="bb-eyebrow">{% trans "Bangladesh's blood community" %}</span>
+      <h1>{% trans "Every drop is a bond." %}</h1>
+      <p class="bb-lead bb-mb-3">{% trans "Find a donor in minutes, answer an urgent call, and earn badges for every life you touch. Free, community-run and built for Bangladesh." %}</p>
       <div class="bb-row">
-        <a href="{% url 'request-create' %}" class="bb-btn bb-btn--white bb-btn--lg"><i class="feather-droplet"></i> I need blood</a>
-        <a href="{% if user.is_authenticated %}{% url 'log-donation' %}{% else %}{% url 'signup' %}{% endif %}" class="bb-btn bb-btn--lg" style="background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.4);"><i class="feather-heart"></i> {% if user.is_authenticated %}My donor hub{% else %}Become a donor{% endif %}</a>
+        <a href="{% url 'request-create' %}" class="bb-btn bb-btn--white bb-btn--lg"><i class="feather-droplet"></i> {% trans "I need blood" %}</a>
+        <a href="{% if user.is_authenticated %}{% url 'log-donation' %}{% else %}{% url 'signup' %}{% endif %}" class="bb-btn bb-btn--lg" style="background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.4);"><i class="feather-heart"></i> {% if user.is_authenticated %}{% trans "My donor hub" %}{% else %}{% trans "Become a donor" %}{% endif %}</a>
       </div>
     </div>
 
     <div class="bb-stack">
       <div class="bb-glass">
         <div class="bb-cols-3" style="grid-template-columns:repeat(3,1fr);">
-          <div class="bb-stat"><div class="bb-stat__value" data-count="{{ community.donations }}">{{ community.donations }}</div><div class="bb-stat__label">Verified donations</div></div>
-          <div class="bb-stat"><div class="bb-stat__value" data-count="{{ community.donors }}">{{ community.donors }}</div><div class="bb-stat__label">Donors</div></div>
-          <div class="bb-stat"><div class="bb-stat__value" data-count="{{ community.lives }}">{{ community.lives }}</div><div class="bb-stat__label">Est. people helped</div></div>
+          <div class="bb-stat"><div class="bb-stat__value" data-count="{{ community.donations }}">{{ community.donations }}</div><div class="bb-stat__label">{% trans "Verified donations" %}</div></div>
+          <div class="bb-stat"><div class="bb-stat__value" data-count="{{ community.donors }}">{{ community.donors }}</div><div class="bb-stat__label">{% trans "Donors" %}</div></div>
+          <div class="bb-stat"><div class="bb-stat__value" data-count="{{ community.lives }}">{{ community.lives }}</div><div class="bb-stat__label">{% trans "Est. people helped" %}</div></div>
         </div>
       </div>
       <div class="bb-center bb-hide-sm">
@@ -39,8 +39,8 @@
     <div class="bb-card">
       <div class="bb-row bb-row--between">
         <div>
-          <h2 class="bb-h3 bb-mb-0">Looking for a blood group?</h2>
-          <p class="bb-muted bb-small bb-mb-0">Tap one to see donors who can give it.</p>
+          <h2 class="bb-h3 bb-mb-0">{% trans "Looking for a blood group?" %}</h2>
+          <p class="bb-muted bb-small bb-mb-0">{% trans "Tap one to see donors who can give it." %}</p>
         </div>
         <div class="bb-chips">
           {% for code in blood_groups %}
@@ -57,10 +57,10 @@
   <div class="bb-container">
     <div class="bb-row bb-row--between bb-mb-2">
       <div>
-        <span class="bb-eyebrow">Urgent now</span>
-        <h2 class="bb-h2 bb-mb-0">Someone needs you today</h2>
+        <span class="bb-eyebrow">{% trans "Urgent now" %}</span>
+        <h2 class="bb-h2 bb-mb-0">{% trans "Someone needs you today" %}</h2>
       </div>
-      <a href="{% url 'request-list' %}" class="bb-btn bb-btn--ghost bb-btn--sm">All requests <i class="feather-arrow-right"></i></a>
+      <a href="{% url 'request-list' %}" class="bb-btn bb-btn--ghost bb-btn--sm">{% trans "All requests" %} <i class="feather-arrow-right"></i></a>
     </div>
 
     <div class="bb-cols-3">
@@ -75,15 +75,15 @@
           </div>
           <div class="bb-divider"></div>
           <div class="bb-row bb-row--between bb-small">
-            <span><strong>{{ req.units_remaining }}</strong> bag{{ req.units_remaining|pluralize }} needed</span>
-            <span class="bb-pill bb-pill--warn">By {{ req.needed_by|date:"M d" }}</span>
+            <span>{% blocktrans count counter=req.units_remaining %}<strong>{{ counter }}</strong> bag needed{% plural %}<strong>{{ counter }}</strong> bags needed{% endblocktrans %}</span>
+            <span class="bb-pill bb-pill--warn">{% blocktrans with d=req.needed_by|date:"M d" %}By {{ d }}{% endblocktrans %}</span>
           </div>
         </a>
       {% empty %}
         <div class="bb-card bb-empty" style="grid-column:1/-1;">
           <i class="feather-check-circle"></i>
-          <div class="bb-strong">No open requests right now</div>
-          <p class="bb-small">That is good news. Be ready: join the donor directory so you can be found.</p>
+          <div class="bb-strong">{% trans "No open requests right now" %}</div>
+          <p class="bb-small">{% trans "That is good news. Be ready: join the donor directory so you can be found." %}</p>
         </div>
       {% endfor %}
     </div>
@@ -94,24 +94,24 @@
 <section class="bb-section bb-section--alt">
   <div class="bb-container">
     <div class="bb-center bb-mb-3">
-      <span class="bb-eyebrow">How it works</span>
-      <h2 class="bb-h2">Three taps from need to help</h2>
+      <span class="bb-eyebrow">{% trans "How it works" %}</span>
+      <h2 class="bb-h2">{% trans "Three taps from need to help" %}</h2>
     </div>
     <div class="bb-cols-3">
       <div class="bb-card bb-center">
         <span class="bb-bloodtag bb-bloodtag--lg"><span><i class="feather-user-plus"></i></span></span>
-        <h3 class="bb-h3 bb-mt-2">1. Join in a minute</h3>
-        <p class="bb-muted bb-mb-0">Sign up with your phone number. Add your blood group and district, then choose whether to be found.</p>
+        <h3 class="bb-h3 bb-mt-2">{% trans "1. Join in a minute" %}</h3>
+        <p class="bb-muted bb-mb-0">{% trans "Sign up with your phone number. Add your blood group and district, then choose whether to be found." %}</p>
       </div>
       <div class="bb-card bb-center">
         <span class="bb-bloodtag bb-bloodtag--lg"><span><i class="feather-search"></i></span></span>
-        <h3 class="bb-h3 bb-mt-2">2. Ask or answer</h3>
-        <p class="bb-muted bb-mb-0">Post an urgent request, or browse the board and pledge to help. Phone numbers are shared only with consent.</p>
+        <h3 class="bb-h3 bb-mt-2">{% trans "2. Ask or answer" %}</h3>
+        <p class="bb-muted bb-mb-0">{% trans "Post an urgent request, or browse the board and pledge to help. Phone numbers are shared only with consent." %}</p>
       </div>
       <div class="bb-card bb-center">
         <span class="bb-bloodtag bb-bloodtag--lg"><span><i class="feather-award"></i></span></span>
-        <h3 class="bb-h3 bb-mt-2">3. Earn and share</h3>
-        <p class="bb-muted bb-mb-0">Every verified donation earns points, badges and a shareable card. Climb the leaderboard with your friends.</p>
+        <h3 class="bb-h3 bb-mt-2">{% trans "3. Earn and share" %}</h3>
+        <p class="bb-muted bb-mb-0">{% trans "Every verified donation earns points, badges and a shareable card. Climb the leaderboard with your friends." %}</p>
       </div>
     </div>
   </div>
@@ -122,17 +122,17 @@
   <div class="bb-container">
     <div class="bb-row bb-row--between bb-mb-2">
       <div>
-        <span class="bb-eyebrow">Make it a game</span>
-        <h2 class="bb-h2 bb-mb-0">Earn badges for every life you touch</h2>
+        <span class="bb-eyebrow">{% trans "Make it a game" %}</span>
+        <h2 class="bb-h2 bb-mb-0">{% trans "Earn badges for every life you touch" %}</h2>
       </div>
-      <a href="{% url 'leaderboard' %}" class="bb-btn bb-btn--ghost bb-btn--sm">See the leaderboard <i class="feather-arrow-right"></i></a>
+      <a href="{% url 'leaderboard' %}" class="bb-btn bb-btn--ghost bb-btn--sm">{% trans "See the leaderboard" %} <i class="feather-arrow-right"></i></a>
     </div>
     <div class="bb-cols-auto">
       {% for badge in tier_badges %}
         <div class="bb-card bb-center bb-card--lift">
           <i class="feather-{{ badge.icon }}" style="font-size:2.2rem;color:{{ badge.color }};"></i>
           <div class="bb-strong bb-mt-1">{{ badge.name }}</div>
-          <div class="bb-muted bb-small">{{ badge.min_donations }}+ donation{{ badge.min_donations|pluralize }}</div>
+          <div class="bb-muted bb-small">{% blocktrans count counter=badge.min_donations %}{{ counter }}+ donation{% plural %}{{ counter }}+ donations{% endblocktrans %}</div>
         </div>
       {% endfor %}
     </div>
@@ -144,8 +144,8 @@
 <section class="bb-section bb-section--alt">
   <div class="bb-container">
     <div class="bb-center bb-mb-3">
-      <span class="bb-eyebrow">Heroes</span>
-      <h2 class="bb-h2">Top donors</h2>
+      <span class="bb-eyebrow">{% trans "Heroes" %}</span>
+      <h2 class="bb-h2">{% trans "Top donors" %}</h2>
     </div>
     <div class="bb-cols-3">
       {% for entry in leaderboard %}
@@ -153,8 +153,8 @@
           <span class="bb-avatar bb-avatar--lg">{% if entry.donor.profile.image %}<img src="{{ entry.donor.profile.image.url }}" alt="">{% else %}{{ entry.display_name|slice:":1"|upper }}{% endif %}</span>
           <h3 class="bb-h4 bb-mt-1 bb-mb-0">{{ entry.display_name }}</h3>
           {% if entry.badge %}<div class="bb-small cm-tier" style="--tier:{{ entry.badge.color }};"><i class="feather-{{ entry.badge.icon }}"></i> {{ entry.badge.name }}</div>{% endif %}
-          <div class="bb-muted bb-small">{{ entry.approved_count }} verified donation{{ entry.approved_count|pluralize }}</div>
-          {% if entry.latest_donation %}<div class="bb-muted bb-xs">Last: {{ entry.latest_donation.donation_date|date:"M d, Y" }}</div>{% endif %}
+          <div class="bb-muted bb-small">{% blocktrans count counter=entry.approved_count %}{{ counter }} verified donation{% plural %}{{ counter }} verified donations{% endblocktrans %}</div>
+          {% if entry.latest_donation %}<div class="bb-muted bb-xs">{% blocktrans with d=entry.latest_donation.donation_date|date:"M d, Y" %}Last: {{ d }}{% endblocktrans %}</div>{% endif %}
         </div>
       {% endfor %}
     </div>
@@ -168,24 +168,24 @@
 <section class="bb-section bb-section--alt" id="explore">
   <div class="bb-container">
     <div class="bb-center bb-mb-3">
-      <span class="bb-eyebrow">Explore</span>
-      <h2 class="bb-h2">More ways to get involved</h2>
+      <span class="bb-eyebrow">{% trans "Explore" %}</span>
+      <h2 class="bb-h2">{% trans "More ways to get involved" %}</h2>
     </div>
     <div class="bb-cols-3">
       <a href="{% url 'leaderboard' %}" class="bb-card bb-card--lift" style="color:inherit;">
-        <h3 class="bb-h4"><i class="feather-award" style="color:var(--bb-red-text)"></i> Leaderboard</h3>
-        <p class="bb-muted">See top donors and squads, and climb the ranks with your friends.</p>
-        <span class="bb-strong">View leaderboard <i class="feather-arrow-right"></i></span>
+        <h3 class="bb-h4"><i class="feather-award" style="color:var(--bb-red-text)"></i> {% trans "Leaderboard" %}</h3>
+        <p class="bb-muted">{% trans "See top donors and squads, and climb the ranks with your friends." %}</p>
+        <span class="bb-strong">{% trans "View leaderboard" %} <i class="feather-arrow-right"></i></span>
       </a>
       <a href="{% url 'impact' %}" class="bb-card bb-card--lift" style="color:inherit;">
-        <h3 class="bb-h4"><i class="feather-bar-chart-2" style="color:var(--bb-red-text)"></i> Impact</h3>
-        <p class="bb-muted">{{ community.donations }} verified donation{{ community.donations|pluralize }} from {{ community.donors }} donor{{ community.donors|pluralize }}, with charts by blood group and district.</p>
-        <span class="bb-strong">See our impact <i class="feather-arrow-right"></i></span>
+        <h3 class="bb-h4"><i class="feather-bar-chart-2" style="color:var(--bb-red-text)"></i> {% trans "Impact" %}</h3>
+        {% blocktrans count counter=community.donors asvar donors_phrase %}{{ counter }} donor{% plural %}{{ counter }} donors{% endblocktrans %}<p class="bb-muted">{% blocktrans count counter=community.donations with donors=donors_phrase %}{{ counter }} verified donation from {{ donors }}, with charts by blood group and district.{% plural %}{{ counter }} verified donations from {{ donors }}, with charts by blood group and district.{% endblocktrans %}</p>
+        <span class="bb-strong">{% trans "See our impact" %} <i class="feather-arrow-right"></i></span>
       </a>
       <a href="{% url 'learn' %}" class="bb-card bb-card--lift" style="color:inherit;">
-        <h3 class="bb-h4"><i class="feather-book-open" style="color:var(--bb-red-text)"></i> Learn</h3>
-        <p class="bb-muted">Who can donate, what to expect, answers to common questions, and about {{ SITE_NAME }}.</p>
-        <span class="bb-strong">Start learning <i class="feather-arrow-right"></i></span>
+        <h3 class="bb-h4"><i class="feather-book-open" style="color:var(--bb-red-text)"></i> {% trans "Learn" %}</h3>
+        <p class="bb-muted">{% blocktrans with site=SITE_NAME %}Who can donate, what to expect, answers to common questions, and about {{ site }}.{% endblocktrans %}</p>
+        <span class="bb-strong">{% trans "Start learning" %} <i class="feather-arrow-right"></i></span>
       </a>
     </div>
   </div>
@@ -195,15 +195,15 @@
 <section class="bb-section">
   <div class="bb-container">
     <div class="bb-center bb-mb-3">
-      <span class="bb-eyebrow">Before you give</span>
-      <h2 class="bb-h2">Can I donate?</h2>
+      <span class="bb-eyebrow">{% trans "Before you give" %}</span>
+      <h2 class="bb-h2">{% trans "Can I donate?" %}</h2>
     </div>
     <div class="bb-cols-3">
-      <div class="bb-card"><h3 class="bb-h4"><i class="feather-user-check" style="color:var(--bb-red-text)"></i> Who</h3><p class="bb-muted bb-mb-0">Healthy adults aged 18 to 60 who weigh at least 45 kg. The blood bank checks haemoglobin and health on the day.</p></div>
-      <div class="bb-card"><h3 class="bb-h4"><i class="feather-clock" style="color:var(--bb-red-text)"></i> How often</h3><p class="bb-muted bb-mb-0">About every {{ donation_interval_label }}*. We show a recovery bar after each donation so you know when you are ready.</p></div>
-      <div class="bb-card"><h3 class="bb-h4"><i class="feather-shield" style="color:var(--bb-red-text)"></i> How safe</h3><p class="bb-muted bb-mb-0">Sterile single-use equipment, and a screening before every donation. You can always say no.</p></div>
+      <div class="bb-card"><h3 class="bb-h4"><i class="feather-user-check" style="color:var(--bb-red-text)"></i> {% trans "Who" %}</h3><p class="bb-muted bb-mb-0">{% trans "Healthy adults aged 18 to 60 who weigh at least 45 kg. The blood bank checks haemoglobin and health on the day." %}</p></div>
+      <div class="bb-card"><h3 class="bb-h4"><i class="feather-clock" style="color:var(--bb-red-text)"></i> {% trans "How often" %}</h3><p class="bb-muted bb-mb-0">{% blocktrans with interval=donation_interval_label %}About every {{ interval }}*. We show a recovery bar after each donation so you know when you are ready.{% endblocktrans %}</p></div>
+      <div class="bb-card"><h3 class="bb-h4"><i class="feather-shield" style="color:var(--bb-red-text)"></i> {% trans "How safe" %}</h3><p class="bb-muted bb-mb-0">{% trans "Sterile single-use equipment, and a screening before every donation. You can always say no." %}</p></div>
     </div>
-    <p class="bb-muted bb-xs bb-center bb-mt-2">* A general reminder, not medical advice. The blood bank's screening decides your eligibility. <a href="{% url 'learn' %}">Read the full guide</a>.</p>
+    {% url 'learn' as learn_url %}<p class="bb-muted bb-xs bb-center bb-mt-2">{% blocktrans %}* A general reminder, not medical advice. The blood bank's screening decides your eligibility. <a href="{{ learn_url }}">Read the full guide</a>.{% endblocktrans %}</p>
   </div>
 </section>
 
@@ -217,9 +217,9 @@
 <section class="bb-section">
   <div class="bb-container">
     <div class="bb-card bb-card--hero bb-center" style="padding:40px 20px;">
-      <h2 class="bb-h2">Ready to be someone's miracle?</h2>
-      <p class="bb-muted bb-mb-2" style="margin-left:auto;margin-right:auto;max-width:48ch;">Join {{ community.donors }} donor{{ community.donors|pluralize }} already making a difference.</p>
-      <a href="{% if user.is_authenticated %}{% url 'log-donation' %}{% else %}{% url 'signup' %}{% endif %}" class="bb-btn bb-btn--white bb-btn--lg">{% if user.is_authenticated %}Log a donation{% else %}Join free{% endif %}</a>
+      <h2 class="bb-h2">{% trans "Ready to be someone's miracle?" %}</h2>
+      <p class="bb-muted bb-mb-2" style="margin-left:auto;margin-right:auto;max-width:48ch;">{% blocktrans count counter=community.donors %}Join {{ counter }} donor already making a difference.{% plural %}Join {{ counter }} donors already making a difference.{% endblocktrans %}</p>
+      <a href="{% if user.is_authenticated %}{% url 'log-donation' %}{% else %}{% url 'signup' %}{% endif %}" class="bb-btn bb-btn--white bb-btn--lg">{% if user.is_authenticated %}{% trans "Log a donation" %}{% else %}{% trans "Join free" %}{% endif %}</a>
     </div>
   </div>
 </section>

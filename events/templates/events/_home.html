@@ -1,0 +1,26 @@
+{% if campaign or events %}{% load static i18n %}
+<link rel="stylesheet" href="{% static 'events/events.css' %}">
+<section class="bb-section bb-section--tight" aria-label="{% trans 'Campaigns and blood drives' %}">
+  <div class="bb-container">
+    {% if campaign %}
+      <div class="ev-banner ev-theme-{{ campaign.theme }}">
+        <span class="ev-banner__icon" aria-hidden="true"><i class="feather-{{ campaign.icon }}"></i></span>
+        <div>
+          <h2 class="bb-h3">{{ campaign.headline }}</h2>
+          {% if campaign.body %}<p>{{ campaign.body }}</p>{% endif %}
+          <a href="{% url 'events:campaigns' %}" class="ev-badge-chip"><i class="feather-{{ campaign.badge_icon }}" aria-hidden="true"></i> {% blocktrans with name=campaign.badge_name %}Earn the {{ name }} badge{% endblocktrans %}</a>
+        </div>
+      </div>
+    {% endif %}
+    {% if events %}
+      <div class="bb-row bb-row--between bb-mb-1">
+        <h2 class="bb-h3 bb-mb-0">{% trans "Upcoming blood drives" %}</h2>
+        <a href="{% url 'events:list' %}" class="bb-small">{% trans "See all" %}</a>
+      </div>
+      {% for event in events %}
+        {% include 'events/_event_card.html' %}
+      {% endfor %}
+    {% endif %}
+  </div>
+</section>
+{% endif %}

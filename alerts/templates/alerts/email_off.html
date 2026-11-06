@@ -1,0 +1,17 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Alert emails{% endblock title %}
+
+{% block body %}
+<div class="bb-container bb-container--narrow bb-section bb-center">
+  {% if ok %}
+    <h1 class="bb-h2">Alert emails are off</h1>
+    <p class="bb-lead">We will not email you about requests any more. You can still see alerts in your inbox if they are turned on.</p>
+    <a href="{% if signed_in %}{% url 'alerts:settings' %}{% else %}{% url 'login' %}{% endif %}" class="bb-btn bb-btn--primary">{% if signed_in %}Alert settings{% else %}Log in to change alerts{% endif %}</a>
+  {% else %}
+    <h1 class="bb-h2">This link does not work</h1>
+    <p class="bb-lead">The link is damaged or out of date. Log in and use your alert settings to turn emails off.</p>
+    <a href="{% url 'alerts:settings' %}" class="bb-btn bb-btn--primary">Alert settings</a>
+  {% endif %}
+</div>
+{% endblock body %}

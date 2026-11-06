@@ -1,0 +1,21 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Weekly email{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'habits/habits.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container bb-container--narrow hb-page">
+  <div class="bb-card bb-center bb-stack">
+    {% if ok %}
+      <h1 class="bb-h2 bb-mb-0">You are unsubscribed</h1>
+      <p class="bb-muted bb-mb-0">We will not send you the weekly {{ SITE_NAME }} email any more. Changed your mind? You can turn it back on from your settings.</p>
+      <div class="bb-row bb-row--center"><a class="bb-btn bb-btn--primary" href="{% url 'habits:settings' %}">Email settings</a><a class="bb-btn bb-btn--ghost" href="{% url 'home' %}">Home</a></div>
+    {% else %}
+      <h1 class="bb-h2 bb-mb-0">That link did not work</h1>
+      <p class="bb-muted bb-mb-0">It may be damaged or too old. Sign in and turn the weekly email off from your settings instead.</p>
+      <div class="bb-row bb-row--center"><a class="bb-btn bb-btn--primary" href="{% url 'habits:settings' %}">Email settings</a></div>
+    {% endif %}
+  </div>
+</div>
+{% endblock body %}

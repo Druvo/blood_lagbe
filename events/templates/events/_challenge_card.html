@@ -1,0 +1,14 @@
+<a href="{% url 'events:challenge-detail' c.pk %}" class="bb-card bb-card--lift ev-card">
+  <div class="ev-date" aria-hidden="true"><i class="feather-target" style="font-size:1.5rem"></i></div>
+  <div class="ev-body">
+    <h3 class="ev-title">{{ c.title }}</h3>
+    <div class="ev-meta">
+      <span><i class="feather-calendar" aria-hidden="true"></i>{{ c.starts_on|date:"j M" }} to {{ c.ends_on|date:"j M Y" }}</span>
+      <span><i class="feather-flag" aria-hidden="true"></i>Target {{ c.target_donations }} per squad</span>
+    </div>
+    <div class="ev-badges">
+      <span class="bb-pill bb-pill--info">{{ c.get_scope_display }}</span>
+      {% if c.state == 'active' %}<span class="bb-pill bb-pill--ok">On now</span>{% elif c.state == 'upcoming' %}<span class="bb-pill bb-pill--warn">Starts soon</span>{% else %}<span class="bb-pill">Finished</span>{% endif %}
+    </div>
+  </div>
+</a>

@@ -1,0 +1,39 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Squad challenges{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'events/events.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container ev-page">
+  <header>
+    <span class="bb-eyebrow">Events</span>
+    <h1 class="bb-h2 bb-mb-1">Squad challenges</h1>
+    <p class="bb-lead">Time-boxed goals for squads. Only verified donations count, and recovery time is respected.</p>
+  </header>
+
+  <nav class="ev-tabs" aria-label="Event sections">
+    <a href="{% url 'events:list' %}" class="bb-chip">Drives</a>
+    <a href="{% url 'events:campaigns' %}" class="bb-chip">Campaigns</a>
+    <a href="{% url 'events:challenges' %}" class="bb-chip bb-chip--active" aria-current="page">Challenges</a>
+  </nav>
+
+  <section aria-labelledby="cur-h">
+    <h2 class="bb-h3" id="cur-h">Current and upcoming</h2>
+    {% for c in current %}
+      {% include 'events/_challenge_card.html' %}
+    {% empty %}
+      <div class="bb-card bb-empty"><i class="feather-target" aria-hidden="true"></i><strong class="bb-strong">No challenge right now</strong><p class="bb-small">Check back soon.</p></div>
+    {% endfor %}
+  </section>
+
+  {% if finished %}
+    <section aria-labelledby="fin-h" class="bb-mt-3">
+      <h2 class="bb-h3" id="fin-h">Finished</h2>
+      {% for c in finished %}
+        {% include 'events/_challenge_card.html' %}
+      {% endfor %}
+    </section>
+  {% endif %}
+</div>
+{% endblock body %}

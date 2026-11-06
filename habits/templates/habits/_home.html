@@ -1,0 +1,12 @@
+{% load static i18n %}{% if member %}<link rel="stylesheet" href="{% static 'habits/habits.css' %}">
+<section class="bb-section--tight" aria-labelledby="habits-home-h">
+  <div class="bb-container">
+    <div class="bb-card bb-card--soft hb-panel__row">
+      <div>
+        <h2 class="bb-h4 bb-mb-0" id="habits-home-h">{% blocktrans with done=done_count %}Today: {{ done }} of {{ total }} small actions done{% endblocktrans %}</h2>
+        <p class="bb-small bb-muted bb-mb-0">{% if streak.current %}{% include 'habits/_flame.html' %} {% blocktrans with n=streak.current %}{{ n }}-day visit streak.{% endblocktrans %} {% endif %}{% trans "No pressure, no rush to donate." %}</p>
+      </div>
+      <a class="bb-btn bb-btn--primary bb-btn--sm" href="{% url 'habits:today' %}">{% if done_count >= total %}{% trans "See today" %}{% else %}{% trans "Open Today" %}{% endif %}</a>
+    </div>
+  </div>
+</section>{% endif %}

@@ -12,7 +12,8 @@ from django.db import models
 from django.db.models import Count, F, OuterRef, Q, Subquery
 from django.db.models.functions import Coalesce
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
+from django.utils.formats import date_format
+from django.utils.translation import gettext, gettext_lazy as _
 
 from rewards.blood import BLOOD_GROUP_CHOICES  # noqa: F401 (re-exported)
 from rewards.geo import DISTRICT_CHOICES
@@ -284,23 +285,25 @@ class BloodRequest(models.Model):
         """(label, tone) for the urgency pill. Tone is a bb-pill modifier."""
         days = self.days_left
         if days <= 0:
-            return 'Needed today', 'bad'
+            return gettext('Needed today'), 'bad'
         if days == 1:
-            return 'Needed tomorrow', 'bad'
+            return gettext('Needed tomorrow'), 'bad'
         if days <= 7:
-            return f'In {days} days', 'warn'
-        return f'By {self.needed_by:%b} {self.needed_by.day}', ''
+            return gettext('In %(n)s days') % {'n': days}, 'warn'
+        return gettext('By %(d)s') % {
+            'd': date_format(self.needed_by, 'M j'),
+        }, ''
 
     @property
     def status_pill(self):
         """(label, tone) summarising where the request stands."""
         if self.status == self.Status.CLOSED:
-            return 'Closed', ''
+            return gettext('Closed'), ''
         if self.is_fulfilled:
-            return 'Fulfilled', 'ok'
+            return gettext('Fulfilled'), 'ok'
         if self.is_expired:
-            return 'Expired', 'warn'
-        return 'Open', 'info'
+            return gettext('Expired'), 'warn'
+        return gettext('Open'), 'info'
 
     @property
     def open_report_count(self):
@@ -355,6 +358,9 @@ class ContactRequest(models.Model):
         PENDING = 'pending', _('Pending')
         ACCEPTED = 'accepted', _('Accepted')
         DECLINED = 'declined', _('Declined')
+        # The donor accepted, then took the number back. Neutral for the
+        # asker: shown as "no longer sharing", never as a refusal.
+        REVOKED = 'revoked', _('Revoked')
 
     sender = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
@@ -370,6 +376,7 @@ class ContactRequest(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True)
     answered_at = models.DateTimeField(null=True, blank=True)
+    revoked_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:
         ordering = ['-created_at']
@@ -386,6 +393,37 @@ class ContactRequest(models.Model):
 
     def __str__(self):
         return f'{self.sender} -> {self.donor} ({self.status})'
+
+
+class ContactBlock(models.Model):
+    """A donor refusing all contact requests from one member. Silent: the
+    blocked member is never told, and cannot see the donor's phone number."""
+
+    donor = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        related_name='contact_blocks_made',
+    )
+    blocked_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
+        related_name='contact_blocks_received',
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        constraints = [
+            models.UniqueConstraint(
+                fields=['donor', 'blocked_user'],
+                name='one_contact_block_per_pair',
+            ),
+            models.CheckConstraint(
+                check=~Q(donor=F('blocked_user')),
+                name='no_contact_block_on_self',
+            ),
+        ]
+
+    def __str__(self):
+        return f'{self.donor_id} blocks {self.blocked_user_id}'
 
 
 class Badge(models.Model):
@@ -435,10 +473,15 @@ def approved_donation_count(user):
     ).count()
 
 
-def get_current_streak(user):
+def get_current_streak(user, frozen=None):
     """Consecutive approved donations spaced no more than one donation
     cycle (+ grace) apart, counting back from the most recent one. Zero
-    if the donor hasn't donated within a cycle+grace of today."""
+    if the donor hasn't donated within a cycle+grace of today.
+
+    A gap the donor froze (``moments.StreakFreeze``) is forgiven here and
+    nowhere else: it never changes when they may donate again. ``frozen`` is
+    an optional set of extra (before, after) date pairs to forgive, used to
+    check what a freeze would save."""
     dates = list(
         Donation.objects.filter(donor=user, status=Donation.Status.APPROVED)
         .order_by('donation_date').values_list('donation_date', flat=True)
@@ -447,9 +490,20 @@ def get_current_streak(user):
         return 0
 
     threshold = timedelta(days=DONATION_CYCLE_DAYS + STREAK_GRACE_DAYS)
+    forgiven = set(frozen or ())
+    if any((b - a) > threshold for a, b in zip(dates, dates[1:])):
+        # Lazy import: moments imports this module. Only looked up when a
+        # gap exists, so streaks without one cost no extra query.
+        from moments.services import frozen_gaps
+        forgiven |= frozen_gaps(user)
     streak = 1
     for prev_date, curr_date in zip(dates, dates[1:]):
-        streak = streak + 1 if (curr_date - prev_date) <= threshold else 1
+        if (curr_date - prev_date) <= threshold or (
+            (prev_date, curr_date) in forgiven
+        ):
+            streak += 1
+        else:
+            streak = 1
 
     if timezone.localdate() - dates[-1] > threshold:
         return 0

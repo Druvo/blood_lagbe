@@ -1,17 +1,17 @@
-{% load static %}<!DOCTYPE html>
-<html lang="en">
+{% load static i18n %}{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}"{% if LANGUAGE_BIDI %} dir="rtl"{% endif %}>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#d8213a">
-  <title>{% block title %}Home{% endblock title %} | {{ SITE_NAME }}</title>
+  <title>{% block title %}{% trans "Home" %}{% endblock title %} | {{ SITE_NAME }}</title>
   {% block meta %}
   {% static 'images/brand/og-default.png' as og_image %}
-  <meta name="description" content="{{ SITE_NAME }} connects blood donors with people who urgently need blood across Bangladesh. {{ SITE_TAGLINE }}">
+  <meta name="description" content="{% blocktrans with site=SITE_NAME tagline=SITE_TAGLINE %}{{ site }} connects blood donors with people who urgently need blood across Bangladesh. {{ tagline }}{% endblocktrans %}">
   <meta property="og:site_name" content="{{ SITE_NAME }}">
   <meta property="og:type" content="website">
   <meta property="og:title" content="{{ SITE_NAME }}: {{ SITE_TAGLINE }}">
-  <meta property="og:description" content="Join the community of blood donors. Answer urgent requests, earn badges, and save lives.">
+  <meta property="og:description" content="{% trans 'Join the community of blood donors. Answer urgent requests, earn badges, and save lives.' %}">
   <meta property="og:url" content="{{ request.build_absolute_uri }}">
   <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_image }}">
   <meta name="twitter:card" content="summary_large_image">
@@ -28,12 +28,12 @@
   <script>try{var t=localStorage.getItem('bb-theme');if(t=='dark'||t=='light')document.documentElement.setAttribute('data-theme',t);}catch(e){}</script>
 </head>
 <body>
-  <a class="bb-skip" href="#main">Skip to content</a>
+  <a class="bb-skip" href="#main">{% trans "Skip to content" %}</a>
 
   {% block nav %}{% include 'snippets/nav.html' %}{% endblock nav %}
 
   {% if messages %}
-    <div class="bb-messages" role="region" aria-label="Notifications">
+    <div class="bb-messages" role="region" aria-label="{% trans 'Notifications' %}">
       {% for message in messages %}
         <div class="bb-alert {% if message.tags == 'error' %}bb-alert--bad{% elif message.tags == 'warning' %}bb-alert--warn{% elif message.tags == 'info' %}bb-alert--info{% else %}bb-alert--ok{% endif %}" role="{% if message.tags == 'error' %}alert{% else %}status{% endif %}">{{ message }}</div>
       {% endfor %}
@@ -49,6 +49,7 @@
   {% include 'snippets/tabbar.html' %}
 
   <script src="{% static 'js/bloodbond.js' %}"></script>
+  {% include 'growth/_install.html' %}
   {% block extra_scripts %}{% endblock extra_scripts %}
   <script>
     try {

@@ -1,0 +1,4942 @@
+# Bangla (bn) translations for BloodBond.
+#
+# REVIEW NEEDED: this catalogue was written without a native-speaker review.
+# The wording is meant to be plain, respectful and in common Bangladeshi usage,
+# but every string should be read by a native Bangla speaker before it is
+# treated as final. Health and safety copy keeps its hedges: eligibility is a
+# reminder, never medical clearance.
+#
+# This file is the source of truth and is maintained by hand (no GNU gettext on
+# the build machine). After editing it:
+#   python manage.py compile_po          # writes django.mo (commit both)
+#   python scripts/check_translations.py # lists strings with no translation
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: BloodBond\n"
+"Language: bn\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: accounts/forms.py
+msgid "Phone Number"
+msgstr "ফোন নম্বর"
+
+#: accounts/forms.py accounts/templates/login.html accounts/templates/signup.html
+msgid "Password"
+msgstr "পাসওয়ার্ড"
+
+#: accounts/forms.py accounts/templates/privacy.html accounts/templates/signup.html pages/templates/pages/learn.html
+msgid "Blood group"
+msgstr "রক্তের গ্রুপ"
+
+#: accounts/forms.py accounts/models.py accounts/templates/privacy.html accounts/templates/signup.html
+msgid "District"
+msgstr "জেলা"
+
+#: accounts/forms.py accounts/models.py accounts/templates/privacy.html accounts/templates/signup.html
+msgid "List me in the donor directory"
+msgstr "আমাকে রক্তদাতা তালিকায় রাখুন"
+
+#: accounts/forms.py
+msgid "Turn on \"Show me on the leaderboard and home page\" first: a public profile shows your name."
+msgstr "আগে \"লিডারবোর্ড ও হোম পেজে আমার নাম দেখান\" চালু করুন: পাবলিক প্রোফাইলে আপনার নাম দেখানো হয়।"
+
+#: accounts/forms.py
+msgid "This phone number already has an account. Try logging in instead."
+msgstr "এই ফোন নম্বরে ইতিমধ্যে একটি অ্যাকাউন্ট আছে। বরং লগ ইন করে দেখুন।"
+
+#: accounts/forms.py
+msgid "This email is already used by another account."
+msgstr "এই ইমেইল অন্য একটি অ্যাকাউন্টে ব্যবহার করা হয়েছে।"
+
+#: accounts/forms.py
+msgid "Enter a Bangladesh mobile number, like 01712345678."
+msgstr "বাংলাদেশের একটি মোবাইল নম্বর দিন, যেমন 01712345678।"
+
+#: accounts/forms.py
+msgid "That phone number and password do not match. Check them and try again."
+msgstr "ফোন নম্বর ও পাসওয়ার্ড মিলছে না। দুটি আবার দেখে নিয়ে চেষ্টা করুন।"
+
+#: accounts/forms.py
+msgid "Needed so people can find you in the directory."
+msgstr "তালিকায় মানুষ যেন আপনাকে খুঁজে পায়, সেজন্য এটি দরকার।"
+
+#: accounts/forms.py
+msgid "Not sure / skip"
+msgstr "নিশ্চিত নই / এড়িয়ে যান"
+
+#: accounts/forms.py
+msgid "Skip for now"
+msgstr "এখন থাক"
+
+#: accounts/models.py
+msgid "Email Address"
+msgstr "ইমেইল ঠিকানা"
+
+#: accounts/models.py
+msgid "Mobile Phone"
+msgstr "মোবাইল ফোন"
+
+#: accounts/models.py
+msgid "First Name"
+msgstr "নামের প্রথম অংশ"
+
+#: accounts/models.py
+msgid "Last Name"
+msgstr "নামের শেষ অংশ"
+
+#: accounts/models.py
+msgid "Profile Picture"
+msgstr "প্রোফাইল ছবি"
+
+#: accounts/models.py
+msgid "Bio"
+msgstr "সংক্ষিপ্ত পরিচয়"
+
+#: accounts/models.py
+msgid "Date of Birth"
+msgstr "জন্ম তারিখ"
+
+#: accounts/models.py
+msgid "Gender"
+msgstr "লিঙ্গ"
+
+#: accounts/models.py core/models.py rewards/models.py
+msgid "Blood Group"
+msgstr "রক্তের গ্রুপ"
+
+#: accounts/models.py accounts/templates/privacy.html
+msgid "I am available to donate right now"
+msgstr "আমি এখন রক্ত দিতে পারব"
+
+#: accounts/models.py accounts/templates/privacy.html
+msgid "Show me on the leaderboard and home page"
+msgstr "লিডারবোর্ড ও হোম পেজে আমার নাম দেখান"
+
+#: accounts/models.py accounts/templates/privacy.html
+msgid "Let anyone with the link view my badge card"
+msgstr "লিংক থাকলে যে কেউ আমার ব্যাজ কার্ড দেখতে পারবে"
+
+#: accounts/models.py accounts/templates/privacy.html
+msgid "Let anyone with the link view my public profile"
+msgstr "লিংক থাকলে যে কেউ আমার পাবলিক প্রোফাইল দেখতে পারবে"
+
+#: accounts/models.py events/models.py
+msgid "Active"
+msgstr "সক্রিয়"
+
+#: accounts/models.py
+msgid "Created At"
+msgstr "তৈরির সময়"
+
+#: accounts/models.py
+msgid "Last Updated"
+msgstr "সর্বশেষ হালনাগাদ"
+
+#: accounts/models.py
+msgid "Opt-in. Logged-in members can then ask you for help. Your phone number is shared only if you accept."
+msgstr "ঐচ্ছিক। চালু করলে লগ ইন করা সদস্যরা আপনার কাছে সাহায্য চাইতে পারবেন। আপনি রাজি হলেই কেবল আপনার ফোন নম্বর জানানো হবে।"
+
+#: accounts/models.py
+msgid "Opt-in. A short page with your name, tier and streak. Never your phone number or email."
+msgstr "ঐচ্ছিক। আপনার নাম, স্তর ও ধারাবাহিকতা নিয়ে একটি ছোট পাতা। ফোন নম্বর বা ইমেইল কখনোই দেখানো হয় না।"
+
+#: accounts/templates/login.html accounts/templates/registration/password_reset_complete.html accounts/templates/signup.html templates/403.html
+msgid "Log in"
+msgstr "লগ ইন"
+
+#: accounts/templates/login.html
+msgid "Welcome back"
+msgstr "আবার স্বাগতম"
+
+#: accounts/templates/login.html
+msgid "Log in with your phone number."
+msgstr "আপনার ফোন নম্বর দিয়ে লগ ইন করুন।"
+
+#: accounts/templates/login.html accounts/templates/signup.html
+msgid "Phone number"
+msgstr "ফোন নম্বর"
+
+#: accounts/templates/login.html accounts/templates/registration/password_reset_confirm.html accounts/templates/signup.html
+msgid "Show"
+msgstr "দেখান"
+
+#: accounts/templates/login.html accounts/templates/registration/password_reset_confirm.html accounts/templates/signup.html moments/templates/moments/_hub.html
+msgid "Hide"
+msgstr "লুকান"
+
+#: accounts/templates/login.html accounts/templates/registration/password_reset_form.html
+msgid "Forgot your password?"
+msgstr "পাসওয়ার্ড ভুলে গেছেন?"
+
+#: accounts/templates/login.html
+msgid "New here?"
+msgstr "নতুন?"
+
+#: accounts/templates/login.html
+msgid "Create a free account"
+msgstr "বিনামূল্যে অ্যাকাউন্ট খুলুন"
+
+#: accounts/templates/login.html
+msgid "Log in to %(site)s."
+msgstr "%(site)s-এ লগ ইন করুন।"
+
+#: accounts/templates/privacy.html rewards/templates/rewards/log_donation.html templates/snippets/nav.html
+msgid "Profile &amp; privacy"
+msgstr "প্রোফাইল ও গোপনীয়তা"
+
+#: accounts/templates/privacy.html
+msgid "Your account"
+msgstr "আপনার অ্যাকাউন্ট"
+
+#: accounts/templates/privacy.html
+msgid "You decide what other members see. Your phone number is never shown on public pages, and your donations always count in site-wide totals."
+msgstr "অন্য সদস্যরা কী দেখবেন, তা আপনিই ঠিক করেন। আপনার ফোন নম্বর কখনোই পাবলিক পাতায় দেখানো হয় না, আর আপনার রক্তদান সবসময় সাইটের মোট হিসাবে ধরা হয়।"
+
+#: accounts/templates/privacy.html
+msgid "Donor profile"
+msgstr "রক্তদাতা প্রোফাইল"
+
+#: accounts/templates/privacy.html
+msgid "Not set"
+msgstr "ঠিক করা হয়নি"
+
+#: accounts/templates/privacy.html
+msgid "Only you can change it. Check it with a blood test result if you are not sure."
+msgstr "শুধু আপনিই এটি বদলাতে পারেন। নিশ্চিত না হলে রক্ত পরীক্ষার রিপোর্ট দেখে নিন।"
+
+#: accounts/templates/privacy.html
+msgid "Shown in the directory"
+msgstr "তালিকায় দেখানো হয়"
+
+#: accounts/templates/privacy.html
+msgid "Logged-in members can search for you and send a request. You choose to accept or decline each one. Needs a blood group and district."
+msgstr "লগ ইন করা সদস্যরা আপনাকে খুঁজে অনুরোধ পাঠাতে পারবেন। প্রতিটি অনুরোধ গ্রহণ বা প্রত্যাখ্যান আপনার সিদ্ধান্ত। রক্তের গ্রুপ ও জেলা লাগবে।"
+
+#: accounts/templates/privacy.html events/models.py growth/models.py rewards/models.py
+msgid "Name"
+msgstr "নাম"
+
+#: accounts/templates/privacy.html
+msgid "Donation count"
+msgstr "রক্তদানের সংখ্যা"
+
+#: accounts/templates/privacy.html
+msgid "Phone: only if you accept"
+msgstr "ফোন: আপনি রাজি হলেই কেবল"
+
+#: accounts/templates/privacy.html pages/templates/pages/faq.html
+msgid "Privacy"
+msgstr "গোপনীয়তা"
+
+#: accounts/templates/privacy.html
+msgid "Turn off to leave public rankings, awards and squad boards. Your donations still count in totals."
+msgstr "বন্ধ করলে পাবলিক র‍্যাঙ্কিং, পুরস্কার ও স্কোয়াড তালিকা থেকে আপনার নাম সরে যাবে। মোট হিসাবে আপনার রক্তদান তবুও ধরা হবে।"
+
+#: accounts/templates/privacy.html
+msgid "Tier"
+msgstr "স্তর"
+
+#: accounts/templates/privacy.html
+msgid "Points"
+msgstr "পয়েন্ট"
+
+#: accounts/templates/privacy.html
+msgid "Phone: never"
+msgstr "ফোন: কখনোই নয়"
+
+#: accounts/templates/privacy.html
+msgid "Turn off to disable sharing. Only you and site staff can open it. It is also private whenever you hide yourself from the leaderboard."
+msgstr "শেয়ার বন্ধ করতে এটি বন্ধ করুন। তখন শুধু আপনি ও সাইটের স্টাফ এটি খুলতে পারবেন। লিডারবোর্ড থেকে নিজেকে লুকালেও এটি ব্যক্তিগত থাকে।"
+
+#: accounts/templates/privacy.html insights/templates/insights/impact.html rewards/templates/rewards/leaderboard.html
+msgid "Donations"
+msgstr "রক্তদান"
+
+#: accounts/templates/privacy.html
+msgid "Streak"
+msgstr "ধারাবাহিকতা"
+
+#: accounts/templates/privacy.html
+msgid "Off by default. A short page you can share. Needs \"Show me on the leaderboard\" to be on."
+msgstr "ডিফল্টে বন্ধ। শেয়ার করার মতো একটি ছোট পাতা। এর জন্য \"লিডারবোর্ডে আমাকে দেখান\" চালু থাকতে হবে।"
+
+#: accounts/templates/privacy.html
+msgid "Level"
+msgstr "লেভেল"
+
+#: accounts/templates/privacy.html
+msgid "Public squads"
+msgstr "পাবলিক স্কোয়াড"
+
+#: accounts/templates/privacy.html
+msgid "Published stories"
+msgstr "প্রকাশিত গল্প"
+
+#: accounts/templates/privacy.html
+msgid "Phone and email: never"
+msgstr "ফোন ও ইমেইল: কখনোই নয়"
+
+#: accounts/templates/privacy.html
+msgid "View my public profile"
+msgstr "আমার পাবলিক প্রোফাইল দেখুন"
+
+#: accounts/templates/privacy.html
+msgid "Save changes"
+msgstr "পরিবর্তন সংরক্ষণ করুন"
+
+#: accounts/templates/privacy.html
+msgid "View my badge card"
+msgstr "আমার ব্যাজ কার্ড দেখুন"
+
+#: accounts/templates/privacy.html templates/snippets/nav.html
+msgid "My squads"
+msgstr "আমার স্কোয়াড"
+
+#: accounts/templates/privacy.html
+msgid "Preview"
+msgstr "প্রিভিউ"
+
+#: accounts/templates/privacy.html
+msgid "How others see you"
+msgstr "অন্যরা আপনাকে যেভাবে দেখে"
+
+#: accounts/templates/privacy.html
+msgid "In the directory"
+msgstr "তালিকায়"
+
+#: accounts/templates/privacy.html rewards/templates/rewards/directory.html
+msgid "Available"
+msgstr "প্রস্তুত আছি"
+
+#: accounts/templates/privacy.html
+msgid "You are not listed in the directory."
+msgstr "আপনি রক্তদাতা তালিকায় নেই।"
+
+#: accounts/templates/privacy.html
+msgid "On the leaderboard"
+msgstr "লিডারবোর্ডে"
+
+#: accounts/templates/privacy.html rewards/templates/rewards/leaderboard.html
+msgid "points"
+msgstr "পয়েন্ট"
+
+#: accounts/templates/privacy.html
+msgid "You do not appear in rankings, awards or squad boards."
+msgstr "র‍্যাঙ্কিং, পুরস্কার বা স্কোয়াড তালিকায় আপনাকে দেখানো হবে না।"
+
+#: accounts/templates/privacy.html
+msgid "Anyone with your badge link can open your card."
+msgstr "আপনার ব্যাজ কার্ডের লিংক যার কাছে আছে, সে-ই কার্ডটি খুলতে পারবে।"
+
+#: accounts/templates/privacy.html
+msgid "Your phone number is not part of any of these."
+msgstr "এগুলোর কোনোটিতেই আপনার ফোন নম্বর থাকে না।"
+
+#: accounts/templates/privacy.html
+msgid "Anywhere"
+msgstr "যেকোনো জায়গা"
+
+#: accounts/templates/privacy.html rewards/templates/rewards/directory.html
+msgid "Not available now"
+msgstr "এখন প্রস্তুত নই"
+
+#: accounts/templates/privacy.html
+msgid "Only you and site staff can open your badge card."
+msgstr "আপনার ব্যাজ কার্ড শুধু আপনি ও সাইটের স্টাফ খুলতে পারবেন।"
+
+#: accounts/templates/privacy.html
+msgid "Switch off when you are away or unwell. You also show as unavailable during the %(interval)s gap after a donation."
+msgstr "বাইরে থাকলে বা অসুস্থ হলে বন্ধ করে রাখুন। রক্তদানের পর %(interval)s বিরতির সময়েও আপনাকে অনুপলব্ধ দেখানো হয়।"
+
+#: accounts/templates/privacy.html pages/templates/pages/home.html rewards/templates/rewards/directory.html rewards/templates/rewards/log_donation.html
+msgid "%(counter)s verified donation"
+msgid_plural "%(counter)s verified donations"
+msgstr[0] "%(counter)sটি যাচাই করা রক্তদান"
+msgstr[1] "%(counter)sটি যাচাই করা রক্তদান"
+
+#: accounts/templates/registration/password_reset_complete.html
+msgid "Password updated"
+msgstr "পাসওয়ার্ড বদলানো হয়েছে"
+
+#: accounts/templates/registration/password_reset_complete.html
+msgid "Your new password is set. You can log in with your phone number now."
+msgstr "আপনার নতুন পাসওয়ার্ড ঠিক হয়ে গেছে। এখন ফোন নম্বর দিয়ে লগ ইন করতে পারবেন।"
+
+#: accounts/templates/registration/password_reset_confirm.html accounts/templates/signup.html
+msgid "At least 8 characters. Not a common password, and not only numbers."
+msgstr "কমপক্ষে 8 অক্ষর। সহজে অনুমান করা যায় এমন পাসওয়ার্ড নয়, আর শুধু সংখ্যাও নয়।"
+
+#: accounts/templates/registration/password_reset_confirm.html accounts/templates/signup.html
+msgid "Type it again"
+msgstr "আবার লিখুন"
+
+#: accounts/templates/registration/password_reset_confirm.html
+msgid "Choose a new password"
+msgstr "নতুন পাসওয়ার্ড বেছে নিন"
+
+#: accounts/templates/registration/password_reset_confirm.html
+msgid "Link expired"
+msgstr "লিংকের মেয়াদ শেষ"
+
+#: accounts/templates/registration/password_reset_confirm.html
+msgid "Pick something you do not use anywhere else."
+msgstr "এমন কিছু বেছে নিন, যা আপনি অন্য কোথাও ব্যবহার করেন না।"
+
+#: accounts/templates/registration/password_reset_confirm.html
+msgid "New password"
+msgstr "নতুন পাসওয়ার্ড"
+
+#: accounts/templates/registration/password_reset_confirm.html
+msgid "Save new password"
+msgstr "নতুন পাসওয়ার্ড সংরক্ষণ করুন"
+
+#: accounts/templates/registration/password_reset_confirm.html
+msgid "This link has expired"
+msgstr "এই লিংকের মেয়াদ শেষ হয়ে গেছে"
+
+#: accounts/templates/registration/password_reset_confirm.html
+msgid "The reset link is not valid. It may have been used already, or it is too old. Request a new one and try again."
+msgstr "রিসেট লিংকটি সঠিক নয়। এটি আগেই ব্যবহার করা হয়ে থাকতে পারে, অথবা অনেক পুরোনো। নতুন একটি লিংক চেয়ে আবার চেষ্টা করুন।"
+
+#: accounts/templates/registration/password_reset_confirm.html
+msgid "Request a new link"
+msgstr "নতুন লিংক চান"
+
+#: accounts/templates/registration/password_reset_done.html
+msgid "Check your email"
+msgstr "আপনার ইমেইল দেখুন"
+
+#: accounts/templates/registration/password_reset_done.html
+msgid "If an account exists for the email you entered, we have sent a link to choose a new password. It should arrive in a few minutes."
+msgstr "আপনার দেওয়া ইমেইলে অ্যাকাউন্ট থাকলে নতুন পাসওয়ার্ড বেছে নেওয়ার একটি লিংক পাঠানো হয়েছে। কয়েক মিনিটের মধ্যেই পৌঁছে যাওয়ার কথা।"
+
+#: accounts/templates/registration/password_reset_done.html
+msgid "Nothing there? Look in spam, and make sure you used the email you signed up with."
+msgstr "কিছু পাননি? স্প্যাম ফোল্ডার দেখুন, আর নিশ্চিত হোন যে সাইন আপের সময়ের ইমেইলটিই দিয়েছেন।"
+
+#: accounts/templates/registration/password_reset_done.html accounts/templates/registration/password_reset_form.html
+msgid "Back to log in"
+msgstr "লগ ইনে ফিরে যান"
+
+#: accounts/templates/registration/password_reset_form.html accounts/templates/signup.html
+msgid "Email"
+msgstr "ইমেইল"
+
+#: accounts/templates/registration/password_reset_form.html
+msgid "Reset your password"
+msgstr "পাসওয়ার্ড রিসেট করুন"
+
+#: accounts/templates/registration/password_reset_form.html
+msgid "Enter the email on your account and we will send a reset link."
+msgstr "আপনার অ্যাকাউন্টের ইমেইল দিন, আমরা একটি রিসেট লিংক পাঠাব।"
+
+#: accounts/templates/registration/password_reset_form.html
+msgid "Send reset link"
+msgstr "রিসেট লিংক পাঠান"
+
+#: accounts/templates/registration/password_reset_form.html
+msgid "Signed up without an email? We cannot reset the password by phone yet."
+msgstr "ইমেইল ছাড়াই সাইন আপ করেছেন? ফোনের মাধ্যমে পাসওয়ার্ড রিসেট করার সুবিধা আমাদের এখনো নেই।"
+
+#: accounts/templates/registration/password_reset_form.html
+msgid "Please ask the site team for help."
+msgstr "অনুগ্রহ করে সাইটের টিমের কাছে সাহায্য চান।"
+
+#: accounts/templates/registration/password_reset_form.html
+msgid "Write to <a href=\"mailto:%(email)s\">%(email)s</a> and we will help."
+msgstr "<a href=\"mailto:%(email)s\">%(email)s</a> ঠিকানায় লিখুন, আমরা সাহায্য করব।"
+
+#: accounts/templates/signup.html pages/templates/pages/home.html pages/templates/pages/learn.html templates/snippets/nav.html
+msgid "Join free"
+msgstr "বিনামূল্যে যোগ দিন"
+
+#: accounts/templates/signup.html
+msgid "Free, and it takes about a minute."
+msgstr "বিনামূল্যে, আর সময় লাগে প্রায় এক মিনিট।"
+
+#: accounts/templates/signup.html
+msgid "Please fix the highlighted fields below."
+msgstr "নিচে চিহ্নিত ঘরগুলো ঠিক করুন।"
+
+#: accounts/templates/signup.html
+msgid "About you"
+msgstr "আপনার সম্পর্কে"
+
+#: accounts/templates/signup.html
+msgid "First name"
+msgstr "নামের প্রথম অংশ"
+
+#: accounts/templates/signup.html
+msgid "Last name"
+msgstr "নামের শেষ অংশ"
+
+#: accounts/templates/signup.html
+msgid "optional"
+msgstr "ঐচ্ছিক"
+
+#: accounts/templates/signup.html
+msgid "This is your login. It is never shown on public pages."
+msgstr "এটিই আপনার লগ ইন। এটি কখনোই পাবলিক পাতায় দেখানো হয় না।"
+
+#: accounts/templates/signup.html
+msgid "Only needed to reset a forgotten password."
+msgstr "ভুলে যাওয়া পাসওয়ার্ড রিসেট করার জন্যই শুধু দরকার।"
+
+#: accounts/templates/signup.html
+msgid "Create a password"
+msgstr "একটি পাসওয়ার্ড বানান"
+
+#: accounts/templates/signup.html
+msgid "Donor basics"
+msgstr "রক্তদাতার প্রাথমিক তথ্য"
+
+#: accounts/templates/signup.html
+msgid "(you can add these later)"
+msgstr "(পরে যোগ করতে পারবেন)"
+
+#: accounts/templates/signup.html
+msgid "Optional. Needs a blood group and district. Members can ask you for help; your number is shared only if you accept."
+msgstr "ঐচ্ছিক। রক্তের গ্রুপ ও জেলা লাগবে। সদস্যরা আপনার কাছে সাহায্য চাইতে পারবেন; আপনি রাজি হলেই কেবল আপনার নম্বর জানানো হবে।"
+
+#: accounts/templates/signup.html
+msgid "Create my account"
+msgstr "আমার অ্যাকাউন্ট খুলুন"
+
+#: accounts/templates/signup.html
+msgid "Already a member?"
+msgstr "আগে থেকেই সদস্য?"
+
+#: accounts/templates/signup.html
+msgid "Create a free %(site)s account to answer urgent blood requests and track your donations."
+msgstr "জরুরি রক্তের অনুরোধে সাড়া দিতে এবং নিজের রক্তদানের হিসাব রাখতে %(site)s-এ বিনামূল্যে অ্যাকাউন্ট খুলুন।"
+
+#: accounts/templates/signup.html
+msgid "Join %(site)s"
+msgstr "%(site)s-এ যোগ দিন"
+
+#: accounts/templates/signup.html
+msgid "By joining you agree to keep requests and contact details respectful. Read how we handle <a href=\"%(about_url)s#privacy\">privacy</a>."
+msgstr "যোগ দিয়ে আপনি অনুরোধ ও যোগাযোগের তথ্যের ক্ষেত্রে সৌজন্য বজায় রাখতে সম্মত হচ্ছেন। আমরা <a href=\"%(about_url)s#privacy\">গোপনীয়তা</a> কীভাবে সামলাই, তা পড়ুন।"
+
+#: accounts/templates/welcome.html accounts/views.py rewards/templates/rewards/log_donation.html
+msgid "See urgent requests"
+msgstr "জরুরি অনুরোধ দেখুন"
+
+#: accounts/templates/welcome.html
+msgid "Welcome"
+msgstr "স্বাগতম"
+
+#: accounts/templates/welcome.html
+msgid "Getting started"
+msgstr "শুরু করা যাক"
+
+#: accounts/templates/welcome.html
+msgid "Welcome."
+msgstr "স্বাগতম।"
+
+#: accounts/templates/welcome.html
+msgid "A few small steps and you are ready to help. Skip any of them; you can come back anytime."
+msgstr "কয়েকটি ছোট ধাপ পেরোলেই আপনি সাহায্য করতে প্রস্তুত। যেকোনোটি এড়িয়ে যেতে পারেন; যখন খুশি ফিরে আসতে পারবেন।"
+
+#: accounts/templates/welcome.html
+msgid "Setup progress"
+msgstr "সেটআপের অগ্রগতি"
+
+#: accounts/templates/welcome.html
+msgid "done"
+msgstr "সম্পন্ন"
+
+#: accounts/templates/welcome.html
+msgid "Go to home"
+msgstr "হোমে যান"
+
+#: accounts/templates/welcome.html
+msgid "Welcome, %(name)s."
+msgstr "স্বাগতম, %(name)s।"
+
+#: accounts/templates/welcome.html
+msgid "You are all set. Thank you for being part of %(site)s."
+msgstr "সব ঠিক আছে। %(site)s-এর অংশ হওয়ার জন্য ধন্যবাদ।"
+
+#: accounts/templates/welcome.html habits/templates/habits/_hub.html
+msgid "%(done)s of %(total)s done"
+msgstr "%(total)sটির মধ্যে %(done)sটি সম্পন্ন"
+
+#: accounts/templates/welcome.html
+msgid "<strong>Your privacy:</strong> your phone number is never shown on public pages. You choose what appears in the directory and on the leaderboard in <a href=\"%(privacy_url)s\">Profile &amp; privacy</a>."
+msgstr "<strong>আপনার গোপনীয়তা:</strong> আপনার ফোন নম্বর কখনোই পাবলিক পাতায় দেখানো হয় না। তালিকা ও লিডারবোর্ডে কী দেখা যাবে, তা <a href=\"%(privacy_url)s\">প্রোফাইল ও গোপনীয়তা</a> থেকে আপনিই ঠিক করেন।"
+
+#: accounts/views.py
+msgid "Too many tries. Please wait about 15 minutes before trying again."
+msgstr "অনেকবার চেষ্টা করা হয়েছে। আবার চেষ্টা করার আগে প্রায় 15 মিনিট অপেক্ষা করুন।"
+
+#: accounts/views.py
+msgid "You are logged out. See you soon."
+msgstr "আপনি লগ আউট হয়েছেন। আবার দেখা হবে।"
+
+#: accounts/views.py rewards/quests.py
+msgid "Complete your profile"
+msgstr "প্রোফাইল সম্পূর্ণ করুন"
+
+#: accounts/views.py rewards/quests.py
+msgid "Join the donor directory"
+msgstr "রক্তদাতা তালিকায় যোগ দিন"
+
+#: accounts/views.py
+msgid "Open board"
+msgstr "তালিকা খুলুন"
+
+#: accounts/views.py rewards/quests.py
+msgid "Log your first donation"
+msgstr "আপনার প্রথম রক্তদান লিপিবদ্ধ করুন"
+
+#: accounts/views.py
+msgid "Open my hub"
+msgstr "আমার হাব খুলুন"
+
+#: accounts/views.py
+msgid "Read the donor guide"
+msgstr "রক্তদাতার গাইড পড়ুন"
+
+#: accounts/views.py
+msgid "Who can donate, what to expect, and how to look after yourself."
+msgstr "কারা রক্ত দিতে পারেন, কী আশা করবেন এবং নিজের যত্ন কীভাবে নেবেন।"
+
+#: accounts/views.py
+msgid "Read guide"
+msgstr "গাইড পড়ুন"
+
+#: accounts/views.py
+msgid "Privacy settings saved."
+msgstr "গোপনীয়তার সেটিংস সংরক্ষণ করা হয়েছে।"
+
+#: accounts/views.py
+msgid "Too many new accounts from this connection. Please try again in an hour."
+msgstr "এই সংযোগ থেকে অনেক নতুন অ্যাকাউন্ট খোলা হয়েছে। এক ঘণ্টা পর আবার চেষ্টা করুন।"
+
+#: accounts/views.py
+msgid "Name, blood group and district are set."
+msgstr "নাম, রক্তের গ্রুপ ও জেলা দেওয়া আছে।"
+
+#: accounts/views.py
+msgid "Add your blood group and district so we can match you."
+msgstr "আপনার রক্তের গ্রুপ ও জেলা যোগ করুন, যাতে আমরা আপনাকে মেলাতে পারি।"
+
+#: accounts/views.py
+msgid "Review"
+msgstr "দেখে নিন"
+
+#: accounts/views.py
+msgid "Add details"
+msgstr "তথ্য যোগ করুন"
+
+#: accounts/views.py
+msgid "You are listed. People ask first; your number is shared only if you accept."
+msgstr "আপনি তালিকায় আছেন। মানুষ আগে অনুরোধ করে; আপনি রাজি হলেই কেবল আপনার নম্বর জানানো হয়।"
+
+#: accounts/views.py
+msgid "Optional. Members can ask you for help, and you choose to accept or decline."
+msgstr "ঐচ্ছিক। সদস্যরা আপনার কাছে সাহায্য চাইতে পারবেন, আর গ্রহণ বা প্রত্যাখ্যান আপনিই ঠিক করবেন।"
+
+#: accounts/views.py
+msgid "Manage"
+msgstr "পরিচালনা করুন"
+
+#: accounts/views.py
+msgid "Join"
+msgstr "যোগ দিন"
+
+#: accounts/views.py
+msgid "Done. A volunteer verifies each donation before it counts."
+msgstr "হয়ে গেছে। হিসাবে ধরার আগে একজন স্বেচ্ছাসেবক প্রতিটি রক্তদান যাচাই করেন।"
+
+#: accounts/views.py
+msgid "Donated before? Add it. A volunteer verifies it before points count."
+msgstr "আগে রক্ত দিয়েছেন? যোগ করুন। পয়েন্ট ধরার আগে একজন স্বেচ্ছাসেবক এটি যাচাই করবেন।"
+
+#: accounts/views.py
+msgid "%(n)s open request need your blood group."
+msgid_plural "%(n)s open requests need your blood group."
+msgstr[0] "%(n)sটি চলমান অনুরোধে আপনার রক্তের গ্রুপ লাগবে।"
+msgstr[1] "%(n)sটি চলমান অনুরোধে আপনার রক্তের গ্রুপ লাগবে।"
+
+#: accounts/views.py
+msgid "No open requests right now."
+msgstr "এই মুহূর্তে কোনো চলমান অনুরোধ নেই।"
+
+#: accounts/views.py
+msgid "You are not in the donor directory yet. Add your blood group and district to join it."
+msgstr "আপনি এখনো রক্তদাতা তালিকায় নেই। যোগ দিতে রক্তের গ্রুপ ও জেলা যোগ করুন।"
+
+#: accounts/views.py
+msgid "%(n)s open request right now."
+msgid_plural "%(n)s open requests right now."
+msgstr[0] "এই মুহূর্তে %(n)sটি চলমান অনুরোধ আছে।"
+msgstr[1] "এই মুহূর্তে %(n)sটি চলমান অনুরোধ আছে।"
+
+#: alerts/forms.py
+msgid "Also alert me about these districts"
+msgstr "এই জেলাগুলোর অ্যালার্টও আমাকে দিন"
+
+#: alerts/forms.py
+msgid "Most alerts per day"
+msgstr "দিনে সর্বোচ্চ অ্যালার্ট"
+
+#: alerts/forms.py
+msgid "Up to {n}. Your own district is always included."
+msgstr "সর্বোচ্চ {n}টি। আপনার নিজের জেলা সবসময় ধরা হয়।"
+
+#: alerts/forms.py
+msgid "Add an email address in Profile and privacy first."
+msgstr "আগে প্রোফাইল ও গোপনীয়তায় একটি ইমেইল ঠিকানা যোগ করুন।"
+
+#: alerts/forms.py
+msgid "Pick at most %(n)s districts."
+msgstr "সর্বোচ্চ %(n)sটি জেলা বেছে নিন।"
+
+#: alerts/templates/alerts/_hub.html alerts/templates/alerts/inbox.html alerts/templates/alerts/settings.html templates/snippets/nav.html
+msgid "Alerts"
+msgstr "অ্যালার্ট"
+
+#: alerts/templates/alerts/_hub.html alerts/templates/alerts/inbox.html
+msgid "Settings"
+msgstr "সেটিংস"
+
+#: alerts/templates/alerts/_hub.html
+msgid "No alerts yet. You can ask for a heads-up when someone near you needs your blood group."
+msgstr "এখনো কোনো অ্যালার্ট নেই। আপনার কাছাকাছি কারও আপনার রক্তের গ্রুপ লাগলে আগেভাগে জানতে চাইতে পারেন।"
+
+#: alerts/templates/alerts/_hub.html
+msgid "Open inbox"
+msgstr "ইনবক্স খুলুন"
+
+#: alerts/templates/alerts/_hub.html
+msgid "%(n)s new"
+msgstr "%(n)sটি নতুন"
+
+#: alerts/templates/alerts/_request.html
+msgid "Donor alerts"
+msgstr "রক্তদাতাদের অ্যালার্ট"
+
+#: alerts/templates/alerts/_request.html
+msgid "Only members who opted in to alerts are told. Names stay private."
+msgstr "শুধু যাঁরা অ্যালার্ট চালু করেছেন, তাঁদেরই জানানো হয়। নাম গোপন থাকে।"
+
+#: alerts/templates/alerts/_request.html
+msgid "Get alerts for requests like this"
+msgstr "এমন অনুরোধের অ্যালার্ট পান"
+
+#: alerts/templates/alerts/_request.html
+msgid "%(counter)s matching donor was notified."
+msgid_plural "%(counter)s matching donors were notified."
+msgstr[0] "মিলে যাওয়া %(counter)s জন রক্তদাতাকে জানানো হয়েছে।"
+msgstr[1] "মিলে যাওয়া %(counter)s জন রক্তদাতাকে জানানো হয়েছে।"
+
+#: alerts/templates/alerts/inbox.html
+msgid "Your inbox"
+msgstr "আপনার ইনবক্স"
+
+#: alerts/templates/alerts/inbox.html
+msgid "Mark all read"
+msgstr "সবগুলো পড়া হয়েছে চিহ্নিত করুন"
+
+#: alerts/templates/alerts/inbox.html
+msgid "New"
+msgstr "নতুন"
+
+#: alerts/templates/alerts/inbox.html rewards/models.py rewards/templates/rewards/request_mine.html
+msgid "Open"
+msgstr "চলমান"
+
+#: alerts/templates/alerts/inbox.html
+msgid "Mark read"
+msgstr "পড়া হয়েছে চিহ্নিত করুন"
+
+#: alerts/templates/alerts/inbox.html events/templates/events/list.html rewards/templates/rewards/directory.html rewards/templates/rewards/request_list.html
+msgid "Pages"
+msgstr "পাতা"
+
+#: alerts/templates/alerts/inbox.html stories/templates/stories/story_list.html
+msgid "Newer"
+msgstr "নতুনগুলো"
+
+#: alerts/templates/alerts/inbox.html stories/templates/stories/story_list.html
+msgid "Older"
+msgstr "পুরোনোগুলো"
+
+#: alerts/templates/alerts/inbox.html
+msgid "No alerts yet. Turn on request alerts and we will tell you when someone near you needs your blood group."
+msgstr "এখনো কোনো অ্যালার্ট নেই। অনুরোধের অ্যালার্ট চালু করুন, আপনার কাছাকাছি কারও আপনার রক্তের গ্রুপ লাগলে আমরা জানাব।"
+
+#: alerts/templates/alerts/inbox.html
+msgid "Set up alerts"
+msgstr "অ্যালার্ট চালু করুন"
+
+#: alerts/templates/alerts/inbox.html
+msgid "%(t)s ago"
+msgstr "%(t)s আগে"
+
+#: alerts/templates/alerts/inbox.html events/templates/events/list.html rewards/templates/rewards/directory.html rewards/templates/rewards/request_list.html
+msgid "Page %(number)s of %(total)s"
+msgstr "পাতা %(number)s / %(total)s"
+
+#: alerts/templates/alerts/settings.html
+msgid "Alert settings"
+msgstr "অ্যালার্ট সেটিংস"
+
+#: alerts/templates/alerts/settings.html
+msgid "Request alerts"
+msgstr "অনুরোধের অ্যালার্ট"
+
+#: alerts/templates/alerts/settings.html
+msgid "Get a heads-up when someone near you posts a request your blood group can help with. It is off until you turn it on, and you can turn it off any time."
+msgstr "আপনার কাছাকাছি কেউ এমন অনুরোধ করলে, যাতে আপনার রক্তের গ্রুপ সাহায্য করতে পারে, আগেভাগে জানুন। আপনি চালু না করা পর্যন্ত এটি বন্ধ থাকে, আর যেকোনো সময় বন্ধ করা যায়।"
+
+#: alerts/templates/alerts/settings.html
+msgid "Alert me about matching requests"
+msgstr "মিলে যায় এমন অনুরোধের অ্যালার্ট দিন"
+
+#: alerts/templates/alerts/settings.html
+msgid "Also email me"
+msgstr "ইমেইলও পাঠান"
+
+#: alerts/templates/alerts/settings.html
+msgid "Each email has a one-click link to stop emails."
+msgstr "প্রতিটি ইমেইলে এক ক্লিকে ইমেইল বন্ধ করার লিংক থাকে।"
+
+#: alerts/templates/alerts/settings.html
+msgid "You have no email address yet. Add one in Profile &amp; privacy."
+msgstr "আপনার এখনো কোনো ইমেইল ঠিকানা নেই। প্রোফাইল ও গোপনীয়তায় একটি যোগ করুন।"
+
+#: alerts/templates/alerts/settings.html
+msgid "Emails never include another member's phone number or email."
+msgstr "ইমেইলে অন্য কোনো সদস্যের ফোন নম্বর বা ইমেইল কখনোই থাকে না।"
+
+#: alerts/templates/alerts/settings.html
+msgid "Only for rare blood groups"
+msgstr "শুধু বিরল রক্তের গ্রুপের জন্য"
+
+#: alerts/templates/alerts/settings.html
+msgid "Skip requests for common groups."
+msgstr "প্রচলিত গ্রুপের অনুরোধ বাদ দিন।"
+
+#: alerts/templates/alerts/settings.html
+msgid "On a computer, hold Ctrl or Cmd to pick more than one."
+msgstr "কম্পিউটারে একাধিক বেছে নিতে Ctrl বা Cmd চেপে ধরুন।"
+
+#: alerts/templates/alerts/settings.html
+msgid "We never send more than this in one day (1 to 10)."
+msgstr "এর বেশি আমরা একদিনে কখনোই পাঠাই না (1 থেকে 10)।"
+
+#: alerts/templates/alerts/settings.html
+msgid "Alerts are reminders only, not medical clearance, and there is no pressure to donate. The hospital decides who can give blood."
+msgstr "অ্যালার্ট শুধু মনে করিয়ে দেওয়ার জন্য, মেডিকেল অনুমোদন নয়; রক্ত দেওয়ার কোনো চাপও নেই। কে রক্ত দিতে পারবেন, তা হাসপাতাল ঠিক করে।"
+
+#: alerts/templates/alerts/settings.html
+msgid "Save settings"
+msgstr "সেটিংস সংরক্ষণ করুন"
+
+#: alerts/templates/alerts/settings.html
+msgid "Back to inbox"
+msgstr "ইনবক্সে ফিরে যান"
+
+#: alerts/templates/alerts/settings.html
+msgid "Alerts need your blood group and district. <a href=\"%(privacy_url)s\">Add them in Profile &amp; privacy</a>."
+msgstr "অ্যালার্টের জন্য আপনার রক্তের গ্রুপ ও জেলা লাগবে। <a href=\"%(privacy_url)s\">প্রোফাইল ও গোপনীয়তায় সেগুলো যোগ করুন</a>।"
+
+#: alerts/templates/alerts/settings.html
+msgid "Only when your group can help, the request is in your district or one you pick, you are marked available, and your %(interval)s break since your last donation is over."
+msgstr "শুধু তখনই, যখন আপনার গ্রুপ সাহায্য করতে পারে, অনুরোধটি আপনার জেলায় বা আপনার বেছে নেওয়া জেলায়, আপনি প্রস্তুত হিসেবে চিহ্নিত, এবং আপনার শেষ রক্তদানের পর %(interval)s বিরতি শেষ।"
+
+#: alerts/views.py
+msgid "That is a lot of clicks. Please wait a few minutes."
+msgstr "অনেকবার ক্লিক হয়েছে। কয়েক মিনিট অপেক্ষা করুন।"
+
+#: alerts/views.py
+msgid "Your alert settings are saved."
+msgstr "আপনার অ্যালার্ট সেটিংস সংরক্ষণ করা হয়েছে।"
+
+#: core/models.py
+msgid "Blood Group Name"
+msgstr "রক্তের গ্রুপের নাম"
+
+#: core/models.py
+msgid "Blood Group Code"
+msgstr "রক্তের গ্রুপের কোড"
+
+#: core/models.py
+msgid "Donate Blood To"
+msgstr "যাদের রক্ত দিতে পারেন"
+
+#: core/models.py
+msgid "Receive Blood From"
+msgstr "যাদের কাছ থেকে রক্ত নিতে পারেন"
+
+#: core/models.py
+msgid "System Name"
+msgstr "সিস্টেমের নাম"
+
+#: core/models.py
+msgid "System logo"
+msgstr "সিস্টেমের লোগো"
+
+#: core/models.py
+msgid "Slogan for system"
+msgstr "সিস্টেমের স্লোগান"
+
+#: events/forms.py
+msgid "Not listed"
+msgstr "তালিকায় নেই"
+
+#: events/forms.py events/models.py
+msgid "Starts"
+msgstr "শুরু"
+
+#: events/forms.py events/models.py
+msgid "Ends (optional)"
+msgstr "শেষ (ঐচ্ছিক)"
+
+#: events/forms.py events/models.py
+msgid "An event cannot start in the past."
+msgstr "অতীতের কোনো সময়ে ইভেন্ট শুরু হতে পারে না।"
+
+#: events/forms.py
+msgid "Say where it is: pick a place or type a venue."
+msgstr "কোথায় হবে জানান: একটি স্থান বেছে নিন অথবা স্থানের নাম লিখুন।"
+
+#: events/forms.py
+msgid "e.g. Campus blood drive"
+msgstr "যেমন: ক্যাম্পাস রক্তদান কর্মসূচি"
+
+#: events/forms.py
+msgid "%(n)s people are already going, so spots cannot go below that."
+msgstr "ইতিমধ্যে %(n)s জন যাচ্ছেন, তাই আসনসংখ্যা এর নিচে নামানো যাবে না।"
+
+#: events/models.py
+msgid "Note (staff only)"
+msgstr "নোট (শুধু স্টাফের জন্য)"
+
+#: events/models.py stories/models.py
+msgid "Title"
+msgstr "শিরোনাম"
+
+#: events/models.py
+msgid "Organizer name (optional)"
+msgstr "আয়োজকের নাম (ঐচ্ছিক)"
+
+#: events/models.py
+msgid "Venue"
+msgstr "স্থান"
+
+#: events/models.py rewards/models.py rewards/templates/rewards/request_detail.html
+msgid "Details"
+msgstr "বিস্তারিত"
+
+#: events/models.py
+msgid "Spots (optional)"
+msgstr "আসন সংখ্যা (ঐচ্ছিক)"
+
+#: events/models.py events/templates/events/detail.html
+msgid "Let the organizer see my name"
+msgstr "আয়োজককে আমার নাম দেখতে দিন"
+
+#: events/models.py events/templates/events/detail.html
+msgid "Checked in"
+msgstr "উপস্থিতি নিশ্চিত হয়েছে"
+
+#: events/models.py
+msgid "Verified by staff"
+msgstr "স্টাফ যাচাই করেছেন"
+
+#: events/models.py
+msgid "Slug"
+msgstr "স্লাগ"
+
+#: events/models.py
+msgid "Starts on"
+msgstr "শুরুর তারিখ"
+
+#: events/models.py
+msgid "Ends on"
+msgstr "শেষের তারিখ"
+
+#: events/models.py
+msgid "Every year: month"
+msgstr "প্রতি বছর: মাস"
+
+#: events/models.py
+msgid "Every year: day"
+msgstr "প্রতি বছর: দিন"
+
+#: events/models.py
+msgid "Days it lasts (yearly campaigns)"
+msgstr "কত দিন চলবে (বার্ষিক ক্যাম্পেইন)"
+
+#: events/models.py
+msgid "Headline"
+msgstr "শিরোনাম"
+
+#: events/models.py rewards/models.py
+msgid "Message"
+msgstr "বার্তা"
+
+#: events/models.py rewards/models.py
+msgid "Color"
+msgstr "রং"
+
+#: events/models.py rewards/models.py
+msgid "Icon"
+msgstr "আইকন"
+
+#: events/models.py
+msgid "Badge name"
+msgstr "ব্যাজের নাম"
+
+#: events/models.py
+msgid "Badge icon"
+msgstr "ব্যাজের আইকন"
+
+#: events/models.py pages/templates/pages/about.html squads/models.py templates/snippets/footer.html
+msgid "About"
+msgstr "পরিচিতি"
+
+#: events/models.py
+msgid "Target (verified donations per squad)"
+msgstr "লক্ষ্য (প্রতি স্কোয়াডে যাচাই করা রক্তদান)"
+
+#: events/models.py stories/models.py
+msgid "Published"
+msgstr "প্রকাশিত"
+
+#: events/models.py events/templates/events/_event_card.html events/templates/events/detail.html
+msgid "Waiting for approval"
+msgstr "অনুমোদনের অপেক্ষায়"
+
+#: events/models.py rewards/models.py rewards/templates/rewards/log_donation.html
+msgid "Approved"
+msgstr "অনুমোদিত"
+
+#: events/models.py events/templates/events/_event_card.html events/templates/events/detail.html
+msgid "Cancelled"
+msgstr "বাতিল"
+
+#: events/models.py events/templates/events/detail.html events/templates/events/list.html
+msgid "Completed"
+msgstr "সম্পন্ন"
+
+#: events/models.py
+msgid "A club or group name shown instead of your own."
+msgstr "আপনার নামের বদলে একটি ক্লাব বা দলের নাম দেখানো হবে।"
+
+#: events/models.py
+msgid "Listed hospital / blood bank"
+msgstr "তালিকাভুক্ত হাসপাতাল / ব্লাড ব্যাংক"
+
+#: events/models.py
+msgid "Where exactly, for example the hall or the campus gate."
+msgstr "ঠিক কোথায়, যেমন হলরুম বা ক্যাম্পাসের গেট।"
+
+#: events/models.py
+msgid "The end must be after the start."
+msgstr "শেষের সময় শুরুর পরে হতে হবে।"
+
+#: events/models.py
+msgid "That place is in a different district."
+msgstr "জায়গাটি অন্য জেলায়।"
+
+#: events/models.py
+msgid "Otherwise the organizer sees \"Donor #id\"."
+msgstr "না দিলে আয়োজক \"Donor #id\" দেখবেন।"
+
+#: events/models.py
+msgid "Staff confirm this person really attended."
+msgstr "স্টাফ নিশ্চিত করেন যে এই ব্যক্তি সত্যিই উপস্থিত ছিলেন।"
+
+#: events/models.py
+msgid "Off by default. Turn on to show the banner and award the badge for donations inside the dates."
+msgstr "ডিফল্টে বন্ধ থাকে। চালু করলে ব্যানার দেখানো হবে এবং নির্ধারিত তারিখের মধ্যে রক্তদানের জন্য ব্যাজ দেওয়া হবে।"
+
+#: events/models.py
+msgid "Set both dates, or neither."
+msgstr "দুটি তারিখই দিন, অথবা কোনোটিই নয়।"
+
+#: events/models.py
+msgid "Set both month and day, or neither."
+msgstr "মাস ও দিন দুটিই দিন, অথবা কোনোটিই নয়।"
+
+#: events/models.py
+msgid "Squad goal (every squad aims for the target)"
+msgstr "স্কোয়াডের লক্ষ্য (প্রতিটি স্কোয়াড লক্ষ্যমাত্রা ছোঁয়ার চেষ্টা করে)"
+
+#: events/models.py
+msgid "Squad vs squad (most donations wins)"
+msgstr "স্কোয়াড বনাম স্কোয়াড (সবচেয়ে বেশি রক্তদান যাদের, তারা জেতে)"
+
+#: events/models.py
+msgid "The end cannot be before the start."
+msgstr "শেষের তারিখ শুরুর আগে হতে পারে না।"
+
+#: events/models.py
+msgid "That is not a real date."
+msgstr "এটি সঠিক তারিখ নয়।"
+
+#: events/templates/events/_event_card.html events/templates/events/detail.html
+msgid "Verified organizer"
+msgstr "যাচাই করা আয়োজক"
+
+#: events/templates/events/_event_card.html events/templates/events/detail.html
+msgid "%(n)s going"
+msgstr "%(n)s জন যাচ্ছেন"
+
+#: events/templates/events/_event_card.html
+msgid "%(n)s spots"
+msgstr "%(n)sটি আসন"
+
+#: events/templates/events/_home.html
+msgid "Campaigns and blood drives"
+msgstr "ক্যাম্পেইন ও রক্তদান কর্মসূচি"
+
+#: events/templates/events/_home.html
+msgid "Upcoming blood drives"
+msgstr "আসন্ন রক্তদান কর্মসূচি"
+
+#: events/templates/events/_home.html
+msgid "See all"
+msgstr "সব দেখুন"
+
+#: events/templates/events/_home.html
+msgid "Earn the %(name)s badge"
+msgstr "%(name)s ব্যাজ অর্জন করুন"
+
+#: events/templates/events/_hub.html events/templates/events/list.html
+msgid "Host a drive"
+msgstr "কর্মসূচির আয়োজন করুন"
+
+#: events/templates/events/_hub.html events/templates/events/list.html templates/snippets/footer.html
+msgid "Campaigns"
+msgstr "ক্যাম্পেইন"
+
+#: events/templates/events/_hub.html
+msgid "Drives and campaigns"
+msgstr "রক্তদান কর্মসূচি ও ক্যাম্পেইন"
+
+#: events/templates/events/_hub.html
+msgid "Next: <a href=\"%(detail_url)s\" class=\"bb-strong\">%(title)s</a>"
+msgstr "পরবর্তী: <a href=\"%(detail_url)s\" class=\"bb-strong\">%(title)s</a>"
+
+#: events/templates/events/_hub.html
+msgid "No RSVP yet. <a href=\"%(list_url)s\">Find a drive</a>."
+msgstr "এখনো কোনো RSVP নেই। <a href=\"%(list_url)s\">একটি কর্মসূচি খুঁজুন</a>।"
+
+#: events/templates/events/_hub.html
+msgid "%(counter)s drive attended"
+msgid_plural "%(counter)s drives attended"
+msgstr[0] "%(counter)sটি কর্মসূচিতে অংশ নিয়েছেন"
+msgstr[1] "%(counter)sটি কর্মসূচিতে অংশ নিয়েছেন"
+
+#: events/templates/events/_hub.html
+msgid "%(n)s verified"
+msgstr "%(n)sটি যাচাই করা"
+
+#: events/templates/events/detail.html
+msgid "All drives"
+msgstr "সব কর্মসূচি"
+
+#: events/templates/events/detail.html
+msgid "Only you and our volunteers can see this drive until it is approved."
+msgstr "অনুমোদন না হওয়া পর্যন্ত শুধু আপনি ও আমাদের স্বেচ্ছাসেবকরা এই কর্মসূচি দেখতে পাবেন।"
+
+#: events/templates/events/detail.html
+msgid "This drive was cancelled."
+msgstr "এই কর্মসূচি বাতিল করা হয়েছে।"
+
+#: events/templates/events/detail.html
+msgid "Drive details"
+msgstr "কর্মসূচির বিবরণ"
+
+#: events/templates/events/detail.html
+msgid "full"
+msgstr "পূর্ণ"
+
+#: events/templates/events/detail.html
+msgid "Add to calendar"
+msgstr "ক্যালেন্ডারে যোগ করুন"
+
+#: events/templates/events/detail.html
+msgid "Eligibility and the donation interval are reminders, not medical advice. The blood bank decides on the day."
+msgstr "যোগ্যতা ও রক্তদানের বিরতি শুধু মনে করিয়ে দেওয়ার জন্য, মেডিকেল পরামর্শ নয়। সেদিন ব্লাড ব্যাংকই সিদ্ধান্ত নেয়।"
+
+#: events/templates/events/detail.html
+msgid "Squad teams"
+msgstr "স্কোয়াড দল"
+
+#: events/templates/events/detail.html
+msgid "A private squad"
+msgstr "একটি ব্যক্তিগত স্কোয়াড"
+
+#: events/templates/events/detail.html
+msgid "Withdraw"
+msgstr "প্রত্যাহার করুন"
+
+#: events/templates/events/detail.html
+msgid "No squad has entered yet."
+msgstr "এখনো কোনো স্কোয়াড যোগ দেয়নি।"
+
+#: events/templates/events/detail.html
+msgid "Enter a squad you own"
+msgstr "আপনার নিজের একটি স্কোয়াড যুক্ত করুন"
+
+#: events/templates/events/detail.html
+msgid "Enter squad"
+msgstr "স্কোয়াড যুক্ত করুন"
+
+#: events/templates/events/detail.html
+msgid "Private squads are shown only as \"A private squad\"."
+msgstr "ব্যক্তিগত স্কোয়াড শুধু \"একটি ব্যক্তিগত স্কোয়াড\" হিসেবে দেখানো হয়।"
+
+#: events/templates/events/detail.html
+msgid "Only you and staff can see this list. People who did not share their name show as a number."
+msgstr "এই তালিকা শুধু আপনি ও স্টাফ দেখতে পারবেন। যাঁরা নাম জানাতে চাননি, তাঁদের একটি নম্বর হিসেবে দেখানো হয়।"
+
+#: events/templates/events/detail.html
+msgid "Only you can see this list. People who did not share their name show as a number."
+msgstr "এই তালিকা শুধু আপনি দেখতে পারবেন। যাঁরা নাম জানাতে চাননি, তাঁদের একটি নম্বর হিসেবে দেখানো হয়।"
+
+#: events/templates/events/detail.html
+msgid "Verified"
+msgstr "যাচাই করা"
+
+#: events/templates/events/detail.html
+msgid "Undo"
+msgstr "ফিরিয়ে নিন"
+
+#: events/templates/events/detail.html
+msgid "Check in"
+msgstr "উপস্থিতি নিশ্চিত করুন"
+
+#: events/templates/events/detail.html
+msgid "Nobody has RSVPed yet."
+msgstr "এখনো কেউ RSVP করেননি।"
+
+#: events/templates/events/detail.html
+msgid "Are you going?"
+msgstr "আপনি কি যাচ্ছেন?"
+
+#: events/templates/events/detail.html
+msgid "RSVPs open once the drive is approved."
+msgstr "কর্মসূচি অনুমোদনের পর RSVP খুলবে।"
+
+#: events/templates/events/detail.html
+msgid "This drive has finished."
+msgstr "এই কর্মসূচি শেষ হয়ে গেছে।"
+
+#: events/templates/events/detail.html
+msgid "Log in to RSVP."
+msgstr "RSVP করতে লগ ইন করুন।"
+
+#: events/templates/events/detail.html
+msgid "Log in to RSVP"
+msgstr "RSVP করতে লগ ইন করুন"
+
+#: events/templates/events/detail.html
+msgid "You are going"
+msgstr "আপনি যাচ্ছেন"
+
+#: events/templates/events/detail.html
+msgid "Cancel my RSVP"
+msgstr "আমার RSVP বাতিল করুন"
+
+#: events/templates/events/detail.html
+msgid "Sorry, this drive is full."
+msgstr "দুঃখিত, এই কর্মসূচিতে আর আসন নেই।"
+
+#: events/templates/events/detail.html
+msgid "Only the organizer, never other people. Otherwise they see a number."
+msgstr "শুধু আয়োজক দেখবেন, অন্য কেউ নন। না দিলে তিনি একটি নম্বর দেখবেন।"
+
+#: events/templates/events/detail.html
+msgid "I am going"
+msgstr "আমি যাচ্ছি"
+
+#: events/templates/events/detail.html
+msgid "Organizer"
+msgstr "আয়োজক"
+
+#: events/templates/events/detail.html
+msgid "Edit"
+msgstr "সম্পাদনা"
+
+#: events/templates/events/detail.html
+msgid "Cancel this drive?"
+msgstr "এই কর্মসূচি বাতিল করবেন?"
+
+#: events/templates/events/detail.html
+msgid "Cancel drive"
+msgstr "কর্মসূচি বাতিল করুন"
+
+#: events/templates/events/detail.html
+msgid "Hosted by %(name)s"
+msgstr "আয়োজক: %(name)s"
+
+#: events/templates/events/detail.html
+msgid "%(start)s to %(end)s"
+msgstr "%(start)s থেকে %(end)s"
+
+#: events/templates/events/detail.html
+msgid "%(counter)s spot left"
+msgid_plural "%(counter)s spots left"
+msgstr[0] "%(counter)sটি আসন বাকি"
+msgstr[1] "%(counter)sটি আসন বাকি"
+
+#: events/templates/events/detail.html
+msgid "%(counter)s member going"
+msgid_plural "%(counter)s members going"
+msgstr[0] "%(counter)s জন সদস্য যাচ্ছেন"
+msgstr[1] "%(counter)s জন সদস্য যাচ্ছেন"
+
+#: events/templates/events/detail.html
+msgid "Who is going (%(n)s)"
+msgstr "যাঁরা যাচ্ছেন (%(n)s)"
+
+#: events/templates/events/detail.html
+msgid "%(n)s checked in."
+msgstr "%(n)s জন উপস্থিত।"
+
+#: events/templates/events/list.html
+msgid "Past blood drives"
+msgstr "অতীতের রক্তদান কর্মসূচি"
+
+#: events/templates/events/list.html
+msgid "Blood drives"
+msgstr "রক্তদান কর্মসূচি"
+
+#: events/templates/events/list.html templates/snippets/footer.html templates/snippets/nav.html
+msgid "Events"
+msgstr "ইভেন্ট"
+
+#: events/templates/events/list.html
+msgid "Organized, friendly reasons to show up. Join one, or host your own."
+msgstr "সুসংগঠিত, আন্তরিক কিছু আয়োজন, যেখানে যাওয়া যায়। একটিতে যোগ দিন, অথবা নিজেই আয়োজন করুন।"
+
+#: events/templates/events/list.html
+msgid "Event sections"
+msgstr "ইভেন্টের বিভাগ"
+
+#: events/templates/events/list.html
+msgid "Upcoming"
+msgstr "আসন্ন"
+
+#: events/templates/events/list.html
+msgid "My drives"
+msgstr "আমার কর্মসূচি"
+
+#: events/templates/events/list.html templates/snippets/footer.html
+msgid "Challenges"
+msgstr "চ্যালেঞ্জ"
+
+#: events/templates/events/list.html rewards/templates/rewards/leaderboard.html rewards/templates/rewards/request_list.html stories/templates/stories/story_list.html
+msgid "All districts"
+msgstr "সব জেলা"
+
+#: events/templates/events/list.html
+msgid "Filter"
+msgstr "ফিল্টার"
+
+#: events/templates/events/list.html
+msgid "No finished drives yet"
+msgstr "এখনো কোনো শেষ হওয়া কর্মসূচি নেই"
+
+#: events/templates/events/list.html
+msgid "No upcoming drives"
+msgstr "কোনো আসন্ন কর্মসূচি নেই"
+
+#: events/templates/events/list.html
+msgid "Be the first to host one in your area."
+msgstr "আপনার এলাকায় প্রথম আয়োজকটি আপনিই হোন।"
+
+#: events/templates/events/list.html rewards/templates/rewards/directory.html rewards/templates/rewards/request_list.html
+msgid "Previous"
+msgstr "আগের"
+
+#: events/templates/events/list.html rewards/templates/rewards/directory.html rewards/templates/rewards/request_list.html
+msgid "Next"
+msgstr "পরের"
+
+#: events/templates/events/list.html
+msgid "Nothing in %(place)s. Try all districts, or host one."
+msgstr "%(place)s-এ কিছু নেই। সব জেলা দেখুন, অথবা নিজেই আয়োজন করুন।"
+
+#: events/views.py
+msgid "The drive is cancelled."
+msgstr "কর্মসূচি বাতিল করা হয়েছে।"
+
+#: events/views.py
+msgid "Your squad is withdrawn."
+msgstr "আপনার স্কোয়াড প্রত্যাহার করা হয়েছে।"
+
+#: events/views.py
+msgid "This drive can no longer be edited."
+msgstr "এই কর্মসূচি আর সম্পাদনা করা যাবে না।"
+
+#: events/views.py
+msgid "A drive that has finished cannot be edited."
+msgstr "শেষ হয়ে যাওয়া কর্মসূচি সম্পাদনা করা যায় না।"
+
+#: events/views.py
+msgid "A drive that has finished cannot be cancelled."
+msgstr "শেষ হয়ে যাওয়া কর্মসূচি বাতিল করা যায় না।"
+
+#: events/views.py
+msgid "Too many tries. Please wait a few minutes."
+msgstr "অনেকবার চেষ্টা করা হয়েছে। কয়েক মিনিট অপেক্ষা করুন।"
+
+#: events/views.py
+msgid "Attendance opens when the drive starts."
+msgstr "কর্মসূচি শুরু হলে উপস্থিতি নেওয়া যাবে।"
+
+#: events/views.py
+msgid "Thanks. Your drive is waiting for approval and will appear in the list once a volunteer has checked it."
+msgstr "ধন্যবাদ। আপনার কর্মসূচি অনুমোদনের অপেক্ষায় আছে; একজন স্বেচ্ছাসেবক দেখে নিলে তালিকায় দেখা যাবে।"
+
+#: events/views.py
+msgid "Saved. Because the text changed, a volunteer will look at it again before it shows in the list."
+msgstr "সংরক্ষণ করা হয়েছে। লেখা বদলানোয় তালিকায় দেখানোর আগে একজন স্বেচ্ছাসেবক আবার দেখবেন।"
+
+#: events/views.py
+msgid "Saved."
+msgstr "সংরক্ষণ করা হয়েছে।"
+
+#: growth/models.py
+msgid "Internal notes"
+msgstr "অভ্যন্তরীণ নোট"
+
+#: growth/models.py
+msgid "Listed place (optional)"
+msgstr "তালিকাভুক্ত স্থান (ঐচ্ছিক)"
+
+#: growth/models.py
+msgid "Requests that picked this place match it directly."
+msgstr "যেসব অনুরোধে এই স্থান বেছে নেওয়া হয়েছে, সেগুলো সরাসরি মিলে যায়।"
+
+#: growth/models.py
+msgid "How it was checked. Never shown to members."
+msgstr "কীভাবে যাচাই করা হয়েছে। সদস্যদের কখনোই দেখানো হয় না।"
+
+#: growth/templates/growth/_hub.html
+msgid "<a href=\"%(profile_url)s\">Your public profile</a> is on. <a href=\"%(privacy_url)s\">Change</a>"
+msgstr "<a href=\"%(profile_url)s\">আপনার পাবলিক প্রোফাইল</a> চালু আছে। <a href=\"%(privacy_url)s\">বদলান</a>"
+
+#: growth/templates/growth/_invite_card.html
+msgid "Spread the word"
+msgstr "ছড়িয়ে দিন"
+
+#: growth/templates/growth/_invite_card.html
+msgid "Invite a friend"
+msgstr "একজন বন্ধুকে আমন্ত্রণ জানান"
+
+#: growth/templates/growth/_invite_card.html
+msgid "Share your link. When a friend joins and their first donation is verified, you earn Friend Maker recognition. Nothing is paid for sign-ups alone."
+msgstr "আপনার লিংক শেয়ার করুন। কোনো বন্ধু যোগ দিলে এবং তাঁর প্রথম রক্তদান যাচাই হলে আপনি \"Friend Maker\" স্বীকৃতি পাবেন। শুধু সাইন আপের জন্য কিছু দেওয়া হয় না।"
+
+#: growth/templates/growth/_invite_card.html
+msgid "Your invite link"
+msgstr "আপনার আমন্ত্রণ লিংক"
+
+#: growth/templates/growth/_invite_card.html
+msgid "Copy"
+msgstr "কপি"
+
+#: growth/templates/growth/_invite_card.html growth/templates/growth/_request.html rewards/templates/rewards/_share_buttons.html
+msgid "WhatsApp"
+msgstr "WhatsApp"
+
+#: growth/templates/growth/_invite_card.html growth/templates/growth/_request.html
+msgid "Messenger"
+msgstr "Messenger"
+
+#: growth/templates/growth/_invite_card.html rewards/templates/rewards/_share_buttons.html
+msgid "Facebook"
+msgstr "Facebook"
+
+#: growth/templates/growth/_invite_card.html
+msgid "gave a first verified donation"
+msgstr "প্রথম যাচাই করা রক্তদান করেছেন"
+
+#: growth/templates/growth/_invite_card.html
+msgid "More about invites"
+msgstr "আমন্ত্রণ সম্পর্কে আরও"
+
+#: growth/templates/growth/_invite_card.html
+msgid "friend joined"
+msgid_plural "friends joined"
+msgstr[0] "জন বন্ধু যোগ দিয়েছেন"
+msgstr[1] "জন বন্ধু যোগ দিয়েছেন"
+
+#: growth/templates/growth/_request.html
+msgid "Verified hospital"
+msgstr "যাচাই করা হাসপাতাল"
+
+#: growth/templates/growth/_request.html
+msgid "Send it to your people"
+msgstr "আপনার পরিচিতদের পাঠান"
+
+#: growth/templates/growth/_request.html
+msgid "A ready message in Bangla and English. It has the blood group, hospital, district and date, never a phone number."
+msgstr "বাংলা ও ইংরেজিতে তৈরি একটি বার্তা। এতে রক্তের গ্রুপ, হাসপাতাল, জেলা ও তারিখ থাকে, ফোন নম্বর কখনোই থাকে না।"
+
+#: growth/templates/growth/_request.html
+msgid "Copy message"
+msgstr "বার্তা কপি করুন"
+
+#: growth/templates/growth/_request.html rewards/models.py
+msgid "Hospital"
+msgstr "হাসপাতাল"
+
+#: growth/templates/growth/_request.html
+msgid "The %(site)s team checked this hospital and it is on our verified list. Still confirm details with the hospital before you travel."
+msgstr "%(site)s টিম এই হাসপাতাল যাচাই করেছে এবং এটি আমাদের যাচাই করা তালিকায় আছে। তবু যাওয়ার আগে হাসপাতালের সঙ্গে তথ্য নিশ্চিত করে নিন।"
+
+#: habits/content.py rewards/context_processors.py
+msgid "%(n)s day"
+msgid_plural "%(n)s days"
+msgstr[0] "%(n)s দিন"
+msgstr[1] "%(n)s দিন"
+
+#: habits/content.py rewards/context_processors.py
+msgid "%(n)s month"
+msgid_plural "%(n)s months"
+msgstr[0] "%(n)s মাস"
+msgstr[1] "%(n)s মাস"
+
+#: habits/models.py
+msgid "Day"
+msgstr "দিন"
+
+#: habits/models.py
+msgid "Send me the weekly email"
+msgstr "আমাকে সাপ্তাহিক ইমেইল পাঠান"
+
+#: habits/models.py habits/templates/habits/today.html
+msgid "Share an urgent request"
+msgstr "একটি জরুরি অনুরোধ শেয়ার করুন"
+
+#: habits/models.py habits/templates/habits/today.html
+msgid "Confirm your availability"
+msgstr "আপনি রক্ত দিতে পারবেন কি না জানান"
+
+#: habits/models.py habits/templates/habits/today.html
+msgid "Read one fact"
+msgstr "একটি তথ্য পড়ুন"
+
+#: habits/models.py
+msgid "Myth or fact quiz"
+msgstr "ভুল ধারণা না সত্য, কুইজ"
+
+#: habits/templates/habits/_home.html
+msgid "No pressure, no rush to donate."
+msgstr "কোনো চাপ নেই, রক্ত দেওয়ার তাড়াও নেই।"
+
+#: habits/templates/habits/_home.html habits/templates/habits/_hub.html
+msgid "See today"
+msgstr "আজকের কাজ দেখুন"
+
+#: habits/templates/habits/_home.html habits/templates/habits/_hub.html
+msgid "Open Today"
+msgstr "আজকের কাজ খুলুন"
+
+#: habits/templates/habits/_home.html
+msgid "Today: %(done)s of %(total)s small actions done"
+msgstr "আজ: %(total)sটি ছোট কাজের মধ্যে %(done)sটি হয়েছে"
+
+#: habits/templates/habits/_home.html
+msgid "%(n)s-day visit streak."
+msgstr "টানা %(n)s দিন ঘুরে যাওয়া।"
+
+#: habits/templates/habits/_hub.html habits/templates/habits/today.html rewards/request_views.py templates/snippets/nav.html
+msgid "Today"
+msgstr "আজ"
+
+#: habits/templates/habits/_hub.html habits/templates/habits/today.html
+msgid "Titles"
+msgstr "উপাধি"
+
+#: habits/templates/habits/_hub.html habits/templates/habits/today.html
+msgid "My year"
+msgstr "আমার বছর"
+
+#: habits/templates/habits/_hub.html
+msgid "Three small things, no pressure."
+msgstr "তিনটি ছোট কাজ, কোনো চাপ নেই।"
+
+#: habits/templates/habits/_hub.html
+msgid "A friendly habit, separate from your points."
+msgstr "একটি আন্তরিক অভ্যাস, আপনার পয়েন্টের থেকে আলাদা।"
+
+#: habits/templates/habits/_hub.html
+msgid "<strong>%(n)s-day</strong> visit streak."
+msgstr "টানা <strong>%(n)s দিন</strong> ঘুরে যাওয়া।"
+
+#: habits/templates/habits/_hub.html
+msgid "Next title: <strong>%(name)s</strong> (%(current)s of %(target)s)"
+msgstr "পরবর্তী উপাধি: <strong>%(name)s</strong> (%(target)sটির মধ্যে %(current)sটি)"
+
+#: habits/templates/habits/today.html
+msgid "Three small things, no pressure"
+msgstr "তিনটি ছোট কাজ, কোনো চাপ নেই"
+
+#: habits/templates/habits/today.html
+msgid "Do what you like, skip what you do not. None of this asks you to donate sooner."
+msgstr "যেটা ভালো লাগে করুন, যেটা লাগে না বাদ দিন। এর কোনোটিই আপনাকে আগেভাগে রক্ত দিতে বলে না।"
+
+#: habits/templates/habits/today.html
+msgid "Your progress"
+msgstr "আপনার অগ্রগতি"
+
+#: habits/templates/habits/today.html
+msgid "Finish one small action to start one."
+msgstr "একটি ছোট কাজ শেষ করে শুরু করুন।"
+
+#: habits/templates/habits/today.html
+msgid "Today is counted."
+msgstr "আজকের দিন গোনা হয়েছে।"
+
+#: habits/templates/habits/today.html
+msgid "Finish one action to keep it going."
+msgstr "ধারা বজায় রাখতে একটি কাজ শেষ করুন।"
+
+#: habits/templates/habits/today.html
+msgid "A friendly habit only. It never counts toward points, levels, the leaderboard or your donation streak. One missed day a week is forgiven"
+msgstr "এটি শুধু একটি আন্তরিক অভ্যাস। এটি পয়েন্ট, লেভেল, লিডারবোর্ড বা আপনার রক্তদানের ধারাবাহিকতায় কখনোই ধরা হয় না। সপ্তাহে একদিন বাদ পড়লে ক্ষমা করা হয়"
+
+#: habits/templates/habits/today.html
+msgid "(this week's is used)"
+msgstr "(এই সপ্তাহেরটি ব্যবহার হয়ে গেছে)"
+
+#: habits/templates/habits/today.html
+msgid "That is today's set. Thank you. See you tomorrow, there is nothing more to do."
+msgstr "আজকের কাজ শেষ। ধন্যবাদ। কাল আবার দেখা হবে, এখন আর কিছু করার নেই।"
+
+#: habits/templates/habits/today.html
+msgid "Done"
+msgstr "হয়েছে"
+
+#: habits/templates/habits/today.html
+msgid "You do not need to be a match. Passing a request on can reach someone who is."
+msgstr "আপনার মেলা জরুরি নয়। অনুরোধটি এগিয়ে দিলে যিনি মেলেন, তাঁর কাছে পৌঁছাতে পারে।"
+
+#: habits/templates/habits/today.html
+msgid "Open it again"
+msgstr "আবার খুলুন"
+
+#: habits/templates/habits/today.html
+msgid "Open and share"
+msgstr "খুলুন ও শেয়ার করুন"
+
+#: habits/templates/habits/today.html
+msgid "Thanks for sharing today."
+msgstr "আজ শেয়ার করার জন্য ধন্যবাদ।"
+
+#: habits/templates/habits/today.html
+msgid "You are inside your recovery gap, so \"Not right now\" is a perfectly good answer."
+msgstr "আপনি এখন আপনার বিশ্রামের বিরতির মধ্যে আছেন, তাই \"এখন নয়\" একদম ঠিক উত্তর।"
+
+#: habits/templates/habits/today.html
+msgid "Yes, I am available"
+msgstr "হ্যাঁ, আমি প্রস্তুত"
+
+#: habits/templates/habits/today.html
+msgid "Not right now"
+msgstr "এখন নয়"
+
+#: habits/templates/habits/today.html
+msgid "Got it"
+msgstr "বুঝেছি"
+
+#: habits/templates/habits/today.html
+msgid "Myth or fact?"
+msgstr "ভুল ধারণা না সত্য?"
+
+#: habits/templates/habits/today.html
+msgid "You said fact."
+msgstr "আপনি বলেছেন সত্য।"
+
+#: habits/templates/habits/today.html
+msgid "You said myth."
+msgstr "আপনি বলেছেন ভুল ধারণা।"
+
+#: habits/templates/habits/today.html
+msgid "Myth"
+msgstr "ভুল ধারণা"
+
+#: habits/templates/habits/today.html
+msgid "Fact"
+msgstr "সত্য"
+
+#: habits/templates/habits/today.html
+msgid "See the answers"
+msgstr "উত্তর দেখুন"
+
+#: habits/templates/habits/today.html
+msgid "Next title"
+msgstr "পরবর্তী উপাধি"
+
+#: habits/templates/habits/today.html
+msgid "More"
+msgstr "আরও"
+
+#: habits/templates/habits/today.html
+msgid "Weekly email"
+msgstr "সাপ্তাহিক ইমেইল"
+
+#: habits/templates/habits/today.html
+msgid "Back to my hub"
+msgstr "আমার হাবে ফিরে যান"
+
+#: habits/templates/habits/today.html
+msgid "day visit streak"
+msgid_plural "days visit streak"
+msgstr[0] "দিন টানা ঘুরে যাওয়া"
+msgstr[1] "দিন টানা ঘুরে যাওয়া"
+
+#: habits/templates/habits/today.html
+msgid "%(done)s of %(total)s done today"
+msgstr "আজ %(total)sটির মধ্যে %(done)sটি হয়েছে"
+
+#: habits/templates/habits/today.html
+msgid "%(done)s of %(total)s"
+msgstr "%(total)sটির মধ্যে %(done)sটি"
+
+#: habits/templates/habits/today.html
+msgid "Right now you are marked <strong>available to donate</strong>."
+msgstr "এখন আপনাকে <strong>রক্ত দিতে প্রস্তুত</strong> হিসেবে চিহ্নিত করা আছে।"
+
+#: habits/templates/habits/today.html
+msgid "Right now you are marked <strong>not available</strong>."
+msgstr "এখন আপনাকে <strong>প্রস্তুত নন</strong> হিসেবে চিহ্নিত করা আছে।"
+
+#: habits/templates/habits/today.html
+msgid "%(n)s of 3"
+msgstr "3টির মধ্যে %(n)sটি"
+
+#: habits/templates/habits/today.html
+msgid "Next title: %(name)s"
+msgstr "পরবর্তী উপাধি: %(name)s"
+
+#: habits/templates/habits/today.html rewards/templates/rewards/log_donation.html
+msgid "Progress to %(name)s"
+msgstr "%(name)s-এর পথে অগ্রগতি"
+
+#: habits/templates/habits/today.html
+msgid "%(current)s of %(target)s"
+msgstr "%(target)sটির মধ্যে %(current)sটি"
+
+#: habits/views.py
+msgid "Too many taps just now. Please try again in a few minutes."
+msgstr "এইমাত্র অনেকবার ট্যাপ করা হয়েছে। কয়েক মিনিট পরে আবার চেষ্টা করুন।"
+
+#: habits/views.py
+msgid "That one is not on your list today."
+msgstr "এটি আজ আপনার তালিকায় নেই।"
+
+#: habits/views.py
+msgid "Please choose one of the two options."
+msgstr "দুটি বিকল্পের একটি বেছে নিন।"
+
+#: habits/views.py
+msgid "Thanks. We have noted that you are available."
+msgstr "ধন্যবাদ। আপনি প্রস্তুত, এটি আমরা জেনে রাখলাম।"
+
+#: habits/views.py
+msgid "Thanks. We have noted that you are resting right now. That is perfectly fine."
+msgstr "ধন্যবাদ। আপনি এখন বিশ্রামে আছেন, এটি আমরা জেনে রাখলাম। এতে কোনো সমস্যা নেই।"
+
+#: habits/views.py
+msgid "Pick myth or fact for all three questions."
+msgstr "তিনটি প্রশ্নেরই উত্তরে ভুল ধারণা বা সত্য বেছে নিন।"
+
+#: habits/views.py
+msgid "You already did today's quiz. Here are the answers."
+msgstr "আজকের কুইজ আপনি আগেই করেছেন। উত্তরগুলো এখানে।"
+
+#: habits/views.py
+msgid "Thank you for sharing. Use the buttons to pass it on."
+msgstr "শেয়ার করার জন্য ধন্যবাদ। এগিয়ে দিতে বোতামগুলো ব্যবহার করুন।"
+
+#: habits/views.py
+msgid "Too many changes just now. Please try again in a few minutes."
+msgstr "এইমাত্র অনেকবার পরিবর্তন করা হয়েছে। কয়েক মিনিট পরে আবার চেষ্টা করুন।"
+
+#: insights/templates/insights/impact.html
+msgid "Our impact"
+msgstr "আমাদের প্রভাব"
+
+#: insights/templates/insights/impact.html
+msgid "Every number is a person who showed up."
+msgstr "প্রতিটি সংখ্যা এমন একজন মানুষ, যিনি এগিয়ে এসেছেন।"
+
+#: insights/templates/insights/impact.html pages/templates/pages/home.html
+msgid "Verified donations"
+msgstr "যাচাই করা রক্তদান"
+
+#: insights/templates/insights/impact.html
+msgid "Donors who gave"
+msgstr "যাঁরা রক্ত দিয়েছেন"
+
+#: insights/templates/insights/impact.html
+msgid "People helped"
+msgstr "উপকৃত মানুষ"
+
+#: insights/templates/insights/impact.html
+msgid "Requests fulfilled"
+msgstr "পূরণ হওয়া অনুরোধ"
+
+#: insights/templates/insights/impact.html
+msgid "none posted yet"
+msgstr "এখনো কোনো অনুরোধ হয়নি"
+
+#: insights/templates/insights/impact.html
+msgid "Time period"
+msgstr "সময়কাল"
+
+#: insights/templates/insights/impact.html
+msgid "No verified donations in this period yet."
+msgstr "এই সময়ে এখনো কোনো যাচাই করা রক্তদান নেই।"
+
+#: insights/templates/insights/impact.html
+msgid "No verified donations yet."
+msgstr "এখনো কোনো যাচাই করা রক্তদান নেই।"
+
+#: insights/templates/insights/impact.html
+msgid "Donations per month"
+msgstr "মাসভিত্তিক রক্তদান"
+
+#: insights/templates/insights/impact.html
+msgid "The last 12 months, verified donations only."
+msgstr "গত 12 মাস, শুধু যাচাই করা রক্তদান।"
+
+#: insights/templates/insights/impact.html
+msgid "View as table"
+msgstr "টেবিল হিসেবে দেখুন"
+
+#: insights/templates/insights/impact.html
+msgid "Month"
+msgstr "মাস"
+
+#: insights/templates/insights/impact.html rewards/templates/rewards/log_donation.html
+msgid "Download CSV"
+msgstr "CSV ডাউনলোড করুন"
+
+#: insights/templates/insights/impact.html
+msgid "This month so far"
+msgstr "এই মাসে এ পর্যন্ত"
+
+#: insights/templates/insights/impact.html
+msgid "New activity"
+msgstr "নতুন কার্যক্রম"
+
+#: insights/templates/insights/impact.html
+msgid "No donations yet"
+msgstr "এখনো কোনো রক্তদান নেই"
+
+#: insights/templates/insights/impact.html
+msgid "Same as last month"
+msgstr "গত মাসের মতোই"
+
+#: insights/templates/insights/impact.html
+msgid "This month is not over yet, so the number can still grow."
+msgstr "এই মাস এখনো শেষ হয়নি, তাই সংখ্যাটি আরও বাড়তে পারে।"
+
+#: insights/templates/insights/impact.html
+msgid "Nothing is urgent right now. Listing yourself in the directory helps the next family find a match fast."
+msgstr "এই মুহূর্তে কিছু জরুরি নয়। নিজেকে তালিকায় রাখলে পরের কোনো পরিবার দ্রুত মিল খুঁজে পাবে।"
+
+#: insights/templates/insights/impact.html
+msgid "List me as a donor"
+msgstr "আমাকে রক্তদাতা হিসেবে তালিকাভুক্ত করুন"
+
+#: insights/templates/insights/impact.html
+msgid "Supply and demand by blood group"
+msgstr "রক্তের গ্রুপ অনুযায়ী যোগান ও চাহিদা"
+
+#: insights/templates/insights/impact.html
+msgid "Open requests against donors who chose to be listed. Counts only, never names."
+msgstr "চলমান অনুরোধ এবং তালিকাভুক্ত হতে চাওয়া রক্তদাতা। শুধু সংখ্যা, নাম কখনোই নয়।"
+
+#: insights/templates/insights/impact.html
+msgid "Bags still needed"
+msgstr "যত ব্যাগ এখনো লাগবে"
+
+#: insights/templates/insights/impact.html
+msgid "Donors listed in the directory"
+msgstr "তালিকায় থাকা রক্তদাতা"
+
+#: insights/templates/insights/impact.html
+msgid "Blood groups"
+msgstr "রক্তের গ্রুপ"
+
+#: insights/templates/insights/impact.html
+msgid "Across Bangladesh"
+msgstr "সারা বাংলাদেশে"
+
+#: insights/templates/insights/impact.html
+msgid "Top districts"
+msgstr "শীর্ষ জেলা"
+
+#: insights/templates/insights/impact.html
+msgid "Tap a district for its own page."
+msgstr "জেলার নিজস্ব পাতা দেখতে সেটিতে ট্যাপ করুন।"
+
+#: insights/templates/insights/impact.html
+msgid "Where donors give"
+msgstr "রক্তদাতারা যেখানে রক্ত দেন"
+
+#: insights/templates/insights/impact.html
+msgid "Hospitals and blood banks with the most verified donations."
+msgstr "সবচেয়ে বেশি যাচাই করা রক্তদান হয়েছে যেসব হাসপাতাল ও ব্লাড ব্যাংকে।"
+
+#: insights/templates/insights/impact.html
+msgid "What happens to requests"
+msgstr "অনুরোধগুলোর কী হয়"
+
+#: insights/templates/insights/impact.html
+msgid "About these numbers"
+msgstr "এই সংখ্যাগুলো সম্পর্কে"
+
+#: insights/templates/insights/impact.html
+msgid "Only donations an admin has verified are counted. Pending and rejected ones are not."
+msgstr "শুধু অ্যাডমিন যাচাই করেছেন এমন রক্তদানই গোনা হয়। অপেক্ষমাণ ও প্রত্যাখ্যাতগুলো গোনা হয় না।"
+
+#: insights/templates/insights/impact.html
+msgid "Donors who hide themselves from the leaderboard are still counted here, but never named."
+msgstr "যে রক্তদাতারা লিডারবোর্ড থেকে নিজেকে লুকিয়ে রেখেছেন, তাঁরাও এখানে গোনা হন, তবে নাম কখনোই দেখানো হয় না।"
+
+#: insights/templates/insights/impact.html
+msgid "Numbers refresh every few minutes."
+msgstr "সংখ্যাগুলো কয়েক মিনিট পরপর হালনাগাদ হয়।"
+
+#: insights/templates/insights/impact.html
+msgid "JSON data"
+msgstr "JSON ডেটা"
+
+#: insights/templates/insights/impact.html
+msgid "Monthly CSV"
+msgstr "মাসিক CSV"
+
+#: insights/templates/insights/impact.html
+msgid "Verified blood donations, donors and requests across Bangladesh, shown with open numbers. %(site)s."
+msgstr "বাংলাদেশজুড়ে যাচাই করা রক্তদান, রক্তদাতা ও অনুরোধ, উন্মুক্ত সংখ্যাসহ। %(site)s।"
+
+#: insights/templates/insights/impact.html
+msgid "%(d)s verified donations from %(n)s donors."
+msgstr "%(n)s জন রক্তদাতার %(d)sটি যাচাই করা রক্তদান।"
+
+#: insights/templates/insights/impact.html
+msgid "Open numbers from %(site)s. Only donations an admin has verified are counted."
+msgstr "%(site)s-এর উন্মুক্ত সংখ্যা। শুধু অ্যাডমিন যাচাই করেছেন এমন রক্তদানই গোনা হয়।"
+
+#: insights/templates/insights/impact.html
+msgid "estimate, up to %(n)s per donation"
+msgstr "আনুমানিক, প্রতি রক্তদানে সর্বোচ্চ %(n)s জন"
+
+#: insights/templates/insights/impact.html
+msgid "%(rate)s%% of %(n)s posted"
+msgstr "%(n)sটির মধ্যে %(rate)s%%"
+
+#: insights/templates/insights/impact.html
+msgid "Showing <strong class=\"bb-strong\">%(p)s</strong> for totals, groups, places and requests."
+msgstr "মোট সংখ্যা, গ্রুপ, স্থান ও অনুরোধের জন্য <strong class=\"bb-strong\">%(p)s</strong> দেখানো হচ্ছে।"
+
+#: insights/templates/insights/impact.html
+msgid "<a href=\"%(log_url)s\">Log a donation</a> and it will count once an admin verifies it."
+msgstr "<a href=\"%(log_url)s\">একটি রক্তদান লিপিবদ্ধ করুন</a>; অ্যাডমিন যাচাই করলে তা গোনা হবে।"
+
+#: insights/templates/insights/impact.html
+msgid "%(a)s against %(b)s."
+msgstr "%(a)s বনাম %(b)s।"
+
+#: insights/templates/insights/impact.html
+msgid "%(n)s%% up"
+msgstr "%(n)s%% বেশি"
+
+#: insights/templates/insights/impact.html
+msgid "%(n)s%% down"
+msgstr "%(n)s%% কম"
+
+#: insights/templates/insights/impact.html
+msgid "%(m)s in full"
+msgstr "%(m)s পুরো মাসে"
+
+#: insights/templates/insights/impact.html
+msgid "We need more %(g)s donors in %(place)s"
+msgstr "%(place)s-এ আমাদের আরও %(g)s রক্তদাতা দরকার"
+
+#: insights/templates/insights/impact.html
+msgid "We need more %(g)s donors"
+msgstr "আমাদের আরও %(g)s রক্তদাতা দরকার"
+
+#: insights/templates/insights/impact.html
+msgid "%(g)s requests are open right now"
+msgstr "এই মুহূর্তে %(g)s গ্রুপের অনুরোধ চলমান"
+
+#: insights/templates/insights/impact.html
+msgid "Few %(g)s donors are listed yet"
+msgstr "%(g)s গ্রুপের রক্তদাতা এখনো কমই তালিকায় আছেন"
+
+#: insights/templates/insights/impact.html
+msgid "Find %(g)s donors"
+msgstr "%(g)s রক্তদাতা খুঁজুন"
+
+#: insights/templates/insights/impact.html
+msgid "See %(g)s requests"
+msgstr "%(g)s অনুরোধ দেখুন"
+
+#: insights/templates/insights/impact.html
+msgid "Share of verified donations, %(p)s."
+msgstr "যাচাই করা রক্তদানের অংশ, %(p)s।"
+
+#: insights/templates/insights/impact.html
+msgid "Verified donations by division, %(p)s."
+msgstr "বিভাগ অনুযায়ী যাচাই করা রক্তদান, %(p)s।"
+
+#: insights/templates/insights/impact.html
+msgid "Requests posted %(p)s, and how far they got."
+msgstr "%(p)s করা অনুরোধ এবং সেগুলো কতদূর এগিয়েছে।"
+
+#: insights/templates/insights/impact.html
+msgid "People helped is an estimate: up to %(n)s patients per donation, not a medical record."
+msgstr "উপকৃত মানুষের সংখ্যা একটি আনুমানিক হিসাব: প্রতি রক্তদানে সর্বোচ্চ %(n)s জন রোগী, এটি মেডিকেল রেকর্ড নয়।"
+
+#: moments/models.py rewards/models.py rewards/templates/rewards/request_form.html
+msgid "Note"
+msgstr "নোট"
+
+#: moments/models.py
+msgid "Email me when I am ready again"
+msgstr "আমি আবার রক্ত দেওয়ার জন্য প্রস্তুত হলে আমাকে ইমেইল করুন"
+
+#: moments/models.py
+msgid "Email me when a request I offered to help with is fulfilled"
+msgstr "আমি সাহায্যের প্রস্তাব দিয়েছিলাম এমন অনুরোধ পূরণ হলে আমাকে ইমেইল করুন"
+
+#: moments/models.py
+msgid "Sent as one note to every responder."
+msgstr "সাড়া দেওয়া প্রত্যেককে একই নোট পাঠানো হয়।"
+
+#: moments/models.py
+msgid "Hidden by the recipient or by staff."
+msgstr "প্রাপক বা স্টাফ লুকিয়ে রেখেছেন।"
+
+#: moments/models.py
+msgid "Date of the donation whose cycle was last reminded. One reminder per cycle."
+msgstr "যে রক্তদানের চক্রে সর্বশেষ মনে করিয়ে দেওয়া হয়েছে, সেই রক্তদানের তারিখ। প্রতি চক্রে একটি স্মরণ করিয়ে দেওয়া হয়।"
+
+#: moments/models.py
+msgid "Donation before the gap."
+msgstr "বিরতির আগের রক্তদান।"
+
+#: moments/models.py
+msgid "Donation after the gap."
+msgstr "বিরতির পরের রক্তদান।"
+
+#: moments/templates/moments/_hub.html
+msgid "Your moments"
+msgstr "আপনার মুহূর্তগুলো"
+
+#: moments/templates/moments/_hub.html
+msgid "Your blood reached someone."
+msgstr "আপনার রক্ত কারও কাছে পৌঁছেছে।"
+
+#: moments/templates/moments/_hub.html
+msgid "Thank you for stepping up."
+msgstr "এগিয়ে আসার জন্য ধন্যবাদ।"
+
+#: moments/templates/moments/_hub.html
+msgid "Dismiss this update"
+msgstr "এই হালনাগাদটি সরিয়ে দিন"
+
+#: moments/templates/moments/_hub.html
+msgid "Your blood group is in short supply."
+msgstr "আপনার রক্তের গ্রুপের যোগান কম।"
+
+#: moments/templates/moments/_hub.html
+msgid "Your recovery interval is over."
+msgstr "আপনার বিশ্রামের বিরতি শেষ হয়েছে।"
+
+#: moments/templates/moments/_hub.html
+msgid "A reminder, not medical clearance. The blood bank decides on the day."
+msgstr "এটি শুধু মনে করিয়ে দেওয়া, মেডিকেল অনুমোদন নয়। সেদিন ব্লাড ব্যাংকই সিদ্ধান্ত নেয়।"
+
+#: moments/templates/moments/_hub.html
+msgid "Save your streak"
+msgstr "আপনার ধারাবাহিকতা বাঁচান"
+
+#: moments/templates/moments/_hub.html
+msgid "Use my streak freeze"
+msgstr "আমার স্ট্রিক ফ্রিজ ব্যবহার করুন"
+
+#: moments/templates/moments/_hub.html
+msgid "Thanks wall"
+msgstr "ধন্যবাদের দেয়াল"
+
+#: moments/templates/moments/_hub.html
+msgid "Hide this note"
+msgstr "এই নোটটি লুকান"
+
+#: moments/templates/moments/_hub.html
+msgid "Email options"
+msgstr "ইমেইলের বিকল্প"
+
+#: moments/templates/moments/_hub.html
+msgid "Remind me when I am ready again"
+msgstr "আমি আবার প্রস্তুত হলে আমাকে মনে করিয়ে দিন"
+
+#: moments/templates/moments/_hub.html
+msgid "One email per cycle. A reminder, not medical clearance."
+msgstr "প্রতি চক্রে একটি ইমেইল। শুধু মনে করিয়ে দেওয়া, মেডিকেল অনুমোদন নয়।"
+
+#: moments/templates/moments/_hub.html
+msgid "Email me when a request I helped is fulfilled"
+msgstr "আমি সাহায্য করেছি এমন অনুরোধ পূরণ হলে আমাকে ইমেইল করুন"
+
+#: moments/templates/moments/_hub.html
+msgid "No patient details. One-click off in every email."
+msgstr "রোগীর কোনো তথ্য নেই। প্রতিটি ইমেইলে এক ক্লিকে বন্ধ করা যায়।"
+
+#: moments/templates/moments/_hub.html
+msgid "Save"
+msgstr "সংরক্ষণ করুন"
+
+#: moments/templates/moments/_hub.html
+msgid "Share my card"
+msgstr "আমার কার্ড শেয়ার করুন"
+
+#: moments/templates/moments/_hub.html
+msgid "Keep going"
+msgstr "এগিয়ে চলুন"
+
+#: moments/templates/moments/_hub.html
+msgid "A %(g)s request in %(place)s you offered to help with was fulfilled."
+msgstr "%(place)s-এর একটি %(g)s অনুরোধ, যেখানে আপনি সাহায্যের প্রস্তাব দিয়েছিলেন, পূরণ হয়েছে।"
+
+#: moments/templates/moments/_hub.html
+msgid "A %(g)s request you offered to help with was fulfilled."
+msgstr "একটি %(g)s অনুরোধ, যেখানে আপনি সাহায্যের প্রস্তাব দিয়েছিলেন, পূরণ হয়েছে।"
+
+#: moments/templates/moments/_hub.html
+msgid "Ready again in %(counter)s day"
+msgid_plural "Ready again in %(counter)s days"
+msgstr[0] "আবার প্রস্তুত হতে আর %(counter)s দিন"
+msgstr[1] "আবার প্রস্তুত হতে আর %(counter)s দিন"
+
+#: moments/templates/moments/_hub.html
+msgid "A long gap reset it to %(current)s. Your once-a-year freeze restores it to %(restored)s. It never changes when you can donate."
+msgstr "দীর্ঘ বিরতির কারণে এটি %(current)s-এ নেমে গেছে। বছরে একবারের ফ্রিজ এটিকে %(restored)s-এ ফিরিয়ে আনে। এতে আপনি কখন রক্ত দিতে পারবেন, তা কখনোই বদলায় না।"
+
+#: moments/templates/moments/_hub.html
+msgid "See all notes (%(n)s more)"
+msgstr "সব নোট দেখুন (আরও %(n)sটি)"
+
+#: moments/templates/moments/_hub.html
+msgid "Add an email in <a href=\"%(privacy_url)s\">Profile &amp; privacy</a> to turn these on."
+msgstr "এগুলো চালু করতে <a href=\"%(privacy_url)s\">প্রোফাইল ও গোপনীয়তায়</a> একটি ইমেইল যোগ করুন।"
+
+#: moments/templates/moments/_request.html
+msgid "Live count"
+msgstr "সরাসরি সংখ্যা"
+
+#: moments/templates/moments/_request.html
+msgid "Offers are not donations. The hospital confirms who can give."
+msgstr "সাহায্যের প্রস্তাব মানে রক্তদান নয়। কে রক্ত দিতে পারবেন, তা হাসপাতাল নিশ্চিত করে।"
+
+#: moments/templates/moments/_request.html
+msgid "Say thank you"
+msgstr "ধন্যবাদ জানান"
+
+#: moments/templates/moments/_request.html pages/templates/pages/home.html
+msgid "Who"
+msgstr "কারা"
+
+#: moments/templates/moments/_request.html
+msgid "thanked"
+msgstr "ধন্যবাদ জানানো হয়েছে"
+
+#: moments/templates/moments/_request.html
+msgid "Your note"
+msgstr "আপনার নোট"
+
+#: moments/templates/moments/_request.html
+msgid "Thank you for stepping up when we needed it."
+msgstr "আমাদের প্রয়োজনের সময় এগিয়ে আসার জন্য ধন্যবাদ।"
+
+#: moments/templates/moments/_request.html
+msgid "Up to 200 characters, plain text. No phone numbers or links. They can hide it."
+msgstr "সর্বোচ্চ 200 অক্ষর, সাধারণ লেখা। ফোন নম্বর বা লিংক নয়। তাঁরা চাইলে এটি লুকিয়ে রাখতে পারবেন।"
+
+#: moments/templates/moments/_request.html
+msgid "Send thanks"
+msgstr "ধন্যবাদ পাঠান"
+
+#: moments/templates/moments/_request.html
+msgid "You have thanked everyone who offered to help."
+msgstr "যাঁরা সাহায্যের প্রস্তাব দিয়েছিলেন, আপনি তাঁদের সবাইকে ধন্যবাদ জানিয়েছেন।"
+
+#: moments/templates/moments/_request.html
+msgid "Nobody offered to help on this request."
+msgstr "এই অনুরোধে কেউ সাহায্যের প্রস্তাব দেননি।"
+
+#: moments/templates/moments/_request.html
+msgid "Everyone who offered (%(n)s)"
+msgstr "যাঁরা প্রস্তাব দিয়েছেন তাঁরা সবাই (%(n)s)"
+
+#: pages/context_processors.py pages/templates/pages/home.html
+msgid "Give blood. Build bonds. Save lives."
+msgstr "রক্ত দিন। বন্ধন গড়ুন। জীবন বাঁচান।"
+
+#: pages/templates/pages/about.html
+msgid "Our mission"
+msgstr "আমাদের লক্ষ্য"
+
+#: pages/templates/pages/about.html
+msgid "When a family needs blood, minutes matter and phone calls go in circles. We want it to be easy to find willing donors nearby, easy to say \"I can help\", and easy to be thanked for it. Giving blood should feel like belonging to something good."
+msgstr "কোনো পরিবারের রক্তের দরকার হলে প্রতিটি মিনিটই মূল্যবান, অথচ ফোন করতে করতেই সময় চলে যায়। আমরা চাই কাছাকাছি ইচ্ছুক রক্তদাতা খুঁজে পাওয়া সহজ হোক, \"আমি সাহায্য করতে পারি\" বলা সহজ হোক, আর সেজন্য ধন্যবাদ পাওয়াও সহজ হোক। রক্ত দেওয়া যেন ভালো কিছুর অংশ হওয়ার অনুভূতি দেয়।"
+
+#: pages/templates/pages/about.html pages/templates/pages/home.html
+msgid "How it works"
+msgstr "যেভাবে কাজ করে"
+
+#: pages/templates/pages/about.html
+msgid "Ask or answer"
+msgstr "চান অথবা সাড়া দিন"
+
+#: pages/templates/pages/about.html
+msgid "Post an urgent request, or see who needs your blood group."
+msgstr "জরুরি অনুরোধ জানান, অথবা দেখুন কার আপনার রক্তের গ্রুপ লাগছে।"
+
+#: pages/templates/pages/about.html
+msgid "Give at a blood bank"
+msgstr "ব্লাড ব্যাংকে রক্ত দিন"
+
+#: pages/templates/pages/about.html
+msgid "Donations happen at hospitals and blood banks, with their screening."
+msgstr "রক্তদান হয় হাসপাতাল ও ব্লাড ব্যাংকে, তাদের স্ক্রিনিংসহ।"
+
+#: pages/templates/pages/about.html
+msgid "Log and get verified"
+msgstr "লিপিবদ্ধ করুন ও যাচাই করিয়ে নিন"
+
+#: pages/templates/pages/about.html
+msgid "A volunteer checks each logged donation, so the numbers you see are real."
+msgstr "একজন স্বেচ্ছাসেবক প্রতিটি লিপিবদ্ধ রক্তদান দেখে নেন, তাই আপনি যে সংখ্যা দেখেন, তা সত্যিকারের।"
+
+#: pages/templates/pages/about.html
+msgid "How it is run"
+msgstr "যেভাবে চালানো হয়"
+
+#: pages/templates/pages/about.html
+msgid "How privacy works"
+msgstr "গোপনীয়তা যেভাবে কাজ করে"
+
+#: pages/templates/pages/about.html
+msgid "Your number stays private"
+msgstr "আপনার নম্বর গোপন থাকে"
+
+#: pages/templates/pages/about.html
+msgid "Phone numbers never appear on public pages. A donor shares theirs only after accepting a contact request."
+msgstr "ফোন নম্বর কখনোই পাবলিক পাতায় দেখানো হয় না। যোগাযোগের অনুরোধ গ্রহণ করার পরই কেবল একজন রক্তদাতা নিজের নম্বর জানান।"
+
+#: pages/templates/pages/about.html
+msgid "You choose what is visible"
+msgstr "কী দেখা যাবে, তা আপনিই ঠিক করেন"
+
+#: pages/templates/pages/about.html
+msgid "Names, not numbers"
+msgstr "নাম দেখানো হয়, নম্বর নয়"
+
+#: pages/templates/pages/about.html
+msgid "Public pages show a name you gave, never your login."
+msgstr "পাবলিক পাতায় আপনার দেওয়া নাম দেখানো হয়, আপনার লগ ইন কখনোই নয়।"
+
+#: pages/templates/pages/about.html
+msgid "Safety principles"
+msgstr "নিরাপত্তার নীতি"
+
+#: pages/templates/pages/about.html
+msgid "The blood bank decides"
+msgstr "ব্লাড ব্যাংকই সিদ্ধান্ত নেয়"
+
+#: pages/templates/pages/about.html
+msgid "Nothing here is medical clearance. Eligibility reminders and recovery gaps are prompts to check with the blood bank."
+msgstr "এখানকার কোনো কিছুই মেডিকেল অনুমোদন নয়। যোগ্যতার স্মারক ও বিশ্রামের বিরতি শুধু ব্লাড ব্যাংকের সঙ্গে কথা বলে নেওয়ার তাগিদ।"
+
+#: pages/templates/pages/about.html
+msgid "Voluntary, never for sale"
+msgstr "স্বেচ্ছায়, কখনোই বিক্রির জন্য নয়"
+
+#: pages/templates/pages/about.html
+msgid "Blood is given freely. Badges and points celebrate giving; they are never a reason to donate when you should rest."
+msgstr "রক্ত স্বেচ্ছায় দেওয়া হয়। ব্যাজ ও পয়েন্ট দান করাকে উদযাপন করে; বিশ্রামের দরকার থাকলে রক্ত দেওয়ার কারণ এগুলো কখনোই নয়।"
+
+#: pages/templates/pages/about.html
+msgid "Report anything that feels off"
+msgstr "কিছু অস্বাভাবিক মনে হলে জানান"
+
+#: pages/templates/pages/about.html
+msgid "Reported requests are hidden until staff have looked at them."
+msgstr "জানানো অনুরোধ স্টাফ না দেখা পর্যন্ত লুকিয়ে রাখা হয়।"
+
+#: pages/templates/pages/about.html
+msgid "Get in touch"
+msgstr "যোগাযোগ করুন"
+
+#: pages/templates/pages/about.html
+msgid "%(site)s is a community that connects blood donors with people who urgently need blood across Bangladesh. %(tagline)s"
+msgstr "%(site)s এমন একটি কমিউনিটি, যা বাংলাদেশজুড়ে রক্তদাতাদের সঙ্গে জরুরি রক্তপ্রার্থীদের যুক্ত করে। %(tagline)s"
+
+#: pages/templates/pages/about.html pages/templates/pages/faq.html
+msgid "About %(site)s"
+msgstr "%(site)s সম্পর্কে"
+
+#: pages/templates/pages/about.html
+msgid "%(site)s is a community that connects blood donors with people who urgently need blood, across Bangladesh."
+msgstr "%(site)s এমন একটি কমিউনিটি, যা বাংলাদেশজুড়ে রক্তদাতাদের সঙ্গে জরুরি রক্তপ্রার্থীদের যুক্ত করে।"
+
+#: pages/templates/pages/about.html
+msgid "%(site)s is run by volunteers. It is free to use, and has no ads. Staff approve donations, review reports and look after the data. We are a community tool, not a hospital or a medical service."
+msgstr "%(site)s স্বেচ্ছাসেবকদের দ্বারা পরিচালিত। এটি ব্যবহার করতে কোনো খরচ নেই, কোনো বিজ্ঞাপনও নেই। স্টাফ রক্তদান অনুমোদন করেন, অভিযোগ দেখেন এবং ডেটার যত্ন নেন। আমরা একটি কমিউনিটি টুল, হাসপাতাল বা চিকিৎসা সেবা নই।"
+
+#: pages/templates/pages/about.html
+msgid "Directory listing is opt-in. The leaderboard and badge card can be switched off any time in <a href=\"%(privacy_url)s\">Profile &amp; privacy</a>."
+msgstr "তালিকায় থাকা ঐচ্ছিক। লিডারবোর্ড ও ব্যাজ কার্ড যেকোনো সময় <a href=\"%(privacy_url)s\">প্রোফাইল ও গোপনীয়তা</a> থেকে বন্ধ করা যায়।"
+
+#: pages/templates/pages/about.html
+msgid "Questions, feedback, or want to help run %(site)s?"
+msgstr "প্রশ্ন, মতামত, অথবা %(site)s চালাতে সাহায্য করতে চান?"
+
+#: pages/templates/pages/about.html
+msgid "Questions? Start with the <a href=\"%(faq_url)s\">FAQ</a> or the <a href=\"%(learn_url)s\">donor guide</a>."
+msgstr "প্রশ্ন আছে? শুরু করুন <a href=\"%(faq_url)s\">সাধারণ প্রশ্নোত্তর</a> বা <a href=\"%(learn_url)s\">রক্তদাতার গাইড</a> দিয়ে।"
+
+#: pages/templates/pages/faq.html templates/snippets/footer.html
+msgid "FAQ"
+msgstr "সাধারণ প্রশ্নোত্তর"
+
+#: pages/templates/pages/faq.html
+msgid "Help"
+msgstr "সাহায্য"
+
+#: pages/templates/pages/faq.html
+msgid "Questions, answered"
+msgstr "প্রশ্ন ও উত্তর"
+
+#: pages/templates/pages/faq.html
+msgid "Tap a question to open it."
+msgstr "প্রশ্নটি খুলতে সেটিতে ট্যাপ করুন।"
+
+#: pages/templates/pages/faq.html
+msgid "Is my phone number public?"
+msgstr "আমার ফোন নম্বর কি সবার জন্য খোলা?"
+
+#: pages/templates/pages/faq.html
+msgid "No. Your number is never shown on public pages, in the leaderboard or on share cards. It is only your login. Other members see it only if you accept their contact request."
+msgstr "না। আপনার নম্বর পাবলিক পাতায়, লিডারবোর্ডে বা শেয়ার কার্ডে কখনোই দেখানো হয় না। এটি শুধু আপনার লগ ইনের জন্য। আপনি কারও যোগাযোগের অনুরোধ গ্রহণ করলেই কেবল অন্য সদস্য এটি দেখতে পান।"
+
+#: pages/templates/pages/faq.html
+msgid "What can other people see about me?"
+msgstr "অন্যরা আমার সম্পর্কে কী দেখতে পায়?"
+
+#: pages/templates/pages/faq.html
+msgid "Your name (or \"Donor #\" and a number if you gave none), tier and donation count appear on the leaderboard if you allow it. If you join the donor directory, logged-in members also see your blood group, district and whether you are available."
+msgstr "আপনি অনুমতি দিলে লিডারবোর্ডে আপনার নাম (নাম না দিলে \"Donor #\" ও একটি নম্বর), স্তর এবং রক্তদানের সংখ্যা দেখানো হয়। রক্তদাতা তালিকায় যোগ দিলে লগ ইন করা সদস্যরা আপনার রক্তের গ্রুপ, জেলা এবং আপনি প্রস্তুত কি না, তাও দেখতে পান।"
+
+#: pages/templates/pages/faq.html
+msgid "Can I stay off the leaderboard?"
+msgstr "আমি কি লিডারবোর্ডের বাইরে থাকতে পারি?"
+
+#: pages/templates/pages/faq.html
+msgid "Yes. Turn off \"Show me on the leaderboard and home page\". Your donations still count in the community totals, without your name."
+msgstr "হ্যাঁ। \"লিডারবোর্ড ও হোম পেজে আমার নাম দেখান\" বন্ধ করুন। আপনার রক্তদান তবুও কমিউনিটির মোট হিসাবে আপনার নাম ছাড়া গোনা হবে।"
+
+#: pages/templates/pages/faq.html
+msgid "Who sees my badge card?"
+msgstr "আমার ব্যাজ কার্ড কে দেখতে পায়?"
+
+#: pages/templates/pages/faq.html
+msgid "Anyone with the link, if you leave sharing on. Turn it off and only you and site staff can open it."
+msgstr "শেয়ারিং চালু রাখলে লিংক যার কাছে আছে, সে-ই দেখতে পারে। বন্ধ করলে শুধু আপনি ও সাইটের স্টাফ খুলতে পারবেন।"
+
+#: pages/templates/pages/faq.html
+msgid "Verification"
+msgstr "যাচাই"
+
+#: pages/templates/pages/faq.html
+msgid "How are donations verified?"
+msgstr "রক্তদান কীভাবে যাচাই করা হয়?"
+
+#: pages/templates/pages/faq.html
+msgid "You log a donation with the date and place. A site volunteer reviews it and approves or rejects it. Only approved donations count towards points, tiers, the leaderboard and community numbers."
+msgstr "আপনি তারিখ ও স্থানসহ রক্তদান লিপিবদ্ধ করেন। সাইটের একজন স্বেচ্ছাসেবক তা দেখে অনুমোদন বা প্রত্যাখ্যান করেন। শুধু অনুমোদিত রক্তদানই পয়েন্ট, স্তর, লিডারবোর্ড ও কমিউনিটির সংখ্যায় গোনা হয়।"
+
+#: pages/templates/pages/faq.html
+msgid "Why is my donation still pending?"
+msgstr "আমার রক্তদান এখনো অপেক্ষমাণ কেন?"
+
+#: pages/templates/pages/faq.html
+msgid "Someone has to check it by hand, which can take a little while. Meanwhile it still starts your recovery gap, so the app will not nudge you to give again too soon."
+msgstr "কাউকে এটি হাতে দেখে নিতে হয়, তাই একটু সময় লাগতে পারে। ইতিমধ্যে এটি আপনার বিশ্রামের বিরতি শুরু করে দেয়, ফলে অ্যাপ আপনাকে খুব তাড়াতাড়ি আবার রক্ত দিতে তাগাদা দেবে না।"
+
+#: pages/templates/pages/faq.html
+msgid "What if a donation is rejected?"
+msgstr "রক্তদান প্রত্যাখ্যাত হলে কী হবে?"
+
+#: pages/templates/pages/faq.html
+msgid "It does not count, and it no longer blocks you. Staff may leave a note explaining why. You can log it again with correct details."
+msgstr "এটি গোনা হয় না, আর আপনার জন্য কোনো বাধাও থাকে না। স্টাফ কারণ জানিয়ে একটি নোট রাখতে পারেন। সঠিক তথ্য দিয়ে আপনি আবার লিপিবদ্ধ করতে পারেন।"
+
+#: pages/templates/pages/faq.html
+msgid "Phone numbers and contact"
+msgstr "ফোন নম্বর ও যোগাযোগ"
+
+#: pages/templates/pages/faq.html
+msgid "How do I contact a donor?"
+msgstr "রক্তদাতার সঙ্গে কীভাবে যোগাযোগ করব?"
+
+#: pages/templates/pages/faq.html
+msgid "Who sees the contact number on a blood request?"
+msgstr "রক্তের অনুরোধে দেওয়া যোগাযোগের নম্বর কে দেখতে পায়?"
+
+#: pages/templates/pages/faq.html
+msgid "The person asking for blood adds a number so donors can reach them. It is shown only to logged-in members, and only while the request is still active."
+msgstr "যিনি রক্ত চাইছেন, তিনি একটি নম্বর দেন যাতে রক্তদাতারা যোগাযোগ করতে পারেন। এটি শুধু লগ ইন করা সদস্যদের দেখানো হয়, আর তা-ও কেবল অনুরোধ চলমান থাকা পর্যন্ত।"
+
+#: pages/templates/pages/faq.html
+msgid "Someone is bothering me. What can I do?"
+msgstr "কেউ আমাকে বিরক্ত করছে। কী করতে পারি?"
+
+#: pages/templates/pages/faq.html
+msgid "Decline their request and do not reply. Report suspicious requests using the report button on the request page. Several reports hide a request until staff have checked it."
+msgstr "তাঁর অনুরোধ প্রত্যাখ্যান করুন এবং উত্তর দেবেন না। সন্দেহজনক অনুরোধ অনুরোধের পাতার রিপোর্ট বোতাম দিয়ে জানান। কয়েকটি রিপোর্ট এলে স্টাফ না দেখা পর্যন্ত অনুরোধটি লুকিয়ে রাখা হয়।"
+
+#: pages/templates/pages/faq.html
+msgid "Points and badges"
+msgstr "পয়েন্ট ও ব্যাজ"
+
+#: pages/templates/pages/faq.html
+msgid "How do I earn points?"
+msgstr "পয়েন্ট কীভাবে পাব?"
+
+#: pages/templates/pages/faq.html
+msgid "Each approved donation earns points. You earn a bonus when a donation answers a blood request, and for keeping a steady streak of donations."
+msgstr "প্রতিটি অনুমোদিত রক্তদানে পয়েন্ট মেলে। রক্তের কোনো অনুরোধে সাড়া দিয়ে রক্ত দিলে এবং নিয়মিত রক্তদানের ধারা বজায় রাখলে বোনাসও পান।"
+
+#: pages/templates/pages/faq.html
+msgid "What are tiers and badges?"
+msgstr "স্তর ও ব্যাজ কী?"
+
+#: pages/templates/pages/faq.html
+msgid "Is this a competition?"
+msgstr "এটি কি প্রতিযোগিতা?"
+
+#: pages/templates/pages/faq.html
+msgid "Only a friendly one. Giving blood too often is not safe, so waiting out your recovery gap never costs you a streak by itself. The gap we show is a reminder, not medical advice."
+msgstr "শুধু বন্ধুত্বপূর্ণ প্রতিযোগিতা। খুব ঘন ঘন রক্ত দেওয়া নিরাপদ নয়, তাই বিশ্রামের বিরতি পুরো করলে শুধু সে কারণে আপনার ধারাবাহিকতা নষ্ট হয় না। আমরা যে বিরতি দেখাই, তা একটি স্মারক, মেডিকেল পরামর্শ নয়।"
+
+#: pages/templates/pages/faq.html rewards/templates/rewards/request_list.html
+msgid "Blood requests"
+msgstr "রক্তের অনুরোধ"
+
+#: pages/templates/pages/faq.html
+msgid "How do I ask for blood?"
+msgstr "রক্ত চাইব কীভাবে?"
+
+#: pages/templates/pages/faq.html
+msgid "Does \"I can help\" mean a donation?"
+msgstr "\"আমি সাহায্য করতে পারি\" মানে কি রক্তদান?"
+
+#: pages/templates/pages/faq.html
+msgid "No. It tells the requester someone may come. A donation counts only after it is logged and verified."
+msgstr "না। এটি অনুরোধকারীকে জানায় যে কেউ আসতে পারেন। রক্তদান লিপিবদ্ধ ও যাচাই হওয়ার পরই কেবল গোনা হয়।"
+
+#: pages/templates/pages/faq.html
+msgid "When does a request close?"
+msgstr "অনুরোধ কখন বন্ধ হয়?"
+
+#: pages/templates/pages/faq.html
+msgid "When the date passes, when enough verified donations cover the bags needed, or when the requester closes it. Please close it as soon as you have the blood."
+msgstr "তারিখ পেরিয়ে গেলে, দরকারি ব্যাগের জন্য যথেষ্ট যাচাই করা রক্তদান হলে, অথবা অনুরোধকারী নিজে বন্ধ করলে। রক্ত পেয়ে গেলেই অনুগ্রহ করে অনুরোধটি বন্ধ করে দিন।"
+
+#: pages/templates/pages/faq.html
+msgid "Is this a replacement for the blood bank?"
+msgstr "এটি কি ব্লাড ব্যাংকের বিকল্প?"
+
+#: pages/templates/pages/faq.html
+msgid "Not here?"
+msgstr "এখানে নেই?"
+
+#: pages/templates/pages/faq.html
+msgid "Check the donor guide, or get in touch."
+msgstr "রক্তদাতার গাইড দেখুন, অথবা যোগাযোগ করুন।"
+
+#: pages/templates/pages/faq.html pages/templates/pages/learn.html
+msgid "Donor guide"
+msgstr "রক্তদাতার গাইড"
+
+#: pages/templates/pages/faq.html
+msgid "Email us"
+msgstr "আমাদের ইমেইল করুন"
+
+#: pages/templates/pages/faq.html
+msgid "Answers about privacy, donation verification, phone number sharing, points and badges, and how blood requests work on %(site)s."
+msgstr "গোপনীয়তা, রক্তদান যাচাই, ফোন নম্বর শেয়ার, পয়েন্ট ও ব্যাজ এবং %(site)s-এ রক্তের অনুরোধ কীভাবে কাজ করে, সে বিষয়ে উত্তর।"
+
+#: pages/templates/pages/faq.html
+msgid "Change any of this in <a href=\"%(privacy_url)s\">Profile &amp; privacy</a>."
+msgstr "এর যেকোনোটি <a href=\"%(privacy_url)s\">প্রোফাইল ও গোপনীয়তা</a> থেকে বদলাতে পারেন।"
+
+#: pages/templates/pages/faq.html
+msgid "Find them in the <a href=\"%(directory_url)s\">donor directory</a> and send a short request. The donor sees your message and chooses to accept or decline. Only if they accept do they share their number with you."
+msgstr "<a href=\"%(directory_url)s\">রক্তদাতা তালিকায়</a> তাঁকে খুঁজে একটি ছোট অনুরোধ পাঠান। রক্তদাতা আপনার বার্তা দেখে গ্রহণ বা প্রত্যাখ্যান করেন। তিনি গ্রহণ করলেই কেবল আপনাকে নিজের নম্বর জানান।"
+
+#: pages/templates/pages/faq.html
+msgid "Tiers (Bronze up to Platinum) reflect how many verified donations you have given. Other badges mark things like helping on requests and keeping a streak. See yours on <a href=\"%(hub_url)s\">your hub</a>."
+msgstr "স্তর (ব্রোঞ্জ থেকে প্ল্যাটিনাম) বোঝায় আপনি কতগুলো যাচাই করা রক্তদান করেছেন। অন্য ব্যাজগুলো অনুরোধে সাহায্য করা ও ধারাবাহিকতা রাখার মতো বিষয় চিহ্নিত করে। আপনারটি <a href=\"%(hub_url)s\">আপনার হাবে</a> দেখুন।"
+
+#: pages/templates/pages/faq.html
+msgid "Log in and <a href=\"%(create_url)s\">post a request</a> with the blood group, hospital, district, how many bags and the date needed. Donors with a matching group can answer with \"I can help\"."
+msgstr "লগ ইন করে রক্তের গ্রুপ, হাসপাতাল, জেলা, কত ব্যাগ এবং কবে লাগবে তা দিয়ে <a href=\"%(create_url)s\">একটি অনুরোধ জানান</a>। মিলে যাওয়া গ্রুপের রক্তদাতারা \"আমি সাহায্য করতে পারি\" বলে সাড়া দিতে পারেন।"
+
+#: pages/templates/pages/faq.html
+msgid "No. %(site)s helps people find each other. In an emergency, contact the hospital's blood bank directly. The blood bank screens every donor and decides who can give."
+msgstr "না। %(site)s মানুষকে একে অপরকে খুঁজে পেতে সাহায্য করে। জরুরি প্রয়োজনে সরাসরি হাসপাতালের ব্লাড ব্যাংকে যোগাযোগ করুন। ব্লাড ব্যাংক প্রতিজন রক্তদাতাকে স্ক্রিনিং করে এবং কে রক্ত দিতে পারবেন, তা ঠিক করে।"
+
+#: pages/templates/pages/home.html
+msgid "Bangladesh's blood community"
+msgstr "বাংলাদেশের রক্তদাতা কমিউনিটি"
+
+#: pages/templates/pages/home.html
+msgid "Every drop is a bond."
+msgstr "প্রতি ফোঁটা রক্তই একটি বন্ধন।"
+
+#: pages/templates/pages/home.html
+msgid "Find a donor in minutes, answer an urgent call, and earn badges for every life you touch. Free, community-run and built for Bangladesh."
+msgstr "কয়েক মিনিটেই রক্তদাতা খুঁজুন, জরুরি ডাকে সাড়া দিন, আর প্রতিটি জীবনের পাশে দাঁড়িয়ে ব্যাজ অর্জন করুন। বিনামূল্যে, কমিউনিটি-পরিচালিত এবং বাংলাদেশের জন্য তৈরি।"
+
+#: pages/templates/pages/home.html
+msgid "I need blood"
+msgstr "আমার রক্ত দরকার"
+
+#: pages/templates/pages/home.html
+msgid "My donor hub"
+msgstr "আমার রক্তদাতা হাব"
+
+#: pages/templates/pages/home.html
+msgid "Become a donor"
+msgstr "রক্তদাতা হোন"
+
+#: pages/templates/pages/home.html templates/snippets/tabbar.html
+msgid "Donors"
+msgstr "রক্তদাতা"
+
+#: pages/templates/pages/home.html rewards/templates/rewards/leaderboard.html
+msgid "Est. people helped"
+msgstr "আনুমানিক উপকৃত মানুষ"
+
+#: pages/templates/pages/home.html
+msgid "Looking for a blood group?"
+msgstr "কোনো রক্তের গ্রুপ খুঁজছেন?"
+
+#: pages/templates/pages/home.html
+msgid "Tap one to see donors who can give it."
+msgstr "একটিতে ট্যাপ করুন, ওই গ্রুপের রক্ত দিতে পারেন এমন রক্তদাতাদের দেখুন।"
+
+#: pages/templates/pages/home.html
+msgid "Urgent now"
+msgstr "এখনই জরুরি"
+
+#: pages/templates/pages/home.html
+msgid "Someone needs you today"
+msgstr "আজ কেউ আপনার অপেক্ষায়"
+
+#: pages/templates/pages/home.html rewards/templates/rewards/request_detail.html
+msgid "All requests"
+msgstr "সব অনুরোধ"
+
+#: pages/templates/pages/home.html
+msgid "No open requests right now"
+msgstr "এই মুহূর্তে কোনো চলমান অনুরোধ নেই"
+
+#: pages/templates/pages/home.html
+msgid "That is good news. Be ready: join the donor directory so you can be found."
+msgstr "এটা সুখবর। তবু প্রস্তুত থাকুন: রক্তদাতা তালিকায় যুক্ত হোন, যাতে প্রয়োজনে আপনাকে খুঁজে পাওয়া যায়।"
+
+#: pages/templates/pages/home.html
+msgid "Three taps from need to help"
+msgstr "প্রয়োজন থেকে সাহায্য, মাত্র তিন ট্যাপে"
+
+#: pages/templates/pages/home.html
+msgid "1. Join in a minute"
+msgstr "1. এক মিনিটে যোগ দিন"
+
+#: pages/templates/pages/home.html
+msgid "Sign up with your phone number. Add your blood group and district, then choose whether to be found."
+msgstr "ফোন নম্বর দিয়ে সাইন আপ করুন। রক্তের গ্রুপ ও জেলা যোগ করুন, তারপর ঠিক করুন অন্যরা আপনাকে খুঁজে পাবে কি না।"
+
+#: pages/templates/pages/home.html
+msgid "2. Ask or answer"
+msgstr "2. চান অথবা সাড়া দিন"
+
+#: pages/templates/pages/home.html
+msgid "Post an urgent request, or browse the board and pledge to help. Phone numbers are shared only with consent."
+msgstr "জরুরি অনুরোধ জানান, অথবা অনুরোধের তালিকা দেখে সাহায্যের প্রতিশ্রুতি দিন। সম্মতি ছাড়া কারও ফোন নম্বর জানানো হয় না।"
+
+#: pages/templates/pages/home.html
+msgid "3. Earn and share"
+msgstr "3. অর্জন করুন ও ছড়িয়ে দিন"
+
+#: pages/templates/pages/home.html
+msgid "Every verified donation earns points, badges and a shareable card. Climb the leaderboard with your friends."
+msgstr "প্রতিটি যাচাই করা রক্তদানে পয়েন্ট, ব্যাজ ও শেয়ার করার মতো একটি কার্ড মেলে। বন্ধুদের সঙ্গে লিডারবোর্ডে এগিয়ে যান।"
+
+#: pages/templates/pages/home.html
+msgid "Make it a game"
+msgstr "একটু খেলার মতো করে নিন"
+
+#: pages/templates/pages/home.html
+msgid "Earn badges for every life you touch"
+msgstr "প্রতিটি জীবনের পাশে থাকার জন্য ব্যাজ অর্জন করুন"
+
+#: pages/templates/pages/home.html
+msgid "See the leaderboard"
+msgstr "লিডারবোর্ড দেখুন"
+
+#: pages/templates/pages/home.html
+msgid "Heroes"
+msgstr "হিরোরা"
+
+#: pages/templates/pages/home.html
+msgid "Top donors"
+msgstr "সেরা রক্তদাতা"
+
+#: pages/templates/pages/home.html
+msgid "Explore"
+msgstr "ঘুরে দেখুন"
+
+#: pages/templates/pages/home.html
+msgid "More ways to get involved"
+msgstr "যুক্ত হওয়ার আরও উপায়"
+
+#: pages/templates/pages/home.html rewards/templates/rewards/leaderboard.html templates/snippets/footer.html
+msgid "Leaderboard"
+msgstr "লিডারবোর্ড"
+
+#: pages/templates/pages/home.html
+msgid "See top donors and squads, and climb the ranks with your friends."
+msgstr "সেরা রক্তদাতা ও স্কোয়াডগুলো দেখুন, আর বন্ধুদের সঙ্গে র‍্যাঙ্কিংয়ে এগিয়ে যান।"
+
+#: pages/templates/pages/home.html
+msgid "View leaderboard"
+msgstr "লিডারবোর্ড দেখুন"
+
+#: pages/templates/pages/home.html templates/snippets/footer.html
+msgid "Impact"
+msgstr "প্রভাব"
+
+#: pages/templates/pages/home.html
+msgid "See our impact"
+msgstr "আমাদের প্রভাব দেখুন"
+
+#: pages/templates/pages/home.html templates/snippets/footer.html
+msgid "Learn"
+msgstr "জানুন"
+
+#: pages/templates/pages/home.html
+msgid "Start learning"
+msgstr "জানা শুরু করুন"
+
+#: pages/templates/pages/home.html
+msgid "Before you give"
+msgstr "রক্ত দেওয়ার আগে"
+
+#: pages/templates/pages/home.html pages/templates/pages/learn.html templates/404.html templates/snippets/footer.html
+msgid "Can I donate?"
+msgstr "আমি কি রক্ত দিতে পারি?"
+
+#: pages/templates/pages/home.html
+msgid "Healthy adults aged 18 to 60 who weigh at least 45 kg. The blood bank checks haemoglobin and health on the day."
+msgstr "18 থেকে 60 বছর বয়সী, অন্তত 45 কেজি ওজনের সুস্থ প্রাপ্তবয়স্করা। রক্তদানের দিন ব্লাড ব্যাংক হিমোগ্লোবিন ও স্বাস্থ্য পরীক্ষা করে।"
+
+#: pages/templates/pages/home.html
+msgid "How often"
+msgstr "কত দিন পর পর"
+
+#: pages/templates/pages/home.html
+msgid "How safe"
+msgstr "কতটা নিরাপদ"
+
+#: pages/templates/pages/home.html
+msgid "Sterile single-use equipment, and a screening before every donation. You can always say no."
+msgstr "জীবাণুমুক্ত, একবার-ব্যবহারের সরঞ্জাম এবং প্রতিবার রক্তদানের আগে স্ক্রিনিং। আপনি যেকোনো সময় না বলতে পারেন।"
+
+#: pages/templates/pages/home.html
+msgid "Ready to be someone's miracle?"
+msgstr "কারও জীবনের অলৌকিক সহায় হতে প্রস্তুত?"
+
+#: pages/templates/pages/home.html rewards/templates/rewards/leaderboard.html rewards/templates/rewards/log_donation.html templates/snippets/footer.html
+msgid "Log a donation"
+msgstr "রক্তদান লিপিবদ্ধ করুন"
+
+#: pages/templates/pages/home.html
+msgid "<strong>%(counter)s</strong> bag needed"
+msgid_plural "<strong>%(counter)s</strong> bags needed"
+msgstr[0] "<strong>%(counter)s</strong>টি ব্যাগ লাগবে"
+msgstr[1] "<strong>%(counter)s</strong>টি ব্যাগ লাগবে"
+
+#: pages/templates/pages/home.html rewards/models.py
+msgid "By %(d)s"
+msgstr "%(d)s এর মধ্যে"
+
+#: pages/templates/pages/home.html
+msgid "%(counter)s+ donation"
+msgid_plural "%(counter)s+ donations"
+msgstr[0] "%(counter)s+ রক্তদান"
+msgstr[1] "%(counter)s+ রক্তদান"
+
+#: pages/templates/pages/home.html
+msgid "Last: %(d)s"
+msgstr "সর্বশেষ: %(d)s"
+
+#: pages/templates/pages/home.html
+msgid "%(counter)s donor"
+msgid_plural "%(counter)s donors"
+msgstr[0] "%(counter)s জন রক্তদাতা"
+msgstr[1] "%(counter)s জন রক্তদাতা"
+
+#: pages/templates/pages/home.html
+msgid "%(counter)s verified donation from %(donors)s, with charts by blood group and district."
+msgid_plural "%(counter)s verified donations from %(donors)s, with charts by blood group and district."
+msgstr[0] "%(donors)sর %(counter)sটি যাচাই করা রক্তদান, সঙ্গে রক্তের গ্রুপ ও জেলাভিত্তিক চার্ট।"
+msgstr[1] "%(donors)sর %(counter)sটি যাচাই করা রক্তদান, সঙ্গে রক্তের গ্রুপ ও জেলাভিত্তিক চার্ট।"
+
+#: pages/templates/pages/home.html
+msgid "Who can donate, what to expect, answers to common questions, and about %(site)s."
+msgstr "কারা রক্ত দিতে পারেন, কী আশা করবেন, সাধারণ প্রশ্নের উত্তর এবং %(site)s সম্পর্কে।"
+
+#: pages/templates/pages/home.html
+msgid "About every %(interval)s*. We show a recovery bar after each donation so you know when you are ready."
+msgstr "প্রায় প্রতি %(interval)s পর পর*। প্রতিটি রক্তদানের পর আমরা একটি রিকভারি বার দেখাই, যাতে আপনি জানতে পারেন কখন আবার প্রস্তুত হবেন।"
+
+#: pages/templates/pages/home.html
+msgid "* A general reminder, not medical advice. The blood bank's screening decides your eligibility. <a href=\"%(learn_url)s\">Read the full guide</a>."
+msgstr "* এটি একটি সাধারণ স্মরণ করিয়ে দেওয়া, মেডিকেল পরামর্শ নয়। আপনি রক্ত দিতে পারবেন কি না, তা ব্লাড ব্যাংকের স্ক্রিনিং সিদ্ধান্ত নেয়। <a href=\"%(learn_url)s\">পুরো গাইড পড়ুন</a>।"
+
+#: pages/templates/pages/home.html
+msgid "Join %(counter)s donor already making a difference."
+msgid_plural "Join %(counter)s donors already making a difference."
+msgstr[0] "ইতিমধ্যে পরিবর্তন আনছেন এমন %(counter)s জন রক্তদাতার সঙ্গে যোগ দিন।"
+msgstr[1] "ইতিমধ্যে পরিবর্তন আনছেন এমন %(counter)s জন রক্তদাতার সঙ্গে যোগ দিন।"
+
+#: pages/templates/pages/learn.html
+msgid "Can I donate blood? A quick, friendly guide to who can give, blood group compatibility, what happens on the day and how to look after yourself."
+msgstr "আমি কি রক্ত দিতে পারি? কারা রক্ত দিতে পারেন, রক্তের গ্রুপের মিল, রক্তদানের দিন কী হয় এবং নিজের যত্ন কীভাবে নেবেন, তার একটি সহজ ও আন্তরিক গাইড।"
+
+#: pages/templates/pages/learn.html
+msgid "Can I donate blood?"
+msgstr "আমি কি রক্ত দিতে পারি?"
+
+#: pages/templates/pages/learn.html
+msgid "Who can give blood, who can receive from whom, and what to expect."
+msgstr "কারা রক্ত দিতে পারেন, কে কার কাছ থেকে রক্ত নিতে পারেন এবং কী আশা করবেন।"
+
+#: pages/templates/pages/learn.html
+msgid "Short answers to the questions people ask before their first donation."
+msgstr "প্রথমবার রক্ত দেওয়ার আগে মানুষ যেসব প্রশ্ন করেন, তার সংক্ষিপ্ত উত্তর।"
+
+#: pages/templates/pages/learn.html
+msgid "On this page"
+msgstr "এই পাতায়"
+
+#: pages/templates/pages/learn.html
+msgid "Blood types"
+msgstr "রক্তের গ্রুপ"
+
+#: pages/templates/pages/learn.html
+msgid "On the day"
+msgstr "রক্তদানের দিন"
+
+#: pages/templates/pages/learn.html
+msgid "After care"
+msgstr "রক্তদানের পরের যত্ন"
+
+#: pages/templates/pages/learn.html
+msgid "Myths"
+msgstr "ভুল ধারণা"
+
+#: pages/templates/pages/learn.html
+msgid "The usual criteria"
+msgstr "সাধারণ শর্তগুলো"
+
+#: pages/templates/pages/learn.html
+msgid "Quick check"
+msgstr "দ্রুত যাচাই"
+
+#: pages/templates/pages/learn.html
+msgid "Your age"
+msgstr "আপনার বয়স"
+
+#: pages/templates/pages/learn.html
+msgid "Weight (kg)"
+msgstr "ওজন (কেজি)"
+
+#: pages/templates/pages/learn.html
+msgid "Do you have a fever, cold or infection now, or were you ill recently?"
+msgstr "আপনার কি এখন জ্বর, সর্দি বা সংক্রমণ আছে, অথবা সম্প্রতি অসুস্থ ছিলেন?"
+
+#: pages/templates/pages/learn.html
+msgid "Yes"
+msgstr "হ্যাঁ"
+
+#: pages/templates/pages/learn.html
+msgid "No"
+msgstr "না"
+
+#: pages/templates/pages/learn.html
+msgid "Have you travelled recently to a place with malaria or another outbreak?"
+msgstr "আপনি কি সম্প্রতি ম্যালেরিয়া বা অন্য কোনো প্রাদুর্ভাব আছে এমন জায়গায় ভ্রমণ করেছেন?"
+
+#: pages/templates/pages/learn.html
+msgid "Have you had a tattoo or piercing recently?"
+msgstr "আপনি কি সম্প্রতি ট্যাটু বা পিয়ার্সিং করিয়েছেন?"
+
+#: pages/templates/pages/learn.html
+msgid "Are you taking medicines now, such as antibiotics or regular prescriptions?"
+msgstr "আপনি কি এখন কোনো ওষুধ খাচ্ছেন, যেমন অ্যান্টিবায়োটিক বা নিয়মিত প্রেসক্রিপশনের ওষুধ?"
+
+#: pages/templates/pages/learn.html
+msgid "Are you pregnant, or did you give birth recently?"
+msgstr "আপনি কি গর্ভবতী, অথবা সম্প্রতি সন্তান জন্ম দিয়েছেন?"
+
+#: pages/templates/pages/learn.html
+msgid "Answer No if this does not apply to you."
+msgstr "এটি আপনার জন্য প্রযোজ্য না হলে \"না\" বলুন।"
+
+#: pages/templates/pages/learn.html
+msgid "When did you last donate whole blood?"
+msgstr "সবশেষ কবে পূর্ণ রক্ত দিয়েছেন?"
+
+#: pages/templates/pages/learn.html
+msgid "I have never donated"
+msgstr "আমি কখনো রক্ত দিইনি"
+
+#: pages/templates/pages/learn.html
+msgid "Check"
+msgstr "যাচাই করুন"
+
+#: pages/templates/pages/learn.html
+msgid "Who can give to whom"
+msgstr "কে কাকে রক্ত দিতে পারেন"
+
+#: pages/templates/pages/learn.html
+msgid "Pick your blood group"
+msgstr "আপনার রক্তের গ্রুপ বেছে নিন"
+
+#: pages/templates/pages/learn.html
+msgid "What happens on the day"
+msgstr "রক্তদানের দিন কী হয়"
+
+#: pages/templates/pages/learn.html
+msgid "Register"
+msgstr "নিবন্ধন"
+
+#: pages/templates/pages/learn.html
+msgid "Quick health check"
+msgstr "দ্রুত স্বাস্থ্য পরীক্ষা"
+
+#: pages/templates/pages/learn.html
+msgid "Donate"
+msgstr "রক্ত দিন"
+
+#: pages/templates/pages/learn.html
+msgid "Rest and refresh"
+msgstr "বিশ্রাম ও আপ্যায়ন"
+
+#: pages/templates/pages/learn.html
+msgid "Looking after yourself afterwards"
+msgstr "পরে নিজের যত্ন নেওয়া"
+
+#: pages/templates/pages/learn.html
+msgid "Myths and facts"
+msgstr "ভুল ধারণা ও সত্য"
+
+#: pages/templates/pages/learn.html
+msgid "Ready to help?"
+msgstr "সাহায্য করতে প্রস্তুত?"
+
+#: pages/templates/pages/learn.html
+msgid "See who needs blood near you, or set up your donor profile."
+msgstr "দেখুন আপনার কাছাকাছি কার রক্ত লাগছে, অথবা আপনার রক্তদাতা প্রোফাইল তৈরি করুন।"
+
+#: pages/templates/pages/learn.html rewards/templates/rewards/leaderboard.html rewards/templates/rewards/log_donation.html templates/404.html
+msgid "Urgent requests"
+msgstr "জরুরি অনুরোধ"
+
+#: pages/templates/pages/learn.html
+msgid "My checklist"
+msgstr "আমার চেকলিস্ট"
+
+#: pages/templates/pages/learn.html
+msgid "<strong>The blood bank decides.</strong> This is a friendly pre-check, not medical clearance. Staff at the blood bank will ask you questions and check you on the day."
+msgstr "<strong>ব্লাড ব্যাংকই সিদ্ধান্ত নেয়।</strong> এটি একটি সহজ প্রাথমিক যাচাই, মেডিকেল অনুমোদন নয়। রক্তদানের দিন ব্লাড ব্যাংকের স্টাফ আপনাকে প্রশ্ন করবেন এবং পরীক্ষা করবেন।"
+
+#: pages/templates/pages/learn.html
+msgid "Our reminder gap is %(interval)s."
+msgstr "আমাদের স্মারক বিরতি %(interval)s।"
+
+#: rewards/directory.py
+msgid "You can't contact yourself."
+msgstr "আপনি নিজেকে যোগাযোগের অনুরোধ পাঠাতে পারবেন না।"
+
+#: rewards/directory.py
+msgid "This donor can't take requests right now."
+msgstr "এই রক্তদাতা এখন অনুরোধ নিতে পারছেন না।"
+
+#: rewards/directory.py
+msgid "This donor is not in the directory."
+msgstr "এই রক্তদাতা তালিকায় নেই।"
+
+#: rewards/directory.py
+msgid "This donor already accepted. Their number is in your inbox."
+msgstr "এই রক্তদাতা ইতিমধ্যে রাজি হয়েছেন। তাঁর নম্বর আপনার ইনবক্সে আছে।"
+
+#: rewards/directory.py rewards/directory_views.py
+msgid "You already asked this donor. Please wait for an answer."
+msgstr "আপনি এই রক্তদাতাকে ইতিমধ্যে অনুরোধ করেছেন। উত্তরের জন্য অপেক্ষা করুন।"
+
+#: rewards/directory.py
+msgid "You have sent a lot of requests today. Please try again tomorrow."
+msgstr "আজ আপনি অনেক অনুরোধ পাঠিয়েছেন। কাল আবার চেষ্টা করুন।"
+
+#: rewards/directory.py
+msgid "You have %(n)s requests waiting for an answer. Wait for a reply before asking more people."
+msgstr "আপনার %(n)sটি অনুরোধ উত্তরের অপেক্ষায় আছে। আরও মানুষকে অনুরোধ করার আগে উত্তরের জন্য অপেক্ষা করুন।"
+
+#: rewards/directory.py
+msgid "This donor declined recently. You can ask again after %(n)s days."
+msgstr "এই রক্তদাতা সম্প্রতি অনুরোধ ফিরিয়ে দিয়েছেন। %(n)s দিন পর আবার অনুরোধ করতে পারবেন।"
+
+#: rewards/directory.py
+msgid "This donor isn't sharing their number any more. You can ask again after %(n)s days."
+msgstr "এই রক্তদাতা আর নিজের নম্বর জানাচ্ছেন না। %(n)s দিন পর আবার অনুরোধ করতে পারবেন।"
+
+#: rewards/directory_views.py
+msgid "Blocked. They cannot send you requests or see your number, and they were not told."
+msgstr "ব্লক করা হয়েছে। তিনি আপনাকে অনুরোধ পাঠাতে বা আপনার নম্বর দেখতে পারবেন না, আর তাঁকে জানানোও হয়নি।"
+
+#: rewards/directory_views.py
+msgid "Unblocked. They can send you requests again."
+msgstr "ব্লক তুলে নেওয়া হয়েছে। তিনি আবার আপনাকে অনুরোধ পাঠাতে পারবেন।"
+
+#: rewards/directory_views.py
+msgid "Request sent. Their number is shared only if they accept."
+msgstr "অনুরোধ পাঠানো হয়েছে। তিনি রাজি হলেই কেবল তাঁর নম্বর জানানো হবে।"
+
+#: rewards/directory_views.py
+msgid "You already answered this request."
+msgstr "আপনি এই অনুরোধের উত্তর ইতিমধ্যে দিয়েছেন।"
+
+#: rewards/directory_views.py
+msgid "Done. Your number is hidden again. They were not given a reason."
+msgstr "হয়ে গেছে। আপনার নম্বর আবার লুকানো হয়েছে। তাঁকে কোনো কারণ জানানো হয়নি।"
+
+#: rewards/directory_views.py
+msgid "You were not sharing your number with them."
+msgstr "আপনি তাঁকে নিজের নম্বর জানাননি।"
+
+#: rewards/directory_views.py
+msgid "Choose accept or decline."
+msgstr "গ্রহণ বা প্রত্যাখ্যান বেছে নিন।"
+
+#: rewards/forms.py
+msgid "-- Other (type below) --"
+msgstr "-- অন্য (নিচে লিখুন) --"
+
+#: rewards/forms.py
+msgid "-- none --"
+msgstr "-- কিছু নেই --"
+
+#: rewards/forms.py
+msgid "That date is too long ago. Check the year."
+msgstr "তারিখটি অনেক আগের। সালটি দেখে নিন।"
+
+#: rewards/forms.py
+msgid "You already logged a donation on this date."
+msgstr "এই তারিখে আপনি ইতিমধ্যে একটি রক্তদান লিপিবদ্ধ করেছেন।"
+
+#: rewards/forms.py
+msgid "Use a first name or initials only. Please do not enter record numbers or IDs."
+msgstr "শুধু নামের প্রথম অংশ বা আদ্যক্ষর দিন। রেকর্ড নম্বর বা আইডি দেবেন না।"
+
+#: rewards/forms.py
+msgid "You already posted this request. Open \"My requests\" to update or close it."
+msgstr "আপনি এই অনুরোধ ইতিমধ্যে জানিয়েছেন। হালনাগাদ বা বন্ধ করতে \"আমার অনুরোধ\" খুলুন।"
+
+#: rewards/forms.py
+msgid "Pick a place from the list, or type its name."
+msgstr "তালিকা থেকে একটি স্থান বেছে নিন, অথবা নাম লিখুন।"
+
+#: rewards/forms.py
+msgid "Pick a date within the next %(n)s days."
+msgstr "আগামী %(n)s দিনের মধ্যের একটি তারিখ বেছে নিন।"
+
+#: rewards/forms.py
+msgid "You have posted a lot of requests today. Please try again tomorrow."
+msgstr "আজ আপনি অনেক অনুরোধ জানিয়েছেন। কাল আবার চেষ্টা করুন।"
+
+#: rewards/forms.py
+msgid "%(place)s is in %(actual)s, not %(chosen)s."
+msgstr "%(place)s %(actual)s-এ, %(chosen)s-এ নয়।"
+
+#: rewards/forms.py
+msgid "Optional. First name or initials only"
+msgstr "ঐচ্ছিক। শুধু নামের প্রথম অংশ বা আদ্যক্ষর"
+
+#: rewards/forms.py
+msgid "Optional. Ward, bed, or anything a donor should know"
+msgstr "ঐচ্ছিক। ওয়ার্ড, বেড, অথবা রক্তদাতার জানা দরকার এমন কিছু"
+
+#: rewards/forms.py
+msgid "You already have %(n)s open requests. Close one before posting another."
+msgstr "আপনার ইতিমধ্যে %(n)sটি চলমান অনুরোধ আছে। আরেকটি জানানোর আগে একটি বন্ধ করুন।"
+
+#: rewards/hub_views.py
+msgid "Donation logged! It'll show up once an admin verifies it."
+msgstr "রক্তদান লিপিবদ্ধ হয়েছে! অ্যাডমিন যাচাই করলে এটি দেখা যাবে।"
+
+#: rewards/hub_views.py
+msgid "Pending donation deleted."
+msgstr "অপেক্ষমাণ রক্তদান মুছে ফেলা হয়েছে।"
+
+#: rewards/hub_views.py
+msgid "That donation was just reviewed and can no longer be deleted."
+msgstr "এই রক্তদান এইমাত্র পর্যালোচনা করা হয়েছে, তাই আর মোছা যাবে না।"
+
+#: rewards/models.py
+msgid "Kind"
+msgstr "ধরন"
+
+#: rewards/models.py
+msgid "Listed in selects"
+msgstr "বাছাই তালিকায় দেখানো হবে"
+
+#: rewards/models.py
+msgid "Donation Date"
+msgstr "রক্তদানের তারিখ"
+
+#: rewards/models.py
+msgid "Location"
+msgstr "স্থান"
+
+#: rewards/models.py
+msgid "Admin Note"
+msgstr "অ্যাডমিনের নোট"
+
+#: rewards/models.py rewards/templates/rewards/request_form.html
+msgid "Bags needed"
+msgstr "ব্যাগ লাগবে"
+
+#: rewards/models.py rewards/templates/rewards/request_detail.html rewards/templates/rewards/request_form.html
+msgid "Needed by"
+msgstr "যে তারিখের মধ্যে লাগবে"
+
+#: rewards/models.py rewards/templates/rewards/request_form.html
+msgid "Contact phone"
+msgstr "যোগাযোগের ফোন"
+
+#: rewards/models.py
+msgid "Patient first name or initials"
+msgstr "রোগীর নামের প্রথম অংশ বা নামের আদ্যক্ষর"
+
+#: rewards/models.py
+msgid "Outcome"
+msgstr "ফলাফল"
+
+#: rewards/models.py
+msgid "Description"
+msgstr "বিবরণ"
+
+#: rewards/models.py
+msgid "Type"
+msgstr "ধরন"
+
+#: rewards/models.py
+msgid "Minimum Approved Donations"
+msgstr "ন্যূনতম অনুমোদিত রক্তদান"
+
+#: rewards/models.py
+msgid "Minimum Streak"
+msgstr "ন্যূনতম ধারাবাহিকতা"
+
+#: rewards/models.py
+msgid "Minimum Donations to Requests"
+msgstr "অনুরোধে ন্যূনতম রক্তদান"
+
+#: rewards/models.py rewards/templates/rewards/request_detail.html
+msgid "Update"
+msgstr "হালনাগাদ"
+
+#: rewards/models.py
+msgid "Donation date cannot be in the future."
+msgstr "রক্তদানের তারিখ ভবিষ্যতের হতে পারে না।"
+
+#: rewards/models.py
+msgid "Date cannot be in the past."
+msgstr "তারিখ অতীতের হতে পারে না।"
+
+#: rewards/models.py
+msgid "Blood bank"
+msgstr "ব্লাড ব্যাংক"
+
+#: rewards/models.py
+msgid "Donation camp"
+msgstr "রক্তদান শিবির"
+
+#: rewards/models.py
+msgid "Untick to hide it without deleting past records."
+msgstr "আগের রেকর্ড না মুছে লুকাতে টিক তুলে দিন।"
+
+#: rewards/models.py rewards/templates/rewards/log_donation.html
+msgid "Pending"
+msgstr "অপেক্ষমাণ"
+
+#: rewards/models.py rewards/templates/rewards/log_donation.html
+msgid "Rejected"
+msgstr "প্রত্যাখ্যাত"
+
+#: rewards/models.py rewards/templates/rewards/log_donation.html
+msgid "Hospital / blood bank"
+msgstr "হাসপাতাল / ব্লাড ব্যাংক"
+
+#: rewards/models.py
+msgid "In response to request"
+msgstr "যে অনুরোধের সাড়ায়"
+
+#: rewards/models.py
+msgid "Closed"
+msgstr "বন্ধ"
+
+#: rewards/models.py
+msgid "Got blood through here"
+msgstr "এখান থেকে রক্ত পেয়েছি"
+
+#: rewards/models.py
+msgid "Found blood elsewhere"
+msgstr "অন্য জায়গায় রক্ত পেয়েছি"
+
+#: rewards/models.py
+msgid "No longer needed"
+msgstr "আর দরকার নেই"
+
+#: rewards/models.py
+msgid "Set by the requester when closing the request."
+msgstr "অনুরোধ বন্ধ করার সময় অনুরোধকারী এটি ঠিক করেন।"
+
+#: rewards/models.py rewards/templates/rewards/contact_inbox.html
+msgid "Accepted"
+msgstr "গৃহীত"
+
+#: rewards/models.py rewards/templates/rewards/contact_inbox.html
+msgid "Declined"
+msgstr "ফিরিয়ে দেওয়া হয়েছে"
+
+#: rewards/models.py
+msgid "Revoked"
+msgstr "প্রত্যাহার করা হয়েছে"
+
+#: rewards/models.py
+msgid "Tier (by total donations)"
+msgstr "স্তর (মোট রক্তদান অনুযায়ী)"
+
+#: rewards/models.py
+msgid "Streak (by consecutive donation cycles)"
+msgstr "ধারাবাহিকতা (পরপর রক্তদান চক্র অনুযায়ী)"
+
+#: rewards/models.py
+msgid "Hero (by verified donations to urgent requests)"
+msgstr "হিরো (জরুরি অনুরোধে যাচাই করা রক্তদান অনুযায়ী)"
+
+#: rewards/models.py
+msgid "Feather icon name, e.g. 'award' for feather-award."
+msgstr "ফেদার আইকনের নাম, যেমন feather-award এর জন্য 'award'।"
+
+#: rewards/models.py
+msgid "Required for tier badges."
+msgstr "স্তরের ব্যাজের জন্য আবশ্যক।"
+
+#: rewards/models.py
+msgid "Required for streak badges."
+msgstr "ধারাবাহিকতার ব্যাজের জন্য আবশ্যক।"
+
+#: rewards/models.py
+msgid "Required for hero badges."
+msgstr "হিরো ব্যাজের জন্য আবশ্যক।"
+
+#: rewards/models.py
+msgid "Still need more"
+msgstr "আরও দরকার"
+
+#: rewards/models.py
+msgid "Found a donor"
+msgstr "রক্তদাতা পেয়েছি"
+
+#: rewards/models.py
+msgid "Other"
+msgstr "অন্যান্য"
+
+#: rewards/models.py
+msgid "Spam"
+msgstr "স্প্যাম"
+
+#: rewards/models.py
+msgid "Looks fake"
+msgstr "ভুয়া মনে হচ্ছে"
+
+#: rewards/models.py
+msgid "Already fulfilled"
+msgstr "ইতিমধ্যে পূরণ হয়েছে"
+
+#: rewards/models.py stories/models.py
+msgid "Something else"
+msgstr "অন্য কিছু"
+
+#: rewards/models.py
+msgid "Staff reviewed it: it no longer counts toward hiding."
+msgstr "স্টাফ পর্যালোচনা করেছেন: এটি আর লুকানোর হিসাবে ধরা হয় না।"
+
+#: rewards/models.py
+msgid "Needed today"
+msgstr "আজই লাগবে"
+
+#: rewards/models.py
+msgid "Needed tomorrow"
+msgstr "কালই লাগবে"
+
+#: rewards/models.py
+msgid "Fulfilled"
+msgstr "পূরণ হয়েছে"
+
+#: rewards/models.py
+msgid "Expired"
+msgstr "মেয়াদ শেষ"
+
+#: rewards/models.py
+msgid "In %(n)s days"
+msgstr "%(n)s দিনের মধ্যে"
+
+#: rewards/quests.py
+msgid "Spark"
+msgstr "স্পার্ক"
+
+#: rewards/quests.py
+msgid "Helper"
+msgstr "সহায়ক"
+
+#: rewards/quests.py
+msgid "Guardian"
+msgstr "অভিভাবক"
+
+#: rewards/quests.py
+msgid "Champion"
+msgstr "চ্যাম্পিয়ন"
+
+#: rewards/quests.py
+msgid "Hero"
+msgstr "হিরো"
+
+#: rewards/quests.py
+msgid "Lifesaver"
+msgstr "জীবনরক্ষক"
+
+#: rewards/quests.py
+msgid "Legend"
+msgstr "কিংবদন্তি"
+
+#: rewards/quests.py
+msgid "Immortal"
+msgstr "অমর"
+
+#: rewards/quests.py
+msgid "Add your blood group and district so people can find you."
+msgstr "আপনার রক্তের গ্রুপ ও জেলা যোগ করুন, যাতে মানুষ আপনাকে খুঁজে পায়।"
+
+#: rewards/quests.py
+msgid "Pre-fills your donation form"
+msgstr "আপনার রক্তদানের ফর্ম আগে থেকে ভরে দেয়"
+
+#: rewards/quests.py
+msgid "Let members ask you for help. Your phone stays hidden until you accept."
+msgstr "সদস্যদের আপনার কাছে সাহায্য চাইতে দিন। আপনি রাজি না হওয়া পর্যন্ত আপনার ফোন লুকানো থাকে।"
+
+#: rewards/quests.py
+msgid "Be found by people in need"
+msgstr "প্রয়োজনে থাকা মানুষ আপনাকে খুঁজে পাবে"
+
+#: rewards/quests.py
+msgid "An admin verifies it, then it counts."
+msgstr "অ্যাডমিন যাচাই করেন, তারপর এটি গোনা হয়।"
+
+#: rewards/quests.py
+msgid "Bronze Donor tier at 1 verified"
+msgstr "1টি যাচাই হলে ব্রোঞ্জ রক্তদাতা স্তর"
+
+#: rewards/quests.py
+msgid "Answer an urgent request"
+msgstr "একটি জরুরি অনুরোধে সাড়া দিন"
+
+#: rewards/quests.py
+msgid "Tap \"I can help\" on a request that needs your group."
+msgstr "আপনার গ্রুপের দরকার এমন অনুরোধে \"আমি সাহায্য করতে পারি\" ট্যাপ করুন।"
+
+#: rewards/quests.py
+msgid "Path to Hero badges"
+msgstr "হিরো ব্যাজের পথ"
+
+#: rewards/quests.py
+msgid "Donate for an urgent request"
+msgstr "জরুরি অনুরোধের জন্য রক্ত দিন"
+
+#: rewards/quests.py
+msgid "Link a donation to a request you answered for bonus points."
+msgstr "বোনাস পয়েন্টের জন্য আপনার সাড়া দেওয়া অনুরোধের সঙ্গে একটি রক্তদান যুক্ত করুন।"
+
+#: rewards/quests.py
+msgid "First Responder badge, +20 points"
+msgstr "ফার্স্ট রেসপন্ডার ব্যাজ, +20 পয়েন্ট"
+
+#: rewards/quests.py
+msgid "Keep a 2-cycle streak"
+msgstr "টানা 2 চক্রের ধারাবাহিকতা রাখুন"
+
+#: rewards/quests.py
+msgid "Donate again within one cycle of your last verified donation."
+msgstr "আপনার শেষ যাচাই করা রক্তদানের এক চক্রের মধ্যে আবার রক্ত দিন।"
+
+#: rewards/quests.py
+msgid "Consistent Donor badge"
+msgstr "ধারাবাহিক রক্তদাতা ব্যাজ"
+
+#: rewards/quests.py
+msgid "Donate 3 times"
+msgstr "3 বার রক্ত দিন"
+
+#: rewards/quests.py
+msgid "Three verified donations show real commitment."
+msgstr "তিনটি যাচাই করা রক্তদান আন্তরিক প্রতিশ্রুতির পরিচয়।"
+
+#: rewards/quests.py
+msgid "Halfway to Silver Donor"
+msgstr "সিলভার রক্তদাতার অর্ধেক পথ"
+
+#: rewards/quests.py
+msgid "Reach Silver Donor"
+msgstr "সিলভার রক্তদাতা হোন"
+
+#: rewards/quests.py
+msgid "Five verified donations."
+msgstr "পাঁচটি যাচাই করা রক্তদান।"
+
+#: rewards/quests.py
+msgid "Silver Donor tier"
+msgstr "সিলভার রক্তদাতা স্তর"
+
+#: rewards/request_views.py
+msgid "This week"
+msgstr "এই সপ্তাহে"
+
+#: rewards/request_views.py rewards/templates/rewards/request_list.html stories/templates/stories/story_list.html
+msgid "All"
+msgstr "সব"
+
+#: rewards/request_views.py
+msgid "Request posted"
+msgstr "অনুরোধ জানানো হয়েছে"
+
+#: rewards/request_views.py
+msgid "You can't respond to your own request."
+msgstr "আপনি নিজের অনুরোধে সাড়া দিতে পারবেন না।"
+
+#: rewards/request_views.py
+msgid "You can't close someone else's request."
+msgstr "আপনি অন্য কারও অনুরোধ বন্ধ করতে পারবেন না।"
+
+#: rewards/request_views.py
+msgid "Please pick what happened."
+msgstr "কী হয়েছে, তা বেছে নিন।"
+
+#: rewards/request_views.py
+msgid "Request closed. Thank you for letting us know."
+msgstr "অনুরোধ বন্ধ হয়েছে। আমাদের জানানোর জন্য ধন্যবাদ।"
+
+#: rewards/request_views.py
+msgid "This request was already closed."
+msgstr "এই অনুরোধ আগেই বন্ধ করা হয়েছে।"
+
+#: rewards/request_views.py
+msgid "Only the requester can post updates."
+msgstr "শুধু অনুরোধকারী হালনাগাদ দিতে পারেন।"
+
+#: rewards/request_views.py rewards/templates/rewards/request_detail.html
+msgid "This request is closed."
+msgstr "এই অনুরোধ বন্ধ।"
+
+#: rewards/request_views.py
+msgid "Pick the kind of update."
+msgstr "হালনাগাদের ধরন বেছে নিন।"
+
+#: rewards/request_views.py
+msgid "You can't report your own request."
+msgstr "আপনি নিজের অনুরোধের বিরুদ্ধে রিপোর্ট করতে পারবেন না।"
+
+#: rewards/request_views.py
+msgid "Pick a reason for the report."
+msgstr "রিপোর্টের একটি কারণ বেছে নিন।"
+
+#: rewards/request_views.py
+msgid "You have filed a lot of reports today. Please try again tomorrow."
+msgstr "আজ আপনি অনেক রিপোর্ট করেছেন। কাল আবার চেষ্টা করুন।"
+
+#: rewards/request_views.py
+msgid "Thank you. Our team will look at this request."
+msgstr "ধন্যবাদ। আমাদের টিম এই অনুরোধটি দেখবে।"
+
+#: rewards/request_views.py
+msgid "You already reported this request."
+msgstr "আপনি এই অনুরোধ ইতিমধ্যে রিপোর্ট করেছেন।"
+
+#: rewards/request_views.py
+msgid "A donation was verified"
+msgstr "একটি রক্তদান যাচাই হয়েছে"
+
+#: rewards/request_views.py
+msgid "Closed by the requester"
+msgstr "অনুরোধকারী বন্ধ করেছেন"
+
+#: rewards/request_views.py
+msgid "Your request is posted. Donors can see it now."
+msgstr "আপনার অনুরোধ জানানো হয়েছে। রক্তদাতারা এখন এটি দেখতে পারবেন।"
+
+#: rewards/request_views.py
+msgid "This request is no longer open."
+msgstr "এই অনুরোধ আর চলমান নেই।"
+
+#: rewards/request_views.py
+msgid "Write a short update first."
+msgstr "আগে একটি ছোট হালনাগাদ লিখুন।"
+
+#: rewards/request_views.py
+msgid "%(number)s of %(n)s bag covered"
+msgid_plural "%(number)s of %(n)s bags covered"
+msgstr[0] "%(n)sটি ব্যাগের মধ্যে %(number)sটি পাওয়া গেছে"
+msgstr[1] "%(n)sটি ব্যাগের মধ্যে %(number)sটি পাওয়া গেছে"
+
+#: rewards/request_views.py
+msgid "Please keep the update under 300 characters."
+msgstr "হালনাগাদ 300 অক্ষরের মধ্যে রাখুন।"
+
+#: rewards/request_views.py
+msgid "%(n)s donor offered to help"
+msgid_plural "%(n)s donors offered to help"
+msgstr[0] "%(n)s জন রক্তদাতা সাহায্যের প্রস্তাব দিয়েছেন"
+msgstr[1] "%(n)s জন রক্তদাতা সাহায্যের প্রস্তাব দিয়েছেন"
+
+#: rewards/request_views.py
+msgid "You can donate again on %(date)s. Please let someone else respond to this request."
+msgstr "আপনি %(date)s তারিখে আবার রক্ত দিতে পারবেন। অনুগ্রহ করে এই অনুরোধে অন্য কাউকে সাড়া দিতে দিন।"
+
+#: rewards/request_views.py
+msgid "You have offered to help a lot today. Please try again tomorrow."
+msgstr "আজ আপনি অনেকবার সাহায্যের প্রস্তাব দিয়েছেন। কাল আবার চেষ্টা করুন।"
+
+#: rewards/request_views.py
+msgid "Thank you! The requester can now see your name and phone."
+msgstr "ধন্যবাদ! অনুরোধকারী এখন আপনার নাম ও ফোন নম্বর দেখতে পারবেন।"
+
+#: rewards/request_views.py
+msgid "Update posted."
+msgstr "হালনাগাদ দেওয়া হয়েছে।"
+
+#: rewards/request_views.py
+msgid "Tomorrow"
+msgstr "আগামীকাল"
+
+#: rewards/request_views.py
+msgid "In 3 days"
+msgstr "3 দিনের মধ্যে"
+
+#: rewards/request_views.py
+msgid "You can post up to %(n)s updates on one request. Close it, or post a new request if things changed."
+msgstr "একটি অনুরোধে সর্বোচ্চ %(n)sটি হালনাগাদ দেওয়া যায়। এটি বন্ধ করুন, অথবা পরিস্থিতি বদলে গেলে নতুন অনুরোধ জানান।"
+
+#: rewards/templates/rewards/_share_buttons.html
+msgid "Share"
+msgstr "শেয়ার"
+
+#: rewards/templates/rewards/_share_buttons.html
+msgid "Save image"
+msgstr "ছবি সংরক্ষণ করুন"
+
+#: rewards/templates/rewards/_share_buttons.html
+msgid "Copy link"
+msgstr "লিংক কপি করুন"
+
+#: rewards/templates/rewards/contact_inbox.html templates/snippets/nav.html
+msgid "Contact requests"
+msgstr "যোগাযোগের অনুরোধ"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "Inbox"
+msgstr "ইনবক্স"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "A number is shared only when the donor accepts. Declining tells the asker nothing else."
+msgstr "রক্তদাতা রাজি হলেই কেবল নম্বর জানানো হয়। প্রত্যাখ্যান করলে অনুরোধকারীকে আর কিছুই জানানো হয় না।"
+
+#: rewards/templates/rewards/contact_inbox.html rewards/templates/rewards/directory.html rewards/templates/rewards/request_detail.html templates/snippets/footer.html
+msgid "Find donors"
+msgstr "রক্তদাতা খুঁজুন"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "Inbox sections"
+msgstr "ইনবক্সের বিভাগ"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "People asking you"
+msgstr "যাঁরা আপনাকে অনুরোধ করছেন"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "You asked"
+msgstr "আপনি অনুরোধ করেছেন"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "People asking for your help"
+msgstr "যাঁরা আপনার সাহায্য চাইছেন"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "Waiting for you"
+msgstr "আপনার উত্তরের অপেক্ষায়"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "Number hidden"
+msgstr "নম্বর লুকানো"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "Accept"
+msgstr "গ্রহণ করুন"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "Decline"
+msgstr "প্রত্যাখ্যান করুন"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "Their number"
+msgstr "তাঁর নম্বর"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "Hide my number again"
+msgstr "আমার নম্বর আবার লুকান"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "Block this person"
+msgstr "এঁকে ব্লক করুন"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "No more requests from them, and they are not told."
+msgstr "তাঁর কাছ থেকে আর অনুরোধ আসবে না, আর তাঁকে জানানোও হবে না।"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "Nobody has asked yet"
+msgstr "এখনো কেউ অনুরোধ করেননি"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "You will see requests here when someone needs your help."
+msgstr "কারও আপনার সাহায্য লাগলে অনুরোধ এখানে দেখতে পাবেন।"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "Requests you sent"
+msgstr "আপনার পাঠানো অনুরোধ"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "Waiting"
+msgstr "অপেক্ষমাণ"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "No longer shared"
+msgstr "আর জানানো হচ্ছে না"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "This donor is not sharing their number any more. It is their choice and nothing you did."
+msgstr "এই রক্তদাতা আর নিজের নম্বর জানাচ্ছেন না। এটি তাঁর নিজের সিদ্ধান্ত, আপনার কোনো দোষ নেই।"
+
+#: rewards/templates/rewards/contact_inbox.html rewards/templates/rewards/directory.html
+msgid "Meanwhile, try someone else."
+msgstr "ইতিমধ্যে অন্য কাউকে চেষ্টা করুন।"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "Waiting for an answer. Don't worry: they only see your name and note."
+msgstr "উত্তরের অপেক্ষায়। চিন্তা করবেন না: তাঁরা শুধু আপনার নাম ও নোট দেখেন।"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "They can't help this time."
+msgstr "এবার তাঁরা সাহায্য করতে পারছেন না।"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "You haven't asked anyone yet"
+msgstr "আপনি এখনো কাউকে অনুরোধ করেননি"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "Search the directory by blood group and district."
+msgstr "রক্তের গ্রুপ ও জেলা দিয়ে তালিকায় খুঁজুন।"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "People you blocked"
+msgstr "আপনার ব্লক করা মানুষ"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "Unblock"
+msgstr "ব্লক তুলুন"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "Asked %(when)s"
+msgstr "অনুরোধ করেছেন: %(when)s"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "Accepting shares your phone number with %(name)s. Only accept if you are happy to be called."
+msgstr "গ্রহণ করলে আপনার ফোন নম্বর %(name)s-কে জানানো হবে। ফোন পেতে আপত্তি না থাকলেই কেবল গ্রহণ করুন।"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "You accepted on %(when)s."
+msgstr "আপনি %(when)s তারিখে গ্রহণ করেছেন।"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "You hid your number on %(when)s."
+msgstr "আপনি %(when)s তারিখে নম্বর লুকিয়েছেন।"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "You declined on %(when)s."
+msgstr "আপনি %(when)s তারিখে প্রত্যাখ্যান করেছেন।"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "You are not in the directory. <a href=\"%(privacy_url)s\">Join it</a> if you want to be found."
+msgstr "আপনি তালিকায় নেই। খুঁজে পেতে চাইলে <a href=\"%(privacy_url)s\">যোগ দিন</a>।"
+
+#: rewards/templates/rewards/contact_inbox.html
+msgid "Sent %(when)s"
+msgstr "পাঠানো হয়েছে: %(when)s"
+
+#: rewards/templates/rewards/contact_inbox.html rewards/templates/rewards/directory.html
+msgid "You can ask again after %(when)s."
+msgstr "%(when)s-এর পর আবার অনুরোধ করতে পারবেন।"
+
+#: rewards/templates/rewards/directory.html
+msgid "Donor directory"
+msgstr "রক্তদাতা তালিকা"
+
+#: rewards/templates/rewards/directory.html
+msgid "Find a donor near you"
+msgstr "আপনার কাছাকাছি রক্তদাতা খুঁজুন"
+
+#: rewards/templates/rewards/directory.html
+msgid "Everyone here chose to be listed. Numbers are shared only if they accept your request."
+msgstr "এখানে সবাই নিজের ইচ্ছায় তালিকাভুক্ত হয়েছেন। তাঁরা আপনার অনুরোধ গ্রহণ করলেই কেবল নম্বর জানানো হয়।"
+
+#: rewards/templates/rewards/directory.html rewards/templates/rewards/request_list.html rewards/templates/rewards/request_mine.html templates/snippets/nav.html
+msgid "My requests"
+msgstr "আমার অনুরোধ"
+
+#: rewards/templates/rewards/directory.html
+msgid "You're not listed."
+msgstr "আপনি তালিকায় নেই।"
+
+#: rewards/templates/rewards/directory.html
+msgid "See my requests"
+msgstr "আমার অনুরোধ দেখুন"
+
+#: rewards/templates/rewards/directory.html
+msgid "Filter donors"
+msgstr "রক্তদাতা ফিল্টার করুন"
+
+#: rewards/templates/rewards/directory.html
+msgid "Any"
+msgstr "যেকোনো"
+
+#: rewards/templates/rewards/directory.html
+msgid "Anywhere in Bangladesh"
+msgstr "বাংলাদেশের যেকোনো জায়গা"
+
+#: rewards/templates/rewards/directory.html
+msgid "Include compatible groups"
+msgstr "মিলে যাওয়া গ্রুপও ধরুন"
+
+#: rewards/templates/rewards/directory.html
+msgid "Available now only"
+msgstr "শুধু এখন প্রস্তুত যাঁরা"
+
+#: rewards/templates/rewards/directory.html
+msgid "Search"
+msgstr "খুঁজুন"
+
+#: rewards/templates/rewards/directory.html
+msgid "Compatibility is a general guide only. The hospital's own testing decides who can give."
+msgstr "মিল একটি সাধারণ নির্দেশনা মাত্র। কে রক্ত দিতে পারবেন, তা হাসপাতালের নিজস্ব পরীক্ষাই ঠিক করে।"
+
+#: rewards/templates/rewards/directory.html rewards/templates/rewards/request_list.html stories/templates/stories/story_list.html
+msgid "Clear filters"
+msgstr "ফিল্টার মুছুন"
+
+#: rewards/templates/rewards/directory.html
+msgid "They accepted"
+msgstr "তিনি রাজি হয়েছেন"
+
+#: rewards/templates/rewards/directory.html
+msgid "This donor can't help right now."
+msgstr "এই রক্তদাতা এখন সাহায্য করতে পারছেন না।"
+
+#: rewards/templates/rewards/directory.html
+msgid "This donor is not sharing their number any more."
+msgstr "এই রক্তদাতা আর নিজের নম্বর জানাচ্ছেন না।"
+
+#: rewards/templates/rewards/directory.html
+msgid "Not available now, but you can still leave a request. They may reply later."
+msgstr "এখন প্রস্তুত নন, তবু আপনি অনুরোধ রেখে যেতে পারেন। তিনি পরে উত্তর দিতে পারেন।"
+
+#: rewards/templates/rewards/directory.html
+msgid "Ask for help"
+msgstr "সাহায্য চান"
+
+#: rewards/templates/rewards/directory.html
+msgid "Short note"
+msgstr "ছোট নোট"
+
+#: rewards/templates/rewards/directory.html
+msgid "Short note: who needs blood, where, when (optional)"
+msgstr "ছোট নোট: কার রক্ত লাগবে, কোথায়, কখন (ঐচ্ছিক)"
+
+#: rewards/templates/rewards/directory.html
+msgid "Send request"
+msgstr "অনুরোধ পাঠান"
+
+#: rewards/templates/rewards/directory.html
+msgid "They see your name and note. Your number stays hidden unless they accept."
+msgstr "তিনি আপনার নাম ও নোট দেখবেন। তিনি রাজি না হলে আপনার নম্বর লুকানো থাকে।"
+
+#: rewards/templates/rewards/directory.html
+msgid "No donors match these filters"
+msgstr "এই ফিল্টারে কোনো রক্তদাতা মেলেনি"
+
+#: rewards/templates/rewards/directory.html
+msgid "Try a nearby district or include compatible groups."
+msgstr "কাছের কোনো জেলা চেষ্টা করুন অথবা মিলে যাওয়া গ্রুপও ধরুন।"
+
+#: rewards/templates/rewards/directory.html
+msgid "Try a nearby district."
+msgstr "কাছের কোনো জেলা চেষ্টা করুন।"
+
+#: rewards/templates/rewards/directory.html
+msgid "Nobody has joined the directory yet"
+msgstr "এখনো কেউ তালিকায় যোগ দেননি"
+
+#: rewards/templates/rewards/directory.html
+msgid "Be the first, or post an urgent request to reach donors directly."
+msgstr "প্রথম হোন, অথবা সরাসরি রক্তদাতাদের কাছে পৌঁছাতে জরুরি অনুরোধ জানান।"
+
+#: rewards/templates/rewards/directory.html
+msgid "Post an urgent request"
+msgstr "জরুরি অনুরোধ জানান"
+
+#: rewards/templates/rewards/directory.html
+msgid "<a href=\"%(privacy_url)s\">Join the directory</a> so people in need can ask you for help."
+msgstr "<a href=\"%(privacy_url)s\">তালিকায় যোগ দিন</a>, যাতে প্রয়োজনে থাকা মানুষ আপনার কাছে সাহায্য চাইতে পারে।"
+
+#: rewards/templates/rewards/directory.html
+msgid "You have %(n)s requests waiting for an answer. You can ask more people once someone replies."
+msgstr "আপনার %(n)sটি অনুরোধ উত্তরের অপেক্ষায় আছে। কেউ উত্তর দিলে আরও মানুষকে অনুরোধ করতে পারবেন।"
+
+#: rewards/templates/rewards/directory.html
+msgid "<strong class=\"bb-strong\">%(counter)s</strong> donor for %(g)s in %(place)s"
+msgid_plural "<strong class=\"bb-strong\">%(counter)s</strong> donors for %(g)s in %(place)s"
+msgstr[0] "%(place)s-এ %(g)s-এর জন্য <strong class=\"bb-strong\">%(counter)s</strong> জন রক্তদাতা"
+msgstr[1] "%(place)s-এ %(g)s-এর জন্য <strong class=\"bb-strong\">%(counter)s</strong> জন রক্তদাতা"
+
+#: rewards/templates/rewards/directory.html
+msgid "<strong class=\"bb-strong\">%(counter)s</strong> donor for %(g)s"
+msgid_plural "<strong class=\"bb-strong\">%(counter)s</strong> donors for %(g)s"
+msgstr[0] "%(g)s-এর জন্য <strong class=\"bb-strong\">%(counter)s</strong> জন রক্তদাতা"
+msgstr[1] "%(g)s-এর জন্য <strong class=\"bb-strong\">%(counter)s</strong> জন রক্তদাতা"
+
+#: rewards/templates/rewards/directory.html
+msgid "<strong class=\"bb-strong\">%(counter)s</strong> donor in %(place)s"
+msgid_plural "<strong class=\"bb-strong\">%(counter)s</strong> donors in %(place)s"
+msgstr[0] "%(place)s-এ <strong class=\"bb-strong\">%(counter)s</strong> জন রক্তদাতা"
+msgstr[1] "%(place)s-এ <strong class=\"bb-strong\">%(counter)s</strong> জন রক্তদাতা"
+
+#: rewards/templates/rewards/directory.html
+msgid "<strong class=\"bb-strong\">%(counter)s</strong> donor"
+msgid_plural "<strong class=\"bb-strong\">%(counter)s</strong> donors"
+msgstr[0] "<strong class=\"bb-strong\">%(counter)s</strong> জন রক্তদাতা"
+msgstr[1] "<strong class=\"bb-strong\">%(counter)s</strong> জন রক্তদাতা"
+
+#: rewards/templates/rewards/directory.html
+msgid "Compatible with %(g)s"
+msgstr "%(g)s-এর সঙ্গে মেলে"
+
+#: rewards/templates/rewards/directory.html
+msgid "You asked on %(when)s. Waiting for an answer."
+msgstr "আপনি %(when)s তারিখে অনুরোধ করেছেন। উত্তরের অপেক্ষায়।"
+
+#: rewards/templates/rewards/directory.html
+msgid "In an emergency, also call the hospital's blood bank. Eligibility and the %(interval)s gap between donations are reminders, never medical clearance. Follow the blood bank's screening before donating."
+msgstr "জরুরি অবস্থায় হাসপাতালের ব্লাড ব্যাংকেও ফোন করুন। যোগ্যতা ও রক্তদানের মধ্যকার %(interval)s বিরতি শুধু মনে করিয়ে দেওয়ার জন্য, কখনোই মেডিকেল অনুমোদন নয়। রক্ত দেওয়ার আগে ব্লাড ব্যাংকের স্ক্রিনিং মেনে চলুন।"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Who is saving the most lives?"
+msgstr "কে সবচেয়ে বেশি জীবন বাঁচাচ্ছেন?"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Only admin-verified donations count. Friendly competition, real blood."
+msgstr "শুধু অ্যাডমিন যাচাই করেছেন এমন রক্তদানই গোনা হয়। বন্ধুত্বপূর্ণ প্রতিযোগিতা, সত্যিকারের রক্ত।"
+
+#: rewards/templates/rewards/leaderboard.html templates/snippets/footer.html
+msgid "Squads"
+msgstr "স্কোয়াড"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Period"
+msgstr "সময়কাল"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "All time"
+msgstr "সর্বকালের"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "This month"
+msgstr "এই মাস"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Filter by district"
+msgstr "জেলা অনুযায়ী ফিল্টার"
+
+#: rewards/templates/rewards/leaderboard.html rewards/templates/rewards/request_list.html stories/templates/stories/story_list.html
+msgid "Apply"
+msgstr "প্রয়োগ করুন"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Show all districts"
+msgstr "সব জেলা দেখান"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "You're hidden from the leaderboard"
+msgstr "আপনি লিডারবোর্ডে লুকানো আছেন"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Your donations still count in site totals, just not in rankings."
+msgstr "আপনার রক্তদান সাইটের মোট হিসাবে ধরা হচ্ছে, শুধু র‍্যাঙ্কিংয়ে নয়।"
+
+#: rewards/templates/rewards/leaderboard.html templates/snippets/footer.html
+msgid "Privacy settings"
+msgstr "গোপনীয়তা সেটিংস"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "You're leading. Keep it up!"
+msgstr "আপনি এগিয়ে আছেন। চালিয়ে যান!"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Climb higher"
+msgstr "আরও উপরে উঠুন"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "You're not on the board yet"
+msgstr "আপনি এখনো তালিকায় নেই"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Top three"
+msgstr "শীর্ষ তিনজন"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Ranking"
+msgstr "র‍্যাঙ্কিং"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Nobody on the board yet"
+msgstr "এখনো তালিকায় কেউ নেই"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Points: 10 per verified donation, +20 for each donation to an urgent request"
+msgstr "পয়েন্ট: প্রতি যাচাই করা রক্তদানে 10, জরুরি অনুরোধে প্রতিটি রক্তদানের জন্য +20"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid ", +5 per streak cycle"
+msgstr ", প্রতি ধারাবাহিকতার চক্রে +5"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Equal points and donations share a rank."
+msgstr "পয়েন্ট ও রক্তদান সমান হলে একই র‍্যাঙ্ক দেওয়া হয়।"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Request heroes"
+msgstr "অনুরোধের হিরো"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Monthly awards"
+msgstr "মাসিক পুরস্কার"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "(site-wide)"
+msgstr "(পুরো সাইটের)"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "New donors"
+msgstr "নতুন রক্তদাতা"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "No verified donations yet this month. Be the first on the board!"
+msgstr "এই মাসে এখনো কোনো যাচাই করা রক্তদান নেই। তালিকায় প্রথম হোন!"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Donate better together"
+msgstr "একসঙ্গে আরও ভালোভাবে রক্ত দিন"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Start a squad with friends, your office or university and climb the squad ranking."
+msgstr "বন্ধু, অফিস বা বিশ্ববিদ্যালয়ের সঙ্গে একটি স্কোয়াড শুরু করুন এবং স্কোয়াড র‍্যাঙ্কিংয়ে এগিয়ে যান।"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Squad ranking"
+msgstr "স্কোয়াড র‍্যাঙ্কিং"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Showing donations made in <strong>%(place)s</strong>."
+msgstr "<strong>%(place)s</strong>-এ হওয়া রক্তদান দেখানো হচ্ছে।"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Your rank (tied): %(n)s points"
+msgstr "আপনার র‍্যাঙ্ক (সমান): %(n)s পয়েন্ট"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Your rank: %(n)s points"
+msgstr "আপনার র‍্যাঙ্ক: %(n)s পয়েন্ট"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "%(counter)s point to catch the next rank."
+msgid_plural "%(counter)s points to catch the next rank."
+msgstr[0] "পরের র‍্যাঙ্কে পৌঁছাতে আরও %(counter)s পয়েন্ট দরকার।"
+msgstr[1] "পরের র‍্যাঙ্কে পৌঁছাতে আরও %(counter)s পয়েন্ট দরকার।"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "%(counter)s verified donation."
+msgid_plural "%(counter)s verified donations."
+msgstr[0] "%(counter)sটি যাচাই করা রক্তদান।"
+msgstr[1] "%(counter)sটি যাচাই করা রক্তদান।"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "You have %(counter)s point"
+msgid_plural "You have %(counter)s points"
+msgstr[0] "আপনার %(counter)s পয়েন্ট আছে"
+msgstr[1] "আপনার %(counter)s পয়েন্ট আছে"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "That's outside the top %(n)s for now. Every verified donation moves you up."
+msgstr "এখন এটি শীর্ষ %(n)s জনের বাইরে। প্রতিটি যাচাই করা রক্তদান আপনাকে এগিয়ে নেয়।"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Rank %(n)s"
+msgstr "র‍্যাঙ্ক %(n)s"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "%(counter)s donation"
+msgid_plural "%(counter)s donations"
+msgstr[0] "%(counter)sটি রক্তদান"
+msgstr[1] "%(counter)sটি রক্তদান"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "Answered %(counter)s urgent request"
+msgid_plural "Answered %(counter)s urgent requests"
+msgstr[0] "%(counter)sটি জরুরি অনুরোধে সাড়া দিয়েছেন"
+msgstr[1] "%(counter)sটি জরুরি অনুরোধে সাড়া দিয়েছেন"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "est. up to %(n)s people helped"
+msgstr "আনুমানিক সর্বোচ্চ %(n)s জন উপকৃত"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "%(counter)s urgent request answered"
+msgid_plural "%(counter)s urgent requests answered"
+msgstr[0] "%(counter)sটি জরুরি অনুরোধে সাড়া দিয়েছেন"
+msgstr[1] "%(counter)sটি জরুরি অনুরোধে সাড়া দিয়েছেন"
+
+#: rewards/templates/rewards/leaderboard.html
+msgid "%(m)s awards"
+msgstr "%(m)s-এর পুরস্কার"
+
+#: rewards/templates/rewards/log_donation.html templates/snippets/nav.html
+msgid "My hub"
+msgstr "আমার হাব"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Hi, friend"
+msgstr "হ্যালো, বন্ধু"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "XP"
+msgstr "XP"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Top level reached"
+msgstr "সর্বোচ্চ লেভেলে পৌঁছেছেন"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Progress to next level"
+msgstr "পরের লেভেলের পথে অগ্রগতি"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Ready to donate"
+msgstr "রক্ত দিতে প্রস্তুত"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Log your first donation to start your journey."
+msgstr "যাত্রা শুরু করতে আপনার প্রথম রক্তদান লিপিবদ্ধ করুন।"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Recharging"
+msgstr "শক্তি ফিরে পাচ্ছেন"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Recharge progress"
+msgstr "বিশ্রামের অগ্রগতি"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "You are ready to help."
+msgstr "আপনি সাহায্য করতে প্রস্তুত।"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "View"
+msgstr "দেখুন"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "awaiting review"
+msgstr "পর্যালোচনার অপেক্ষায়"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "cycle streak"
+msgstr "চক্রের ধারাবাহিকতা"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Next step"
+msgstr "পরের ধাপ"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Go"
+msgstr "যান"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Donation date"
+msgstr "রক্তদানের তারিখ"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Donated for an urgent request? (+20 bonus points)"
+msgstr "জরুরি অনুরোধের জন্য রক্ত দিয়েছেন? (+20 বোনাস পয়েন্ট)"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Submit for verification"
+msgstr "যাচাইয়ের জন্য জমা দিন"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "An admin verifies each donation before it counts toward your tier."
+msgstr "আপনার স্তরে গোনার আগে একজন অ্যাডমিন প্রতিটি রক্তদান যাচাই করেন।"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "My donations"
+msgstr "আমার রক্তদান"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Print / save"
+msgstr "প্রিন্ট / সংরক্ষণ"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Delete"
+msgstr "মুছুন"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "No donations logged yet."
+msgstr "এখনো কোনো রক্তদান লিপিবদ্ধ হয়নি।"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Your first one starts the journey."
+msgstr "আপনার প্রথমটিই যাত্রা শুরু করবে।"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Donor tier"
+msgstr "রক্তদাতার স্তর"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "No tier yet"
+msgstr "এখনো কোনো স্তর নেই"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "One verified donation earns Bronze."
+msgstr "একটি যাচাই করা রক্তদানে ব্রোঞ্জ মেলে।"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Highest tier reached. Thank you!"
+msgstr "সর্বোচ্চ স্তরে পৌঁছেছেন। ধন্যবাদ!"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Quests"
+msgstr "কুয়েস্ট"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "(done)"
+msgstr "(সম্পন্ন)"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Streak badges"
+msgstr "ধারাবাহিকতার ব্যাজ"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Hero badges"
+msgstr "হিরো ব্যাজ"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Share &amp; download"
+msgstr "শেয়ার ও ডাউনলোড"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Share my badge"
+msgstr "আমার ব্যাজ শেয়ার করুন"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Donor card"
+msgstr "রক্তদাতা কার্ড"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Print history"
+msgstr "ইতিহাস প্রিন্ট করুন"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Blood group %(g)s"
+msgstr "রক্তের গ্রুপ %(g)s"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Hi, %(name)s"
+msgstr "হ্যালো, %(name)s"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Level %(n)s"
+msgstr "লেভেল %(n)s"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "<span class=\"bb-num\">%(n)s</span> to %(name)s"
+msgstr "%(name)s পর্যন্ত <span class=\"bb-num\">%(n)s</span>"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "day left"
+msgid_plural "days left"
+msgstr[0] "দিন বাকি"
+msgstr[1] "দিন বাকি"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "The %(interval)s gap since %(d)s has passed."
+msgstr "%(d)s থেকে %(interval)s-এর বিরতি পেরিয়ে গেছে।"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Next donation from <strong class=\"bb-strong\">%(d)s</strong>."
+msgstr "পরবর্তী রক্তদান <strong class=\"bb-strong\">%(d)s</strong> থেকে।"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "A reminder only (%(interval)s gap), not medical clearance. Always follow the blood bank's screening."
+msgstr "শুধু একটি স্মারক (%(interval)s বিরতি), মেডিকেল অনুমোদন নয়। সবসময় ব্লাড ব্যাংকের স্ক্রিনিং মেনে চলুন।"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "%(counter)s urgent request needs %(g)s"
+msgid_plural "%(counter)s urgent requests need %(g)s"
+msgstr[0] "%(counter)sটি জরুরি অনুরোধে %(g)s লাগবে"
+msgstr[1] "%(counter)sটি জরুরি অনুরোধে %(g)s লাগবে"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "verified donation"
+msgid_plural "verified donations"
+msgstr[0] "যাচাই করা রক্তদান"
+msgstr[1] "যাচাই করা রক্তদান"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "request donation"
+msgid_plural "request donations"
+msgstr[0] "অনুরোধে রক্তদান"
+msgstr[1] "অনুরোধে রক্তদান"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "est. up to <strong class=\"bb-strong\">%(n)s</strong> people helped"
+msgstr "আনুমানিক সর্বোচ্চ <strong class=\"bb-strong\">%(n)s</strong> জন উপকৃত"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Delete pending donation from %(d)s"
+msgstr "%(d)s-এর অপেক্ষমাণ রক্তদান মুছুন"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "See all %(n)s"
+msgstr "সব %(n)sটি দেখুন"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "%(counter)s more donation to %(name)s"
+msgid_plural "%(counter)s more donations to %(name)s"
+msgstr[0] "%(name)s পর্যন্ত আরও %(counter)sটি রক্তদান"
+msgstr[1] "%(name)s পর্যন্ত আরও %(counter)sটি রক্তদান"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "%(n)s+ streak"
+msgstr "%(n)s+ ধারাবাহিকতা"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Donate every %(interval)s cycle to grow your streak."
+msgstr "ধারাবাহিকতা বাড়াতে প্রতি %(interval)s চক্রে রক্ত দিন।"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "%(counter)s+ request"
+msgid_plural "%(counter)s+ requests"
+msgstr[0] "%(counter)s+ অনুরোধ"
+msgstr[1] "%(counter)s+ অনুরোধ"
+
+#: rewards/templates/rewards/log_donation.html
+msgid "Verified donations to urgent requests (%(n)s so far). <a href=\"%(list_url)s\">Find a request</a>"
+msgstr "জরুরি অনুরোধে যাচাই করা রক্তদান (এ পর্যন্ত %(n)sটি)। <a href=\"%(list_url)s\">একটি অনুরোধ খুঁজুন</a>"
+
+#: rewards/templates/rewards/request_detail.html rewards/templates/rewards/request_list.html rewards/templates/rewards/request_mine.html
+msgid "Bags received"
+msgstr "পাওয়া ব্যাগ"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Donors offered"
+msgstr "সাহায্যের প্রস্তাব দিয়েছেন"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Patient"
+msgstr "রোগী"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Several members reported this request, so it is hidden from the public board while our team reviews it. You can still close it from here."
+msgstr "কয়েকজন সদস্য এই অনুরোধ নিয়ে অভিযোগ করেছেন, তাই আমাদের টিম পর্যালোচনা করা পর্যন্ত এটি পাবলিক তালিকা থেকে লুকানো আছে। আপনি এখান থেকে এটি বন্ধ করতে পারবেন।"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Members reported this request, so it is being reviewed. Contact details are hidden until then. Please check with the hospital before acting on it."
+msgstr "সদস্যরা এই অনুরোধ নিয়ে অভিযোগ করেছেন, তাই এটি পর্যালোচনা করা হচ্ছে। ততক্ষণ যোগাযোগের তথ্য লুকানো থাকবে। কিছু করার আগে হাসপাতালের সঙ্গে যাচাই করে নিন।"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "This request is fulfilled. Thank you to every donor!"
+msgstr "এই অনুরোধ পূরণ হয়েছে। প্রতিজন রক্তদাতাকে ধন্যবাদ!"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "This request has expired."
+msgstr "এই অনুরোধের মেয়াদ শেষ হয়েছে।"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Contact"
+msgstr "যোগাযোগ"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Log in to see the contact number and offer to help."
+msgstr "যোগাযোগের নম্বর দেখতে ও সাহায্যের প্রস্তাব দিতে লগ ইন করুন।"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Log in to help"
+msgstr "সাহায্য করতে লগ ইন করুন"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Join as a donor"
+msgstr "রক্তদাতা হিসেবে যোগ দিন"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "I can help"
+msgstr "আমি সাহায্য করতে পারি"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "The requester will see your name and phone. Only offer if you feel well; the blood bank decides if you can donate."
+msgstr "অনুরোধকারী আপনার নাম ও ফোন নম্বর দেখতে পাবেন। নিজেকে সুস্থ মনে হলেই কেবল প্রস্তাব দিন; আপনি রক্ত দিতে পারবেন কি না, তা ব্লাড ব্যাংক ঠিক করে।"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Donors who can help"
+msgstr "যে রক্তদাতারা সাহায্য করতে পারেন"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "compatible in the directory"
+msgstr "তালিকায় মিলে যাওয়া"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "No compatible donors are listed yet. Sharing this request is the fastest way to reach more people."
+msgstr "এখনো মিলে যাওয়া কোনো রক্তদাতা তালিকায় নেই। এই অনুরোধ শেয়ার করাই আরও মানুষের কাছে পৌঁছানোর দ্রুততম উপায়।"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Donors share their number only if they accept your request. Compatibility is a guide; the hospital decides."
+msgstr "রক্তদাতারা আপনার অনুরোধ গ্রহণ করলেই কেবল নিজের নম্বর জানান। মিল একটি নির্দেশনা; সিদ্ধান্ত হাসপাতালের।"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Number not shared"
+msgstr "নম্বর জানানো হয়নি"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Nobody yet. Share this request to reach more donors."
+msgstr "এখনো কেউ নেই। আরও রক্তদাতার কাছে পৌঁছাতে এই অনুরোধ শেয়ার করুন।"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Post an update"
+msgstr "হালনাগাদ দিন"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Kind of update"
+msgstr "হালনাগাদের ধরন"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "e.g. Two donors found, one bag to go"
+msgstr "যেমন: দুজন রক্তদাতা পেয়েছি, আরও এক ব্যাগ বাকি"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Post"
+msgstr "দিন"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Close this request"
+msgstr "এই অনুরোধ বন্ধ করুন"
+
+#: rewards/templates/rewards/request_detail.html rewards/templates/rewards/request_mine.html
+msgid "What happened?"
+msgstr "কী হয়েছে?"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Close request"
+msgstr "অনুরোধ বন্ধ করুন"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Know someone who can help? Share this request"
+msgstr "কাউকে চেনেন যিনি সাহায্য করতে পারেন? এই অনুরোধ শেয়ার করুন"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "What has happened"
+msgstr "যা যা ঘটেছে"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "You reported this request"
+msgstr "আপনি এই অনুরোধ রিপোর্ট করেছেন"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Report this request"
+msgstr "এই অনুরোধ রিপোর্ট করুন"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "What is wrong?"
+msgstr "কী সমস্যা?"
+
+#: rewards/templates/rewards/request_detail.html rewards/templates/rewards/request_form.html
+msgid "(optional)"
+msgstr "(ঐচ্ছিক)"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Send report"
+msgstr "রিপোর্ট পাঠান"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "%(group)s needed at %(hospital)s"
+msgstr "%(hospital)s-এ %(group)s লাগবে"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Urgent: %(group)s blood needed at %(hospital)s"
+msgstr "জরুরি: %(hospital)s-এ %(group)s রক্ত লাগবে"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "%(counter)s bag still needed in %(place)s by %(d)s. Can you help?"
+msgid_plural "%(counter)s bags still needed in %(place)s by %(d)s. Can you help?"
+msgstr[0] "%(d)s-এর মধ্যে %(place)s-এ আরও %(counter)sটি ব্যাগ লাগবে। আপনি কি সাহায্য করতে পারেন?"
+msgstr[1] "%(d)s-এর মধ্যে %(place)s-এ আরও %(counter)sটি ব্যাগ লাগবে। আপনি কি সাহায্য করতে পারেন?"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Reported (%(n)s)"
+msgstr "রিপোর্ট করা হয়েছে (%(n)s)"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "<strong class=\"bb-strong\">%(received)s</strong> of %(counter)s bag covered"
+msgid_plural "<strong class=\"bb-strong\">%(received)s</strong> of %(counter)s bags covered"
+msgstr[0] "%(counter)sটি ব্যাগের মধ্যে <strong class=\"bb-strong\">%(received)s</strong>টি পাওয়া গেছে"
+msgstr[1] "%(counter)sটি ব্যাগের মধ্যে <strong class=\"bb-strong\">%(received)s</strong>টি পাওয়া গেছে"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "%(n)s still needed"
+msgstr "আরও %(n)sটি লাগবে"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "This request is closed: %(outcome)s."
+msgstr "এই অনুরোধ বন্ধ: %(outcome)s।"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "You're on the list. The requester can see your name and phone. After you donate, <a href=\"%(log_url)s\">log it</a> and pick this request to earn bonus points."
+msgstr "আপনি তালিকায় আছেন। অনুরোধকারী আপনার নাম ও ফোন নম্বর দেখতে পারেন। রক্ত দেওয়ার পর <a href=\"%(log_url)s\">সেটি লিপিবদ্ধ করুন</a> এবং বোনাস পয়েন্ট পেতে এই অনুরোধটি বেছে নিন।"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "You can donate again on <strong>%(d)s</strong>. Please share this request so someone else can help."
+msgstr "আপনি <strong>%(d)s</strong> তারিখে আবার রক্ত দিতে পারবেন। অনুগ্রহ করে এই অনুরোধ শেয়ার করুন, যাতে অন্য কেউ সাহায্য করতে পারেন।"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "in %(place)s"
+msgstr "%(place)s-এ"
+
+#: rewards/templates/rewards/request_detail.html
+msgid "Donors who offered to help (%(n)s)"
+msgstr "যে রক্তদাতারা সাহায্যের প্রস্তাব দিয়েছেন (%(n)s)"
+
+#: rewards/templates/rewards/request_form.html
+msgid "Post a blood request"
+msgstr "রক্তের অনুরোধ জানান"
+
+#: rewards/templates/rewards/request_form.html rewards/templates/rewards/request_list.html
+msgid "Urgent"
+msgstr "জরুরি"
+
+#: rewards/templates/rewards/request_form.html
+msgid "Three quick steps. Logged-in donors will see the hospital and your phone number."
+msgstr "তিনটি ছোট ধাপ। লগ ইন করা রক্তদাতারা হাসপাতাল ও আপনার ফোন নম্বর দেখতে পাবেন।"
+
+#: rewards/templates/rewards/request_form.html
+msgid "Who needs blood?"
+msgstr "কার রক্ত লাগবে?"
+
+#: rewards/templates/rewards/request_form.html
+msgid "Patient's blood group"
+msgstr "রোগীর রক্তের গ্রুপ"
+
+#: rewards/templates/rewards/request_form.html
+msgid "Patient name"
+msgstr "রোগীর নাম"
+
+#: rewards/templates/rewards/request_form.html
+msgid "Where is it needed?"
+msgstr "কোথায় লাগবে?"
+
+#: rewards/templates/rewards/request_form.html
+msgid "Hospital or blood bank"
+msgstr "হাসপাতাল বা ব্লাড ব্যাংক"
+
+#: rewards/templates/rewards/request_form.html
+msgid "Hospital not listed? Type its name"
+msgstr "হাসপাতাল তালিকায় নেই? নামটি লিখুন"
+
+#: rewards/templates/rewards/request_form.html
+msgid "When, and how to reach you"
+msgstr "কখন লাগবে, আর কীভাবে আপনার সঙ্গে যোগাযোগ করা যাবে"
+
+#: rewards/templates/rewards/request_form.html
+msgid "Quick dates"
+msgstr "দ্রুত তারিখ"
+
+#: rewards/templates/rewards/request_form.html
+msgid "Shown only to logged-in members."
+msgstr "শুধু লগ ইন করা সদস্যদের দেখানো হয়।"
+
+#: rewards/templates/rewards/request_form.html
+msgid "Post request"
+msgstr "অনুরোধ জানান"
+
+#: rewards/templates/rewards/request_form.html
+msgid "Please post only real, current needs. Never share medical record numbers."
+msgstr "শুধু সত্যিকারের, বর্তমান প্রয়োজন জানান। মেডিকেল রেকর্ড নম্বর কখনোই দেবেন না।"
+
+#: rewards/templates/rewards/request_form.html
+msgid "Back to requests"
+msgstr "অনুরোধের তালিকায় ফিরে যান"
+
+#: rewards/templates/rewards/request_form.html
+msgid "You already have %(n)s open requests. <a href=\"%(mine_url)s\">Close one</a> before posting another."
+msgstr "আপনার ইতিমধ্যে %(n)sটি চলমান অনুরোধ আছে। আরেকটি জানানোর আগে <a href=\"%(mine_url)s\">একটি বন্ধ করুন</a>।"
+
+#: rewards/templates/rewards/request_list.html
+msgid "Urgent blood requests"
+msgstr "জরুরি রক্তের অনুরোধ"
+
+#: rewards/templates/rewards/request_list.html
+msgid "People near you who need blood right now. See who needs which group, where, and by when."
+msgstr "আপনার কাছাকাছি যাঁদের এখনই রক্ত লাগবে। কার কোন গ্রুপ, কোথায় এবং কবে লাগবে, তা দেখুন।"
+
+#: rewards/templates/rewards/request_list.html
+msgid "People near you who need blood right now. Can you help?"
+msgstr "আপনার কাছাকাছি যাঁদের এখনই রক্ত লাগবে। আপনি কি সাহায্য করতে পারেন?"
+
+#: rewards/templates/rewards/request_list.html rewards/templates/rewards/request_mine.html
+msgid "Post a request"
+msgstr "অনুরোধ জানান"
+
+#: rewards/templates/rewards/request_list.html
+msgid "Filter requests"
+msgstr "অনুরোধ ফিল্টার করুন"
+
+#: rewards/templates/rewards/request_list.html
+msgid "Group"
+msgstr "গ্রুপ"
+
+#: rewards/templates/rewards/request_list.html
+msgid "Needed"
+msgstr "যখন লাগবে"
+
+#: rewards/templates/rewards/request_list.html rewards/templates/rewards/request_mine.html
+msgid "Reported"
+msgstr "রিপোর্ট করা হয়েছে"
+
+#: rewards/templates/rewards/request_list.html
+msgid "No open requests match these filters."
+msgstr "এই ফিল্টারে কোনো চলমান অনুরোধ মেলেনি।"
+
+#: rewards/templates/rewards/request_list.html
+msgid "Try another group or district."
+msgstr "অন্য গ্রুপ বা জেলা চেষ্টা করুন।"
+
+#: rewards/templates/rewards/request_list.html
+msgid "No one is waiting for blood right now."
+msgstr "এই মুহূর্তে কেউ রক্তের অপেক্ষায় নেই।"
+
+#: rewards/templates/rewards/request_list.html
+msgid "That is good news. If you or someone you know needs blood, post a request."
+msgstr "এটা সুখবর। আপনার বা আপনার পরিচিত কারও রক্ত লাগলে অনুরোধ জানান।"
+
+#: rewards/templates/rewards/request_list.html
+msgid "In an emergency, call the hospital's blood bank first. Whether someone can donate is decided by the blood bank, not by this site."
+msgstr "জরুরি অবস্থায় আগে হাসপাতালের ব্লাড ব্যাংকে ফোন করুন। কেউ রক্ত দিতে পারবেন কি না, তা ব্লাড ব্যাংক ঠিক করে, এই সাইট নয়।"
+
+#: rewards/templates/rewards/request_list.html
+msgid "You can donate again on <strong>%(d)s</strong> (%(counter)s day left). You can still share a request to help find a donor."
+msgid_plural "You can donate again on <strong>%(d)s</strong> (%(counter)s days left). You can still share a request to help find a donor."
+msgstr[0] "আপনি <strong>%(d)s</strong> তারিখে আবার রক্ত দিতে পারবেন (আর %(counter)s দিন বাকি)। রক্তদাতা খুঁজতে আপনি এখনো অনুরোধ শেয়ার করতে পারেন।"
+msgstr[1] "আপনি <strong>%(d)s</strong> তারিখে আবার রক্ত দিতে পারবেন (আর %(counter)s দিন বাকি)। রক্তদাতা খুঁজতে আপনি এখনো অনুরোধ শেয়ার করতে পারেন।"
+
+#: rewards/templates/rewards/request_list.html
+msgid "%(counter)s request still needs donors for %(group)s in %(place)s."
+msgid_plural "%(counter)s requests still need donors for %(group)s in %(place)s."
+msgstr[0] "%(place)s-এ %(group)s-এর জন্য %(counter)sটি অনুরোধে এখনো রক্তদাতা লাগবে।"
+msgstr[1] "%(place)s-এ %(group)s-এর জন্য %(counter)sটি অনুরোধে এখনো রক্তদাতা লাগবে।"
+
+#: rewards/templates/rewards/request_list.html
+msgid "%(counter)s request still needs donors for %(group)s."
+msgid_plural "%(counter)s requests still need donors for %(group)s."
+msgstr[0] "%(group)s-এর জন্য %(counter)sটি অনুরোধে এখনো রক্তদাতা লাগবে।"
+msgstr[1] "%(group)s-এর জন্য %(counter)sটি অনুরোধে এখনো রক্তদাতা লাগবে।"
+
+#: rewards/templates/rewards/request_list.html
+msgid "%(counter)s request still needs donors in %(place)s."
+msgid_plural "%(counter)s requests still need donors in %(place)s."
+msgstr[0] "%(place)s-এ %(counter)sটি অনুরোধে এখনো রক্তদাতা লাগবে।"
+msgstr[1] "%(place)s-এ %(counter)sটি অনুরোধে এখনো রক্তদাতা লাগবে।"
+
+#: rewards/templates/rewards/request_list.html
+msgid "%(counter)s request still needs donors."
+msgid_plural "%(counter)s requests still need donors."
+msgstr[0] "%(counter)sটি অনুরোধে এখনো রক্তদাতা লাগবে।"
+msgstr[1] "%(counter)sটি অনুরোধে এখনো রক্তদাতা লাগবে।"
+
+#: rewards/templates/rewards/request_list.html rewards/templates/rewards/request_mine.html
+msgid "%(n)s offered"
+msgstr "%(n)s জন প্রস্তাব দিয়েছেন"
+
+#: rewards/templates/rewards/request_list.html
+msgid "<strong>%(remaining)s</strong> of %(counter)s bag still needed"
+msgid_plural "<strong>%(remaining)s</strong> of %(counter)s bags still needed"
+msgstr[0] "%(counter)sটি ব্যাগের মধ্যে <strong>%(remaining)s</strong>টি এখনো লাগবে"
+msgstr[1] "%(counter)sটি ব্যাগের মধ্যে <strong>%(remaining)s</strong>টি এখনো লাগবে"
+
+#: rewards/templates/rewards/request_mine.html
+msgid "Your requests"
+msgstr "আপনার অনুরোধ"
+
+#: rewards/templates/rewards/request_mine.html
+msgid "Close: what happened?"
+msgstr "বন্ধ করুন: কী হয়েছে?"
+
+#: rewards/templates/rewards/request_mine.html
+msgid "Close"
+msgstr "বন্ধ করুন"
+
+#: rewards/templates/rewards/request_mine.html
+msgid "You have not posted a request."
+msgstr "আপনি এখনো কোনো অনুরোধ জানাননি।"
+
+#: rewards/templates/rewards/request_mine.html
+msgid "If you or someone you know needs blood, post it here and donors will see it."
+msgstr "আপনার বা আপনার পরিচিত কারও রক্ত লাগলে এখানে জানান, রক্তদাতারা দেখতে পাবেন।"
+
+#: rewards/templates/rewards/request_mine.html
+msgid "%(n)s open: close one to post more"
+msgstr "%(n)sটি চলমান: আরও জানাতে একটি বন্ধ করুন"
+
+#: rewards/templates/rewards/request_mine.html
+msgid "<strong>%(received)s</strong> of %(counter)s bag covered"
+msgid_plural "<strong>%(received)s</strong> of %(counter)s bags covered"
+msgstr[0] "%(counter)sটি ব্যাগের মধ্যে <strong>%(received)s</strong>টি পাওয়া গেছে"
+msgstr[1] "%(counter)sটি ব্যাগের মধ্যে <strong>%(received)s</strong>টি পাওয়া গেছে"
+
+#: squads/models.py
+msgid "Squad name"
+msgstr "স্কোয়াডের নাম"
+
+#: squads/models.py
+msgid "Show in the public squad list"
+msgstr "পাবলিক স্কোয়াড তালিকায় দেখান"
+
+#: squads/models.py
+msgid "Owner"
+msgstr "মালিক"
+
+#: squads/models.py
+msgid "Member"
+msgstr "সদস্য"
+
+#: stories/models.py
+msgid "I am sharing as"
+msgstr "আমি যেভাবে শেয়ার করছি"
+
+#: stories/models.py
+msgid "Your story"
+msgstr "আপনার গল্প"
+
+#: stories/models.py
+msgid "Share without my name"
+msgstr "আমার নাম ছাড়া শেয়ার করুন"
+
+#: stories/models.py
+msgid "Moderation note"
+msgstr "মডারেশন নোট"
+
+#: stories/models.py
+msgid "Please write plain text only, without HTML or tags."
+msgstr "শুধু সাধারণ লেখা লিখুন, HTML বা ট্যাগ ছাড়া।"
+
+#: stories/models.py
+msgid "Donor"
+msgstr "রক্তদাতা"
+
+#: stories/models.py
+msgid "Recipient family"
+msgstr "রক্তগ্রহীতার পরিবার"
+
+#: stories/models.py
+msgid "Volunteer"
+msgstr "স্বেচ্ছাসেবক"
+
+#: stories/models.py
+msgid "Pending review"
+msgstr "পর্যালোচনার অপেক্ষায়"
+
+#: stories/models.py
+msgid "Not published"
+msgstr "প্রকাশিত হয়নি"
+
+#: stories/models.py
+msgid "Link a verified donation"
+msgstr "যাচাই করা একটি রক্তদান যুক্ত করুন"
+
+#: stories/models.py
+msgid "Shown to the author when a story is not published."
+msgstr "গল্প প্রকাশিত না হলে লেখককে এটি দেখানো হয়।"
+
+#: stories/models.py
+msgid "Moved me"
+msgstr "মনে দাগ কেটেছে"
+
+#: stories/models.py
+msgid "Thank you"
+msgstr "ধন্যবাদ"
+
+#: stories/models.py
+msgid "Proud of you"
+msgstr "আপনার জন্য গর্বিত"
+
+#: stories/models.py
+msgid "Does not seem true"
+msgstr "সত্য মনে হচ্ছে না"
+
+#: stories/models.py
+msgid "Shares private details"
+msgstr "ব্যক্তিগত তথ্য প্রকাশ করছে"
+
+#: stories/models.py
+msgid "Offensive or unkind"
+msgstr "আপত্তিকর বা অশোভন"
+
+#: stories/models.py
+msgid "Spam or advert"
+msgstr "স্প্যাম বা বিজ্ঞাপন"
+
+#: stories/models.py
+msgid "You can only link your own donation."
+msgstr "আপনি শুধু আপনার নিজের রক্তদান যুক্ত করতে পারবেন।"
+
+#: stories/models.py
+msgid "Only a verified donation can be linked."
+msgstr "শুধু যাচাই করা রক্তদান যুক্ত করা যায়।"
+
+#: stories/templates/stories/_card.html stories/templates/stories/_home_strip.html
+msgid "Read the story"
+msgstr "গল্পটি পড়ুন"
+
+#: stories/templates/stories/_home_strip.html stories/templates/stories/story_list.html templates/snippets/footer.html templates/snippets/nav.html
+msgid "Stories"
+msgstr "গল্প"
+
+#: stories/templates/stories/_home_strip.html stories/templates/stories/story_list.html
+msgid "Share your story"
+msgstr "আপনার গল্প শেয়ার করুন"
+
+#: stories/templates/stories/_home_strip.html
+msgid "Every bag has a story"
+msgstr "প্রতিটি ব্যাগের একটি গল্প আছে"
+
+#: stories/templates/stories/_home_strip.html
+msgid "All stories"
+msgstr "সব গল্প"
+
+#: stories/templates/stories/_home_strip.html
+msgid "Donors, recipient families and volunteers are all welcome."
+msgstr "রক্তদাতা, রক্তগ্রহীতার পরিবার ও স্বেচ্ছাসেবক, সবাইকে স্বাগত।"
+
+#: stories/templates/stories/_home_strip.html
+msgid "No stories yet. Be the first."
+msgstr "এখনো কোনো গল্প নেই। প্রথম হোন।"
+
+#: stories/templates/stories/_home_strip.html
+msgid "Tell us about a donation, or about the person who gave blood when your family needed it."
+msgstr "কোনো রক্তদানের কথা বলুন, অথবা আপনার পরিবারের প্রয়োজনে যিনি রক্ত দিয়েছিলেন, তাঁর কথা বলুন।"
+
+#: stories/templates/stories/_tags.html
+msgid "Verified donation"
+msgstr "যাচাই করা রক্তদান"
+
+#: stories/templates/stories/story_list.html
+msgid "Real stories from blood donors, recipient families and volunteers across Bangladesh."
+msgstr "বাংলাদেশজুড়ে রক্তদাতা, রক্তগ্রহীতার পরিবার ও স্বেচ্ছাসেবকদের সত্যিকারের গল্প।"
+
+#: stories/templates/stories/story_list.html templates/snippets/footer.html
+msgid "Community"
+msgstr "কমিউনিটি"
+
+#: stories/templates/stories/story_list.html
+msgid "True moments from people who gave blood, received it, or helped someone find it."
+msgstr "যাঁরা রক্ত দিয়েছেন, পেয়েছেন, অথবা কাউকে রক্ত খুঁজে পেতে সাহায্য করেছেন, তাঁদের সত্যিকারের মুহূর্ত।"
+
+#: stories/templates/stories/story_list.html
+msgid "My stories"
+msgstr "আমার গল্প"
+
+#: stories/templates/stories/story_list.html
+msgid "Filter stories"
+msgstr "গল্প ফিল্টার করুন"
+
+#: stories/templates/stories/story_list.html
+msgid "Who is sharing"
+msgstr "কে শেয়ার করছেন"
+
+#: stories/templates/stories/story_list.html
+msgid "No stories match yet."
+msgstr "এখনো কোনো গল্প মেলেনি।"
+
+#: stories/templates/stories/story_list.html
+msgid "Try another district or group, or be the first to share one."
+msgstr "অন্য জেলা বা ধরন চেষ্টা করুন, অথবা প্রথম গল্পটি আপনিই শেয়ার করুন।"
+
+#: stories/templates/stories/story_list.html
+msgid "Show all stories"
+msgstr "সব গল্প দেখুন"
+
+#: stories/templates/stories/story_list.html
+msgid "No stories yet."
+msgstr "এখনো কোনো গল্প নেই।"
+
+#: stories/templates/stories/story_list.html
+msgid "Every donation has a story behind it. Yours could be the first."
+msgstr "প্রতিটি রক্তদানের পেছনে একটি গল্প আছে। আপনারটিই প্রথম হতে পারে।"
+
+#: stories/templates/stories/story_list.html
+msgid "Stories are shared by members and read by our team before they appear. Nothing here is medical advice."
+msgstr "গল্প সদস্যরা শেয়ার করেন এবং প্রকাশের আগে আমাদের টিম পড়ে দেখে। এখানকার কোনো কিছুই মেডিকেল পরামর্শ নয়।"
+
+#: stories/templates/stories/story_list.html
+msgid "Stories from the %(site)s community"
+msgstr "%(site)s কমিউনিটির গল্প"
+
+#: templates/403.html
+msgid "Not allowed"
+msgstr "অনুমতি নেই"
+
+#: templates/403.html
+msgid "You cannot open this page"
+msgstr "আপনি এই পাতাটি খুলতে পারবেন না"
+
+#: templates/403.html
+msgid "Your account does not have access to it. If you think this is a mistake, go back and try again."
+msgstr "আপনার অ্যাকাউন্টের এই পাতায় প্রবেশাধিকার নেই। এটি ভুল মনে হলে ফিরে গিয়ে আবার চেষ্টা করুন।"
+
+#: templates/403.html templates/403_csrf.html templates/404.html
+msgid "Go home"
+msgstr "হোমে যান"
+
+#: templates/403_csrf.html
+msgid "Please try again"
+msgstr "আবার চেষ্টা করুন"
+
+#: templates/403_csrf.html
+msgid "That page expired"
+msgstr "পাতাটির মেয়াদ শেষ হয়ে গেছে"
+
+#: templates/403_csrf.html
+msgid "For your safety, a form can only be sent for a short while after it opens, and only from this site. Nothing was saved. Open the page again and resend it."
+msgstr "আপনার নিরাপত্তার জন্য কোনো ফর্ম খোলার অল্প সময়ের মধ্যে এবং শুধু এই সাইট থেকেই পাঠানো যায়। কিছুই সংরক্ষিত হয়নি। পাতাটি আবার খুলে ফর্মটি পাঠান।"
+
+#: templates/404.html
+msgid "Page not found"
+msgstr "পাতাটি পাওয়া যায়নি"
+
+#: templates/404.html
+msgid "We could not find that page"
+msgstr "আমরা পাতাটি খুঁজে পাইনি"
+
+#: templates/404.html
+msgid "The link may be old, or the page may have moved. Here is where people usually go next."
+msgstr "লিংকটি পুরোনো হতে পারে, অথবা পাতাটি সরে গেছে। সাধারণত যেখানে যাওয়া হয়, সেগুলো নিচে দেওয়া হলো।"
+
+#: templates/500.html
+msgid "Something went wrong"
+msgstr "কিছু একটা ভুল হয়েছে"
+
+#: templates/500.html
+msgid "Something went wrong on our side"
+msgstr "আমাদের দিক থেকে কিছু একটা ভুল হয়েছে"
+
+#: templates/500.html
+msgid "It is not you. We have been told and will look into it. Please try again in a little while. In an emergency, contact the hospital's blood bank directly."
+msgstr "এতে আপনার কোনো দোষ নেই। বিষয়টি আমাদের জানানো হয়েছে, আমরা দেখছি। কিছুক্ষণ পর আবার চেষ্টা করুন। জরুরি প্রয়োজনে সরাসরি হাসপাতালের ব্লাড ব্যাংকে যোগাযোগ করুন।"
+
+#: templates/500.html
+msgid "Back to the home page"
+msgstr "হোম পেজে ফিরে যান"
+
+#: templates/base/base.html templates/snippets/tabbar.html
+msgid "Home"
+msgstr "হোম"
+
+#: templates/base/base.html
+msgid "Join the community of blood donors. Answer urgent requests, earn badges, and save lives."
+msgstr "রক্তদাতাদের কমিউনিটিতে যোগ দিন। জরুরি অনুরোধে সাড়া দিন, ব্যাজ অর্জন করুন, জীবন বাঁচান।"
+
+#: templates/base/base.html
+msgid "Skip to content"
+msgstr "মূল অংশে যান"
+
+#: templates/base/base.html
+msgid "Notifications"
+msgstr "বিজ্ঞপ্তি"
+
+#: templates/base/base.html
+msgid "%(site)s connects blood donors with people who urgently need blood across Bangladesh. %(tagline)s"
+msgstr "%(site)s বাংলাদেশজুড়ে রক্তদাতাদের সঙ্গে জরুরি রক্তপ্রার্থীদের যুক্ত করে। %(tagline)s"
+
+#: templates/snippets/footer.html
+msgid "A community that connects blood donors with the people who need them, across Bangladesh."
+msgstr "বাংলাদেশজুড়ে রক্তদাতা ও রক্তপ্রার্থীদের যুক্ত করার একটি কমিউনিটি।"
+
+#: templates/snippets/footer.html
+msgid "Give &amp; get blood"
+msgstr "রক্ত দিন ও নিন"
+
+#: templates/snippets/footer.html templates/snippets/tabbar.html
+msgid "Ask for blood"
+msgstr "রক্ত চান"
+
+#: templates/snippets/footer.html
+msgid "Blog"
+msgstr "ব্লগ"
+
+#: templates/snippets/footer.html
+msgid "Made in Bangladesh."
+msgstr "বাংলাদেশে তৈরি।"
+
+#: templates/snippets/footer.html
+msgid "%(site)s is a community tool, not a medical service. Eligibility and safety are decided by the blood bank's screening. In an emergency, contact the hospital's blood bank directly."
+msgstr "%(site)s একটি কমিউনিটি টুল, কোনো চিকিৎসা সেবা নয়। রক্তদানের যোগ্যতা ও নিরাপত্তা ব্লাড ব্যাংকের স্ক্রিনিং সিদ্ধান্ত নেয়। জরুরি প্রয়োজনে সরাসরি হাসপাতালের ব্লাড ব্যাংকে যোগাযোগ করুন।"
+
+#: templates/snippets/lang_switch.html
+msgid "Language"
+msgstr "ভাষা"
+
+#: templates/snippets/nav.html
+msgid "Main"
+msgstr "প্রধান মেনু"
+
+#: templates/snippets/nav.html
+msgid "Toggle dark mode"
+msgstr "ডার্ক মোড চালু বা বন্ধ করুন"
+
+#: templates/snippets/nav.html
+msgid "Account menu"
+msgstr "অ্যাকাউন্ট মেনু"
+
+#: templates/snippets/nav.html
+msgid "My account"
+msgstr "আমার অ্যাকাউন্ট"
+
+#: templates/snippets/nav.html
+msgid "Invite friends"
+msgstr "বন্ধুদের আমন্ত্রণ জানান"
+
+#: templates/snippets/nav.html
+msgid "Staff desk"
+msgstr "স্টাফ ডেস্ক"
+
+#: templates/snippets/nav.html
+msgid "Log out"
+msgstr "লগ আউট"
+
+#: templates/snippets/nav.html
+msgid "%(site)s home"
+msgstr "%(site)s হোম"
+
+#: templates/snippets/nav.html
+msgid "%(n)s unread"
+msgstr "%(n)sটি না-পড়া"
+
+#: templates/snippets/tabbar.html
+msgid "Quick navigation"
+msgstr "দ্রুত নেভিগেশন"
+
+#: templates/snippets/tabbar.html
+msgid "Requests"
+msgstr "অনুরোধ"
+
+#: templates/snippets/tabbar.html
+msgid "Ask"
+msgstr "চান"
+
+#: templates/snippets/tabbar.html
+msgid "Me"
+msgstr "আমি"
+
+#: pages/templates/pages/learn.html
+msgid "<strong>Age 18 to 60.</strong> Limits can differ between blood banks."
+msgstr "<strong>বয়স 18 থেকে 60।</strong> সীমা ব্লাড ব্যাংকভেদে আলাদা হতে পারে।"
+
+#: pages/templates/pages/learn.html
+msgid "<strong>Weight at least 45 kg.</strong>"
+msgstr "<strong>ওজন কমপক্ষে 45 কেজি।</strong>"
+
+#: pages/templates/pages/learn.html
+msgid "<strong>Feeling well today.</strong> No fever, cold or infection, and not recently ill."
+msgstr "<strong>আজ সুস্থ বোধ করছেন।</strong> জ্বর, সর্দি বা সংক্রমণ নেই, এবং সম্প্রতি অসুস্থ ছিলেন না।"
+
+#: pages/templates/pages/learn.html
+msgid "<strong>Gap since your last donation:</strong> we use %(interval)s as a reminder. Blood banks may ask for a different gap."
+msgstr "<strong>শেষ রক্তদানের পর বিরতি:</strong> আমরা স্মারক হিসেবে %(interval)s ধরি। ব্লাড ব্যাংক ভিন্ন বিরতি চাইতে পারে।"
+
+#: pages/templates/pages/learn.html
+msgid "<strong>Tell the staff</strong> if you travelled recently, got a tattoo or piercing, take regular medicines, or are pregnant or recently gave birth. They may ask you to wait."
+msgstr "<strong>স্টাফকে জানান,</strong> যদি সম্প্রতি ভ্রমণ করে থাকেন, ট্যাটু বা পিয়ার্সিং করিয়ে থাকেন, নিয়মিত ওষুধ খান, অথবা গর্ভবতী বা সম্প্রতি সন্তান জন্ম দিয়ে থাকেন। তাঁরা আপনাকে অপেক্ষা করতে বলতে পারেন।"
+

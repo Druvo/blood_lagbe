@@ -1,0 +1,47 @@
+{% extends 'base/base.html' %}
+
+{% block title %}Staff desk{% endblock title %}
+{% block meta %}<meta name="robots" content="noindex">{% endblock meta %}
+
+{% block body %}
+<section class="bb-section bb-section--tight">
+  <div class="bb-container bb-container--narrow bb-stack">
+    <header>
+      <span class="bb-eyebrow">Staff</span>
+      <h1 class="bb-h2 bb-mb-1">Staff desk</h1>
+      <p class="bb-lead">{% if waiting %}{{ waiting }} item{{ waiting|pluralize }} waiting for a moderator.{% else %}Nothing is waiting. Nice work.{% endif %}</p>
+    </header>
+
+    <section aria-labelledby="desk-queue">
+      <h2 class="bb-h3" id="desk-queue">Needs attention</h2>
+      <div class="bb-stack bb-stack--sm">
+        {% for item in queue %}
+          <a class="bb-card bb-card--lift{% if item.count %} bb-card--accent{% endif %}" href="{{ item.url }}" style="color:inherit;">
+            <div class="bb-row bb-row--between">
+              <div>
+                <strong class="bb-strong">{{ item.label }}</strong>
+                <div class="bb-muted bb-small">{{ item.hint }}</div>
+              </div>
+              <span class="bb-num bb-h2 bb-mb-0">{{ item.count }}</span>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section aria-labelledby="desk-pulse">
+      <h2 class="bb-h3" id="desk-pulse">Pulse</h2>
+      <div class="bb-cols-auto">
+        {% for stat in pulse %}
+          <div class="bb-card bb-center">
+            <div class="bb-num bb-h2 bb-mb-0">{{ stat.value }}</div>
+            <div class="bb-muted bb-small">{{ stat.label }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <p><a class="bb-btn bb-btn--ghost" href="{{ admin_url }}"><i class="feather-settings" aria-hidden="true"></i> Open the full admin</a></p>
+  </div>
+</section>
+{% endblock body %}

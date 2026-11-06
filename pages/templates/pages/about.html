@@ -1,11 +1,11 @@
 {% extends 'base/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}About{% endblock title %}
+{% block title %}{% trans "About" %}{% endblock title %}
 {% block meta %}
-<meta name="description" content="{{ SITE_NAME }} is a community that connects blood donors with people who urgently need blood across Bangladesh. {{ SITE_TAGLINE }}">
+<meta name="description" content="{% blocktrans with site=SITE_NAME tagline=SITE_TAGLINE %}{{ site }} is a community that connects blood donors with people who urgently need blood across Bangladesh. {{ tagline }}{% endblocktrans %}">
 <meta property="og:site_name" content="{{ SITE_NAME }}">
-<meta property="og:title" content="About {{ SITE_NAME }}">
+<meta property="og:title" content="{% blocktrans with site=SITE_NAME %}About {{ site }}{% endblocktrans %}">
 <meta property="og:description" content="{{ SITE_TAGLINE }}">
 <meta property="og:url" content="{{ request.build_absolute_uri }}">
 {% endblock meta %}
@@ -14,9 +14,9 @@
 {% block body %}
 <section class="pg-hero">
   <div class="bb-container bb-container--narrow">
-    <span class="bb-eyebrow">About</span>
+    <span class="bb-eyebrow">{% trans "About" %}</span>
     <h1 class="bb-h1 bb-mb-1">{{ SITE_TAGLINE }}</h1>
-    <p class="bb-lead">{{ SITE_NAME }} is a community that connects blood donors with people who urgently need blood, across Bangladesh.</p>
+    <p class="bb-lead">{% blocktrans with site=SITE_NAME %}{{ site }} is a community that connects blood donors with people who urgently need blood, across Bangladesh.{% endblocktrans %}</p>
   </div>
 </section>
 
@@ -24,51 +24,51 @@
   <div class="bb-container bb-container--narrow bb-stack bb-stack--lg">
 
     <div>
-      <h2 class="bb-h3">Our mission</h2>
-      <p>When a family needs blood, minutes matter and phone calls go in circles. We want it to be easy to find willing donors nearby, easy to say "I can help", and easy to be thanked for it. Giving blood should feel like belonging to something good.</p>
+      <h2 class="bb-h3">{% trans "Our mission" %}</h2>
+      <p>{% trans "When a family needs blood, minutes matter and phone calls go in circles. We want it to be easy to find willing donors nearby, easy to say \"I can help\", and easy to be thanked for it. Giving blood should feel like belonging to something good." %}</p>
     </div>
 
     <div>
-      <h2 class="bb-h3">How it works</h2>
+      <h2 class="bb-h3">{% trans "How it works" %}</h2>
       <div class="bb-card">
         <ol class="pg-steps">
-          <li><div><strong>Ask or answer</strong><span class="bb-muted">Post an urgent request, or see who needs your blood group.</span></div></li>
-          <li><div><strong>Give at a blood bank</strong><span class="bb-muted">Donations happen at hospitals and blood banks, with their screening.</span></div></li>
-          <li><div><strong>Log and get verified</strong><span class="bb-muted">A volunteer checks each logged donation, so the numbers you see are real.</span></div></li>
+          <li><div><strong>{% trans "Ask or answer" %}</strong><span class="bb-muted">{% trans "Post an urgent request, or see who needs your blood group." %}</span></div></li>
+          <li><div><strong>{% trans "Give at a blood bank" %}</strong><span class="bb-muted">{% trans "Donations happen at hospitals and blood banks, with their screening." %}</span></div></li>
+          <li><div><strong>{% trans "Log and get verified" %}</strong><span class="bb-muted">{% trans "A volunteer checks each logged donation, so the numbers you see are real." %}</span></div></li>
         </ol>
       </div>
     </div>
 
     <div>
-      <h2 class="bb-h3">How it is run</h2>
-      <p>{{ SITE_NAME }} is run by volunteers. It is free to use, and has no ads. Staff approve donations, review reports and look after the data. We are a community tool, not a hospital or a medical service.</p>
+      <h2 class="bb-h3">{% trans "How it is run" %}</h2>
+      <p>{% blocktrans with site=SITE_NAME %}{{ site }} is run by volunteers. It is free to use, and has no ads. Staff approve donations, review reports and look after the data. We are a community tool, not a hospital or a medical service.{% endblocktrans %}</p>
     </div>
 
     <div id="privacy" class="pg-anchor">
-      <h2 class="bb-h3">How privacy works</h2>
+      <h2 class="bb-h3">{% trans "How privacy works" %}</h2>
       <div class="bb-card bb-stack">
-        <div class="pg-principle"><span class="pg-principle__icon"><i class="feather-phone-off" aria-hidden="true"></i></span><div><h3>Your number stays private</h3><p>Phone numbers never appear on public pages. A donor shares theirs only after accepting a contact request.</p></div></div>
-        <div class="pg-principle"><span class="pg-principle__icon"><i class="feather-toggle-right" aria-hidden="true"></i></span><div><h3>You choose what is visible</h3><p>Directory listing is opt-in. The leaderboard and badge card can be switched off any time in <a href="{% url 'privacy' %}">Profile &amp; privacy</a>.</p></div></div>
-        <div class="pg-principle"><span class="pg-principle__icon"><i class="feather-user-check" aria-hidden="true"></i></span><div><h3>Names, not numbers</h3><p>Public pages show a name you gave, never your login.</p></div></div>
+        <div class="pg-principle"><span class="pg-principle__icon"><i class="feather-phone-off" aria-hidden="true"></i></span><div><h3>{% trans "Your number stays private" %}</h3><p>{% trans "Phone numbers never appear on public pages. A donor shares theirs only after accepting a contact request." %}</p></div></div>
+        <div class="pg-principle"><span class="pg-principle__icon"><i class="feather-toggle-right" aria-hidden="true"></i></span><div><h3>{% trans "You choose what is visible" %}</h3>{% url 'privacy' as privacy_url %}<p>{% blocktrans %}Directory listing is opt-in. The leaderboard and badge card can be switched off any time in <a href="{{ privacy_url }}">Profile &amp; privacy</a>.{% endblocktrans %}</p></div></div>
+        <div class="pg-principle"><span class="pg-principle__icon"><i class="feather-user-check" aria-hidden="true"></i></span><div><h3>{% trans "Names, not numbers" %}</h3><p>{% trans "Public pages show a name you gave, never your login." %}</p></div></div>
       </div>
     </div>
 
     <div>
-      <h2 class="bb-h3">Safety principles</h2>
+      <h2 class="bb-h3">{% trans "Safety principles" %}</h2>
       <div class="pg-principles">
-        <div class="pg-principle"><span class="pg-principle__icon"><i class="feather-shield" aria-hidden="true"></i></span><div><h3>The blood bank decides</h3><p>Nothing here is medical clearance. Eligibility reminders and recovery gaps are prompts to check with the blood bank.</p></div></div>
-        <div class="pg-principle"><span class="pg-principle__icon"><i class="feather-heart" aria-hidden="true"></i></span><div><h3>Voluntary, never for sale</h3><p>Blood is given freely. Badges and points celebrate giving; they are never a reason to donate when you should rest.</p></div></div>
-        <div class="pg-principle"><span class="pg-principle__icon"><i class="feather-flag" aria-hidden="true"></i></span><div><h3>Report anything that feels off</h3><p>Reported requests are hidden until staff have looked at them.</p></div></div>
+        <div class="pg-principle"><span class="pg-principle__icon"><i class="feather-shield" aria-hidden="true"></i></span><div><h3>{% trans "The blood bank decides" %}</h3><p>{% trans "Nothing here is medical clearance. Eligibility reminders and recovery gaps are prompts to check with the blood bank." %}</p></div></div>
+        <div class="pg-principle"><span class="pg-principle__icon"><i class="feather-heart" aria-hidden="true"></i></span><div><h3>{% trans "Voluntary, never for sale" %}</h3><p>{% trans "Blood is given freely. Badges and points celebrate giving; they are never a reason to donate when you should rest." %}</p></div></div>
+        <div class="pg-principle"><span class="pg-principle__icon"><i class="feather-flag" aria-hidden="true"></i></span><div><h3>{% trans "Report anything that feels off" %}</h3><p>{% trans "Reported requests are hidden until staff have looked at them." %}</p></div></div>
       </div>
     </div>
 
     <div class="bb-card bb-card--soft bb-center">
-      <h2 class="bb-h3">Get in touch</h2>
+      <h2 class="bb-h3">{% trans "Get in touch" %}</h2>
       {% if SITE_CONTACT_EMAIL %}
-        <p class="bb-muted">Questions, feedback, or want to help run {{ SITE_NAME }}?</p>
+        <p class="bb-muted">{% blocktrans with site=SITE_NAME %}Questions, feedback, or want to help run {{ site }}?{% endblocktrans %}</p>
         <a class="bb-btn bb-btn--primary" href="mailto:{{ SITE_CONTACT_EMAIL }}">{{ SITE_CONTACT_EMAIL }}</a>
       {% else %}
-        <p class="bb-muted bb-mb-0">Questions? Start with the <a href="{% url 'faq' %}">FAQ</a> or the <a href="{% url 'learn' %}">donor guide</a>.</p>
+        {% url 'faq' as faq_url %}{% url 'learn' as learn_url %}<p class="bb-muted bb-mb-0">{% blocktrans %}Questions? Start with the <a href="{{ faq_url }}">FAQ</a> or the <a href="{{ learn_url }}">donor guide</a>.{% endblocktrans %}</p>
       {% endif %}
     </div>
   </div>

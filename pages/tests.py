@@ -124,7 +124,7 @@ class RobotsTests(TestCase):
         self.assertEqual(response['Content-Type'], 'text/plain')
         body = response.content.decode()
         for path in ('/admin/', '/accounts/', '/welcome/', '/donors/',
-                     '/donations/'):
+                     '/donations/', '/alerts/', '/today/', '/moments/'):
             self.assertIn(f'Disallow: {path}', body)
         self.assertIn('User-agent: *', body)
         self.assertIn('Sitemap: http://testserver/sitemap.xml', body)
@@ -155,6 +155,49 @@ class SitemapTests(TestCase):
         for private in ('/accounts/', '/welcome/', '/donors/', '/admin/',
                         '/donations/'):
             self.assertNotIn(private, joined)
+
+    def test_event_pages_listed(self):
+        locs = self.locs()
+        for name in ('events:list', 'events:campaigns', 'events:challenges'):
+            self.assertIn('http://testserver' + reverse(name), locs, name)
+
+    def test_only_approved_upcoming_drives_listed(self):
+        from django.utils import timezone
+        from events.models import Challenge, Event
+        organizer = User.objects.create_user(phone='01711000010', password='x')
+        soon = timezone.now() + timezone.timedelta(days=3)
+
+        def drive(title, status, starts_at=soon):
+            return Event.objects.create(
+                title=title, organizer=organizer, starts_at=starts_at,
+                district='Dhaka', status=status,
+            )
+
+        public = drive('Public', Event.Status.APPROVED)
+        pending = drive('Pending', Event.Status.PENDING)
+        cancelled = drive('Cancelled', Event.Status.CANCELLED)
+        past = drive('Past', Event.Status.APPROVED,
+                     timezone.now() - timezone.timedelta(days=3))
+        shown = Challenge.objects.create(
+            title='Shown', starts_on=timezone.localdate(),
+            ends_on=timezone.localdate(), target_donations=3,
+            is_published=True,
+        )
+        hidden = Challenge.objects.create(
+            title='Hidden', starts_on=timezone.localdate(),
+            ends_on=timezone.localdate(), target_donations=3,
+            is_published=False,
+        )
+        locs = self.locs()
+        base = 'http://testserver'
+        self.assertIn(base + reverse('events:detail', args=[public.pk]), locs)
+        for event in (pending, cancelled, past):
+            self.assertNotIn(
+                base + reverse('events:detail', args=[event.pk]), locs)
+        self.assertIn(
+            base + reverse('events:challenge-detail', args=[shown.pk]), locs)
+        self.assertNotIn(
+            base + reverse('events:challenge-detail', args=[hidden.pk]), locs)
 
     def test_blog_posts_listed(self):
         author = Author.objects.create(

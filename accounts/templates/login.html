@@ -1,10 +1,10 @@
 {% extends 'base/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Log in{% endblock title %}
+{% block title %}{% trans "Log in" %}{% endblock title %}
 {% block meta %}
 <meta name="robots" content="noindex">
-<meta name="description" content="Log in to {{ SITE_NAME }}.">
+<meta name="description" content="{% blocktrans with site=SITE_NAME %}Log in to {{ site }}.{% endblocktrans %}">
 {% endblock meta %}
 {% block extra_style %}<link rel="stylesheet" href="{% static 'css/pages.css' %}">{% endblock extra_style %}
 
@@ -13,8 +13,8 @@
   <div class="bb-container bb-container--form">
     <div class="pg-auth__brand">
       <img src="{% static 'images/brand/bloodbond-mark.svg' %}" alt="" width="56" height="56">
-      <h1>Welcome back</h1>
-      <p>Log in with your phone number.</p>
+      <h1>{% trans "Welcome back" %}</h1>
+      <p>{% trans "Log in with your phone number." %}</p>
     </div>
 
     <div class="bb-card">
@@ -27,26 +27,26 @@
         {% endif %}
 
         <div class="bb-field">
-          <label class="bb-label" for="{{ login_form.phone.id_for_label }}">Phone number</label>
+          <label class="bb-label" for="{{ login_form.phone.id_for_label }}">{% trans "Phone number" %}</label>
           <input type="tel" name="{{ login_form.phone.html_name }}" id="{{ login_form.phone.id_for_label }}" value="{{ login_form.phone.value|default_if_none:'' }}" inputmode="tel" autocomplete="tel" placeholder="01712345678" required autofocus>
           {{ login_form.phone.errors }}
         </div>
 
         <div class="bb-field">
-          <label class="bb-label" for="{{ login_form.password.id_for_label }}">Password</label>
+          <label class="bb-label" for="{{ login_form.password.id_for_label }}">{% trans "Password" %}</label>
           <div class="pg-pw">
             <input type="password" name="{{ login_form.password.html_name }}" id="{{ login_form.password.id_for_label }}" autocomplete="current-password" required>
-            <button type="button" data-toggle-password aria-controls="{{ login_form.password.id_for_label }}">Show</button>
+            <button type="button" data-toggle-password data-show-label="{% trans 'Show' %}" data-hide-label="{% trans 'Hide' %}" aria-controls="{{ login_form.password.id_for_label }}">{% trans "Show" %}</button>
           </div>
           {{ login_form.password.errors }}
         </div>
 
-        <button class="bb-btn bb-btn--primary bb-btn--lg bb-btn--block" type="submit">Log in</button>
-        <p class="pg-auth__alt bb-mb-0"><a href="{% url 'password_reset' %}">Forgot your password?</a></p>
+        <button class="bb-btn bb-btn--primary bb-btn--lg bb-btn--block" type="submit">{% trans "Log in" %}</button>
+        <p class="pg-auth__alt bb-mb-0"><a href="{% url 'password_reset' %}">{% trans "Forgot your password?" %}</a></p>
       </form>
     </div>
 
-    <p class="pg-auth__alt">New here? <a href="{% url 'signup' %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="bb-strong" style="color:var(--bb-red-text)">Create a free account</a></p>
+    <p class="pg-auth__alt">{% trans "New here?" %} <a href="{% url 'signup' %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="bb-strong" style="color:var(--bb-red-text)">{% trans "Create a free account" %}</a></p>
   </div>
 </section>
 {% endblock body %}

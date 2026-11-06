@@ -1,0 +1,19 @@
+{% load i18n %}
+{% if show %}
+<section class="bb-card bb-mt-3" aria-labelledby="al-hub-h">
+  <div class="bb-row bb-row--between bb-row--center">
+    <h2 class="bb-card__title bb-mb-0" id="al-hub-h"><i class="feather-bell" aria-hidden="true"></i> {% trans "Alerts" %}{% if unread %} <span class="bb-pill bb-pill--info">{% blocktrans with n=unread %}{{ n }} new{% endblocktrans %}</span>{% endif %}</h2>
+    <a href="{% url 'alerts:settings' %}" class="bb-small">{% trans "Settings" %}</a>
+  </div>
+  {% if latest %}
+    <ul class="bb-stack bb-stack--sm bb-mt-1" style="list-style:none;padding:0;margin:0;">
+      {% for n in latest %}
+        <li class="bb-small"{% if not n.read_at %} style="font-weight:700;"{% endif %}>{{ n.title }}</li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="bb-small bb-muted bb-mt-1 bb-mb-0">{% trans "No alerts yet. You can ask for a heads-up when someone near you needs your blood group." %}</p>
+  {% endif %}
+  <p class="bb-mt-1 bb-mb-0"><a href="{% url 'alerts:inbox' %}" class="bb-btn bb-btn--soft bb-btn--sm">{% trans "Open inbox" %}</a></p>
+</section>
+{% endif %}

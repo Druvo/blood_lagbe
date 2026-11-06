@@ -360,12 +360,14 @@ class JoinCodeTests(TestCase):
         self.assertEqual(landing.status_code, again.status_code)
 
         # The CSRF token (in the account menu's logout form) is different on
-        # every response, so compare the pages with it masked out.
+        # every response, and the language switcher's hidden "next" field
+        # echoes the visitor's own URL, so compare with both masked out.
         def mask(response):
-            return re.sub(
+            body = re.sub(
                 rb'name="csrfmiddlewaretoken" value="[^"]+"', b'',
                 response.content,
             )
+            return re.sub(rb'name="next" value="[^"]*"', b'', body)
         self.assertEqual(mask(landing), mask(again))
         self.assertContains(landing, "isn't valid")
         self.assertNotContains(landing, 'Codes')

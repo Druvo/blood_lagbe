@@ -10,6 +10,7 @@ from django.db.models import (
     Case, Count, Exists, IntegerField, OuterRef, Q, Value, When,
 )
 from django.utils import timezone
+from django.utils.translation import gettext
 
 from rewards.blood import donor_groups_for
 from rewards.models import (
@@ -18,11 +19,15 @@ from rewards.models import (
     MAX_CONTACTS_PER_DAY,
     MAX_PENDING_CONTACTS_PER_USER,
     Badge,
+    ContactBlock,
     ContactRequest,
     Donation,
 )
 
 User = get_user_model()
+
+# Statuses after which the asker waits CONTACT_RETRY_DAYS before asking again.
+COOLING_OFF = (ContactRequest.Status.DECLINED, ContactRequest.Status.REVOKED)
 
 
 def directory_queryset(viewer, group='', compatible=False, district='',
@@ -36,6 +41,8 @@ def directory_queryset(viewer, group='', compatible=False, district='',
     qs = (
         User.objects.filter(is_active=True, profile__in_directory=True)
         .exclude(pk=viewer.pk)
+        # A donor who blocked this viewer is simply not listed for them.
+        .exclude(contact_blocks_made__blocked_user=viewer)
         .exclude(profile__blood_group='')
         .select_related('profile')
         .annotate(
@@ -80,12 +87,39 @@ def contact_states(sender, donors):
     for req in ContactRequest.objects.filter(
         sender=sender, donor__in=donors,
     ).order_by('created_at'):
-        if req.status == ContactRequest.Status.DECLINED and (
-            req.answered_at is None or req.answered_at < cutoff
+        if req.status in COOLING_OFF and (
+            (req.revoked_at or req.answered_at) is None
+            or (req.revoked_at or req.answered_at) < cutoff
         ):
-            continue  # old decline: may ask again
+            continue  # old decline or revoke: may ask again
         states[req.donor_id] = req
     return states
+
+
+def phone_withheld_from(viewer, donor_ids):
+    """Donor ids whose phone `viewer` must not see on any page: the donor
+    blocked them, or took back a number they had shared (and has not
+    accepted them again since). Anonymous or unsaved viewers: empty set."""
+    if viewer is None or not getattr(viewer, 'pk', None):
+        return set()
+    withheld = set(
+        ContactBlock.objects.filter(
+            blocked_user=viewer, donor__in=donor_ids,
+        ).values_list('donor_id', flat=True)
+    )
+    latest = {}
+    for req in ContactRequest.objects.filter(
+        sender=viewer, donor__in=donor_ids,
+        status__in=(
+            ContactRequest.Status.ACCEPTED, ContactRequest.Status.REVOKED,
+        ),
+    ).order_by('created_at', 'pk'):
+        latest[req.donor_id] = req.status
+    withheld |= {
+        donor_id for donor_id, status in latest.items()
+        if status == ContactRequest.Status.REVOKED
+    }
+    return withheld
 
 
 def pending_contact_count(sender):
@@ -95,46 +129,58 @@ def pending_contact_count(sender):
 
 
 def retry_date(request):
-    """The day a declined sender may ask again."""
-    if request.answered_at is None:
+    """The day a declined (or revoked) sender may ask again."""
+    since = request.revoked_at or request.answered_at
+    if since is None:
         return None
     return timezone.localtime(
-        request.answered_at + timedelta(days=CONTACT_RETRY_DAYS),
+        since + timedelta(days=CONTACT_RETRY_DAYS),
     ).date()
 
 
 def contact_block_reason(sender, donor):
     """Why `sender` may not ask `donor` right now, or None if they may."""
     if sender.pk == donor.pk:
-        return "You can't contact yourself."
+        return gettext("You can't contact yourself.")
+    if ContactBlock.objects.filter(donor=donor, blocked_user=sender).exists():
+        # Deliberately vague: a block is never announced to the blocked member.
+        return gettext("This donor can't take requests right now.")
     profile = donor.profile
     if not (donor.is_active and profile.in_directory and profile.blood_group):
-        return 'This donor is not in the directory.'
+        return gettext('This donor is not in the directory.')
     if ContactRequest.objects.filter(
         sender=sender, donor=donor, status=ContactRequest.Status.ACCEPTED,
     ).exists():
-        return 'This donor already accepted. Their number is in your inbox.'
+        return gettext('This donor already accepted. Their number is in your inbox.')
     pending = ContactRequest.objects.filter(
         sender=sender, status=ContactRequest.Status.PENDING,
     )
     if pending.filter(donor=donor).exists():
-        return 'You already asked this donor. Please wait for an answer.'
+        return gettext('You already asked this donor. Please wait for an answer.')
     if pending.count() >= MAX_PENDING_CONTACTS_PER_USER:
-        return (
-            f'You have {MAX_PENDING_CONTACTS_PER_USER} requests waiting for '
-            'an answer. Wait for a reply before asking more people.'
-        )
+        return gettext(
+            'You have %(n)s requests waiting for an answer. '
+            'Wait for a reply before asking more people.'
+        ) % {'n': MAX_PENDING_CONTACTS_PER_USER}
     if ContactRequest.objects.filter(
         sender=sender, created_at__gte=timezone.now() - timedelta(days=1),
     ).count() >= MAX_CONTACTS_PER_DAY:
-        return 'You have sent a lot of requests today. Please try again tomorrow.'
+        return gettext('You have sent a lot of requests today. Please try again tomorrow.')
     cutoff = timezone.now() - timedelta(days=CONTACT_RETRY_DAYS)
     if ContactRequest.objects.filter(
         sender=sender, donor=donor, status=ContactRequest.Status.DECLINED,
         answered_at__gte=cutoff,
     ).exists():
-        return (
-            f'This donor declined recently. You can ask again after '
-            f'{CONTACT_RETRY_DAYS} days.'
-        )
+        return gettext(
+            'This donor declined recently. You can ask again after '
+            '%(n)s days.'
+        ) % {'n': CONTACT_RETRY_DAYS}
+    if ContactRequest.objects.filter(
+        sender=sender, donor=donor, status=ContactRequest.Status.REVOKED,
+        revoked_at__gte=cutoff,
+    ).exists():
+        return gettext(
+            "This donor isn't sharing their number any more. You can ask "
+            'again after %(n)s days.'
+        ) % {'n': CONTACT_RETRY_DAYS}
     return None

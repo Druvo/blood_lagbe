@@ -1,14 +1,14 @@
 {% extends 'base/base.html' %}
-{% load static moments_tags growth_tags alerts_tags events_tags habits_tags %}
+{% load static moments_tags growth_tags alerts_tags events_tags habits_tags i18n %}
 
-{% block title %}{{ blood_request.blood_group }} needed at {{ blood_request.hospital }}{% endblock title %}
+{% block title %}{% blocktrans with group=blood_request.blood_group hospital=blood_request.hospital %}{{ group }} needed at {{ hospital }}{% endblocktrans %}{% endblock title %}
 
 {% block meta %}
 {% static 'images/brand/og-default.png' as og_image %}
 <meta property="og:site_name" content="{{ SITE_NAME }}">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Urgent: {{ blood_request.blood_group }} blood needed at {{ blood_request.hospital }}">
-<meta property="og:description" content="{{ blood_request.units_remaining }} bag{{ blood_request.units_remaining|pluralize }} still needed in {{ blood_request.district }} by {{ blood_request.needed_by|date:'M d' }}. Can you help?">
+<meta property="og:title" content="{% blocktrans with group=blood_request.blood_group hospital=blood_request.hospital %}Urgent: {{ group }} blood needed at {{ hospital }}{% endblocktrans %}">
+<meta property="og:description" content="{% blocktrans count counter=blood_request.units_remaining with place=blood_request.district d=blood_request.needed_by|date:'M d' %}{{ counter }} bag still needed in {{ place }} by {{ d }}. Can you help?{% plural %}{{ counter }} bags still needed in {{ place }} by {{ d }}. Can you help?{% endblocktrans %}">
 <meta property="og:url" content="{{ share_url }}">
 <meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_image }}">
 <meta name="twitter:card" content="summary">
@@ -19,7 +19,7 @@
 {% block body %}
 {% with st=blood_request.status_pill urg=blood_request.urgency %}
 <div class="bb-container bb-section--tight">
-  <p class="bb-mt-2 bb-mb-2"><a href="{% url 'request-list' %}"><i class="feather-arrow-left"></i> All requests</a></p>
+  <p class="bb-mt-2 bb-mb-2"><a href="{% url 'request-list' %}"><i class="feather-arrow-left"></i> {% trans "All requests" %}</a></p>
 
   <div class="bb-split">
     <div class="bb-stack">
@@ -36,21 +36,21 @@
         <div class="bb-chips bb-mt-2">
           <span class="bb-pill{% if st.1 %} bb-pill--{{ st.1 }}{% endif %}">{{ st.0 }}</span>
           {% if blood_request.is_active %}<span class="bb-pill{% if urg.1 %} bb-pill--{{ urg.1 }}{% endif %}"><i class="feather-clock"></i> {{ urg.0 }}</span>{% endif %}
-          {% if blood_request.is_flagged and is_owner %}<span class="bb-pill bb-pill--warn">Reported ({{ blood_request.open_report_count }})</span>{% endif %}
+          {% if blood_request.is_flagged and is_owner %}<span class="bb-pill bb-pill--warn">{% blocktrans with n=blood_request.open_report_count %}Reported ({{ n }}){% endblocktrans %}</span>{% endif %}
         </div>
 
         <div class="bb-mt-2">
           <div class="bb-row bb-row--between bb-small">
-            <span><strong class="bb-strong">{{ blood_request.units_received }}</strong> of {{ blood_request.units_needed }} bag{{ blood_request.units_needed|pluralize }} covered</span>
-            <span class="bb-muted">{{ blood_request.units_remaining }} still needed</span>
+            <span>{% blocktrans count counter=blood_request.units_needed with received=blood_request.units_received %}<strong class="bb-strong">{{ received }}</strong> of {{ counter }} bag covered{% plural %}<strong class="bb-strong">{{ received }}</strong> of {{ counter }} bags covered{% endblocktrans %}</span>
+            <span class="bb-muted">{% blocktrans with n=blood_request.units_remaining %}{{ n }} still needed{% endblocktrans %}</span>
           </div>
-          <div class="bb-progress {% if blood_request.is_fulfilled %}bb-progress--ok{% endif %} bb-mt-1" role="progressbar" aria-valuemin="0" aria-valuemax="{{ blood_request.units_needed }}" aria-valuenow="{{ blood_request.units_received }}" aria-label="Bags received"><span style="width:{% widthratio blood_request.units_received blood_request.units_needed 100 %}%"></span></div>
+          <div class="bb-progress {% if blood_request.is_fulfilled %}bb-progress--ok{% endif %} bb-mt-1" role="progressbar" aria-valuemin="0" aria-valuemax="{{ blood_request.units_needed }}" aria-valuenow="{{ blood_request.units_received }}" aria-label="{% trans 'Bags received' %}"><span style="width:{% widthratio blood_request.units_received blood_request.units_needed 100 %}%"></span></div>
         </div>
 
         <dl class="rq-facts bb-mt-2 bb-mb-0">
-          <div><dt>Needed by</dt><dd>{{ blood_request.needed_by|date:"D, M d" }}</dd></div>
-          <div><dt>Donors offered</dt><dd>{{ response_count }}</dd></div>
-          {% if user.is_authenticated and not under_review and blood_request.patient_name %}<div><dt>Patient</dt><dd>{{ blood_request.patient_name }}</dd></div>{% endif %}
+          <div><dt>{% trans "Needed by" %}</dt><dd>{{ blood_request.needed_by|date:"D, M d" }}</dd></div>
+          <div><dt>{% trans "Donors offered" %}</dt><dd>{{ response_count }}</dd></div>
+          {% if user.is_authenticated and not under_review and blood_request.patient_name %}<div><dt>{% trans "Patient" %}</dt><dd>{{ blood_request.patient_name }}</dd></div>{% endif %}
         </dl>
 
         {% if blood_request.note %}<p class="bb-mt-2 bb-mb-0">{{ blood_request.note }}</p>{% endif %}
@@ -58,21 +58,21 @@
 
       {% if is_owner and blood_request.is_flagged and blood_request.status == 'open' %}
         <div class="bb-alert bb-alert--warn" role="status">
-          Several members reported this request, so it is hidden from the public board while our team reviews it. You can still close it from here.
+          {% trans "Several members reported this request, so it is hidden from the public board while our team reviews it. You can still close it from here." %}
         </div>
       {% endif %}
       {% if under_review %}
         <div class="bb-alert bb-alert--warn" role="status">
-          Members reported this request, so it is being reviewed. Contact details are hidden until then. Please check with the hospital before acting on it.
+          {% trans "Members reported this request, so it is being reviewed. Contact details are hidden until then. Please check with the hospital before acting on it." %}
         </div>
       {% elif not blood_request.is_active %}
         <div class="bb-alert bb-alert--info" role="status">
           {% if blood_request.status == 'closed' %}
-            This request is closed{% if blood_request.outcome %}: {{ blood_request.get_outcome_display|lower }}{% endif %}.
+            {% if blood_request.outcome %}{% blocktrans with outcome=blood_request.get_outcome_display|lower %}This request is closed: {{ outcome }}.{% endblocktrans %}{% else %}{% trans "This request is closed." %}{% endif %}
           {% elif blood_request.is_fulfilled %}
-            This request is fulfilled. Thank you to every donor!
+            {% trans "This request is fulfilled. Thank you to every donor!" %}
           {% else %}
-            This request has expired.
+            {% trans "This request has expired." %}
           {% endif %}
         </div>
       {% endif %}
@@ -84,7 +84,7 @@
             <div class="rq-phone">
               <i class="feather-phone" aria-hidden="true"></i>
               <div>
-                <div class="bb-xs bb-muted">Contact</div>
+                <div class="bb-xs bb-muted">{% trans "Contact" %}</div>
                 <a class="bb-strong" href="tel:{{ blood_request.contact_phone }}">{{ blood_request.contact_phone }}</a>
               </div>
             </div>
@@ -92,25 +92,24 @@
 
           {% if not is_owner %}
             {% if not user.is_authenticated %}
-              <p class="bb-mb-0">Log in to see the contact number and offer to help.</p>
+              <p class="bb-mb-0">{% trans "Log in to see the contact number and offer to help." %}</p>
               <div class="bb-row">
-                <a href="{% url 'login' %}?next={{ request.path|urlencode }}" class="bb-btn bb-btn--primary">Log in to help</a>
-                <a href="{% url 'signup' %}" class="bb-btn bb-btn--ghost">Join as a donor</a>
+                <a href="{% url 'login' %}?next={{ request.path|urlencode }}" class="bb-btn bb-btn--primary">{% trans "Log in to help" %}</a>
+                <a href="{% url 'signup' %}" class="bb-btn bb-btn--ghost">{% trans "Join as a donor" %}</a>
               </div>
             {% elif has_responded %}
               <div class="bb-alert bb-alert--ok bb-mb-0">
-                You're on the list. The requester can see your name and phone.
-                After you donate, <a href="{% url 'log-donation' %}">log it</a> and pick this request to earn bonus points.
+                {% url 'log-donation' as log_url %}{% blocktrans %}You're on the list. The requester can see your name and phone. After you donate, <a href="{{ log_url }}">log it</a> and pick this request to earn bonus points.{% endblocktrans %}
               </div>
             {% elif eligibility and not eligibility.eligible %}
               <div class="bb-alert bb-alert--warn bb-mb-0">
-                You can donate again on <strong>{{ eligibility.next_date|date:"M d, Y" }}</strong>. Please share this request so someone else can help.
+                {% blocktrans with d=eligibility.next_date|date:"M d, Y" %}You can donate again on <strong>{{ d }}</strong>. Please share this request so someone else can help.{% endblocktrans %}
               </div>
             {% else %}
               <form method="post" action="{% url 'request-respond' blood_request.pk %}">
                 {% csrf_token %}
-                <button type="submit" class="bb-btn bb-btn--primary bb-btn--lg bb-btn--block"><i class="feather-heart"></i> I can help</button>
-                <p class="bb-help bb-mb-0">The requester will see your name and phone. Only offer if you feel well; the blood bank decides if you can donate.</p>
+                <button type="submit" class="bb-btn bb-btn--primary bb-btn--lg bb-btn--block"><i class="feather-heart"></i> {% trans "I can help" %}</button>
+                <p class="bb-help bb-mb-0">{% trans "The requester will see your name and phone. Only offer if you feel well; the blood bank decides if you can donate." %}</p>
               </form>
             {% endif %}
           {% endif %}
@@ -120,72 +119,72 @@
       {# ---- Owner tools ---- #}
       {% if is_owner and help_panel %}
         <section class="bb-card rq-help">
-          <h2 class="bb-card__title">Donors who can help</h2>
+          <h2 class="bb-card__title">{% trans "Donors who can help" %}</h2>
           {% if help_panel.total %}
             <div class="rq-help__nums">
-              <div class="bb-stat"><div class="bb-stat__value bb-num">{{ help_panel.total }}</div><div class="bb-stat__label">compatible in the directory</div></div>
-              <div class="bb-stat"><div class="bb-stat__value bb-num">{{ help_panel.nearby }}</div><div class="bb-stat__label">in {{ blood_request.district }}</div></div>
+              <div class="bb-stat"><div class="bb-stat__value bb-num">{{ help_panel.total }}</div><div class="bb-stat__label">{% trans "compatible in the directory" %}</div></div>
+              <div class="bb-stat"><div class="bb-stat__value bb-num">{{ help_panel.nearby }}</div><div class="bb-stat__label">{% blocktrans with place=blood_request.district %}in {{ place }}{% endblocktrans %}</div></div>
             </div>
           {% else %}
-            <p class="bb-muted">No compatible donors are listed yet. Sharing this request is the fastest way to reach more people.</p>
+            <p class="bb-muted">{% trans "No compatible donors are listed yet. Sharing this request is the fastest way to reach more people." %}</p>
           {% endif %}
-          <a href="{{ help_panel.url }}" class="bb-btn bb-btn--soft">Find donors</a>
-          <p class="bb-help">Donors share their number only if they accept your request. Compatibility is a guide; the hospital decides.</p>
+          <a href="{{ help_panel.url }}" class="bb-btn bb-btn--soft">{% trans "Find donors" %}</a>
+          <p class="bb-help">{% trans "Donors share their number only if they accept your request. Compatibility is a guide; the hospital decides." %}</p>
         </section>
       {% endif %}
 
       {% if is_owner %}
         <section class="bb-card">
-          <h2 class="bb-card__title">Donors who offered to help ({{ response_count }})</h2>
+          <h2 class="bb-card__title">{% blocktrans with n=response_count %}Donors who offered to help ({{ n }}){% endblocktrans %}</h2>
           {% for r in responses %}
             <div class="rq-resp">
               <div>
                 <span class="bb-strong">{{ r.name }}</span>
                 <span class="bb-xs bb-muted"> &middot; {{ r.when|date:"M d, H:i" }}</span>
               </div>
-              <a href="tel:{{ r.phone }}">{{ r.phone }}</a>
+              {% if r.phone %}<a href="tel:{{ r.phone }}">{{ r.phone }}</a>{% else %}<span class="bb-xs bb-muted">{% trans "Number not shared" %}</span>{% endif %}
             </div>
           {% empty %}
-            <p class="bb-muted bb-mb-0">Nobody yet. Share this request to reach more donors.</p>
+            <p class="bb-muted bb-mb-0">{% trans "Nobody yet. Share this request to reach more donors." %}</p>
           {% endfor %}
         </section>
       {% endif %}
 
       {% if can_update %}
         <section class="bb-card">
-          <h2 class="bb-card__title">Post an update</h2>
+          <h2 class="bb-card__title">{% trans "Post an update" %}</h2>
           <form method="post" action="{% url 'request-update' blood_request.pk %}" class="bb-form rq-inline">
             {% csrf_token %}
-            <label class="bb-sr" for="upd-kind">Kind of update</label>
+            <label class="bb-sr" for="upd-kind">{% trans "Kind of update" %}</label>
             <select id="upd-kind" name="kind">
               {% for value, label in update_kinds %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
             </select>
-            <label class="bb-sr" for="upd-text">Update</label>
-            <input type="text" id="upd-text" name="text" maxlength="300" required placeholder="e.g. Two donors found, one bag to go">
-            <button class="bb-btn bb-btn--dark" type="submit">Post</button>
+            <label class="bb-sr" for="upd-text">{% trans "Update" %}</label>
+            <input type="text" id="upd-text" name="text" maxlength="300" required placeholder="{% trans 'e.g. Two donors found, one bag to go' %}">
+            <button class="bb-btn bb-btn--dark" type="submit">{% trans "Post" %}</button>
           </form>
         </section>
       {% endif %}
 
       {% if is_owner and blood_request.status == 'open' %}
         <section class="bb-card bb-card--soft">
-          <h2 class="bb-card__title">Close this request</h2>
+          <h2 class="bb-card__title">{% trans "Close this request" %}</h2>
           <form method="post" action="{% url 'request-close' blood_request.pk %}" class="bb-form rq-inline">
             {% csrf_token %}
-            <label class="bb-sr" for="close-outcome">What happened?</label>
+            <label class="bb-sr" for="close-outcome">{% trans "What happened?" %}</label>
             <select id="close-outcome" name="outcome" required>
-              <option value="" disabled selected>What happened?</option>
+              <option value="" disabled selected>{% trans "What happened?" %}</option>
               {% for value, label in outcome_choices %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
             </select>
-            <button class="bb-btn bb-btn--ghost" type="submit">Close request</button>
+            <button class="bb-btn bb-btn--ghost" type="submit">{% trans "Close request" %}</button>
           </form>
         </section>
       {% endif %}
 
       {# ---- Share ---- #}
       {% if active %}
-        <section class="bb-card bb-center">
-          <h2 class="bb-card__title">Know someone who can help? Share this request</h2>
+        <section class="bb-card bb-center" id="share">
+          <h2 class="bb-card__title">{% trans "Know someone who can help? Share this request" %}</h2>
           {% include 'rewards/_share_buttons.html' %}
         </section>
       {% endif %}
@@ -198,7 +197,7 @@
     {# ---- Timeline + report ---- #}
     <aside class="bb-stack">
       <section class="bb-card">
-        <h2 class="bb-card__title">What has happened</h2>
+        <h2 class="bb-card__title">{% trans "What has happened" %}</h2>
         <ol class="bb-timeline bb-mb-0">
           {% for ev in timeline %}
             <li{% if ev.done %} class="is-done"{% endif %}>
@@ -212,17 +211,17 @@
 
       {% if user.is_authenticated and not is_requester %}
         <details class="rq-details bb-noprint">
-          <summary><i class="feather-flag"></i> {% if has_reported %}You reported this request{% else %}Report this request{% endif %}</summary>
+          <summary><i class="feather-flag"></i> {% if has_reported %}{% trans "You reported this request" %}{% else %}{% trans "Report this request" %}{% endif %}</summary>
           {% if not has_reported %}
             <form method="post" action="{% url 'request-report' blood_request.pk %}" class="bb-form bb-card bb-card--flat bb-stack bb-stack--sm">
               {% csrf_token %}
-              <label class="bb-label" for="rep-reason">What is wrong?</label>
+              <label class="bb-label" for="rep-reason">{% trans "What is wrong?" %}</label>
               <select id="rep-reason" name="reason" required>
                 {% for value, label in report_reasons %}<option value="{{ value }}">{{ label }}</option>{% endfor %}
               </select>
-              <label class="bb-label" for="rep-text">Details <span class="bb-muted">(optional)</span></label>
+              <label class="bb-label" for="rep-text">{% trans "Details" %} <span class="bb-muted">{% trans "(optional)" %}</span></label>
               <input type="text" id="rep-text" name="text" maxlength="300">
-              <button class="bb-btn bb-btn--ghost bb-btn--sm" type="submit">Send report</button>
+              <button class="bb-btn bb-btn--ghost bb-btn--sm" type="submit">{% trans "Send report" %}</button>
             </form>
           {% endif %}
         </details>

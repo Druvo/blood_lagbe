@@ -1,0 +1,55 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}My {{ year }}{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'habits/habits.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container bb-container--narrow hb-page">
+  <header class="bb-stack bb-stack--sm bb-mb-2">
+    <span class="bb-eyebrow">Year in review</span>
+    <h1 class="bb-h2 bb-mb-0">Your {{ year }} on {{ SITE_NAME }}</h1>
+    <nav class="hb-years" aria-label="Choose a year">
+      {% for y in years %}<a class="bb-chip{% if y == year %} bb-chip--active{% endif %}" href="{% url 'habits:year-detail' y %}"{% if y == year %} aria-current="page"{% endif %}>{{ y }}</a>{% endfor %}
+    </nav>
+  </header>
+
+  {% if not review.has_donations %}
+    <div class="bb-card bb-center bb-stack">
+      <div class="bb-empty"><i class="feather-heart" aria-hidden="true"></i><p>No verified donations in {{ year }} yet, and that is completely fine. Everyone has their own pace, and resting matters.</p></div>
+      {% if review.days_visited or review.requests_shared %}
+        <p class="bb-muted bb-mb-0">You still showed up: {% if review.days_visited %}{{ review.days_visited }} day{{ review.days_visited|pluralize }} of small actions{% endif %}{% if review.days_visited and review.requests_shared %} and {% endif %}{% if review.requests_shared %}{{ review.requests_shared }} request{{ review.requests_shared|pluralize }} shared{% endif %}. Thank you.</p>
+      {% endif %}
+      <div class="bb-row bb-row--center">
+        <a class="bb-btn bb-btn--primary" href="{% url 'habits:today' %}">Open Today</a>
+        <a class="bb-btn bb-btn--ghost" href="{% url 'learn' %}">Read the guide</a>
+      </div>
+    </div>
+  {% else %}
+    <div class="hb-stats">
+      <div class="hb-stat"><strong>{{ review.count }}</strong><span>Verified donation{{ review.count|pluralize }}</span></div>
+      <div class="hb-stat"><strong>{{ review.lives }}</strong><span>Est. people helped</span><small>An estimate, at most.</small></div>
+      <div class="hb-stat"><strong>{{ review.months_active }}</strong><span>Month{{ review.months_active|pluralize }} active</span><small>{{ review.months|join:', ' }}</small></div>
+      {% if review.place %}<div class="hb-stat hb-stat--wide"><strong>{{ review.place.0 }}</strong><span>Favourite place</span><small>{{ review.place.1 }} donation{{ review.place.1|pluralize }} there</small></div>{% endif %}
+      <div class="hb-stat"><strong>{% include 'habits/_flame.html' %} {{ review.longest_streak }}</strong><span>Longest visit streak</span><small>Days in a row, in {{ year }}</small></div>
+      <div class="hb-stat"><strong>{% if review.percentile %}Top {{ review.percentile.top_percent }}%{% else %}&ndash;{% endif %}</strong><span>Rank among opted-in donors</span><small>{% if review.percentile %}Of {{ review.percentile.pool }} donors who show on the leaderboard. No names shown.{% else %}Shown once enough donors have opted in.{% endif %}</small></div>
+    </div>
+
+    <section class="bb-card bb-mt-2" aria-labelledby="badges-h">
+      <h2 class="bb-card__title" id="badges-h">Badges earned in {{ year }}</h2>
+      {% for item in review.badges %}
+        <div class="hb-badge-row bb-mb-1"><i class="feather-{{ item.badge.icon }}" style="color:{{ item.badge.color }}" aria-hidden="true"></i><div><strong>{{ item.badge.name }}</strong><div class="bb-xs bb-muted">{{ item.date|date:"M j" }}</div></div></div>
+      {% empty %}
+        <p class="bb-muted bb-mb-0">No new badges this year. They are never a race.</p>
+      {% endfor %}
+    </section>
+
+    <div class="bb-row bb-mt-2">
+      <a class="bb-btn bb-btn--primary" href="{{ card_url }}"><i class="feather-share-2" aria-hidden="true"></i> Share card</a>
+      <a class="bb-btn bb-btn--ghost" href="{% url 'habits:today' %}">Back to Today</a>
+    </div>
+    {% if not profile.public_badge_card %}<p class="bb-xs bb-muted bb-mt-1">Your card is private. Only you can open it. You can change that in <a href="{% url 'privacy' %}">profile and privacy</a>.</p>{% endif %}
+  {% endif %}
+  <p class="bb-xs bb-muted bb-mt-2">Only verified donations count. People helped is an estimate. {{ safety_note }}</p>
+</div>
+{% endblock body %}

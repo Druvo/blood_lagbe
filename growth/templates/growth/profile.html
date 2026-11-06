@@ -1,0 +1,82 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}{{ name }}{% endblock title %}
+{% block meta %}
+{% static 'images/brand/og-default.png' as og_image %}
+{% if not is_public %}<meta name="robots" content="noindex">{% endif %}
+<meta name="description" content="{{ name }} on {{ SITE_NAME }}. {{ og_description }}">
+<meta property="og:site_name" content="{{ SITE_NAME }}">
+<meta property="og:type" content="profile">
+<meta property="og:title" content="{{ name }} on {{ SITE_NAME }}">
+<meta property="og:description" content="{{ og_description }}">
+<meta property="og:url" content="{{ profile_url }}">
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_image }}">
+<meta name="twitter:card" content="summary">
+{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'growth/growth.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<section class="bb-section">
+  <div class="bb-container bb-container--narrow bb-stack bb-stack--lg">
+
+    {% if not is_public %}
+      <div class="bb-alert bb-alert--info" role="status">
+        {% if is_owner %}Only you can see this page right now.{% else %}This profile is private. You can see it because you are staff.{% endif %}
+        {% if is_owner %}<a href="{% url 'privacy' %}">Turn on your public profile</a> in Profile &amp; privacy to share it.{% endif %}
+      </div>
+    {% endif %}
+
+    <header class="bb-card gr-profile__head">
+      <span class="bb-avatar bb-avatar--lg" aria-hidden="true">{% if image %}<img src="{{ image.url }}" alt="">{% else %}{{ initials }}{% endif %}</span>
+      <div class="bb-grow">
+        <h1 class="bb-h2 bb-mb-0">{{ name }}</h1>
+        <div class="bb-chips bb-mt-1">
+          {% if tier %}<span class="bb-pill bb-pill--ok"><i class="feather-{{ tier.icon }}" aria-hidden="true"></i> {{ tier.name }}</span>{% endif %}
+          <span class="bb-pill bb-pill--info"><i class="feather-{{ level.icon }}" aria-hidden="true"></i> Level {{ level.number }}: {{ level.name }}</span>
+          {% if district %}<span class="bb-pill"><i class="feather-map-pin" aria-hidden="true"></i> {{ district }}</span>{% endif %}
+        </div>
+      </div>
+    </header>
+
+    <div class="gr-stats">
+      <div class="gr-stat"><strong>{{ donations }}</strong><span>verified donation{{ donations|pluralize }}</span></div>
+      <div class="gr-stat"><strong>{{ streak }}</strong><span>donation streak</span></div>
+    </div>
+    <p class="bb-xs bb-muted bb-mb-0">Only donations a volunteer verified are counted. A streak counts donations spaced by the usual {{ donation_interval_label }} recovery gap, so it never rewards giving sooner.</p>
+
+    {% if titles %}
+      <section class="bb-card" aria-labelledby="gr-titles-h">
+        <h2 class="bb-card__title" id="gr-titles-h">Titles</h2>
+        <div class="bb-chips">{% for title in titles %}<span class="bb-pill">{{ title }}</span>{% endfor %}</div>
+      </section>
+    {% endif %}
+
+    {% if squads %}
+      <section class="bb-card" aria-labelledby="gr-squads-h">
+        <h2 class="bb-card__title" id="gr-squads-h">Squads</h2>
+        <ul class="gr-list">
+          {% for squad in squads %}<li><i class="feather-users" aria-hidden="true"></i> <a href="{% url 'squads:detail' squad.pk %}">{{ squad.name }}</a></li>{% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+
+    {% if stories %}
+      <section class="bb-card" aria-labelledby="gr-stories-h">
+        <h2 class="bb-card__title" id="gr-stories-h">Stories</h2>
+        <ul class="gr-list">
+          {% for story in stories %}<li><i class="feather-book-open" aria-hidden="true"></i> <a href="{% url 'story-detail' story.pk %}">{{ story.title }}</a></li>{% endfor %}
+        </ul>
+      </section>
+    {% endif %}
+
+    {% if is_owner and is_public %}
+      <div class="gr-link">
+        <label class="bb-sr" for="gr-profile-link">Your public profile link</label>
+        <input type="text" id="gr-profile-link" value="{{ profile_url }}" readonly>
+        <button type="button" class="bb-btn bb-btn--soft" data-copy="#gr-profile-link"><i class="feather-copy" aria-hidden="true"></i> Copy</button>
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% endblock body %}

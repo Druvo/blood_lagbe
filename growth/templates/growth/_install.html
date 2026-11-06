@@ -1,0 +1,5 @@
+{% load static %}{% comment %}Add-to-home-screen prompt. Included once from base/base.html, after bloodbond.js.{% endcomment %}
+<link rel="stylesheet" href="{% static 'growth/growth.css' %}">
+<script src="{% static 'growth/install.js' %}" defer
+        data-site="{{ SITE_NAME }}"
+        data-authed="{% if user.is_authenticated %}1{% else %}0{% endif %}"></script>

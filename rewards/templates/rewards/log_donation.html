@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
-{% load static moments_tags habits_tags events_tags growth_tags alerts_tags %}
+{% load static moments_tags habits_tags events_tags growth_tags alerts_tags i18n %}
 
-{% block title %}My hub{% endblock title %}
+{% block title %}{% trans "My hub" %}{% endblock title %}
 
 {% block extra_style %}
 <style>
@@ -92,30 +92,30 @@
       <div class="hub-hero__top">
         <div class="hub-hero__tag">
           {% if profile.blood_group %}
-            <span class="bb-bloodtag bb-bloodtag--lg" aria-label="Blood group {{ profile.blood_group }}"><span>{{ profile.blood_group }}</span></span>
+            <span class="bb-bloodtag bb-bloodtag--lg" aria-label="{% blocktrans with g=profile.blood_group %}Blood group {{ g }}{% endblocktrans %}"><span>{{ profile.blood_group }}</span></span>
           {% else %}
             <span class="hub-hero__noblood" aria-hidden="true"><i class="feather-heart"></i></span>
           {% endif %}
         </div>
         <div class="bb-grow">
-          <h1>Hi, {{ first_name|default:"friend" }}</h1>
-          <span class="hub-level"><i class="feather-{{ level_info.level.icon }}" aria-hidden="true"></i> Level {{ level_info.level.number }} &middot; {{ level_info.level.name }}</span>
+          <h1>{% if first_name %}{% blocktrans with name=first_name %}Hi, {{ name }}{% endblocktrans %}{% else %}{% trans "Hi, friend" %}{% endif %}</h1>
+          <span class="hub-level"><i class="feather-{{ level_info.level.icon }}" aria-hidden="true"></i> {% blocktrans with n=level_info.level.number %}Level {{ n }}{% endblocktrans %} &middot; {{ level_info.level.name }}</span>
         </div>
       </div>
       <div class="hub-xp">
         <div class="hub-xp__row">
-          <span><span class="bb-num">{{ points }}</span> XP</span>
+          <span><span class="bb-num">{{ points }}</span> {% trans "XP" %}</span>
           {% if level_info.next_level %}
-            <span><span class="bb-num">{{ level_info.points_to_next }}</span> to {{ level_info.next_level.name }}</span>
+            <span>{% blocktrans with n=level_info.points_to_next name=level_info.next_level.name %}<span class="bb-num">{{ n }}</span> to {{ name }}{% endblocktrans %}</span>
           {% else %}
-            <span>Top level reached</span>
+            <span>{% trans "Top level reached" %}</span>
           {% endif %}
         </div>
-        <div class="hub-xp__track" role="progressbar" aria-label="Progress to next level" aria-valuenow="{{ level_info.progress_percent }}" aria-valuemin="0" aria-valuemax="100"><span style="width:{{ level_info.progress_percent }}%"></span></div>
+        <div class="hub-xp__track" role="progressbar" aria-label="{% trans 'Progress to next level' %}" aria-valuenow="{{ level_info.progress_percent }}" aria-valuemin="0" aria-valuemax="100"><span style="width:{{ level_info.progress_percent }}%"></span></div>
       </div>
       <div class="hub-hero__cta">
-        <a href="#log" class="bb-btn bb-btn--white"><i class="feather-plus-circle"></i> Log a donation</a>
-        <a href="{% url 'request-list' %}" class="bb-btn" style="background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.4);"><i class="feather-droplet"></i> Urgent requests</a>
+        <a href="#log" class="bb-btn bb-btn--white"><i class="feather-plus-circle"></i> {% trans "Log a donation" %}</a>
+        <a href="{% url 'request-list' %}" class="bb-btn" style="background:rgba(255,255,255,.16);color:#fff;border-color:rgba(255,255,255,.4);"><i class="feather-droplet"></i> {% trans "Urgent requests" %}</a>
       </div>
     </div>
 
@@ -134,51 +134,51 @@
                 {% if eligibility.eligible %}
                   <i class="feather-zap"></i>
                 {% else %}
-                  <b class="bb-num">{{ eligibility.days_left }}</b><small>day{{ eligibility.days_left|pluralize }} left</small>
+                  <b class="bb-num">{{ eligibility.days_left }}</b><small>{% blocktrans count counter=eligibility.days_left %}day left{% plural %}days left{% endblocktrans %}</small>
                 {% endif %}
               </div>
             </div>
             <div class="bb-grow">
               {% if eligibility.eligible %}
-                <h2>Ready to donate</h2>
+                <h2>{% trans "Ready to donate" %}</h2>
                 <p class="bb-muted">
                   {% if eligibility.last_date %}
-                    The {{ donation_interval_label }} gap since {{ eligibility.last_date|date:"M d, Y" }} has passed.
+                    {% blocktrans with interval=donation_interval_label d=eligibility.last_date|date:"M d, Y" %}The {{ interval }} gap since {{ d }} has passed.{% endblocktrans %}
                   {% else %}
-                    Log your first donation to start your journey.
+                    {% trans "Log your first donation to start your journey." %}
                   {% endif %}
                 </p>
-                <a href="{% url 'request-list' %}" class="bb-btn bb-btn--primary bb-btn--sm">See urgent requests</a>
+                <a href="{% url 'request-list' %}" class="bb-btn bb-btn--primary bb-btn--sm">{% trans "See urgent requests" %}</a>
               {% else %}
-                <h2>Recharging</h2>
-                <p class="bb-muted">Next donation from <strong class="bb-strong">{{ eligibility.next_date|date:"M d, Y" }}</strong>.</p>
-                <div class="bb-progress" role="progressbar" aria-label="Recharge progress" aria-valuenow="{{ eligibility.percent }}" aria-valuemin="0" aria-valuemax="100"><span style="width:{{ eligibility.percent }}%"></span></div>
+                <h2>{% trans "Recharging" %}</h2>
+                <p class="bb-muted">{% blocktrans with d=eligibility.next_date|date:"M d, Y" %}Next donation from <strong class="bb-strong">{{ d }}</strong>.{% endblocktrans %}</p>
+                <div class="bb-progress" role="progressbar" aria-label="{% trans 'Recharge progress' %}" aria-valuenow="{{ eligibility.percent }}" aria-valuemin="0" aria-valuemax="100"><span style="width:{{ eligibility.percent }}%"></span></div>
               {% endif %}
             </div>
           </div>
-          <p class="bb-xs bb-muted bb-mb-0 bb-mt-2">A reminder only ({{ donation_interval_label }} gap), not medical clearance. Always follow the blood bank's screening.</p>
+          <p class="bb-xs bb-muted bb-mb-0 bb-mt-2">{% blocktrans with interval=donation_interval_label %}A reminder only ({{ interval }} gap), not medical clearance. Always follow the blood bank's screening.{% endblocktrans %}</p>
         </div>
 
         {% if urgent_matches %}
           <div class="bb-card bb-card--soft hub-step">
             <span class="hub-step__icon"><i class="feather-droplet"></i></span>
             <div class="bb-grow">
-              <strong class="bb-strong">{{ urgent_matches }} urgent request{{ urgent_matches|pluralize }} need{{ urgent_matches|pluralize:"s," }} {{ profile.blood_group }}</strong>
-              <div class="bb-small bb-muted">You are ready to help.</div>
+              <strong class="bb-strong">{% blocktrans count counter=urgent_matches with g=profile.blood_group %}{{ counter }} urgent request needs {{ g }}{% plural %}{{ counter }} urgent requests need {{ g }}{% endblocktrans %}</strong>
+              <div class="bb-small bb-muted">{% trans "You are ready to help." %}</div>
             </div>
-            <a href="{% url 'request-list' %}?blood_group={{ profile.blood_group|urlencode }}" class="bb-btn bb-btn--primary bb-btn--sm">View</a>
+            <a href="{% url 'request-list' %}?blood_group={{ profile.blood_group|urlencode }}" class="bb-btn bb-btn--primary bb-btn--sm">{% trans "View" %}</a>
           </div>
         {% endif %}
 
         {# ---------- Stats ---------- #}
         <div>
           <div class="hub-stats">
-            <div class="hub-stat"><i class="feather-check-circle" aria-hidden="true"></i><div class="bb-stat__value">{{ approved_count }}</div><div class="bb-stat__label">verified donation{{ approved_count|pluralize }}</div></div>
-            <div class="hub-stat"><i class="feather-clock" aria-hidden="true"></i><div class="bb-stat__value">{{ pending_count }}</div><div class="bb-stat__label">awaiting review</div></div>
-            <div class="hub-stat"><i class="feather-repeat" aria-hidden="true"></i><div class="bb-stat__value">{{ current_streak }}</div><div class="bb-stat__label">cycle streak</div></div>
-            <div class="hub-stat"><i class="feather-life-buoy" aria-hidden="true"></i><div class="bb-stat__value">{{ request_donations }}</div><div class="bb-stat__label">request donation{{ request_donations|pluralize }}</div></div>
+            <div class="hub-stat"><i class="feather-check-circle" aria-hidden="true"></i><div class="bb-stat__value">{{ approved_count }}</div><div class="bb-stat__label">{% blocktrans count counter=approved_count %}verified donation{% plural %}verified donations{% endblocktrans %}</div></div>
+            <div class="hub-stat"><i class="feather-clock" aria-hidden="true"></i><div class="bb-stat__value">{{ pending_count }}</div><div class="bb-stat__label">{% trans "awaiting review" %}</div></div>
+            <div class="hub-stat"><i class="feather-repeat" aria-hidden="true"></i><div class="bb-stat__value">{{ current_streak }}</div><div class="bb-stat__label">{% trans "cycle streak" %}</div></div>
+            <div class="hub-stat"><i class="feather-life-buoy" aria-hidden="true"></i><div class="bb-stat__value">{{ request_donations }}</div><div class="bb-stat__label">{% blocktrans count counter=request_donations %}request donation{% plural %}request donations{% endblocktrans %}</div></div>
           </div>
-          <p class="bb-small bb-muted bb-center bb-mb-0 bb-mt-1"><i class="feather-heart" style="color:var(--bb-red-text)"></i> est. up to <strong class="bb-strong">{{ lives }}</strong> people helped</p>
+          <p class="bb-small bb-muted bb-center bb-mb-0 bb-mt-1"><i class="feather-heart" style="color:var(--bb-red-text)"></i> {% blocktrans with n=lives %}est. up to <strong class="bb-strong">{{ n }}</strong> people helped{% endblocktrans %}</p>
         </div>
 
         {# ---------- Next step (only while something is open) ---------- #}
@@ -187,41 +187,41 @@
           <div class="bb-card bb-card--flat hub-step">
             <span class="hub-step__icon"><i class="feather-flag"></i></span>
             <div class="bb-grow">
-              <div class="bb-eyebrow bb-mb-0">Next step</div>
+              <div class="bb-eyebrow bb-mb-0">{% trans "Next step" %}</div>
               <strong class="bb-strong">{{ quest.title }}</strong>
               <div class="bb-small bb-muted">{{ quest.description }}</div>
             </div>
-            <a href="{{ quest.url }}" class="bb-btn bb-btn--soft bb-btn--sm">Go</a>
+            <a href="{{ quest.url }}" class="bb-btn bb-btn--soft bb-btn--sm">{% trans "Go" %}</a>
           </div>
           {% endwith %}
         {% endif %}
 
         {# ---------- Log a donation ---------- #}
         <div class="bb-card" id="log">
-          <h2 class="bb-card__title">Log a donation</h2>
+          <h2 class="bb-card__title">{% trans "Log a donation" %}</h2>
           <form method="post" class="bb-form" action="{% url 'log-donation' %}#log">
             {% csrf_token %}
             {{ form.non_field_errors }}
             <div class="hub-pair">
               <div class="bb-field">
-                <label class="bb-label" for="{{ form.blood_group.id_for_label }}">Blood group</label>
+                <label class="bb-label" for="{{ form.blood_group.id_for_label }}">{% trans "Blood group" %}</label>
                 {{ form.blood_group }}
                 {{ form.blood_group.errors }}
               </div>
               <div class="bb-field">
-                <label class="bb-label" for="{{ form.donation_date.id_for_label }}">Donation date</label>
+                <label class="bb-label" for="{{ form.donation_date.id_for_label }}">{% trans "Donation date" %}</label>
                 {{ form.donation_date }}
                 {{ form.donation_date.errors }}
               </div>
             </div>
             <div class="hub-pair">
               <div class="bb-field">
-                <label class="bb-label" for="{{ form.district.id_for_label }}">District</label>
+                <label class="bb-label" for="{{ form.district.id_for_label }}">{% trans "District" %}</label>
                 {{ form.district }}
                 {{ form.district.errors }}
               </div>
               <div class="bb-field">
-                <label class="bb-label" for="{{ form.place.id_for_label }}">Hospital / blood bank</label>
+                <label class="bb-label" for="{{ form.place.id_for_label }}">{% trans "Hospital / blood bank" %}</label>
                 {{ form.place }}
                 {{ form.place.errors }}
               </div>
@@ -233,49 +233,49 @@
             </div>
             {% if has_requests_to_link %}
               <div class="bb-field">
-                <label class="bb-label" for="{{ form.blood_request.id_for_label }}">Donated for an urgent request? (+20 bonus points)</label>
+                <label class="bb-label" for="{{ form.blood_request.id_for_label }}">{% trans "Donated for an urgent request? (+20 bonus points)" %}</label>
                 {{ form.blood_request }}
                 {{ form.blood_request.errors }}
               </div>
             {% endif %}
-            <button class="bb-btn bb-btn--primary bb-btn--block" type="submit"><i class="feather-send"></i> Submit for verification</button>
-            <div class="bb-help bb-center">An admin verifies each donation before it counts toward your tier.</div>
+            <button class="bb-btn bb-btn--primary bb-btn--block" type="submit"><i class="feather-send"></i> {% trans "Submit for verification" %}</button>
+            <div class="bb-help bb-center">{% trans "An admin verifies each donation before it counts toward your tier." %}</div>
           </form>
         </div>
 
         {# ---------- History ---------- #}
         <div class="bb-card">
           <div class="bb-row bb-row--between bb-mb-1">
-            <h2 class="bb-card__title bb-mb-0">My donations</h2>
-            {% if donations %}<a href="{% url 'donation-history' %}" class="bb-small bb-strong" style="color:var(--bb-red-text)">Print / save</a>{% endif %}
+            <h2 class="bb-card__title bb-mb-0">{% trans "My donations" %}</h2>
+            {% if donations %}<a href="{% url 'donation-history' %}" class="bb-small bb-strong" style="color:var(--bb-red-text)">{% trans "Print / save" %}</a>{% endif %}
           </div>
           {% if recent_donations %}
             <div>
               {% for donation in recent_donations %}
                 <div class="hub-don">
-                  <span class="bb-bloodtag bb-bloodtag--sm" aria-label="Blood group {{ donation.blood_group }}"><span>{{ donation.blood_group }}</span></span>
+                  <span class="bb-bloodtag bb-bloodtag--sm" aria-label="{% blocktrans with g=donation.blood_group %}Blood group {{ g }}{% endblocktrans %}"><span>{{ donation.blood_group }}</span></span>
                   <div class="hub-don__main">
                     <strong>{{ donation.donation_date|date:"M d, Y" }}</strong>
                     <span class="bb-small bb-muted hub-don__place">{{ donation.location }}{% if donation.district %} &middot; {{ donation.district }}{% endif %}</span>
                   </div>
                   <div class="hub-don__side">
                     {% if donation.status == 'approved' %}
-                      <span class="bb-pill bb-pill--ok"><i class="feather-check"></i> Approved</span>
+                      <span class="bb-pill bb-pill--ok"><i class="feather-check"></i> {% trans "Approved" %}</span>
                     {% elif donation.status == 'rejected' %}
-                      <span class="bb-pill bb-pill--bad"><i class="feather-x"></i> Rejected</span>
+                      <span class="bb-pill bb-pill--bad"><i class="feather-x"></i> {% trans "Rejected" %}</span>
                     {% else %}
-                      <span class="bb-pill bb-pill--warn"><i class="feather-clock"></i> Pending</span>
-                      <a href="{% url 'donation-delete' donation.pk %}" class="hub-del" aria-label="Delete pending donation from {{ donation.donation_date|date:'M d, Y' }}"><i class="feather-trash-2"></i> Delete</a>
+                      <span class="bb-pill bb-pill--warn"><i class="feather-clock"></i> {% trans "Pending" %}</span>
+                      <a href="{% url 'donation-delete' donation.pk %}" class="hub-del" aria-label="{% blocktrans with d=donation.donation_date|date:'M d, Y' %}Delete pending donation from {{ d }}{% endblocktrans %}"><i class="feather-trash-2"></i> {% trans "Delete" %}</a>
                     {% endif %}
                   </div>
                 </div>
               {% endfor %}
             </div>
             {% if more_donations %}
-              <div class="bb-center bb-mt-1"><a href="{% url 'donation-history' %}" class="bb-btn bb-btn--ghost bb-btn--sm">See all {{ donations|length }}</a></div>
+              <div class="bb-center bb-mt-1"><a href="{% url 'donation-history' %}" class="bb-btn bb-btn--ghost bb-btn--sm">{% blocktrans with n=donations|length %}See all {{ n }}{% endblocktrans %}</a></div>
             {% endif %}
           {% else %}
-            <div class="bb-empty"><i class="feather-droplet"></i>No donations logged yet.<br>Your first one starts the journey.</div>
+            <div class="bb-empty"><i class="feather-droplet"></i>{% trans "No donations logged yet." %}<br>{% trans "Your first one starts the journey." %}</div>
           {% endif %}
         </div>
       </div>
@@ -284,27 +284,27 @@
 
         {# ---------- Tier ---------- #}
         <div class="bb-card">
-          <h2 class="bb-card__title">Donor tier</h2>
+          <h2 class="bb-card__title">{% trans "Donor tier" %}</h2>
           <div class="hub-tier">
             {% if current_badge %}
               <span class="hub-tier__icon" style="color:{{ current_badge.color }}"><i class="feather-{{ current_badge.icon }}"></i></span>
               <div>
                 <strong class="bb-strong" style="color:{{ current_badge.color }}">{{ current_badge.name }}</strong>
-                <div class="bb-small bb-muted">{{ approved_count }} verified donation{{ approved_count|pluralize }}</div>
+                <div class="bb-small bb-muted">{% blocktrans count counter=approved_count %}{{ counter }} verified donation{% plural %}{{ counter }} verified donations{% endblocktrans %}</div>
               </div>
             {% else %}
               <span class="hub-tier__icon" style="color:var(--bb-muted)"><i class="feather-heart"></i></span>
               <div>
-                <strong class="bb-strong">No tier yet</strong>
-                <div class="bb-small bb-muted">One verified donation earns Bronze.</div>
+                <strong class="bb-strong">{% trans "No tier yet" %}</strong>
+                <div class="bb-small bb-muted">{% trans "One verified donation earns Bronze." %}</div>
               </div>
             {% endif %}
           </div>
           {% if next_badge %}
-            <div class="bb-progress" role="progressbar" aria-label="Progress to {{ next_badge.name }}" aria-valuenow="{{ progress_percent }}" aria-valuemin="0" aria-valuemax="100"><span style="width:{{ progress_percent }}%;background:{{ next_badge.color }}"></span></div>
-            <div class="bb-xs bb-muted bb-mt-1">{{ remaining_to_next }} more donation{{ remaining_to_next|pluralize }} to {{ next_badge.name }}</div>
+            <div class="bb-progress" role="progressbar" aria-label="{% blocktrans with name=next_badge.name %}Progress to {{ name }}{% endblocktrans %}" aria-valuenow="{{ progress_percent }}" aria-valuemin="0" aria-valuemax="100"><span style="width:{{ progress_percent }}%;background:{{ next_badge.color }}"></span></div>
+            <div class="bb-xs bb-muted bb-mt-1">{% blocktrans count counter=remaining_to_next with name=next_badge.name %}{{ counter }} more donation to {{ name }}{% plural %}{{ counter }} more donations to {{ name }}{% endblocktrans %}</div>
           {% else %}
-            <div class="bb-xs bb-muted">Highest tier reached. Thank you!</div>
+            <div class="bb-xs bb-muted">{% trans "Highest tier reached. Thank you!" %}</div>
           {% endif %}
           <div class="hub-badges bb-mt-2">
             {% for badge in all_badges %}
@@ -320,14 +320,14 @@
         {# ---------- Quests ---------- #}
         <div class="bb-card">
           <div class="bb-row bb-row--between bb-mb-1">
-            <h2 class="bb-card__title bb-mb-0">Quests</h2>
+            <h2 class="bb-card__title bb-mb-0">{% trans "Quests" %}</h2>
             <span class="bb-pill bb-pill--info">{{ quests_done }} / {{ quests|length }}</span>
           </div>
           {% for quest in quests %}
             <div class="hub-quest {% if quest.done %}is-done{% endif %}">
               <span class="hub-quest__mark" aria-hidden="true"><i class="feather-check"></i></span>
               <div class="bb-grow">
-                <span class="hub-quest__title">{{ quest.title }}{% if quest.done %}<span class="bb-sr"> (done)</span>{% endif %}</span>
+                <span class="hub-quest__title">{{ quest.title }}{% if quest.done %}<span class="bb-sr"> {% trans "(done)" %}</span>{% endif %}</span>
                 {% if not quest.done %}
                   <span class="bb-small bb-muted">{{ quest.description }}</span>
                   {% if quest.target %}
@@ -336,49 +336,49 @@
                   <div class="hub-quest__reward"><i class="feather-gift"></i> {{ quest.reward }}{% if quest.target %} &middot; {{ quest.progress }}/{{ quest.target }}{% endif %}</div>
                 {% endif %}
               </div>
-              {% if not quest.done %}<a href="{{ quest.url }}" class="bb-btn bb-btn--ghost bb-btn--sm">Go</a>{% endif %}
+              {% if not quest.done %}<a href="{{ quest.url }}" class="bb-btn bb-btn--ghost bb-btn--sm">{% trans "Go" %}</a>{% endif %}
             </div>
           {% endfor %}
         </div>
 
         {# ---------- Streak + hero badges ---------- #}
         <div class="bb-card">
-          <h2 class="bb-card__title">Streak badges</h2>
+          <h2 class="bb-card__title">{% trans "Streak badges" %}</h2>
           <div class="hub-badges">
             {% for badge in streak_badges %}
               <div class="hub-badge {% if badge not in earned_streak_badges %}is-locked{% endif %}">
                 <i class="feather-{{ badge.icon }}" style="color:{{ badge.color }}"></i>
                 {{ badge.name }}
-                <small>{{ badge.min_streak }}+ streak</small>
+                <small>{% blocktrans with n=badge.min_streak %}{{ n }}+ streak{% endblocktrans %}</small>
               </div>
             {% endfor %}
           </div>
-          <div class="bb-xs bb-muted bb-mt-1">Donate every {{ donation_interval_label }} cycle to grow your streak.</div>
+          <div class="bb-xs bb-muted bb-mt-1">{% blocktrans with interval=donation_interval_label %}Donate every {{ interval }} cycle to grow your streak.{% endblocktrans %}</div>
 
           <div class="bb-divider"></div>
 
-          <h2 class="bb-card__title">Hero badges</h2>
+          <h2 class="bb-card__title">{% trans "Hero badges" %}</h2>
           <div class="hub-badges">
             {% for badge in hero_badges %}
               <div class="hub-badge {% if badge not in earned_hero_badges %}is-locked{% endif %}">
                 <i class="feather-{{ badge.icon }}" style="color:{{ badge.color }}"></i>
                 {{ badge.name }}
-                <small>{{ badge.min_request_donations }}+ request{{ badge.min_request_donations|pluralize }}</small>
+                <small>{% blocktrans count counter=badge.min_request_donations %}{{ counter }}+ request{% plural %}{{ counter }}+ requests{% endblocktrans %}</small>
               </div>
             {% endfor %}
           </div>
-          <div class="bb-xs bb-muted bb-mt-1">Verified donations to urgent requests ({{ request_donations }} so far). <a href="{% url 'request-list' %}">Find a request</a></div>
+          <div class="bb-xs bb-muted bb-mt-1">{% url 'request-list' as list_url %}{% blocktrans with n=request_donations %}Verified donations to urgent requests ({{ n }} so far). <a href="{{ list_url }}">Find a request</a>{% endblocktrans %}</div>
         </div>
 
         {# ---------- Tools ---------- #}
         <div class="bb-card">
-          <h2 class="bb-card__title">Share &amp; download</h2>
+          <h2 class="bb-card__title">{% trans "Share &amp; download" %}</h2>
           <div class="hub-tools">
-            <a href="{% url 'badge-card' user.id %}" target="_blank" rel="noopener"><i class="feather-share-2"></i> Share my badge</a>
-            <a href="{% url 'donor-card' %}"><i class="feather-credit-card"></i> Donor card</a>
-            <a href="{% url 'donation-history' %}"><i class="feather-printer"></i> Print history</a>
-            <a href="{% url 'donation-export' %}"><i class="feather-download"></i> Download CSV</a>
-            <a href="{% url 'privacy' %}"><i class="feather-lock"></i> Profile &amp; privacy</a>
+            <a href="{% url 'badge-card' user.id %}" target="_blank" rel="noopener"><i class="feather-share-2"></i> {% trans "Share my badge" %}</a>
+            <a href="{% url 'donor-card' %}"><i class="feather-credit-card"></i> {% trans "Donor card" %}</a>
+            <a href="{% url 'donation-history' %}"><i class="feather-printer"></i> {% trans "Print history" %}</a>
+            <a href="{% url 'donation-export' %}"><i class="feather-download"></i> {% trans "Download CSV" %}</a>
+            <a href="{% url 'privacy' %}"><i class="feather-lock"></i> {% trans "Profile &amp; privacy" %}</a>
           </div>
         </div>
       </div>

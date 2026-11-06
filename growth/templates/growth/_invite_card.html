@@ -1,0 +1,33 @@
+{% load i18n %}
+{# Shared by the hub and home panels. Needs: invite, share, link_id, heading_id, and optionally stats. #}
+<section class="bb-card gr-panel" aria-labelledby="{{ heading_id }}">
+  <div>
+    <span class="bb-eyebrow">{% trans "Spread the word" %}</span>
+    <h2 class="bb-card__title" id="{{ heading_id }}" style="margin-bottom:4px;">{% trans "Invite a friend" %}</h2>
+    <p class="bb-small bb-muted">{% trans "Share your link. When a friend joins and their first donation is verified, you earn Friend Maker recognition. Nothing is paid for sign-ups alone." %}</p>
+  </div>
+
+  <div class="gr-link">
+    <label class="bb-sr" for="{{ link_id }}">{% trans "Your invite link" %}</label>
+    <input type="text" id="{{ link_id }}" value="{{ share.url }}" readonly>
+    <button type="button" class="bb-btn bb-btn--soft" data-copy="#{{ link_id }}"><i class="feather-copy" aria-hidden="true"></i> {% trans "Copy" %}</button>
+  </div>
+
+  <div class="gr-share">
+    <a class="bb-btn bb-btn--ok bb-btn--sm" target="_blank" rel="noopener noreferrer" href="{{ share.whatsapp }}"><i class="feather-message-circle" aria-hidden="true"></i> {% trans "WhatsApp" %}</a>
+    <a class="bb-btn bb-btn--ghost bb-btn--sm" target="_blank" rel="noopener noreferrer" href="{{ share.messenger }}"><i class="feather-send" aria-hidden="true"></i> {% trans "Messenger" %}</a>
+    <a class="bb-btn bb-btn--ghost bb-btn--sm" target="_blank" rel="noopener noreferrer" href="{{ share.facebook }}"><i class="feather-facebook" aria-hidden="true"></i> {% trans "Facebook" %}</a>
+  </div>
+
+  {% if stats %}
+    <div class="gr-stats">
+      <div class="gr-stat"><strong>{{ stats.joined }}</strong><span>{% blocktrans count counter=stats.joined %}friend joined{% plural %}friends joined{% endblocktrans %}</span></div>
+      <div class="gr-stat"><strong>{{ stats.rewarded }}</strong><span>{% trans "gave a first verified donation" %}</span></div>
+    </div>
+    {% if stats.current %}
+      <p class="bb-small"><span class="bb-pill bb-pill--ok"><i class="feather-users" aria-hidden="true"></i> {{ stats.current.name }}</span></p>
+    {% endif %}
+  {% endif %}
+
+  <p class="bb-small"><a href="{% url 'growth:invite-home' %}">{% trans "More about invites" %}</a></p>
+</section>

@@ -1,10 +1,10 @@
 {% extends 'base/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Join free{% endblock title %}
+{% block title %}{% trans "Join free" %}{% endblock title %}
 {% block meta %}
 <meta name="robots" content="noindex">
-<meta name="description" content="Create a free {{ SITE_NAME }} account to answer urgent blood requests and track your donations.">
+<meta name="description" content="{% blocktrans with site=SITE_NAME %}Create a free {{ site }} account to answer urgent blood requests and track your donations.{% endblocktrans %}">
 {% endblock meta %}
 {% block extra_style %}<link rel="stylesheet" href="{% static 'css/pages.css' %}">{% endblock extra_style %}
 
@@ -14,8 +14,8 @@
   <div class="bb-container bb-container--form">
     <div class="pg-auth__brand">
       <img src="{% static 'images/brand/bloodbond-mark.svg' %}" alt="" width="56" height="56">
-      <h1>Join {{ SITE_NAME }}</h1>
-      <p>Free, and it takes about a minute.</p>
+      <h1>{% blocktrans with site=SITE_NAME %}Join {{ site }}{% endblocktrans %}</h1>
+      <p>{% trans "Free, and it takes about a minute." %}</p>
     </div>
 
     <div class="bb-card">
@@ -24,68 +24,68 @@
         {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
 
         {% if f.errors %}
-          <div class="bb-alert bb-alert--bad" role="alert">Please fix the highlighted fields below.</div>
+          <div class="bb-alert bb-alert--bad" role="alert">{% trans "Please fix the highlighted fields below." %}</div>
         {% endif %}
         {% if f.non_field_errors %}{{ f.non_field_errors }}{% endif %}
 
         <fieldset class="pg-fieldset">
-          <legend>About you</legend>
+          <legend>{% trans "About you" %}</legend>
           <div class="pg-2col">
             <div class="bb-field">
-              <label class="bb-label" for="{{ f.first_name.id_for_label }}">First name</label>
+              <label class="bb-label" for="{{ f.first_name.id_for_label }}">{% trans "First name" %}</label>
               <input type="text" name="{{ f.first_name.html_name }}" id="{{ f.first_name.id_for_label }}" value="{{ f.first_name.value|default_if_none:'' }}" autocomplete="given-name" required autofocus>
               {{ f.first_name.errors }}
             </div>
             <div class="bb-field">
-              <label class="bb-label" for="{{ f.last_name.id_for_label }}">Last name <span class="pg-optional">optional</span></label>
+              <label class="bb-label" for="{{ f.last_name.id_for_label }}">{% trans "Last name" %} <span class="pg-optional">{% trans "optional" %}</span></label>
               <input type="text" name="{{ f.last_name.html_name }}" id="{{ f.last_name.id_for_label }}" value="{{ f.last_name.value|default_if_none:'' }}" autocomplete="family-name">
               {{ f.last_name.errors }}
             </div>
           </div>
 
           <div class="bb-field">
-            <label class="bb-label" for="{{ f.phone.id_for_label }}">Phone number</label>
+            <label class="bb-label" for="{{ f.phone.id_for_label }}">{% trans "Phone number" %}</label>
             <input type="tel" name="{{ f.phone.html_name }}" id="{{ f.phone.id_for_label }}" value="{{ f.phone.value|default_if_none:'' }}" inputmode="tel" autocomplete="tel" placeholder="01712345678" required>
-            <div class="bb-help">This is your login. It is never shown on public pages.</div>
+            <div class="bb-help">{% trans "This is your login. It is never shown on public pages." %}</div>
             {{ f.phone.errors }}
           </div>
 
           <div class="bb-field">
-            <label class="bb-label" for="{{ f.email.id_for_label }}">Email <span class="pg-optional">optional</span></label>
+            <label class="bb-label" for="{{ f.email.id_for_label }}">{% trans "Email" %} <span class="pg-optional">{% trans "optional" %}</span></label>
             <input type="email" name="{{ f.email.html_name }}" id="{{ f.email.id_for_label }}" value="{{ f.email.value|default_if_none:'' }}" autocomplete="email">
-            <div class="bb-help">Only needed to reset a forgotten password.</div>
+            <div class="bb-help">{% trans "Only needed to reset a forgotten password." %}</div>
             {{ f.email.errors }}
           </div>
         </fieldset>
 
         <fieldset class="pg-fieldset">
-          <legend>Password</legend>
+          <legend>{% trans "Password" %}</legend>
           <div class="bb-field">
-            <label class="bb-label" for="{{ f.password1.id_for_label }}">Create a password</label>
+            <label class="bb-label" for="{{ f.password1.id_for_label }}">{% trans "Create a password" %}</label>
             <div class="pg-pw">
               <input type="password" name="{{ f.password1.html_name }}" id="{{ f.password1.id_for_label }}" autocomplete="new-password" required>
-              <button type="button" data-toggle-password aria-controls="{{ f.password1.id_for_label }}">Show</button>
+              <button type="button" data-toggle-password data-show-label="{% trans 'Show' %}" data-hide-label="{% trans 'Hide' %}" aria-controls="{{ f.password1.id_for_label }}">{% trans "Show" %}</button>
             </div>
-            <div class="bb-help">At least 8 characters. Not a common password, and not only numbers.</div>
+            <div class="bb-help">{% trans "At least 8 characters. Not a common password, and not only numbers." %}</div>
             {{ f.password1.errors }}
           </div>
           <div class="bb-field">
-            <label class="bb-label" for="{{ f.password2.id_for_label }}">Type it again</label>
+            <label class="bb-label" for="{{ f.password2.id_for_label }}">{% trans "Type it again" %}</label>
             <input type="password" name="{{ f.password2.html_name }}" id="{{ f.password2.id_for_label }}" autocomplete="new-password" required>
             {{ f.password2.errors }}
           </div>
         </fieldset>
 
         <fieldset class="pg-fieldset">
-          <legend>Donor basics <span class="pg-optional" style="text-transform:none;letter-spacing:0">(you can add these later)</span></legend>
+          <legend>{% trans "Donor basics" %} <span class="pg-optional" style="text-transform:none;letter-spacing:0">{% trans "(you can add these later)" %}</span></legend>
           <div class="pg-2col">
             <div class="bb-field">
-              <label class="bb-label" for="{{ f.blood_group.id_for_label }}">Blood group</label>
+              <label class="bb-label" for="{{ f.blood_group.id_for_label }}">{% trans "Blood group" %}</label>
               {{ f.blood_group }}
               {{ f.blood_group.errors }}
             </div>
             <div class="bb-field">
-              <label class="bb-label" for="{{ f.district.id_for_label }}">District</label>
+              <label class="bb-label" for="{{ f.district.id_for_label }}">{% trans "District" %}</label>
               {{ f.district }}
               {{ f.district.errors }}
             </div>
@@ -93,18 +93,18 @@
           <label class="bb-check" for="{{ f.in_directory.id_for_label }}">
             <input type="checkbox" name="{{ f.in_directory.html_name }}" id="{{ f.in_directory.id_for_label }}"{% if f.in_directory.value %} checked{% endif %}>
             <span>
-              <strong>List me in the donor directory</strong>
-              <span class="bb-help">Optional. Needs a blood group and district. Members can ask you for help; your number is shared only if you accept.</span>
+              <strong>{% trans "List me in the donor directory" %}</strong>
+              <span class="bb-help">{% trans "Optional. Needs a blood group and district. Members can ask you for help; your number is shared only if you accept." %}</span>
             </span>
           </label>
         </fieldset>
 
-        <button class="bb-btn bb-btn--primary bb-btn--lg bb-btn--block" type="submit">Create my account</button>
-        <p class="pg-formnote">By joining you agree to keep requests and contact details respectful. Read how we handle <a href="{% url 'about' %}#privacy">privacy</a>.</p>
+        <button class="bb-btn bb-btn--primary bb-btn--lg bb-btn--block" type="submit">{% trans "Create my account" %}</button>
+        <p class="pg-formnote">{% url 'about' as about_url %}{% blocktrans %}By joining you agree to keep requests and contact details respectful. Read how we handle <a href="{{ about_url }}#privacy">privacy</a>.{% endblocktrans %}</p>
       </form>
     </div>
 
-    <p class="pg-auth__alt">Already a member? <a href="{% url 'login' %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="bb-strong" style="color:var(--bb-red-text)">Log in</a></p>
+    <p class="pg-auth__alt">{% trans "Already a member?" %} <a href="{% url 'login' %}{% if next %}?next={{ next|urlencode }}{% endif %}" class="bb-strong" style="color:var(--bb-red-text)">{% trans "Log in" %}</a></p>
   </div>
 </section>
 {% endwith %}

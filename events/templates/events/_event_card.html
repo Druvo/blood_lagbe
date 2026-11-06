@@ -1,0 +1,18 @@
+{% load i18n %}
+<a href="{% url 'events:detail' event.pk %}" class="bb-card bb-card--lift ev-card">
+  <div class="ev-date" aria-hidden="true"><strong>{{ event.starts_at|date:"j" }}</strong><span>{{ event.starts_at|date:"M" }}</span></div>
+  <div class="ev-body">
+    <h{{ level|default:3 }} class="ev-title">{{ event.title }}</h{{ level|default:3 }}>
+    <div class="ev-meta">
+      <span><i class="feather-clock" aria-hidden="true"></i>{{ event.starts_at|date:"D, j M, g:i A" }}</span>
+      <span><i class="feather-map-pin" aria-hidden="true"></i>{{ event.where }}</span>
+    </div>
+    <div class="ev-badges">
+      {% if event.status == 'cancelled' %}<span class="bb-pill bb-pill--bad">{% trans "Cancelled" %}</span>{% endif %}
+      {% if event.status == 'pending' %}<span class="bb-pill bb-pill--warn">{% trans "Waiting for approval" %}</span>{% endif %}
+      {% if event.is_verified_organizer %}<span class="bb-pill bb-pill--ok"><i class="feather-check-circle" aria-hidden="true"></i> {% trans "Verified organizer" %}</span>{% endif %}
+      <span class="bb-pill"><i class="feather-users" aria-hidden="true"></i> {% blocktrans with n=event.going_count %}{{ n }} going{% endblocktrans %}</span>
+      {% if event.capacity %}<span class="bb-pill">{% blocktrans with n=event.capacity %}{{ n }} spots{% endblocktrans %}</span>{% endif %}
+    </div>
+  </div>
+</a>

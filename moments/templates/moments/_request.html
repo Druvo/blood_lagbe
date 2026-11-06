@@ -1,0 +1,42 @@
+{% load static i18n %}{% if show %}
+<link rel="stylesheet" href="{% static 'moments/moments.css' %}">
+
+{% if pulse %}
+  <section class="bb-card mo-panel" aria-labelledby="mo-pulse-title">
+    <h2 class="bb-card__title" id="mo-pulse-title">{% trans "Live count" %}</h2>
+    <p class="mo-pulse bb-mb-0" aria-live="polite" data-mo-pulse data-url="{% url 'moments:pulse' blood_request.pk %}" data-needed="{{ blood_request.units_needed }}">{% if pulse.people %}{{ pulse.people }} {% if pulse.people == 1 %}person{% else %}people{% endif %} responding &middot; {{ pulse.bags_pledged }} of {{ blood_request.units_needed }} bag{{ blood_request.units_needed|pluralize }} offered &middot; {{ pulse.still_needed }} still needed{% else %}Nobody has offered yet. {{ blood_request.units_needed }} bag{{ blood_request.units_needed|pluralize }} still needed.{% endif %}</p>
+    <p class="bb-help">{% trans "Offers are not donations. The hospital confirms who can give." %}</p>
+  </section>
+  <script src="{% static 'moments/pulse.js' %}" defer></script>
+{% elif thank %}
+  <section class="bb-card mo-panel" aria-labelledby="mo-thank-title">
+    <h2 class="bb-card__title" id="mo-thank-title">{% trans "Say thank you" %}</h2>
+    {% if thank.responders %}
+      {% if thank.open_count %}
+        <form method="post" action="{% url 'moments:thank-send' blood_request.pk %}" class="bb-form">
+          {% csrf_token %}
+          <div class="bb-field">
+            <label class="bb-label" for="mo-thank-to">{% trans "Who" %}</label>
+            <select id="mo-thank-to" name="recipient">
+              <option value="all">{% blocktrans with n=thank.open_count %}Everyone who offered ({{ n }}){% endblocktrans %}</option>
+              {% for r in thank.responders %}
+                <option value="{{ r.id }}"{% if r.thanked %} disabled{% endif %}>{{ r.name }}{% if r.thanked %} ({% trans "thanked" %}){% endif %}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="bb-field">
+            <label class="bb-label" for="mo-thank-text">{% trans "Your note" %}</label>
+            <textarea id="mo-thank-text" name="text" rows="3" maxlength="200" required placeholder="{% trans 'Thank you for stepping up when we needed it.' %}"></textarea>
+            <div class="bb-help">{% trans "Up to 200 characters, plain text. No phone numbers or links. They can hide it." %}</div>
+          </div>
+          <button type="submit" class="bb-btn bb-btn--primary"><i class="feather-heart" aria-hidden="true"></i> {% trans "Send thanks" %}</button>
+        </form>
+      {% else %}
+        <p class="bb-muted bb-mb-0">{% trans "You have thanked everyone who offered to help." %}</p>
+      {% endif %}
+    {% else %}
+      <p class="bb-muted bb-mb-0">{% trans "Nobody offered to help on this request." %}</p>
+    {% endif %}
+  </section>
+{% endif %}
+{% endif %}

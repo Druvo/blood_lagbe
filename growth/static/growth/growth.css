@@ -1,0 +1,68 @@
+/* Growth lane: invites, public profile, share panel, install card.
+   Colors come from the bloodbond.css variables only, so dark mode follows. */
+
+.gr-panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; }
+.gr-panel p { margin: 0; }
+.gr-link { display: flex; gap: 8px; align-items: stretch; }
+.gr-link input {
+  flex: 1 1 auto; min-width: 0; min-height: 46px; padding: .6rem .8rem;
+  font: 500 .9rem/1.3 var(--bb-font); color: var(--bb-ink);
+  background: var(--bb-surface-2); border: 1.5px solid var(--bb-line); border-radius: var(--bb-radius-sm);
+  text-overflow: ellipsis;
+}
+.gr-link input:focus-visible { outline: 2px solid var(--bb-red); outline-offset: 1px; }
+.gr-link .bb-btn { flex: none; }
+.gr-share { display: flex; flex-wrap: wrap; gap: 8px; }
+.gr-share .bb-btn { flex: 1 1 130px; }
+.gr-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.gr-stat { padding: 10px 12px; border-radius: var(--bb-radius-sm); background: var(--bb-surface-2); }
+.gr-stat strong { display: block; font: 800 1.5rem/1.1 var(--bb-font-display); color: var(--bb-ink); }
+.gr-stat span { font-size: .8rem; color: var(--bb-muted); }
+.gr-levels { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.gr-levels li { display: inline-flex; align-items: center; gap: 6px; }
+
+/* Verified hospital chip + tooltip */
+.gr-verified { position: relative; display: inline-flex; }
+.gr-verified__chip {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: .4rem .9rem;
+  border-radius: 999px; font-weight: 700; font-size: .9rem; cursor: help;
+  background: var(--bb-green-soft); color: var(--bb-ok-text); border: 1.5px solid var(--bb-ok-line);
+}
+.gr-verified__tip {
+  position: absolute; left: 0; top: calc(100% + 6px); z-index: 20; width: min(280px, 80vw);
+  padding: .6rem .8rem; border-radius: var(--bb-radius-sm); font-size: .8rem; font-weight: 500;
+  background: var(--bb-ink); color: var(--bb-bg); box-shadow: var(--bb-shadow);
+  opacity: 0; visibility: hidden; transition: opacity .15s ease;
+}
+.gr-verified:hover .gr-verified__tip,
+.gr-verified:focus-within .gr-verified__tip { opacity: 1; visibility: visible; }
+
+/* Public profile */
+.gr-profile__head { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.gr-profile__head .bb-avatar--lg { width: 80px; height: 80px; font-size: 1.8rem; }
+.gr-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.gr-list li { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.gr-kicker { font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--bb-muted); }
+
+/* Install card (JS builds it) */
+.gr-install {
+  position: fixed; z-index: 60; left: 12px; right: 12px;
+  bottom: calc(var(--bb-tabbar-h, 64px) + env(safe-area-inset-bottom, 0px) + 12px);
+  max-width: 460px; margin: 0 auto; padding: 14px 16px; border-radius: var(--bb-radius);
+  background: var(--bb-surface); color: var(--bb-text); border: 1.5px solid var(--bb-line);
+  box-shadow: var(--bb-shadow-lg); display: grid; gap: 10px;
+  animation: gr-rise .3s ease both;
+}
+.gr-install[hidden] { display: none; }
+.gr-install p { margin: 0; font-size: .9rem; }
+.gr-install strong { color: var(--bb-ink); }
+.gr-install__row { display: flex; gap: 8px; flex-wrap: wrap; }
+.gr-install__row .bb-btn { flex: 1 1 120px; }
+@media (min-width: 960px) {
+  .gr-install { bottom: 20px; left: auto; right: 20px; margin: 0; }
+}
+@keyframes gr-rise { from { transform: translateY(16px); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .gr-install { animation: none; }
+  .gr-verified__tip { transition: none; }
+}

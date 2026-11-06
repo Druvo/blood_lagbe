@@ -1,12 +1,12 @@
 {% extends 'base/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Can I donate?{% endblock title %}
+{% block title %}{% trans "Can I donate?" %}{% endblock title %}
 {% block meta %}
-<meta name="description" content="Can I donate blood? A quick, friendly guide to who can give, blood group compatibility, what happens on the day and how to look after yourself.">
+<meta name="description" content="{% trans 'Can I donate blood? A quick, friendly guide to who can give, blood group compatibility, what happens on the day and how to look after yourself.' %}">
 <meta property="og:site_name" content="{{ SITE_NAME }}">
-<meta property="og:title" content="Can I donate blood? | {{ SITE_NAME }}">
-<meta property="og:description" content="Who can give blood, who can receive from whom, and what to expect.">
+<meta property="og:title" content="{% trans 'Can I donate blood?' %} | {{ SITE_NAME }}">
+<meta property="og:description" content="{% trans 'Who can give blood, who can receive from whom, and what to expect.' %}">
 <meta property="og:url" content="{{ request.build_absolute_uri }}">
 {% endblock meta %}
 {% block extra_style %}<link rel="stylesheet" href="{% static 'css/pages.css' %}">{% endblock extra_style %}
@@ -14,15 +14,15 @@
 {% block body %}
 <section class="pg-hero">
   <div class="bb-container bb-container--narrow">
-    <span class="bb-eyebrow">Donor guide</span>
-    <h1 class="bb-h1 bb-mb-1">Can I donate?</h1>
-    <p class="bb-lead">Short answers to the questions people ask before their first donation.</p>
-    <nav class="pg-jump bb-mt-2" aria-label="On this page">
-      <a class="bb-chip" href="#eligibility">Can I donate?</a>
-      <a class="bb-chip" href="#blood-types">Blood types</a>
-      <a class="bb-chip" href="#on-the-day">On the day</a>
-      <a class="bb-chip" href="#after-care">After care</a>
-      <a class="bb-chip" href="#myths">Myths</a>
+    <span class="bb-eyebrow">{% trans "Donor guide" %}</span>
+    <h1 class="bb-h1 bb-mb-1">{% trans "Can I donate?" %}</h1>
+    <p class="bb-lead">{% trans "Short answers to the questions people ask before their first donation." %}</p>
+    <nav class="pg-jump bb-mt-2" aria-label="{% trans 'On this page' %}">
+      <a class="bb-chip" href="#eligibility">{% trans "Can I donate?" %}</a>
+      <a class="bb-chip" href="#blood-types">{% trans "Blood types" %}</a>
+      <a class="bb-chip" href="#on-the-day">{% trans "On the day" %}</a>
+      <a class="bb-chip" href="#after-care">{% trans "After care" %}</a>
+      <a class="bb-chip" href="#myths">{% trans "Myths" %}</a>
     </nav>
   </div>
 </section>
@@ -32,69 +32,69 @@
 
     <!-- Eligibility -->
     <div id="eligibility" class="pg-anchor bb-stack">
-      <h2 class="bb-h2 bb-mb-0">Can I donate?</h2>
+      <h2 class="bb-h2 bb-mb-0">{% trans "Can I donate?" %}</h2>
       <div class="pg-disclaimer" role="note">
         <i class="feather-alert-triangle" aria-hidden="true"></i>
-        <p><strong>The blood bank decides.</strong> This is a friendly pre-check, not medical clearance. Staff at the blood bank will ask you questions and check you on the day.</p>
+        <p>{% blocktrans %}<strong>The blood bank decides.</strong> This is a friendly pre-check, not medical clearance. Staff at the blood bank will ask you questions and check you on the day.{% endblocktrans %}</p>
       </div>
 
       <div class="bb-card">
-        <h3 class="bb-card__title">The usual criteria</h3>
+        <h3 class="bb-card__title">{% trans "The usual criteria" %}</h3>
         <ul class="pg-criteria">
-          <li><i class="feather-check-circle" aria-hidden="true"></i><span><strong>Age 18 to 60.</strong> Limits can differ between blood banks.</span></li>
-          <li><i class="feather-check-circle" aria-hidden="true"></i><span><strong>Weight at least 45 kg.</strong></span></li>
-          <li><i class="feather-check-circle" aria-hidden="true"></i><span><strong>Feeling well today.</strong> No fever, cold or infection, and not recently ill.</span></li>
-          <li><i class="feather-check-circle" aria-hidden="true"></i><span><strong>Gap since your last donation:</strong> we use {{ donation_interval_label }} as a reminder. Blood banks may ask for a different gap.</span></li>
-          <li><i class="feather-check-circle" aria-hidden="true"></i><span><strong>Tell the staff</strong> if you travelled recently, got a tattoo or piercing, take regular medicines, or are pregnant or recently gave birth. They may ask you to wait.</span></li>
+          <li><i class="feather-check-circle" aria-hidden="true"></i><span>{% blocktrans %}<strong>Age 18 to 60.</strong> Limits can differ between blood banks.{% endblocktrans %}</span></li>
+          <li><i class="feather-check-circle" aria-hidden="true"></i><span>{% blocktrans %}<strong>Weight at least 45 kg.</strong>{% endblocktrans %}</span></li>
+          <li><i class="feather-check-circle" aria-hidden="true"></i><span>{% blocktrans %}<strong>Feeling well today.</strong> No fever, cold or infection, and not recently ill.{% endblocktrans %}</span></li>
+          <li><i class="feather-check-circle" aria-hidden="true"></i><span>{% blocktrans with interval=donation_interval_label %}<strong>Gap since your last donation:</strong> we use {{ interval }} as a reminder. Blood banks may ask for a different gap.{% endblocktrans %}</span></li>
+          <li><i class="feather-check-circle" aria-hidden="true"></i><span>{% blocktrans %}<strong>Tell the staff</strong> if you travelled recently, got a tattoo or piercing, take regular medicines, or are pregnant or recently gave birth. They may ask you to wait.{% endblocktrans %}</span></li>
         </ul>
       </div>
 
       <div class="bb-card" data-checker hidden data-interval-days="{{ donation_interval_days }}" data-interval-label="{{ donation_interval_label }}">
-        <h3 class="bb-card__title">Quick check</h3>
+        <h3 class="bb-card__title">{% trans "Quick check" %}</h3>
         <form class="bb-form" novalidate data-checker-form>
           <div class="pg-q">
             <div class="pg-numrow">
               <div>
-                <label class="pg-q__label" for="chk-age">Your age</label>
+                <label class="pg-q__label" for="chk-age">{% trans "Your age" %}</label>
                 <input type="number" id="chk-age" name="age" inputmode="numeric" min="1" max="120" placeholder="e.g. 28">
               </div>
               <div>
-                <label class="pg-q__label" for="chk-weight">Weight (kg)</label>
+                <label class="pg-q__label" for="chk-weight">{% trans "Weight (kg)" %}</label>
                 <input type="number" id="chk-weight" name="weight" inputmode="decimal" min="1" max="300" placeholder="e.g. 62">
               </div>
             </div>
           </div>
 
           <div class="pg-q" role="radiogroup" aria-labelledby="q-ill">
-            <span class="pg-q__label" id="q-ill">Do you have a fever, cold or infection now, or were you ill recently?</span>
-            <div class="pg-yn"><label><input type="radio" name="ill" value="yes"><span>Yes</span></label><label><input type="radio" name="ill" value="no" checked><span>No</span></label></div>
+            <span class="pg-q__label" id="q-ill">{% trans "Do you have a fever, cold or infection now, or were you ill recently?" %}</span>
+            <div class="pg-yn"><label><input type="radio" name="ill" value="yes"><span>{% trans "Yes" %}</span></label><label><input type="radio" name="ill" value="no" checked><span>{% trans "No" %}</span></label></div>
           </div>
           <div class="pg-q" role="radiogroup" aria-labelledby="q-travel">
-            <span class="pg-q__label" id="q-travel">Have you travelled recently to a place with malaria or another outbreak?</span>
-            <div class="pg-yn"><label><input type="radio" name="travel" value="yes"><span>Yes</span></label><label><input type="radio" name="travel" value="no" checked><span>No</span></label></div>
+            <span class="pg-q__label" id="q-travel">{% trans "Have you travelled recently to a place with malaria or another outbreak?" %}</span>
+            <div class="pg-yn"><label><input type="radio" name="travel" value="yes"><span>{% trans "Yes" %}</span></label><label><input type="radio" name="travel" value="no" checked><span>{% trans "No" %}</span></label></div>
           </div>
           <div class="pg-q" role="radiogroup" aria-labelledby="q-tattoo">
-            <span class="pg-q__label" id="q-tattoo">Have you had a tattoo or piercing recently?</span>
-            <div class="pg-yn"><label><input type="radio" name="tattoo" value="yes"><span>Yes</span></label><label><input type="radio" name="tattoo" value="no" checked><span>No</span></label></div>
+            <span class="pg-q__label" id="q-tattoo">{% trans "Have you had a tattoo or piercing recently?" %}</span>
+            <div class="pg-yn"><label><input type="radio" name="tattoo" value="yes"><span>{% trans "Yes" %}</span></label><label><input type="radio" name="tattoo" value="no" checked><span>{% trans "No" %}</span></label></div>
           </div>
           <div class="pg-q" role="radiogroup" aria-labelledby="q-meds">
-            <span class="pg-q__label" id="q-meds">Are you taking medicines now, such as antibiotics or regular prescriptions?</span>
-            <div class="pg-yn"><label><input type="radio" name="meds" value="yes"><span>Yes</span></label><label><input type="radio" name="meds" value="no" checked><span>No</span></label></div>
+            <span class="pg-q__label" id="q-meds">{% trans "Are you taking medicines now, such as antibiotics or regular prescriptions?" %}</span>
+            <div class="pg-yn"><label><input type="radio" name="meds" value="yes"><span>{% trans "Yes" %}</span></label><label><input type="radio" name="meds" value="no" checked><span>{% trans "No" %}</span></label></div>
           </div>
           <div class="pg-q" role="radiogroup" aria-labelledby="q-preg">
-            <span class="pg-q__label" id="q-preg">Are you pregnant, or did you give birth recently?<span class="pg-q__hint">Answer No if this does not apply to you.</span></span>
-            <div class="pg-yn"><label><input type="radio" name="pregnant" value="yes"><span>Yes</span></label><label><input type="radio" name="pregnant" value="no" checked><span>No</span></label></div>
+            <span class="pg-q__label" id="q-preg">{% trans "Are you pregnant, or did you give birth recently?" %}<span class="pg-q__hint">{% trans "Answer No if this does not apply to you." %}</span></span>
+            <div class="pg-yn"><label><input type="radio" name="pregnant" value="yes"><span>{% trans "Yes" %}</span></label><label><input type="radio" name="pregnant" value="no" checked><span>{% trans "No" %}</span></label></div>
           </div>
           <div class="pg-q">
-            <label class="pg-q__label" for="chk-last">When did you last donate whole blood?<span class="pg-q__hint">Our reminder gap is {{ donation_interval_label }}.</span></label>
+            <label class="pg-q__label" for="chk-last">{% trans "When did you last donate whole blood?" %}<span class="pg-q__hint">{% blocktrans with interval=donation_interval_label %}Our reminder gap is {{ interval }}.{% endblocktrans %}</span></label>
             <input type="date" id="chk-last" name="last">
             <label class="bb-check" style="margin:10px 0 0">
               <input type="checkbox" name="never" checked>
-              <span><strong>I have never donated</strong></span>
+              <span><strong>{% trans "I have never donated" %}</strong></span>
             </label>
           </div>
 
-          <button type="submit" class="bb-btn bb-btn--primary bb-btn--lg bb-btn--block bb-mt-2">Check</button>
+          <button type="submit" class="bb-btn bb-btn--primary bb-btn--lg bb-btn--block bb-mt-2">{% trans "Check" %}</button>
         </form>
         <div class="pg-result" data-checker-result hidden aria-live="polite" tabindex="-1"></div>
       </div>
@@ -102,13 +102,13 @@
 
     <!-- Blood types -->
     <div id="blood-types" class="pg-anchor bb-stack">
-      <h2 class="bb-h2 bb-mb-0">Who can give to whom</h2>
+      <h2 class="bb-h2 bb-mb-0">{% trans "Who can give to whom" %}</h2>
       <p class="bb-muted bb-mb-0">Red blood cells, the most common need. Find your group in the table: a green square means that donor group usually matches.</p>
 
       <div class="bb-card">
         <div class="pg-pick" data-pick>
-          <span class="bb-label">Pick your blood group</span>
-          <div class="bb-chips" role="group" aria-label="Blood group">
+          <span class="bb-label">{% trans "Pick your blood group" %}</span>
+          <div class="bb-chips" role="group" aria-label="{% trans 'Blood group' %}">
             {% for g in compat_groups %}<button type="button" class="bb-chip" data-pick-group="{{ g }}" aria-pressed="false">{{ g }}</button>{% endfor %}
           </div>
           <div class="pg-pick__out" data-pick-out hidden aria-live="polite"></div>
@@ -143,13 +143,13 @@
 
     <!-- On the day -->
     <div id="on-the-day" class="pg-anchor bb-stack">
-      <h2 class="bb-h2 bb-mb-0">What happens on the day</h2>
+      <h2 class="bb-h2 bb-mb-0">{% trans "What happens on the day" %}</h2>
       <div class="bb-card">
         <ol class="pg-steps">
-          <li><div><strong>Register</strong><span class="bb-muted">Bring an ID. Staff note your details and ask a few health questions.</span></div></li>
-          <li><div><strong>Quick health check</strong><span class="bb-muted">Usually pulse, blood pressure and a small finger-prick test. Answer honestly; it protects you and the patient.</span></div></li>
-          <li><div><strong>Donate</strong><span class="bb-muted">You sit or lie down while a trained person collects the blood with a sterile, single-use needle. The donation itself usually takes about ten minutes.</span></div></li>
-          <li><div><strong>Rest and refresh</strong><span class="bb-muted">Stay for a short rest with a drink and a snack before you leave. Plan for up to an hour in total.</span></div></li>
+          <li><div><strong>{% trans "Register" %}</strong><span class="bb-muted">Bring an ID. Staff note your details and ask a few health questions.</span></div></li>
+          <li><div><strong>{% trans "Quick health check" %}</strong><span class="bb-muted">Usually pulse, blood pressure and a small finger-prick test. Answer honestly; it protects you and the patient.</span></div></li>
+          <li><div><strong>{% trans "Donate" %}</strong><span class="bb-muted">You sit or lie down while a trained person collects the blood with a sterile, single-use needle. The donation itself usually takes about ten minutes.</span></div></li>
+          <li><div><strong>{% trans "Rest and refresh" %}</strong><span class="bb-muted">Stay for a short rest with a drink and a snack before you leave. Plan for up to an hour in total.</span></div></li>
         </ol>
         <p class="bb-small bb-muted bb-mt-2 bb-mb-0">Steps and timing vary between blood banks. Ask yours if you are unsure.</p>
       </div>
@@ -157,7 +157,7 @@
 
     <!-- After care -->
     <div id="after-care" class="pg-anchor bb-stack">
-      <h2 class="bb-h2 bb-mb-0">Looking after yourself afterwards</h2>
+      <h2 class="bb-h2 bb-mb-0">{% trans "Looking after yourself afterwards" %}</h2>
       <div class="bb-card">
         <ul class="pg-tips">
           <li><i class="feather-droplet" aria-hidden="true"></i><span><strong>Drink extra fluids</strong> for the rest of the day.</span></li>
@@ -173,7 +173,7 @@
 
     <!-- Myths -->
     <div id="myths" class="pg-anchor bb-stack">
-      <h2 class="bb-h2 bb-mb-0">Myths and facts</h2>
+      <h2 class="bb-h2 bb-mb-0">{% trans "Myths and facts" %}</h2>
       <div class="bb-card bb-stack">
         <div class="pg-myth"><div class="pg-myth__m">Donating makes you weak for weeks.</div><p class="pg-myth__f">Most healthy people feel fine after resting and drinking fluids. Your body replaces what you gave over the following days and weeks.</p></div>
         <div class="bb-divider" style="margin:0"></div>
@@ -190,11 +190,11 @@
     </div>
 
     <div class="bb-card bb-card--hero bb-center">
-      <h2 class="bb-h3">Ready to help?</h2>
-      <p class="bb-muted">See who needs blood near you, or set up your donor profile.</p>
+      <h2 class="bb-h3">{% trans "Ready to help?" %}</h2>
+      <p class="bb-muted">{% trans "See who needs blood near you, or set up your donor profile." %}</p>
       <div class="bb-row bb-row--center">
-        <a class="bb-btn bb-btn--white" href="{% url 'request-list' %}">Urgent requests</a>
-        {% if user.is_authenticated %}<a class="bb-btn bb-btn--ghost" style="color:#fff;border-color:rgba(255,255,255,.6)" href="{% url 'welcome' %}">My checklist</a>{% else %}<a class="bb-btn bb-btn--ghost" style="color:#fff;border-color:rgba(255,255,255,.6)" href="{% url 'signup' %}">Join free</a>{% endif %}
+        <a class="bb-btn bb-btn--white" href="{% url 'request-list' %}">{% trans "Urgent requests" %}</a>
+        {% if user.is_authenticated %}<a class="bb-btn bb-btn--ghost" style="color:#fff;border-color:rgba(255,255,255,.6)" href="{% url 'welcome' %}">{% trans "My checklist" %}</a>{% else %}<a class="bb-btn bb-btn--ghost" style="color:#fff;border-color:rgba(255,255,255,.6)" href="{% url 'signup' %}">{% trans "Join free" %}</a>{% endif %}
       </div>
     </div>
     <p class="bb-small bb-muted bb-center">Questions about privacy or points? See the <a href="{% url 'faq' %}">FAQ</a>.</p>

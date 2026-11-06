@@ -33,6 +33,30 @@
 - **Accounts**: sign up with a phone number (blood group, district and an
   opt-in to the directory are optional), log in by phone, a first-run welcome
   checklist, and password reset by email.
+- **Moments**: when a request you answered is closed you get a short "your
+  blood reached someone" update; requesters can send thank-you notes (shown on
+  a thanks wall); first donations and new tiers get a celebration; a "ready
+  again in N days" countdown and an opt-in reminder; one streak freeze a year;
+  a live "people responding" counter on open requests.
+- **Today and habits**: three small daily actions (share a request, confirm
+  your availability, learn a fact or take a myth-or-fact quiz), a cosmetic visit
+  streak that never touches points, an opt-in weekly digest, a year in review,
+  and titles (Request Champion, Connector, Storyteller) for people who cannot
+  donate.
+- **Blood drives and campaigns**: members host drives (staff approve them),
+  RSVP, download a calendar file, enter their squad as a team, and earn
+  seasonal campaign badges. Squad challenges show progress towards a goal.
+- **Alerts**: an in-app inbox and opt-in email for requests that match your
+  blood group and district. Capped per day, never during your recovery gap.
+- **Growth and trust**: invite links (rewarded when a friend's first donation
+  is verified, not at sign-up), opt-in public profiles, WhatsApp, Messenger and
+  Facebook share text for requests, verified-hospital chips, and donor controls
+  to hide a shared number again or block a requester.
+- **English and Bangla**: a language switcher (nav, account menu on phones,
+  footer). Bangla covers the main pages; the rest stays English. The Bangla
+  text is a first draft and needs review by a native speaker, especially the
+  health and safety copy.
+- **Staff desk** at `/desk/`: counts of what waits for a moderator.
 - **Blog** for announcements and donation tips.
 - **App-like**: mobile-first layout with a bottom tab bar, dark mode, a web
   app manifest and a small service worker that caches only the offline page and
@@ -42,6 +66,24 @@
 
 Phone numbers are private: they are never shown on public pages or used as a
 display name.
+
+## Languages (English and Bangla)
+
+English is the default. Visitors switch to Bangla (বাংলা) with the "EN | বাংলা"
+control in the top bar, the account menu and the footer; the choice is kept in
+the `django_language` cookie, and a browser that asks for Bangla gets it on the
+first visit. URLs do not change. Translations live in
+`locale/bn/LC_MESSAGES/django.po` (edited by hand; it needs review by a native
+speaker). GNU gettext is not needed:
+
+```bash
+python manage.py compile_po               # django.po -> django.mo (commit both)
+python scripts/check_translations.py      # wrapped strings with no Bangla yet
+```
+
+Wrap new text with `{% trans %}` / `{% blocktrans %}` in templates and
+`gettext` / `gettext_lazy` in Python, add the msgid to the `.po`, recompile.
+The test `core.test_translations` fails when a wrapped string has no Bangla.
 
 ## Setup
 
@@ -75,6 +117,7 @@ to change them.
 | --- | --- | --- |
 | `SITE_NAME` | `BloodBond` | Product name in pages, emails and the web manifest. |
 | `SITE_TAGLINE` | `Give blood. Build bonds. Save lives.` | Tagline in the footer, About page and manifest. |
+| `SITE_URL` | empty | Public address (`https://bloodbond.example`, no trailing slash) used for links in emails and share text. Falls back to the first `DJANGO_ALLOWED_HOSTS` entry. |
 | `SITE_CONTACT_EMAIL` | empty | Shown in the footer, About, FAQ and password-reset pages only when set. |
 | `DONATION_INTERVAL_DAYS` | `120` | Recovery gap between donations, a reminder only and never medical clearance. Confirm the figure with your national blood transfusion service. |
 | `DJANGO_SECRET_KEY` | insecure dev key | **Set this in production.** With `DJANGO_DEBUG=False` the app refuses to start on the built-in key. |
@@ -136,6 +179,40 @@ Other things to know:
 - Staff accounts have every admin permission (`User.has_perm` returns `True`
   for anyone with `staff` set), so only give `staff` to people you trust fully.
 
+### Translations
+
+Strings are wrapped with `{% trans %}` or `gettext_lazy` and the Bangla text
+lives in `locale/bn/LC_MESSAGES/django.po`. This project does not need the
+gettext tools: after editing the `.po`, run
+
+```bash
+python manage.py compile_po                      # writes django.mo
+python scripts/check_translations.py --stale     # missing or stale entries
+```
+
+`core/test_translations.py` fails if a wrapped string has no Bangla entry, or
+the compiled `.mo` is out of date, so the two cannot drift apart.
+
+### Scheduled jobs
+
+Reminders, digests and cleanup run from one command. Put it in cron (or any
+scheduler) once a day:
+
+```bash
+python manage.py run_scheduled            # all jobs
+python manage.py run_scheduled --dry-run  # say what would happen
+python manage.py run_scheduled --list     # job names
+```
+
+It runs `send_impact_updates`, `send_ready_reminders`, `send_weekly_digest`,
+`award_campaign_badges` and `prune_notifications`. Each is idempotent, so a
+second run the same day sends nothing twice, and one failing job does not stop
+the others (the command exits non-zero so your scheduler can alert). All
+emails are opt-in and carry a one-click off link.
+
+Emails are sent while the request or command runs. That is fine for a small
+community; with large volumes move sending to a queue.
+
 ### Privacy rules the tests enforce
 
 `rewards/test_privacy_audit.py` crawls every URL as many kinds of viewer and
@@ -167,6 +244,10 @@ CI runs the same command on every push and pull request.
 | `rewards/` | Donations, requests, directory, points, tiers, leaderboard |
 | `pages/` | Home, learn hub, FAQ, About, robots, manifest, service worker |
 | `insights/`, `stories/` | Impact numbers and member stories |
+| `moments/`, `habits/` | Thank-yous, celebrations, countdowns, daily actions, digest, year in review |
+| `events/`, `squads/` | Blood drives, campaigns, challenges, squads |
+| `alerts/`, `growth/` | Matched alerts and inbox; invites, public profiles, sharing, trust |
+| `core/` | Rate limits, staff desk, scheduled-jobs command, test runner |
 | `blogapp/` | Blog |
 | `templates/`, `staticfiles/` | Shared templates, the `bloodbond.css` design kit, scripts and images |
 

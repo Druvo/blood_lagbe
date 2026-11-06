@@ -1,0 +1,58 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Invite a friend{% endblock title %}
+{% block meta %}<meta name="robots" content="noindex">{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'growth/growth.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<section class="bb-section">
+  <div class="bb-container bb-container--narrow bb-stack bb-stack--lg">
+    <header>
+      <span class="bb-eyebrow">Spread the word</span>
+      <h1 class="bb-h2 bb-mb-1">Invite a friend</h1>
+      <p class="bb-lead">More donors means more people reached in time. Share your link; there is no pressure and no cost.</p>
+    </header>
+
+    <section class="bb-card gr-panel" aria-labelledby="gr-link-h">
+      <h2 class="bb-card__title" id="gr-link-h" style="margin-bottom:0;">Your link</h2>
+      <div class="gr-link">
+        <label class="bb-sr" for="gr-page-link">Your invite link</label>
+        <input type="text" id="gr-page-link" value="{{ share.url }}" readonly>
+        <button type="button" class="bb-btn bb-btn--soft" data-copy="#gr-page-link"><i class="feather-copy" aria-hidden="true"></i> Copy</button>
+      </div>
+      <div class="gr-share">
+        <a class="bb-btn bb-btn--ok" target="_blank" rel="noopener noreferrer" href="{{ share.whatsapp }}"><i class="feather-message-circle" aria-hidden="true"></i> WhatsApp</a>
+        <a class="bb-btn bb-btn--ghost" target="_blank" rel="noopener noreferrer" href="{{ share.messenger }}"><i class="feather-send" aria-hidden="true"></i> Messenger</a>
+        <a class="bb-btn bb-btn--ghost" target="_blank" rel="noopener noreferrer" href="{{ share.facebook }}"><i class="feather-facebook" aria-hidden="true"></i> Facebook</a>
+      </div>
+      <p class="bb-help bb-mb-0">Friends see your name only if you are listed on the leaderboard. Otherwise they see "A friend".</p>
+    </section>
+
+    <section class="bb-card gr-panel" aria-labelledby="gr-stats-h">
+      <h2 class="bb-card__title" id="gr-stats-h" style="margin-bottom:0;">How it is going</h2>
+      <div class="gr-stats">
+        <div class="gr-stat"><strong>{{ stats.joined }}</strong><span>friend{{ stats.joined|pluralize }} joined</span></div>
+        <div class="gr-stat"><strong>{{ stats.rewarded }}</strong><span>gave a first verified donation</span></div>
+      </div>
+      {% if stats.waiting %}<p class="bb-small bb-muted">{{ stats.waiting }} friend{{ stats.waiting|pluralize }} {{ stats.waiting|pluralize:"has,have" }} not had a first donation verified yet. That is fine; there is no deadline.</p>{% endif %}
+      {% if stats.levels %}
+        <ul class="gr-levels" aria-label="Recognition you earned">
+          {% for reward in stats.levels %}<li><span class="bb-pill bb-pill--ok"><i class="feather-users" aria-hidden="true"></i> {{ reward.name }}</span></li>{% endfor %}
+        </ul>
+      {% endif %}
+    </section>
+
+    <section class="bb-card gr-panel" aria-labelledby="gr-how-h">
+      <h2 class="bb-card__title" id="gr-how-h" style="margin-bottom:0;">Friend Maker recognition</h2>
+      <p class="bb-small">You earn it when a friend you invited has their first donation verified by a volunteer. Signing up alone earns nothing, and neither does inviting yourself.</p>
+      <ul class="gr-list">
+        {% for number, needed, name in levels %}
+          <li><span class="bb-pill{% if stats.rewarded >= needed %} bb-pill--ok{% endif %}">{{ name }}</span> <span class="bb-small bb-muted">{{ needed }} friend{{ needed|pluralize }} with a verified first donation</span></li>
+        {% endfor %}
+      </ul>
+      {% if stats.next %}<p class="bb-small bb-muted bb-mb-0">Next: {{ stats.next.name }}, {{ stats.next.left }} more.</p>{% endif %}
+    </section>
+  </div>
+</section>
+{% endblock body %}

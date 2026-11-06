@@ -1,0 +1,11 @@
+.al-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+.al-item { display: flex; gap: 12px; align-items: flex-start; }
+.al-item.is-unread { border-left: 4px solid var(--bb-red); }
+.al-item__main { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.al-item__title { font-weight: 700; color: var(--bb-ink); }
+.al-item__actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.al-item__actions form { margin: 0; }
+.al-dot { flex: none; width: 10px; height: 10px; border-radius: 999px; margin-top: 7px; background: var(--bb-red); }
+.al-dot.is-read { background: var(--bb-line); }
+.al-pager { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.al-districts { min-height: 160px; width: 100%; }

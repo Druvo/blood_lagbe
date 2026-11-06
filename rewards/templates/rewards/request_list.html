@@ -1,13 +1,13 @@
 {% extends 'base/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Urgent blood requests{% endblock title %}
+{% block title %}{% trans "Urgent blood requests" %}{% endblock title %}
 
 {% block meta %}
-<meta name="description" content="People near you who need blood right now. See who needs which group, where, and by when.">
+<meta name="description" content="{% trans 'People near you who need blood right now. See who needs which group, where, and by when.' %}">
 <meta property="og:site_name" content="{{ SITE_NAME }}">
-<meta property="og:title" content="Urgent blood requests | {{ SITE_NAME }}">
-<meta property="og:description" content="People near you who need blood right now. Can you help?">
+<meta property="og:title" content="{% trans 'Urgent blood requests' %} | {{ SITE_NAME }}">
+<meta property="og:description" content="{% trans 'People near you who need blood right now. Can you help?' %}">
 {% endblock meta %}
 
 {% block extra_style %}<link rel="stylesheet" href="{% static 'css/requests.css' %}">{% endblock extra_style %}
@@ -17,37 +17,35 @@
 
   <div class="bb-pagehead bb-row bb-row--between">
     <div>
-      <span class="bb-eyebrow">Urgent</span>
-      <h1 class="bb-h2 bb-mb-0">Blood requests</h1>
+      <span class="bb-eyebrow">{% trans "Urgent" %}</span>
+      <h1 class="bb-h2 bb-mb-0">{% trans "Blood requests" %}</h1>
     </div>
     <div class="bb-row">
       {% if user.is_authenticated %}
-        <a href="{% url 'request-mine' %}" class="bb-btn bb-btn--ghost">My requests</a>
+        <a href="{% url 'request-mine' %}" class="bb-btn bb-btn--ghost">{% trans "My requests" %}</a>
       {% endif %}
-      <a href="{% url 'request-create' %}" class="bb-btn bb-btn--primary"><i class="feather-plus"></i> Post a request</a>
+      <a href="{% url 'request-create' %}" class="bb-btn bb-btn--primary"><i class="feather-plus"></i> {% trans "Post a request" %}</a>
     </div>
   </div>
 
   {% if eligibility and not eligibility.eligible %}
     <div class="bb-alert bb-alert--warn bb-mt-2">
-      You can donate again on <strong>{{ eligibility.next_date|date:"M d, Y" }}</strong>
-      ({{ eligibility.days_left }} day{{ eligibility.days_left|pluralize }} left).
-      You can still share a request to help find a donor.
+      {% blocktrans count counter=eligibility.days_left with d=eligibility.next_date|date:"M d, Y" %}You can donate again on <strong>{{ d }}</strong> ({{ counter }} day left). You can still share a request to help find a donor.{% plural %}You can donate again on <strong>{{ d }}</strong> ({{ counter }} days left). You can still share a request to help find a donor.{% endblocktrans %}
     </div>
   {% endif %}
 
-  <form method="get" class="bb-card bb-card--flat bb-mt-2 rq-filters" aria-label="Filter requests">
+  <form method="get" class="bb-card bb-card--flat bb-mt-2 rq-filters" aria-label="{% trans 'Filter requests' %}">
     <div class="rq-filters__row">
-      <span class="rq-filters__label" id="lbl-group">Group</span>
+      <span class="rq-filters__label" id="lbl-group">{% trans "Group" %}</span>
       <div class="rq-groups" role="group" aria-labelledby="lbl-group">
-        <a href="{{ any_group_url }}" class="bb-chip{% if not selected %} bb-chip--active{% endif %}">All</a>
+        <a href="{{ any_group_url }}" class="bb-chip{% if not selected %} bb-chip--active{% endif %}">{% trans "All" %}</a>
         {% for g in blood_groups %}
           <a href="{{ g.url }}" class="bb-chip{% if g.active %} bb-chip--active{% endif %}"{% if g.active %} aria-current="true"{% endif %}>{{ g.code }}</a>
         {% endfor %}
       </div>
     </div>
     <div class="rq-filters__row">
-      <span class="rq-filters__label" id="lbl-when">Needed</span>
+      <span class="rq-filters__label" id="lbl-when">{% trans "Needed" %}</span>
       <div class="bb-chips" role="group" aria-labelledby="lbl-when">
         {% for w in when_options %}
           <a href="{{ w.url }}" class="bb-chip{% if w.active %} bb-chip--active{% endif %}">{{ w.label }}</a>
@@ -55,9 +53,9 @@
       </div>
     </div>
     <div class="rq-filters__row">
-      <label class="rq-filters__label" for="f-district">District</label>
+      <label class="rq-filters__label" for="f-district">{% trans "District" %}</label>
       <select id="f-district" name="district" data-autosubmit>
-        <option value="">All districts</option>
+        <option value="">{% trans "All districts" %}</option>
         {% for division, districts in district_choices %}
           <optgroup label="{{ division }}">
             {% for value, label in districts %}
@@ -68,13 +66,13 @@
       </select>
       {% if selected %}<input type="hidden" name="blood_group" value="{{ selected }}">{% endif %}
       {% if when %}<input type="hidden" name="when" value="{{ when }}">{% endif %}
-      <noscript><button class="bb-btn bb-btn--soft bb-btn--sm" type="submit">Apply</button></noscript>
-      {% if filtered %}<a href="{% url 'request-list' %}" class="bb-small">Clear filters</a>{% endif %}
+      <noscript><button class="bb-btn bb-btn--soft bb-btn--sm" type="submit">{% trans "Apply" %}</button></noscript>
+      {% if filtered %}<a href="{% url 'request-list' %}" class="bb-small">{% trans "Clear filters" %}</a>{% endif %}
     </div>
   </form>
 
   <p class="bb-muted bb-small bb-mt-2 bb-mb-1" aria-live="polite">
-    {{ total }} request{{ total|pluralize }} still need{{ total|pluralize:"s," }} donors{% if selected %} for {{ selected }}{% endif %}{% if district %} in {{ district }}{% endif %}.
+    {% if selected and district %}{% blocktrans count counter=total with group=selected place=district %}{{ counter }} request still needs donors for {{ group }} in {{ place }}.{% plural %}{{ counter }} requests still need donors for {{ group }} in {{ place }}.{% endblocktrans %}{% elif selected %}{% blocktrans count counter=total with group=selected %}{{ counter }} request still needs donors for {{ group }}.{% plural %}{{ counter }} requests still need donors for {{ group }}.{% endblocktrans %}{% elif district %}{% blocktrans count counter=total with place=district %}{{ counter }} request still needs donors in {{ place }}.{% plural %}{{ counter }} requests still need donors in {{ place }}.{% endblocktrans %}{% else %}{% blocktrans count counter=total %}{{ counter }} request still needs donors.{% plural %}{{ counter }} requests still need donors.{% endblocktrans %}{% endif %}
   </p>
 
   <div class="bb-stack">
@@ -86,15 +84,15 @@
           <h2 class="rq-card__title">{{ req.hospital }}</h2>
           <div class="rq-card__meta">
             <span><i class="feather-map-pin"></i>{{ req.district }}</span>
-            {% if req.pledges %}<span><i class="feather-users"></i>{{ req.pledges }} offered</span>{% endif %}
+            {% if req.pledges %}<span><i class="feather-users"></i>{% blocktrans with n=req.pledges %}{{ n }} offered{% endblocktrans %}</span>{% endif %}
           </div>
         </div>
         <div class="rq-card__foot">
           <span class="bb-pill{% if urg.1 %} bb-pill--{{ urg.1 }}{% endif %}"><i class="feather-clock"></i> {{ urg.0 }}</span>
-          {% if req.is_flagged %}<span class="bb-pill bb-pill--warn">Reported</span>{% endif %}
+          {% if req.is_flagged %}<span class="bb-pill bb-pill--warn">{% trans "Reported" %}</span>{% endif %}
           <div class="rq-card__progress">
-            <div class="rq-bags"><strong>{{ req.units_remaining }}</strong> of {{ req.units_needed }} bag{{ req.units_needed|pluralize }} still needed</div>
-            <div class="bb-progress" role="progressbar" aria-valuemin="0" aria-valuemax="{{ req.units_needed }}" aria-valuenow="{{ req.units_received }}" aria-label="Bags received"><span style="width:{% widthratio req.units_received req.units_needed 100 %}%"></span></div>
+            <div class="rq-bags">{% blocktrans count counter=req.units_needed with remaining=req.units_remaining %}<strong>{{ remaining }}</strong> of {{ counter }} bag still needed{% plural %}<strong>{{ remaining }}</strong> of {{ counter }} bags still needed{% endblocktrans %}</div>
+            <div class="bb-progress" role="progressbar" aria-valuemin="0" aria-valuemax="{{ req.units_needed }}" aria-valuenow="{{ req.units_received }}" aria-label="{% trans 'Bags received' %}"><span style="width:{% widthratio req.units_received req.units_needed 100 %}%"></span></div>
           </div>
         </div>
       </a>
@@ -103,28 +101,28 @@
       <div class="bb-card bb-empty">
         <i class="feather-heart"></i>
         {% if filtered %}
-          <p class="bb-strong bb-mb-1">No open requests match these filters.</p>
-          <p>Try another group or district.</p>
-          <a href="{% url 'request-list' %}" class="bb-btn bb-btn--ghost">Clear filters</a>
+          <p class="bb-strong bb-mb-1">{% trans "No open requests match these filters." %}</p>
+          <p>{% trans "Try another group or district." %}</p>
+          <a href="{% url 'request-list' %}" class="bb-btn bb-btn--ghost">{% trans "Clear filters" %}</a>
         {% else %}
-          <p class="bb-strong bb-mb-1">No one is waiting for blood right now.</p>
-          <p>That is good news. If you or someone you know needs blood, post a request.</p>
+          <p class="bb-strong bb-mb-1">{% trans "No one is waiting for blood right now." %}</p>
+          <p>{% trans "That is good news. If you or someone you know needs blood, post a request." %}</p>
         {% endif %}
-        <p class="bb-mt-2"><a href="{% url 'request-create' %}" class="bb-btn bb-btn--primary">Post a request</a></p>
+        <p class="bb-mt-2"><a href="{% url 'request-create' %}" class="bb-btn bb-btn--primary">{% trans "Post a request" %}</a></p>
       </div>
     {% endfor %}
   </div>
 
   {% if page.has_other_pages %}
-    <nav class="rq-pager bb-mt-3" aria-label="Pages">
-      {% if page.has_previous %}<a class="bb-btn bb-btn--ghost bb-btn--sm" href="?{% if page_query %}{{ page_query }}&amp;{% endif %}page={{ page.previous_page_number }}">Previous</a>{% endif %}
-      <span class="bb-muted bb-small">Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
-      {% if page.has_next %}<a class="bb-btn bb-btn--ghost bb-btn--sm" href="?{% if page_query %}{{ page_query }}&amp;{% endif %}page={{ page.next_page_number }}">Next</a>{% endif %}
+    <nav class="rq-pager bb-mt-3" aria-label="{% trans 'Pages' %}">
+      {% if page.has_previous %}<a class="bb-btn bb-btn--ghost bb-btn--sm" href="?{% if page_query %}{{ page_query }}&amp;{% endif %}page={{ page.previous_page_number }}">{% trans "Previous" %}</a>{% endif %}
+      <span class="bb-muted bb-small">{% blocktrans with number=page.number total=page.paginator.num_pages %}Page {{ number }} of {{ total }}{% endblocktrans %}</span>
+      {% if page.has_next %}<a class="bb-btn bb-btn--ghost bb-btn--sm" href="?{% if page_query %}{{ page_query }}&amp;{% endif %}page={{ page.next_page_number }}">{% trans "Next" %}</a>{% endif %}
     </nav>
   {% endif %}
 
   <p class="bb-muted bb-xs bb-center bb-mt-3">
-    In an emergency, call the hospital's blood bank first. Whether someone can donate is decided by the blood bank, not by this site.
+    {% trans "In an emergency, call the hospital's blood bank first. Whether someone can donate is decided by the blood bank, not by this site." %}
   </p>
 </div>
 {% endblock body %}

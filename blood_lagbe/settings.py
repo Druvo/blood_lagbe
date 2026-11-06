@@ -120,6 +120,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -141,9 +142,11 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.template.context_processors.i18n',
                 'pages.context_processors.site',
                 'rewards.context_processors.donation_interval',
                 'rewards.context_processors.contact_inbox',
+                'alerts.context_processors.unread_alerts',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -194,6 +197,21 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
+# English stays the default. Bangla is chosen with the language switcher (a POST
+# to /i18n/set-language/) or by the browser's Accept-Language header. There are
+# no language prefixes in URLs. Translations live in locale/bn/LC_MESSAGES/
+# django.po; compile them with `python manage.py compile_po` (no gettext needed).
+LANGUAGES = [
+    ('en', 'English'),
+    ('bn', 'বাংলা'),
+]
+LOCALE_PATHS = [BASE_DIR / 'locale']
+LANGUAGE_COOKIE_NAME = 'django_language'
+LANGUAGE_COOKIE_AGE = 60 * 60 * 24 * 365
+LANGUAGE_COOKIE_SAMESITE = 'Lax'
+LANGUAGE_COOKIE_HTTPONLY = True
+LANGUAGE_COOKIE_SECURE = SESSION_COOKIE_SECURE
+
 TIME_ZONE = 'Asia/Dhaka'
 
 USE_I18N = True
@@ -229,6 +247,10 @@ DONATION_INTERVAL_DAYS = int(os.environ.get('DONATION_INTERVAL_DAYS', '120'))
 # Branding. Every template and email reads these, so renaming is one line.
 SITE_NAME = os.environ.get('SITE_NAME', 'BloodBond')
 SITE_TAGLINE = os.environ.get('SITE_TAGLINE', 'Give blood. Build bonds. Save lives.')
+# Absolute site root for links in emails and share text, e.g.
+# "https://bloodbond.example" (no trailing slash). Falls back to the first
+# ALLOWED_HOSTS entry, then to a relative link.
+SITE_URL = os.environ.get('SITE_URL', '').rstrip('/')
 # Shown in the footer only when set.
 SITE_CONTACT_EMAIL = os.environ.get('SITE_CONTACT_EMAIL', '')
 

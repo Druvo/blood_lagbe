@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.utils.translation import ngettext
 
 
 def donation_interval(request):
@@ -7,8 +8,9 @@ def donation_interval(request):
     return {
         'donation_interval_days': days,
         'donation_interval_label': (
-            f'{months} month{"s" if months != 1 else ""}' if days % 30 == 0
-            else f'{days} days'
+            ngettext('%(n)s month', '%(n)s months', months) % {'n': months}
+            if days % 30 == 0
+            else ngettext('%(n)s day', '%(n)s days', days) % {'n': days}
         ),
     }
 

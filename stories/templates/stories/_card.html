@@ -1,8 +1,9 @@
+{% load i18n %}
 <article class="bb-card bb-card--lift bbs-card" id="story-{{ story.pk }}">
   {% include 'stories/_who.html' %}
   {% include 'stories/_tags.html' %}
   <h3 class="bbs-card__title"><a href="{{ story.get_absolute_url }}">{{ story.title }}</a></h3>
   <p class="bbs-card__body">{{ story.body|truncatechars:240 }}</p>
-  <a class="bbs-card__more" href="{{ story.get_absolute_url }}">Read the story <i class="feather-arrow-right"></i></a>
+  <a class="bbs-card__more" href="{{ story.get_absolute_url }}">{% trans "Read the story" %} <i class="feather-arrow-right"></i></a>
   {% include 'stories/_reactions.html' %}
 </article>

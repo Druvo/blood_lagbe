@@ -1,0 +1,51 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}You are invited{% endblock title %}
+{% block meta %}
+{% static 'images/brand/og-default.png' as og_image %}
+<meta name="robots" content="noindex">
+<meta name="description" content="{{ inviter }} invited you to {{ SITE_NAME }}. {{ SITE_TAGLINE }}">
+<meta property="og:site_name" content="{{ SITE_NAME }}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Join me on {{ SITE_NAME }}">
+<meta property="og:description" content="{{ SITE_TAGLINE }}">
+<meta property="og:url" content="{{ request.build_absolute_uri }}">
+<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ og_image }}">
+<meta name="twitter:card" content="summary_large_image">
+{% endblock meta %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'growth/growth.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<section class="bb-section">
+  <div class="bb-container bb-container--narrow bb-stack bb-stack--lg">
+    <div class="bb-card bb-card--hero bb-center" style="padding:36px 20px;">
+      <span class="bb-eyebrow" style="color:#fff;">You are invited</span>
+      <h1 class="bb-h1 bb-mb-1">{{ inviter }} invited you to {{ SITE_NAME }}</h1>
+      <p class="bb-lead bb-mb-2">{{ SITE_TAGLINE }}</p>
+      {% if is_owner %}
+        <p class="bb-mb-2">This is your own invite link. Share it with friends.</p>
+        <a href="{% url 'growth:invite-home' %}" class="bb-btn bb-btn--white bb-btn--lg">Share my link</a>
+      {% elif signed_in %}
+        <p class="bb-mb-2">You already have an account here. Thank you for being part of it.</p>
+        <a href="{% url 'home' %}" class="bb-btn bb-btn--white bb-btn--lg">Go to the home page</a>
+      {% else %}
+        <div class="bb-row bb-row--center">
+          <a href="{% url 'signup' %}" class="bb-btn bb-btn--white bb-btn--lg">Join {{ SITE_NAME }}</a>
+          <a href="{% url 'login' %}" class="bb-btn bb-btn--ghost bb-btn--lg" style="color:#fff;border-color:rgba(255,255,255,.6);">I already have an account</a>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="bb-card">
+      <h2 class="bb-card__title">What you can do here</h2>
+      <ul class="gr-list">
+        <li><i class="feather-droplet" aria-hidden="true" style="color:var(--bb-red-text);"></i> See urgent blood requests and say "I can help".</li>
+        <li><i class="feather-users" aria-hidden="true" style="color:var(--bb-red-text);"></i> Join the donor directory. Your phone number is shared only if you accept.</li>
+        <li><i class="feather-award" aria-hidden="true" style="color:var(--bb-red-text);"></i> Earn badges for verified donations.</li>
+      </ul>
+      <p class="bb-help bb-mb-0">Joining is free. Eligibility tips here are reminders, never medical clearance.</p>
+    </div>
+  </div>
+</section>
+{% endblock body %}

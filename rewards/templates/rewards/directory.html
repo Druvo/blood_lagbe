@@ -1,7 +1,7 @@
 {% extends 'base/base.html' %}
-{% load static %}
+{% load static i18n %}
 
-{% block title %}Find donors{% endblock title %}
+{% block title %}{% trans "Find donors" %}{% endblock title %}
 {% block extra_style %}<link rel="stylesheet" href="{% static 'css/community.css' %}">{% endblock extra_style %}
 
 {% block body %}
@@ -9,34 +9,34 @@
 
   <header class="cm-head bb-row bb-row--between bb-row--top">
     <div>
-      <span class="bb-eyebrow">Donor directory</span>
-      <h1 class="bb-h2 bb-mb-1">Find a donor near you</h1>
-      <p class="bb-lead">Everyone here chose to be listed. Numbers are shared only if they accept your request.</p>
+      <span class="bb-eyebrow">{% trans "Donor directory" %}</span>
+      <h1 class="bb-h2 bb-mb-1">{% trans "Find a donor near you" %}</h1>
+      <p class="bb-lead">{% trans "Everyone here chose to be listed. Numbers are shared only if they accept your request." %}</p>
     </div>
     <a href="{% url 'contact-inbox' %}" class="bb-btn bb-btn--soft bb-btn--sm">
-      <i class="feather-inbox"></i> My requests
+      <i class="feather-inbox"></i> {% trans "My requests" %}
       {% if contact_pending_count %}<span class="bb-pill bb-pill--bad">{{ contact_pending_count }}</span>{% endif %}
     </a>
   </header>
 
   {% if not in_directory %}
     <div class="bb-alert bb-alert--info bb-mt-2">
-      <strong>You're not listed.</strong>
-      <a href="{% url 'privacy' %}">Join the directory</a> so people in need can ask you for help.
+      <strong>{% trans "You're not listed." %}</strong>
+      {% url 'privacy' as privacy_url %}{% blocktrans %}<a href="{{ privacy_url }}">Join the directory</a> so people in need can ask you for help.{% endblocktrans %}
     </div>
   {% endif %}
   {% if cap_reached %}
     <div class="bb-alert bb-alert--warn bb-mt-2">
-      You have {{ max_pending }} requests waiting for an answer. You can ask more people once someone replies.
-      <a href="{% url 'contact-inbox' %}">See my requests</a>
+      {% blocktrans with n=max_pending %}You have {{ n }} requests waiting for an answer. You can ask more people once someone replies.{% endblocktrans %}
+      <a href="{% url 'contact-inbox' %}">{% trans "See my requests" %}</a>
     </div>
   {% endif %}
 
-  <form method="get" class="bb-card bb-form cm-filters bb-mt-2" id="dir-filter" aria-label="Filter donors">
+  <form method="get" class="bb-card bb-form cm-filters bb-mt-2" id="dir-filter" aria-label="{% trans 'Filter donors' %}">
     <fieldset style="border:0;margin:0;padding:0;min-width:0;">
-      <legend class="bb-label">Blood group</legend>
+      <legend class="bb-label">{% trans "Blood group" %}</legend>
       <div class="cm-chipset">
-        <label class="cm-chip"><input type="radio" name="group" value="" {% if not group %}checked{% endif %}><span>Any</span></label>
+        <label class="cm-chip"><input type="radio" name="group" value="" {% if not group %}checked{% endif %}><span>{% trans "Any" %}</span></label>
         {% for code in blood_groups %}
           <label class="cm-chip"><input type="radio" name="group" value="{{ code }}" {% if code == group %}checked{% endif %}><span>{{ code }}</span></label>
         {% endfor %}
@@ -44,9 +44,9 @@
     </fieldset>
     <div class="cm-bar">
       <div class="bb-field bb-mb-0" style="min-width:200px;flex:1 1 200px;">
-        <label class="bb-label" for="f-district">District</label>
+        <label class="bb-label" for="f-district">{% trans "District" %}</label>
         <select id="f-district" name="district" style="width:100%;max-width:none;">
-          <option value="">Anywhere in Bangladesh</option>
+          <option value="">{% trans "Anywhere in Bangladesh" %}</option>
           {% for division, districts in district_choices %}
             <optgroup label="{{ division }}">
               {% for value, label in districts %}
@@ -59,25 +59,25 @@
       <div class="cm-toggles">
         <label class="cm-switch {% if not group %}cm-switch--off{% endif %}" id="sw-compatible">
           <input type="checkbox" name="compatible" value="1" {% if compatible %}checked{% endif %} {% if not group %}disabled{% endif %}>
-          <i aria-hidden="true"></i> Include compatible groups
+          <i aria-hidden="true"></i> {% trans "Include compatible groups" %}
         </label>
         <label class="cm-switch">
           <input type="checkbox" name="available" value="1" {% if available_only %}checked{% endif %}>
-          <i aria-hidden="true"></i> Available now only
+          <i aria-hidden="true"></i> {% trans "Available now only" %}
         </label>
       </div>
-      <button class="bb-btn bb-btn--primary" type="submit"><i class="feather-search"></i> Search</button>
+      <button class="bb-btn bb-btn--primary" type="submit"><i class="feather-search"></i> {% trans "Search" %}</button>
     </div>
     {% if compatible %}
-      <p class="bb-help bb-mb-0">Compatibility is a general guide only. The hospital's own testing decides who can give.</p>
+      <p class="bb-help bb-mb-0">{% trans "Compatibility is a general guide only. The hospital's own testing decides who can give." %}</p>
     {% endif %}
   </form>
 
   <div class="bb-row bb-row--between bb-mt-2 bb-mb-1">
     <p class="bb-small bb-muted bb-mb-0" aria-live="polite">
-      <strong class="bb-strong">{{ total }}</strong> donor{{ total|pluralize }}{% if group %} for {{ group }}{% endif %}{% if district %} in {{ district }}{% endif %}
+      {% if group and district %}{% blocktrans count counter=total with g=group place=district %}<strong class="bb-strong">{{ counter }}</strong> donor for {{ g }} in {{ place }}{% plural %}<strong class="bb-strong">{{ counter }}</strong> donors for {{ g }} in {{ place }}{% endblocktrans %}{% elif group %}{% blocktrans count counter=total with g=group %}<strong class="bb-strong">{{ counter }}</strong> donor for {{ g }}{% plural %}<strong class="bb-strong">{{ counter }}</strong> donors for {{ g }}{% endblocktrans %}{% elif district %}{% blocktrans count counter=total with place=district %}<strong class="bb-strong">{{ counter }}</strong> donor in {{ place }}{% plural %}<strong class="bb-strong">{{ counter }}</strong> donors in {{ place }}{% endblocktrans %}{% else %}{% blocktrans count counter=total %}<strong class="bb-strong">{{ counter }}</strong> donor{% plural %}<strong class="bb-strong">{{ counter }}</strong> donors{% endblocktrans %}{% endif %}
     </p>
-    {% if has_filters or compatible %}<a href="{% url 'donor-directory' %}" class="bb-small">Clear filters</a>{% endif %}
+    {% if has_filters or compatible %}<a href="{% url 'donor-directory' %}" class="bb-small">{% trans "Clear filters" %}</a>{% endif %}
   </div>
 
   <div class="cm-skel" id="dir-skel" aria-hidden="true"><div></div><div></div><div></div><div></div></div>
@@ -91,38 +91,40 @@
             <div class="cm-donor__name cm-trunc">{{ d.name }}</div>
             <div class="cm-donor__meta">
               {% if d.district %}<span><i class="feather-map-pin"></i> {{ d.district }}</span>{% endif %}
-              <span>{{ d.donations }} verified donation{{ d.donations|pluralize }}</span>
+              <span>{% blocktrans count counter=d.donations %}{{ counter }} verified donation{% plural %}{{ counter }} verified donations{% endblocktrans %}</span>
               {% if d.badge %}<span class="cm-tier" style="--tier:{{ d.badge.color }};"><i class="feather-{{ d.badge.icon }}"></i> {{ d.badge.name }}</span>{% endif %}
             </div>
             <div class="bb-chips bb-mt-1">
-              {% if d.available %}<span class="bb-pill bb-pill--ok">Available</span>{% else %}<span class="bb-pill">Not available now</span>{% endif %}
-              {% if d.compatible_only %}<span class="bb-pill bb-pill--info">Compatible with {{ group }}</span>{% endif %}
+              {% if d.available %}<span class="bb-pill bb-pill--ok">{% trans "Available" %}</span>{% else %}<span class="bb-pill">{% trans "Not available now" %}</span>{% endif %}
+              {% if d.compatible_only %}<span class="bb-pill bb-pill--info">{% blocktrans with g=group %}Compatible with {{ g }}{% endblocktrans %}</span>{% endif %}
             </div>
           </div>
         </div>
 
         {% if d.contact.status == 'accepted' %}
           <div class="cm-phone">
-            <span><i class="feather-check-circle"></i> They accepted</span>
+            <span><i class="feather-check-circle"></i> {% trans "They accepted" %}</span>
             <a href="tel:{{ d.user.phone }}" class="bb-btn bb-btn--ok bb-btn--sm"><i class="feather-phone"></i> {{ d.user.phone }}</a>
           </div>
         {% elif d.contact.status == 'pending' %}
-          <div class="cm-donor__why"><i class="feather-clock"></i><span>You asked on {{ d.contact.created_at|date:"j M" }}. Waiting for an answer.</span></div>
+          <div class="cm-donor__why"><i class="feather-clock"></i><span>{% blocktrans with when=d.contact.created_at|date:"j M" %}You asked on {{ when }}. Waiting for an answer.{% endblocktrans %}</span></div>
         {% elif d.contact.status == 'declined' %}
-          <div class="cm-donor__why"><i class="feather-info"></i><span>This donor can't help right now.{% if d.retry_on %} You can ask again after {{ d.retry_on|date:"j M Y" }}.{% endif %}</span></div>
+          <div class="cm-donor__why"><i class="feather-info"></i><span>{% trans "This donor can't help right now." %}{% if d.retry_on %} {% blocktrans with when=d.retry_on|date:"j M Y" %}You can ask again after {{ when }}.{% endblocktrans %}{% endif %}</span></div>
+        {% elif d.contact.status == 'revoked' %}
+          <div class="cm-donor__why"><i class="feather-info"></i><span>{% trans "This donor is not sharing their number any more." %}{% if d.retry_on %} {% blocktrans with when=d.retry_on|date:"j M Y" %}You can ask again after {{ when }}.{% endblocktrans %}{% endif %} {% trans "Meanwhile, try someone else." %}</span></div>
         {% elif d.reason %}
           <div class="cm-donor__why"><i class="feather-alert-circle"></i><span>{{ d.reason }}</span></div>
         {% else %}
-          {% if not d.available %}<div class="cm-donor__why"><i class="feather-info"></i><span>Not available now, but you can still leave a request. They may reply later.</span></div>{% endif %}
+          {% if not d.available %}<div class="cm-donor__why"><i class="feather-info"></i><span>{% trans "Not available now, but you can still leave a request. They may reply later." %}</span></div>{% endif %}
           <details class="cm-ask">
-            <summary class="bb-btn bb-btn--primary bb-btn--block"><i class="feather-heart"></i> Ask for help</summary>
+            <summary class="bb-btn bb-btn--primary bb-btn--block"><i class="feather-heart"></i> {% trans "Ask for help" %}</summary>
             <form method="post" action="{% url 'contact-donor' d.user.pk %}" class="bb-form bb-mt-1">
               {% csrf_token %}
               <input type="hidden" name="next" value="{{ request.get_full_path }}">
-              <label class="bb-sr" for="note-{{ d.user.pk }}">Short note</label>
-              <input type="text" id="note-{{ d.user.pk }}" name="message" maxlength="200" placeholder="Short note: who needs blood, where, when (optional)">
-              <button class="bb-btn bb-btn--primary bb-btn--block" type="submit">Send request</button>
-              <span class="bb-help">They see your name and note. Your number stays hidden unless they accept.</span>
+              <label class="bb-sr" for="note-{{ d.user.pk }}">{% trans "Short note" %}</label>
+              <input type="text" id="note-{{ d.user.pk }}" name="message" maxlength="200" placeholder="{% trans 'Short note: who needs blood, where, when (optional)' %}">
+              <button class="bb-btn bb-btn--primary bb-btn--block" type="submit">{% trans "Send request" %}</button>
+              <span class="bb-help">{% trans "They see your name and note. Your number stays hidden unless they accept." %}</span>
             </form>
           </details>
         {% endif %}
@@ -131,31 +133,31 @@
       <div class="bb-card bb-empty" style="grid-column:1/-1;">
         <i class="feather-users"></i>
         {% if has_filters or compatible %}
-          <strong class="bb-strong">No donors match these filters</strong>
-          <p class="bb-small">Try a nearby district{% if group and not compatible %} or include compatible groups{% endif %}.</p>
+          <strong class="bb-strong">{% trans "No donors match these filters" %}</strong>
+          <p class="bb-small">{% if group and not compatible %}{% trans "Try a nearby district or include compatible groups." %}{% else %}{% trans "Try a nearby district." %}{% endif %}</p>
           <div class="bb-row bb-row--center">
-            {% if group and not compatible %}<a class="bb-btn bb-btn--soft bb-btn--sm" href="?group={{ group|urlencode }}&amp;compatible=1{% if district %}&amp;district={{ district|urlencode }}{% endif %}">Include compatible groups</a>{% endif %}
-            <a class="bb-btn bb-btn--ghost bb-btn--sm" href="{% url 'donor-directory' %}">Clear filters</a>
+            {% if group and not compatible %}<a class="bb-btn bb-btn--soft bb-btn--sm" href="?group={{ group|urlencode }}&amp;compatible=1{% if district %}&amp;district={{ district|urlencode }}{% endif %}">{% trans "Include compatible groups" %}</a>{% endif %}
+            <a class="bb-btn bb-btn--ghost bb-btn--sm" href="{% url 'donor-directory' %}">{% trans "Clear filters" %}</a>
           </div>
         {% else %}
-          <strong class="bb-strong">Nobody has joined the directory yet</strong>
-          <p class="bb-small">Be the first, or post an urgent request to reach donors directly.</p>
+          <strong class="bb-strong">{% trans "Nobody has joined the directory yet" %}</strong>
+          <p class="bb-small">{% trans "Be the first, or post an urgent request to reach donors directly." %}</p>
         {% endif %}
-        <div class="bb-mt-2"><a href="{% url 'request-create' %}" class="bb-btn bb-btn--primary bb-btn--sm">Post an urgent request</a></div>
+        <div class="bb-mt-2"><a href="{% url 'request-create' %}" class="bb-btn bb-btn--primary bb-btn--sm">{% trans "Post an urgent request" %}</a></div>
       </div>
     {% endfor %}
   </div>
 
   {% if page.has_other_pages %}
-    <nav class="cm-pager bb-mt-3" aria-label="Pages">
-      {% if page.has_previous %}<a class="bb-btn bb-btn--ghost bb-btn--sm" href="?{% if query %}{{ query }}&amp;{% endif %}page={{ page.previous_page_number }}">Previous</a>{% endif %}
-      <span class="bb-small bb-muted">Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
-      {% if page.has_next %}<a class="bb-btn bb-btn--ghost bb-btn--sm" href="?{% if query %}{{ query }}&amp;{% endif %}page={{ page.next_page_number }}">Next</a>{% endif %}
+    <nav class="cm-pager bb-mt-3" aria-label="{% trans 'Pages' %}">
+      {% if page.has_previous %}<a class="bb-btn bb-btn--ghost bb-btn--sm" href="?{% if query %}{{ query }}&amp;{% endif %}page={{ page.previous_page_number }}">{% trans "Previous" %}</a>{% endif %}
+      <span class="bb-small bb-muted">{% blocktrans with number=page.number total=page.paginator.num_pages %}Page {{ number }} of {{ total }}{% endblocktrans %}</span>
+      {% if page.has_next %}<a class="bb-btn bb-btn--ghost bb-btn--sm" href="?{% if query %}{{ query }}&amp;{% endif %}page={{ page.next_page_number }}">{% trans "Next" %}</a>{% endif %}
     </nav>
   {% endif %}
 
   <p class="bb-xs bb-muted bb-center bb-mt-3">
-    In an emergency, also call the hospital's blood bank. Eligibility and the {{ donation_interval_label }} gap between donations are reminders, never medical clearance. Follow the blood bank's screening before donating.
+    {% blocktrans with interval=donation_interval_label %}In an emergency, also call the hospital's blood bank. Eligibility and the {{ interval }} gap between donations are reminders, never medical clearance. Follow the blood bank's screening before donating.{% endblocktrans %}
   </p>
 </div>
 {% endblock body %}

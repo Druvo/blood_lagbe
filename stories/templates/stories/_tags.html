@@ -1,5 +1,6 @@
+{% load i18n %}
 <div class="bbs-tags">
   <span class="bb-pill {% if story.kind == 'donor' %}bb-pill--bad{% elif story.kind == 'recipient' %}bb-pill--info{% else %}bb-pill--ok{% endif %}">{{ story.get_kind_display }}</span>
   {% if story.blood_group %}<span class="bb-bloodtag bb-bloodtag--sm"><span>{{ story.blood_group }}</span></span>{% endif %}
-  {% if story.donation_id %}<span class="bb-pill bb-pill--ok"><i class="feather-check-circle"></i> Verified donation</span>{% endif %}
+  {% if story.donation_id %}<span class="bb-pill bb-pill--ok"><i class="feather-check-circle"></i> {% trans "Verified donation" %}</span>{% endif %}
 </div>

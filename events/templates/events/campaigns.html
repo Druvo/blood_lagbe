@@ -1,0 +1,63 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Campaigns{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'events/events.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container ev-page">
+  <header>
+    <span class="bb-eyebrow">Events</span>
+    <h1 class="bb-h2 bb-mb-1">Seasonal campaigns</h1>
+    <p class="bb-lead">Give during a campaign and earn its badge, once. Donations count after a volunteer approves them.</p>
+  </header>
+
+  <nav class="ev-tabs" aria-label="Event sections">
+    <a href="{% url 'events:list' %}" class="bb-chip">Drives</a>
+    <a href="{% url 'events:campaigns' %}" class="bb-chip bb-chip--active" aria-current="page">Campaigns</a>
+    <a href="{% url 'events:challenges' %}" class="bb-chip">Challenges</a>
+  </nav>
+
+  {% if user.is_authenticated %}
+    <section aria-labelledby="earned-h" class="bb-mb-3">
+      <h2 class="bb-h3" id="earned-h">My campaign badges</h2>
+      {% if earned %}
+        <div class="bb-row">
+          {% for row in earned %}
+            <span class="ev-badge-chip ev-theme-{{ row.campaign.theme }}"><i class="feather-{{ row.campaign.badge_icon }}" aria-hidden="true"></i> {{ row.campaign.badge_name }}</span>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="bb-muted">None yet. Donate during a campaign to earn one.</p>
+      {% endif %}
+    </section>
+  {% endif %}
+
+  <div class="ev-cal">
+    {% for row in rows %}
+      {% with c=row.campaign %}
+      <article class="bb-card ev-theme-{{ c.theme }}{% if row.award %} ev-earned{% endif %}">
+        <div class="bb-row">
+          <span class="ev-banner__icon" style="background:var(--ev-soft)"><i class="feather-{{ c.icon }}" aria-hidden="true"></i></span>
+          <div class="bb-grow">
+            <h2 class="bb-h4 bb-mb-0">{{ c.name }}</h2>
+            <span class="bb-small bb-muted">
+              {% if row.window %}{{ row.window.0|date:"j M" }} to {{ row.window.1|date:"j M Y" }}{% elif c.starts_on %}{{ c.starts_on|date:"j M Y" }} to {{ c.ends_on|date:"j M Y" }}{% elif c.recurring_month %}Every year around {{ c.recurring_day }}/{{ c.recurring_month }}{% else %}Dates to be announced{% endif %}
+            </span>
+          </div>
+          {% if row.live %}<span class="bb-pill bb-pill--ok">On now</span>{% endif %}
+        </div>
+        <p class="bb-mt-1"><strong class="bb-strong">{{ c.headline }}</strong><br>{{ c.body }}</p>
+        <span class="ev-badge-chip"><i class="feather-{{ c.badge_icon }}" aria-hidden="true"></i> {{ c.badge_name }}{% if row.award %} &middot; earned {{ row.award.awarded_at|date:"j M Y" }}{% endif %}</span>
+      </article>
+      {% endwith %}
+    {% empty %}
+      <div class="bb-card bb-empty">
+        <i class="feather-calendar" aria-hidden="true"></i>
+        <strong class="bb-strong">No campaigns right now</strong>
+        <p class="bb-small">Seasonal campaigns appear here when a volunteer switches them on.</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock body %}

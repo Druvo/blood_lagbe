@@ -47,9 +47,12 @@ jobs:
           python manage.py check --deploy --fail-level WARNING
     - name: Check for missing migrations
       run: python manage.py makemigrations --check --dry-run
+    - name: Check translations
+      run: |
+        python manage.py compile_po --check
+        python scripts/check_translations.py --stale
     - name: Run migrations
       run: python manage.py migrate
     - name: Run tests
-      # Covers every app: rewards, accounts, pages, blogapp, insights,
-      # stories, squads. No --parallel: the suite shares a cache and hangs.
+      # Covers every installed app. No --parallel: the suite shares a cache and hangs.
       run: python manage.py test

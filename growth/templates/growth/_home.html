@@ -1,0 +1,8 @@
+{% load static %}{% if invite %}
+<link rel="stylesheet" href="{% static 'growth/growth.css' %}">
+<section class="bb-section bb-section--tight">
+  <div class="bb-container bb-container--narrow">
+    {% include 'growth/_invite_card.html' with link_id='gr-home-link' heading_id='gr-home-h' %}
+  </div>
+</section>
+{% endif %}

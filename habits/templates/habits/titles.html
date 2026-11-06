@@ -1,0 +1,48 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}Your titles{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'habits/habits.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container bb-container--narrow hb-page">
+  <header class="bb-stack bb-stack--sm bb-mb-2">
+    <span class="bb-eyebrow">Recognition</span>
+    <h1 class="bb-h2 bb-mb-0">Your titles</h1>
+    <p class="bb-lead bb-mb-0">Ways of helping that do not need a donation. Anyone can earn them, including people who cannot donate right now.</p>
+  </header>
+
+  <div class="bb-stack">
+    {% if not earned %}
+      <div class="bb-empty"><i class="feather-award" aria-hidden="true"></i><p>No titles yet. Pick any one below, whenever you like.</p></div>
+    {% endif %}
+    {% for t in earned %}
+      <section class="bb-card hb-title is-earned" aria-label="{{ t.name }}">
+        <span class="hb-title__icon"><i class="feather-{{ t.icon }}" aria-hidden="true"></i></span>
+        <div class="hb-title__body">
+          <h2 class="hb-title__name">{{ t.name }} <span class="bb-pill bb-pill--ok">Earned</span></h2>
+          <span class="bb-small bb-muted">{{ t.description }}</span>
+        </div>
+      </section>
+    {% endfor %}
+
+    {% if locked %}
+      <h2 class="bb-h3 bb-mb-0 bb-mt-2">Next up</h2>
+      {% for t in locked %}
+        <section class="bb-card hb-title" aria-label="{{ t.name }}">
+          <span class="hb-title__icon"><i class="feather-{{ t.icon }}" aria-hidden="true"></i></span>
+          <div class="hb-title__body">
+            <h3 class="hb-title__name">{{ t.name }}</h3>
+            <span class="bb-small bb-muted">{{ t.description }}</span>
+            <div class="bb-progress" role="progressbar" aria-valuenow="{{ t.percent }}" aria-valuemin="0" aria-valuemax="100" aria-label="Progress to {{ t.name }}"><span style="width:{{ t.percent }}%"></span></div>
+            <span class="bb-xs bb-muted">{{ t.current }} of {{ t.target }}. {{ t.hint }}</span>
+          </div>
+        </section>
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <p class="bb-xs bb-muted bb-mt-2">Titles never change your points, level or leaderboard place.</p>
+  <p><a class="bb-btn bb-btn--ghost bb-btn--sm" href="{% url 'habits:today' %}">Back to Today</a></p>
+</div>
+{% endblock body %}

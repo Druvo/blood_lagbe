@@ -8,6 +8,7 @@ they are cheap to test; `get_quests` is the thin database wrapper.
 from collections import namedtuple
 
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 from rewards.models import Donation, RequestResponse, get_current_streak
 
@@ -16,14 +17,14 @@ Level = namedtuple('Level', 'number name min_points icon color')
 # (name, points needed, feather icon, colour). Points are 10 per verified
 # donation, +5 per streak step, +20 per donation to an urgent request.
 LEVELS = [
-    Level(1, 'Spark', 0, 'zap', '#f5a524'),
-    Level(2, 'Helper', 10, 'heart', '#f97066'),
-    Level(3, 'Guardian', 40, 'shield', '#2e90fa'),
-    Level(4, 'Champion', 100, 'award', '#12b76a'),
-    Level(5, 'Hero', 200, 'star', '#7a5af8'),
-    Level(6, 'Lifesaver', 350, 'life-buoy', '#d8213a'),
-    Level(7, 'Legend', 600, 'sun', '#d4af37'),
-    Level(8, 'Immortal', 1000, 'target', '#00b894'),
+    Level(1, _('Spark'), 0, 'zap', '#f5a524'),
+    Level(2, _('Helper'), 10, 'heart', '#f97066'),
+    Level(3, _('Guardian'), 40, 'shield', '#2e90fa'),
+    Level(4, _('Champion'), 100, 'award', '#12b76a'),
+    Level(5, _('Hero'), 200, 'star', '#7a5af8'),
+    Level(6, _('Lifesaver'), 350, 'life-buoy', '#d8213a'),
+    Level(7, _('Legend'), 600, 'sun', '#d4af37'),
+    Level(8, _('Immortal'), 1000, 'target', '#00b894'),
 ]
 
 LevelInfo = namedtuple(
@@ -78,54 +79,54 @@ def build_quests(facts):
 
     return [
         Quest(
-            'profile', 'Complete your profile',
-            'Add your blood group and district so people can find you.',
+            'profile', _('Complete your profile'),
+            _('Add your blood group and district so people can find you.'),
             bool(facts.blood_group and facts.district),
-            url('privacy'), 'Pre-fills your donation form', None, None,
+            url('privacy'), _('Pre-fills your donation form'), None, None,
         ),
         Quest(
-            'directory', 'Join the donor directory',
-            'Let members ask you for help. Your phone stays hidden until you accept.',
+            'directory', _('Join the donor directory'),
+            _('Let members ask you for help. Your phone stays hidden until you accept.'),
             bool(facts.in_directory),
-            url('privacy'), 'Be found by people in need', None, None,
+            url('privacy'), _('Be found by people in need'), None, None,
         ),
         Quest(
-            'first', 'Log your first donation',
-            'An admin verifies it, then it counts.',
+            'first', _('Log your first donation'),
+            _('An admin verifies it, then it counts.'),
             facts.logged_count >= 1,
-            url('log-donation', '#log'), 'Bronze Donor tier at 1 verified', None, None,
+            url('log-donation', '#log'), _('Bronze Donor tier at 1 verified'), None, None,
         ),
         Quest(
-            'respond', 'Answer an urgent request',
-            'Tap "I can help" on a request that needs your group.',
+            'respond', _('Answer an urgent request'),
+            _('Tap "I can help" on a request that needs your group.'),
             bool(facts.answered_request),
-            url('request-list'), 'Path to Hero badges', None, None,
+            url('request-list'), _('Path to Hero badges'), None, None,
         ),
         Quest(
-            'request_donation', 'Donate for an urgent request',
-            'Link a donation to a request you answered for bonus points.',
+            'request_donation', _('Donate for an urgent request'),
+            _('Link a donation to a request you answered for bonus points.'),
             facts.request_donations >= 1,
-            url('log-donation', '#log'), 'First Responder badge, +20 points', None, None,
+            url('log-donation', '#log'), _('First Responder badge, +20 points'), None, None,
         ),
         Quest(
-            'streak', 'Keep a 2-cycle streak',
-            'Donate again within one cycle of your last verified donation.',
+            'streak', _('Keep a 2-cycle streak'),
+            _('Donate again within one cycle of your last verified donation.'),
             facts.streak >= STREAK_TARGET,
-            url('log-donation', '#log'), 'Consistent Donor badge',
+            url('log-donation', '#log'), _('Consistent Donor badge'),
             min(facts.streak, STREAK_TARGET), STREAK_TARGET,
         ),
         Quest(
-            'three', 'Donate 3 times',
-            'Three verified donations show real commitment.',
+            'three', _('Donate 3 times'),
+            _('Three verified donations show real commitment.'),
             facts.approved_count >= DONATE_TARGET,
-            url('log-donation', '#log'), 'Halfway to Silver Donor',
+            url('log-donation', '#log'), _('Halfway to Silver Donor'),
             min(facts.approved_count, DONATE_TARGET), DONATE_TARGET,
         ),
         Quest(
-            'silver', 'Reach Silver Donor',
-            'Five verified donations.',
+            'silver', _('Reach Silver Donor'),
+            _('Five verified donations.'),
             facts.approved_count >= TIER_TARGET,
-            url('log-donation', '#log'), 'Silver Donor tier',
+            url('log-donation', '#log'), _('Silver Donor tier'),
             min(facts.approved_count, TIER_TARGET), TIER_TARGET,
         ),
     ]

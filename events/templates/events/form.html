@@ -1,0 +1,69 @@
+{% extends 'base/base.html' %}
+{% load static %}
+
+{% block title %}{% if event %}Edit drive{% else %}Host a drive{% endif %}{% endblock title %}
+{% block extra_style %}<link rel="stylesheet" href="{% static 'events/events.css' %}">{% endblock extra_style %}
+
+{% block body %}
+<div class="bb-container bb-container--form ev-page">
+  <header>
+    <span class="bb-eyebrow">Events</span>
+    <h1 class="bb-h2">{% if event %}Edit your drive{% else %}Host a blood drive{% endif %}</h1>
+    <p class="bb-muted">A volunteer checks every new drive before it shows to others.{% if event and event.status == 'approved' %} Changing the title, details or place sends it back for another look.{% endif %}</p>
+  </header>
+
+  {% if blocked %}<div class="bb-alert bb-alert--warn bb-mt-2" role="status">{{ blocked }}</div>{% endif %}
+
+  <form method="post" class="bb-card bb-form bb-mt-2" novalidate>
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <div class="bb-field">
+      <label class="bb-label" for="{{ form.title.id_for_label }}">Title</label>
+      {{ form.title }}{{ form.title.errors }}
+    </div>
+    <div class="bb-field">
+      <label class="bb-label" for="{{ form.organizer_name.id_for_label }}">Organizer name (optional)</label>
+      {{ form.organizer_name }}
+      <div class="bb-help">A club or group name. Leave empty to be listed as a community member.</div>
+      {{ form.organizer_name.errors }}
+    </div>
+    <div class="bb-field">
+      <label class="bb-label" for="{{ form.starts_at.id_for_label }}">Starts</label>
+      {{ form.starts_at }}{{ form.starts_at.errors }}
+    </div>
+    <div class="bb-field">
+      <label class="bb-label" for="{{ form.ends_at.id_for_label }}">Ends (optional)</label>
+      {{ form.ends_at }}{{ form.ends_at.errors }}
+    </div>
+    <div class="bb-field">
+      <label class="bb-label" for="{{ form.district.id_for_label }}">District</label>
+      {{ form.district }}{{ form.district.errors }}
+    </div>
+    <div class="bb-field">
+      <label class="bb-label" for="{{ form.place.id_for_label }}">Hospital or blood bank (if listed)</label>
+      {{ form.place }}{{ form.place.errors }}
+    </div>
+    <div class="bb-field">
+      <label class="bb-label" for="{{ form.venue.id_for_label }}">Venue</label>
+      {{ form.venue }}
+      <div class="bb-help">Hall, campus gate or ward. Needed if the place is not listed.</div>
+      {{ form.venue.errors }}
+    </div>
+    <div class="bb-field">
+      <label class="bb-label" for="{{ form.description.id_for_label }}">Details (optional)</label>
+      {{ form.description }}{{ form.description.errors }}
+    </div>
+    <div class="bb-field">
+      <label class="bb-label" for="{{ form.capacity.id_for_label }}">Spots (optional)</label>
+      {{ form.capacity }}
+      <div class="bb-help">Leave empty for no limit.</div>
+      {{ form.capacity.errors }}
+    </div>
+    <p class="bb-help bb-mb-2">Please do not put phone numbers or patient details here. Eligibility is for the blood bank to decide on the day.</p>
+    <div class="bb-row">
+      <button type="submit" class="bb-btn bb-btn--primary">{% if event %}Save changes{% else %}Submit for approval{% endif %}</button>
+      <a href="{% if event %}{% url 'events:detail' event.pk %}{% else %}{% url 'events:list' %}{% endif %}" class="bb-btn bb-btn--ghost">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock body %}

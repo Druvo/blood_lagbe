@@ -2,6 +2,7 @@ import datetime
 
 from django import forms
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from rewards.blood import BLOOD_GROUP_CHOICES
 from rewards.models import (
@@ -50,7 +51,7 @@ class PlaceFieldsMixin:
         # Widget first: assigning the queryset hands its choices to it.
         place.widget = PlaceSelect(attrs=place.widget.attrs)
         place.queryset = Place.objects.filter(is_approved=True)
-        place.empty_label = '-- Other (type below) --'
+        place.empty_label = _('-- Other (type below) --')
         place.required = False
         self.fields[self.text_field].required = False
         self.fields[self.text_field].label = 'Other place (if not listed)'
@@ -63,14 +64,17 @@ class PlaceFieldsMixin:
             if district and place.district != district:
                 self.add_error(
                     'place',
-                    f'{place.name} is in {place.district}, not {district}.',
+                    _('%(place)s is in %(actual)s, not %(chosen)s.') % {
+                        'place': place.name, 'actual': place.district,
+                        'chosen': district,
+                    },
                 )
             else:
                 cleaned_data[self.text_field] = place.name
         elif not text:
             self.add_error(
                 self.text_field,
-                'Pick a place from the list, or type its name.',
+                _('Pick a place from the list, or type its name.'),
             )
         else:
             cleaned_data[self.text_field] = text
@@ -100,21 +104,21 @@ class DonationForm(PlaceFieldsMixin, forms.ModelForm):
             if user is not None else BloodRequest.objects.none()
         )
         field.required = False
-        field.empty_label = '-- none --'
+        field.empty_label = _('-- none --')
 
     def clean_donation_date(self):
         date = self.cleaned_data['donation_date']
         today = timezone.localdate()
         if date < today - datetime.timedelta(days=MAX_DONATION_AGE_DAYS):
             raise forms.ValidationError(
-                'That date is too long ago. Check the year.'
+                _('That date is too long ago. Check the year.')
             )
         if self.user is not None and Donation.objects.filter(
             donor=self.user, donation_date=date,
         ).exclude(status=Donation.Status.REJECTED).exists():
             # Also what a double click on "Log donation" runs into.
             raise forms.ValidationError(
-                'You already logged a donation on this date.'
+                _('You already logged a donation on this date.')
             )
         return date
 
@@ -138,13 +142,13 @@ class BloodRequestForm(PlaceFieldsMixin, forms.ModelForm):
             ),
             'needed_by': forms.DateInput(attrs={'type': 'date'}),
             'patient_name': forms.TextInput(attrs={
-                'placeholder': 'Optional. First name or initials only',
+                'placeholder': _('Optional. First name or initials only'),
                 'autocomplete': 'off',
             }),
             'note': forms.Textarea(attrs={
                 'rows': 3,
-                'placeholder': 'Optional. Ward, bed, or anything a donor '
-                               'should know',
+                'placeholder': _('Optional. Ward, bed, or anything a donor '
+                               'should know'),
             }),
         }
         help_texts = {
@@ -175,7 +179,8 @@ class BloodRequestForm(PlaceFieldsMixin, forms.ModelForm):
             days=MAX_REQUEST_LEAD_DAYS,
         ):
             raise forms.ValidationError(
-                f'Pick a date within the next {MAX_REQUEST_LEAD_DAYS} days.'
+                _('Pick a date within the next %(n)s days.')
+                % {'n': MAX_REQUEST_LEAD_DAYS}
             )
         return date
 
@@ -183,8 +188,8 @@ class BloodRequestForm(PlaceFieldsMixin, forms.ModelForm):
         name = ' '.join(self.cleaned_data.get('patient_name', '').split())
         if sum(ch.isdigit() for ch in name) > 1:
             raise forms.ValidationError(
-                'Use a first name or initials only. Please do not enter '
-                'record numbers or IDs.'
+                _('Use a first name or initials only. Please do not enter '
+                'record numbers or IDs.')
             )
         return name
 
@@ -201,8 +206,8 @@ class BloodRequestForm(PlaceFieldsMixin, forms.ModelForm):
         ):
             # Also what a double click on "Post request" would create twice.
             raise forms.ValidationError(
-                'You already posted this request. Open "My requests" to '
-                'update or close it.'
+                _('You already posted this request. Open "My requests" to '
+                'update or close it.')
             )
         if self.user is not None:
             open_count = BloodRequest.objects.open_and_current().filter(
@@ -210,8 +215,9 @@ class BloodRequestForm(PlaceFieldsMixin, forms.ModelForm):
             ).count()
             if open_count >= MAX_OPEN_REQUESTS_PER_USER:
                 raise forms.ValidationError(
-                    f'You already have {MAX_OPEN_REQUESTS_PER_USER} open '
-                    'requests. Close one before posting another.'
+                    _('You already have %(n)s open requests. '
+                      'Close one before posting another.')
+                    % {'n': MAX_OPEN_REQUESTS_PER_USER}
                 )
             posted_today = BloodRequest.objects.filter(
                 requester=self.user,
@@ -219,7 +225,7 @@ class BloodRequestForm(PlaceFieldsMixin, forms.ModelForm):
             ).count()
             if posted_today >= MAX_REQUESTS_PER_DAY:
                 raise forms.ValidationError(
-                    'You have posted a lot of requests today. Please try '
-                    'again tomorrow.'
+                    _('You have posted a lot of requests today. Please try '
+                    'again tomorrow.')
                 )
         return cleaned_data

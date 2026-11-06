@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import PasswordResetView
 from django.shortcuts import redirect, render
+from django.utils.translation import gettext as _, gettext_lazy, ngettext
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.decorators.cache import never_cache
 from django.views.decorators.http import require_http_methods
@@ -35,7 +36,7 @@ LOGIN_FAIL_LIMIT_PER_IP = 40
 RESET_MAIL_LIMIT_PER_IP = 5
 RESET_WINDOW = 60 * 60
 SIGNUPS_PER_IP_PER_HOUR = 20
-TOO_MANY_LOGINS = (
+TOO_MANY_LOGINS = gettext_lazy(
     'Too many tries. Please wait about 15 minutes before trying again.'
 )
 
@@ -104,7 +105,7 @@ def logout_view(request):
     was_logged_in = request.user.is_authenticated
     logout(request)
     if was_logged_in:
-        messages.info(request, 'You are logged out. See you soon.')
+        messages.info(request, _('You are logged out. See you soon.'))
     return redirect('home')
 
 
@@ -118,8 +119,9 @@ def signup_view(request):
         form = RegistrationForm(request.POST)
         ip = ratelimit.client_ip(request)
         if ratelimit.is_limited('signup-ip', ip, SIGNUPS_PER_IP_PER_HOUR):
-            form.add_error(None, 'Too many new accounts from this connection. '
-                                 'Please try again in an hour.')
+            form.add_error(None, _(
+                'Too many new accounts from this connection. '
+                'Please try again in an hour.'))
             return render(request, 'signup.html', {
                 'registration_form': form, 'next': next_url,
             }, status=429)
@@ -135,8 +137,8 @@ def signup_view(request):
                 if form.directory_ignored:
                     messages.info(
                         request,
-                        'You are not in the donor directory yet. Add your '
-                        'blood group and district to join it.',
+                        _('You are not in the donor directory yet. Add your '
+                          'blood group and district to join it.'),
                     )
                 # Someone who came from an invite or a request link goes
                 # back there; everyone else gets the onboarding checklist.
@@ -177,53 +179,60 @@ def welcome_view(request):
     steps = [
         {
             'key': 'profile', 'done': profile_done,
-            'title': 'Complete your profile',
+            'title': _('Complete your profile'),
             'hint': (
-                'Name, blood group and district are set.' if profile_done
-                else 'Add your blood group and district so we can match you.'
+                _('Name, blood group and district are set.') if profile_done
+                else _('Add your blood group and district so we can match you.')
             ),
-            'url_name': 'privacy', 'cta': 'Review' if profile_done else 'Add details',
+            'url_name': 'privacy', 'cta': _('Review') if profile_done else _('Add details'),
             'icon': 'feather-user',
         },
         {
             'key': 'directory', 'done': directory_done,
-            'title': 'Join the donor directory',
+            'title': _('Join the donor directory'),
             'hint': (
-                'You are listed. People ask first; your number is shared only if you accept.'
+                _('You are listed. People ask first; your number is shared only if you accept.')
                 if directory_done else
-                'Optional. Members can ask you for help, and you choose to accept or decline.'
+                _('Optional. Members can ask you for help, and you choose to accept or decline.')
             ),
-            'url_name': 'privacy', 'cta': 'Manage' if directory_done else 'Join',
+            'url_name': 'privacy', 'cta': _('Manage') if directory_done else _('Join'),
             'icon': 'feather-users',
         },
         {
             'key': 'requests', 'done': requests_done,
-            'title': 'See urgent requests',
+            'title': _('See urgent requests'),
             'hint': (
-                f'{open_matching} open request{"s" if open_matching != 1 else ""} '
-                f'need your blood group.' if open_matching else
-                (f'{open_total} open request{"s" if open_total != 1 else ""} right now.'
-                 if open_total else 'No open requests right now.')
+                ngettext(
+                    '%(n)s open request need your blood group.',
+                    '%(n)s open requests need your blood group.',
+                    open_matching,
+                ) % {'n': open_matching} if open_matching else
+                (ngettext(
+                    '%(n)s open request right now.',
+                    '%(n)s open requests right now.',
+                    open_total,
+                ) % {'n': open_total}
+                 if open_total else _('No open requests right now.'))
             ),
-            'url_name': 'request-list', 'cta': 'Open board',
+            'url_name': 'request-list', 'cta': _('Open board'),
             'icon': 'feather-droplet',
         },
         {
             'key': 'donation', 'done': donation_done,
-            'title': 'Log your first donation',
+            'title': _('Log your first donation'),
             'hint': (
-                'Done. A volunteer verifies each donation before it counts.'
+                _('Done. A volunteer verifies each donation before it counts.')
                 if donation_done else
-                'Donated before? Add it. A volunteer verifies it before points count.'
+                _('Donated before? Add it. A volunteer verifies it before points count.')
             ),
-            'url_name': 'log-donation', 'cta': 'Open my hub',
+            'url_name': 'log-donation', 'cta': _('Open my hub'),
             'icon': 'feather-award',
         },
         {
             'key': 'guide', 'done': guide_done,
-            'title': 'Read the donor guide',
-            'hint': 'Who can donate, what to expect, and how to look after yourself.',
-            'url_name': 'learn', 'cta': 'Read guide',
+            'title': _('Read the donor guide'),
+            'hint': _('Who can donate, what to expect, and how to look after yourself.'),
+            'url_name': 'learn', 'cta': _('Read guide'),
             'icon': 'feather-book-open',
         },
     ]
@@ -247,7 +256,7 @@ def privacy_view(request):
     )
     if request.method == 'POST' and form.is_valid():
         form.save()
-        messages.success(request, 'Privacy settings saved.')
+        messages.success(request, _('Privacy settings saved.'))
         return redirect('privacy')
     return render(request, 'privacy.html', {
         'form': form,
